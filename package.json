@@ -4,6 +4,7 @@
   "description": "Vidyashilp University AI Academic Advisor",
   "main": "src/index.ts",
   "scripts": {
+    "build": "echo \"Build ready\"",
     "start": "node src/server.js",
     "dev": "node src/server.js",
     "test:phase2": "node scripts/test-phase2.js",
