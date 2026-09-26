@@ -1,5 +1,9 @@
-# Dependencies
+# Dependencies & Builds
 node_modules/
+.next/
+.turbo/
+dist/
+build/
 
 # Environment variables & secrets
 .env
