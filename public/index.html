@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VU AI Faculty Advisor — Vidyashilp University</title>
+  <meta name="description" content="VU AI Faculty Advisor — evidence-grounded academic intelligence for Vidyashilp University students. Check prerequisites, attendance, eligibility and more.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,400&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ══════════ BACKGROUND ══════════ -->
+  <div class="bg-layer" aria-hidden="true">
+    <div class="bg-grid"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+  </div>
+
+  <!-- ══════════ NAVIGATION ══════════ -->
+  <nav class="topnav" id="topnav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="#hero" id="navBrand">
+        <div class="nav-logo">
+          <div class="nav-logo-inner">VU</div>
+          <div class="nav-logo-pulse"></div>
+        </div>
+        <div class="nav-brand-text">
+          <span class="nav-brand-name">Faculty Advisor</span>
+          <span class="nav-brand-sub">AI-Powered · Evidence-Grounded</span>
+        </div>
+      </a>
+
+      <div class="nav-links" id="navLinks">
+        <a class="nav-link active" href="#hero" id="navAdvisor">Advisor</a>
+        <a class="nav-link" href="#programs" id="navPrograms">Programs</a>
+        <a class="nav-link" href="#profile-section" id="navProfile">My Profile</a>
+        <a class="nav-link" href="#about" id="navAbout">About</a>
+      </div>
+
+      <div class="nav-actions">
+        <div class="nav-status" id="navStatus">
+          <span class="nav-status-dot"></span>
+          <span class="nav-status-text">Live</span>
+        </div>
+        <button class="nav-cta" id="navCta" onclick="scrollToAdvisor()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Ask Advisor
+        </button>
+        <button class="nav-hamburger" id="navHamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════ HERO ══════════ -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <div class="eyebrow-dot"></div>
+        <span>Vidyashilp University · AI Academic Intelligence</span>
+      </div>
+      <h1 class="hero-title">
+        Your Academic<br>
+        <span class="hero-title-accent">AI Advisor</span>
+      </h1>
+      <p class="hero-desc">Ask about prerequisites, attendance, eligibility and course registration — grounded in official Vidyashilp University documents. No guesswork. Cited answers.</p>
+      <div class="hero-actions">
+        <button class="btn-primary-lg" id="heroAskBtn" onclick="scrollToAdvisor()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Ask your advisor
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+        <button class="btn-ghost-lg" onclick="document.getElementById('programs').scrollIntoView({behavior:'smooth'})">
+          Explore Programs
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-num">15</span>
+          <span class="hero-stat-label">Demo Students</span>
+        </div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">11</span>
+          <span class="hero-stat-label">Programs</span>
+        </div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">5+</span>
+          <span class="hero-stat-label">Source Documents</span>
+        </div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">RAG</span>
+          <span class="hero-stat-label">Evidence-Grounded</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <div class="advisor-orb">
+        <div class="orb-ring orb-ring-1"></div>
+        <div class="orb-ring orb-ring-2"></div>
+        <div class="orb-ring orb-ring-3"></div>
+        <div class="orb-core">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        </div>
+        <div class="orb-particle p1"></div>
+        <div class="orb-particle p2"></div>
+        <div class="orb-particle p3"></div>
+        <div class="orb-particle p4"></div>
+      </div>
+      <div class="floating-card fc-1">
+        <div class="fc-dot fc-dot-green"></div>
+        <span>DATA302 — Eligible ✓</span>
+      </div>
+      <div class="floating-card fc-2">
+        <div class="fc-dot fc-dot-blue"></div>
+        <span>Attendance: 86.5%</span>
+      </div>
+      <div class="floating-card fc-3">
+        <div class="fc-dot fc-dot-amber"></div>
+        <span>Sem 5 · B.Tech DS</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ QUICK ACTIONS ══════════ -->
+  <section class="quick-section" id="quick-actions">
+    <div class="section-inner">
+      <div class="qa-grid" id="qaGrid">
+        <button class="qa-card" id="qa-attendance" data-query="What is the minimum attendance requirement?">
+          <div class="qa-icon">📋</div>
+          <span class="qa-label">Attendance</span>
+        </button>
+        <button class="qa-card" id="qa-eligibility" data-query="Can I take DATA302?">
+          <div class="qa-icon">✓</div>
+          <span class="qa-label">Eligibility</span>
+        </button>
+        <button class="qa-card" id="qa-calendar" data-query="What is the academic calendar for this semester?">
+          <div class="qa-icon">📅</div>
+          <span class="qa-label">Calendar</span>
+        </button>
+        <button class="qa-card" id="qa-registration" data-query="What are the course registration rules?">
+          <div class="qa-icon">📝</div>
+          <span class="qa-label">Registration</span>
+        </button>
+        <button class="qa-card" id="qa-prereq" data-query="What is the prerequisite for DATA302?">
+          <div class="qa-icon">🔗</div>
+          <span class="qa-label">Prerequisites</span>
+        </button>
+        <button class="qa-card" id="qa-summer" data-query="What courses are offered in Summer Term 2026?">
+          <div class="qa-icon">☀</div>
+          <span class="qa-label">Summer Term</span>
+        </button>
+        <button class="qa-card" id="qa-minors" data-query="What minor courses are available?">
+          <div class="qa-icon">📚</div>
+          <span class="qa-label">Minors</span>
+        </button>
+        <button class="qa-card" id="qa-programs" data-query="What programs are offered at Vidyashilp University?">
+          <div class="qa-icon">🏛</div>
+          <span class="qa-label">Programs</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ ADVISOR SECTION (MAIN) ══════════ -->
+  <section class="advisor-section" id="advisor">
+    <div class="advisor-layout">
+
+      <!-- LEFT: Student Profile Panel -->
+      <aside class="profile-panel" id="profilePanel">
+        <div class="panel-header">
+          <div class="panel-header-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div>
+            <h3 class="panel-title">Demo Student</h3>
+            <p class="panel-sub">Synthetic profiles</p>
+          </div>
+          <div class="synthetic-badge-mini">⚗ DEMO</div>
+        </div>
+
+        <!-- Program Filter -->
+        <div class="filter-wrap">
+          <svg class="filter-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+          <select class="program-select-v2" id="programFilter">
+            <option value="">All Programs</option>
+            <option value="BTECH_DS">B.Tech — Data Science</option>
+            <option value="BTECH_AIML">B.Tech — AI/ML</option>
+            <option value="BMS_DB">BMS — Digital Business</option>
+            <option value="BMS_DB_RESEARCH">BMS — Digital Business (Research)</option>
+            <option value="BA_PSY">BA — Psychology</option>
+            <option value="BA_ECO">BA — Economics</option>
+            <option value="BA_PSY_RESEARCH">BA — Psychology (Research)</option>
+            <option value="BA_ECO_RESEARCH">BA — Economics (Research)</option>
+            <option value="BDES_CD">B.Des — Communication Design</option>
+            <option value="BA_LLB">BA, LLB</option>
+            <option value="BMS_LLB">BMS, LLB</option>
+          </select>
+        </div>
+
+        <!-- Profile Grid -->
+        <div class="profile-scroll" id="profileGrid">
+          <!-- Rendered by app.js -->
+        </div>
+
+        <!-- Active Profile Card -->
+        <div class="active-profile-card hidden" id="activeProfileCard">
+          <div class="apc-header">
+            <div class="apc-avatar" id="apcAvatar">01</div>
+            <div class="apc-info">
+              <div class="apc-name" id="apcName">Student 01</div>
+              <div class="apc-program" id="apcProgram">B.Tech Data Science</div>
+            </div>
+            <button class="apc-close" id="apcClose" title="Deselect student">×</button>
+          </div>
+          <div class="apc-details" id="apcDetails">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </aside>
+
+      <!-- CENTER: Chat Interface -->
+      <main class="chat-panel" id="chatPanel">
+        <div class="chat-header">
+          <div class="chat-header-left">
+            <div class="chat-avatar-wrap">
+              <div class="chat-avatar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              </div>
+              <div class="chat-avatar-pulse"></div>
+            </div>
+            <div>
+              <h2 class="chat-title">VU AI Advisor</h2>
+              <p class="chat-sub">Evidence-grounded · Citing official documents</p>
+            </div>
+          </div>
+          <div class="chat-header-right">
+            <div class="rag-badge">
+              <span class="rag-dot"></span>
+              <span>RAG · Local</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Welcome / Chat area -->
+        <div class="chat-body" id="chatBody">
+
+          <!-- Welcome State -->
+          <div class="welcome-state" id="welcomeState">
+            <div class="ws-inner">
+              <div class="ws-icon-wrap">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              </div>
+              <h3 class="ws-title">Ask your Faculty Advisor</h3>
+              <p class="ws-desc">Select a demo student profile, then type your question below or use a quick action above.</p>
+              <div class="ws-caps">
+                <div class="ws-cap">
+                  <div class="ws-cap-icon green">✓</div>
+                  <span>Prerequisite checks</span>
+                </div>
+                <div class="ws-cap">
+                  <div class="ws-cap-icon blue">📋</div>
+                  <span>Attendance rules</span>
+                </div>
+                <div class="ws-cap">
+                  <div class="ws-cap-icon amber">📝</div>
+                  <span>Registration guidance</span>
+                </div>
+                <div class="ws-cap">
+                  <div class="ws-cap-icon purple">🏛</div>
+                  <span>Program information</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat History -->
+          <div class="chat-history" id="chatHistory"></div>
+
+          <!-- Thinking indicator -->
+          <div class="thinking-wrap hidden" id="thinkingWrap">
+            <div class="thinking-avatar">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <div class="thinking-bubble">
+              <span class="t-dot"></span>
+              <span class="t-dot"></span>
+              <span class="t-dot"></span>
+              <span class="thinking-text">Retrieving evidence...</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Input -->
+        <div class="chat-input-area" id="chatInputArea">
+          <div class="input-context-bar" id="inputContextBar"></div>
+          <form class="chat-form" id="advisorForm">
+            <div class="chat-input-wrap">
+              <input
+                type="text"
+                id="queryInput"
+                class="chat-input"
+                placeholder="Ask about prerequisites, attendance, eligibility, registration…"
+                autocomplete="off"
+              />
+              <button type="submit" id="submitBtn" class="chat-send-btn">
+                <svg id="btnIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                <div class="btn-spin hidden" id="spinner"><div class="spin-ring"></div></div>
+              </button>
+            </div>
+          </form>
+          <p class="input-sub-hint">Press <kbd>Enter</kbd> to ask &nbsp;·&nbsp; Select a demo student for personalised answers &nbsp;·&nbsp; Powered by RAG</p>
+        </div>
+      </main>
+
+      <!-- RIGHT: Quick Questions Panel -->
+      <aside class="quick-panel" id="quickPanel">
+        <div class="panel-header">
+          <div class="panel-header-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div>
+            <h3 class="panel-title">Quick Ask</h3>
+            <p class="panel-sub">Common questions</p>
+          </div>
+        </div>
+        <div class="quick-list">
+          <button class="ql-btn" id="ql-attendance" data-query="What is the minimum attendance requirement?">
+            <span class="ql-icon">📋</span>
+            <div class="ql-text">
+              <span class="ql-title">Attendance</span>
+              <span class="ql-sub">Min 75% requirement</span>
+            </div>
+            <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="ql-btn" id="ql-registration" data-query="What are the course registration rules?">
+            <span class="ql-icon">📝</span>
+            <div class="ql-text">
+              <span class="ql-title">Registration</span>
+              <span class="ql-sub">Digii portal rules</span>
+            </div>
+            <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="ql-btn" id="ql-prereq" data-query="What is the prerequisite for DATA302?">
+            <span class="ql-icon">🔗</span>
+            <div class="ql-text">
+              <span class="ql-title">DATA302 Prereq</span>
+              <span class="ql-sub">Deep Learning</span>
+            </div>
+            <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="ql-btn" id="ql-eligible" data-query="Can I take DATA302?">
+            <span class="ql-icon">🎓</span>
+            <div class="ql-text">
+              <span class="ql-title">My Eligibility</span>
+              <span class="ql-sub">Check DATA302</span>
+            </div>
+            <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="ql-btn" id="ql-summer" data-query="What courses are offered in Summer Term 2026?">
+            <span class="ql-icon">☀</span>
+            <div class="ql-text">
+              <span class="ql-title">Summer Term</span>
+              <span class="ql-sub">June 2026 offerings</span>
+            </div>
+            <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="ql-btn" id="ql-sumrules" data-query="What are the Summer Term registration rules?">
+            <span class="ql-icon">📅</span>
+            <div class="ql-text">
+              <span class="ql-title">Summer Rules</span>
+              <span class="ql-sub">Registration policy</span>
+            </div>
+            <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="ql-btn" id="ql-minors" data-query="What minor courses are available?">
+            <span class="ql-icon">📚</span>
+            <div class="ql-text">
+              <span class="ql-title">Minor Courses</span>
+              <span class="ql-sub">B.Tech minors</span>
+            </div>
+            <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="ql-btn" id="ql-fees" data-query="Can I register with pending fees?">
+            <span class="ql-icon">💳</span>
+            <div class="ql-text">
+              <span class="ql-title">Pending Fees</span>
+              <span class="ql-sub">Registration block</span>
+            </div>
+            <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="ql-btn" id="ql-programs" data-query="What programs are offered at Vidyashilp University?">
+            <span class="ql-icon">🏛</span>
+            <div class="ql-text">
+              <span class="ql-title">Programs</span>
+              <span class="ql-sub">All UG programs</span>
+            </div>
+            <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button class="ql-btn" id="ql-calendar" data-query="What is the academic calendar for this semester?">
+            <span class="ql-icon">📆</span>
+            <div class="ql-text">
+              <span class="ql-title">Academic Calendar</span>
+              <span class="ql-sub">Semester dates</span>
+            </div>
+            <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </aside>
+
+    </div>
+  </section>
+
+  <!-- ══════════ PROGRAMS SECTION ══════════ -->
+  <section class="programs-section" id="programs">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <div class="eyebrow-dot"></div>
+          <span>Vidyashilp University</span>
+        </div>
+        <h2 class="section-title">Undergraduate Programs</h2>
+        <p class="section-desc">Official programs listed on the Vidyashilp University website. Detailed curriculum is available in source documents for B.Tech programs.</p>
+      </div>
+
+      <div class="programs-grid">
+        <div class="prog-card" id="prog-btech-ds" onclick="filterByProgram('BTECH_DS', 'B.Tech — Data Science')" role="button" tabindex="0">
+          <div class="prog-icon-wrap prog-blue">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div class="prog-badge prog-badge-blue">B.Tech · Hons.</div>
+          <h4 class="prog-name">CSE — Data Science</h4>
+          <p class="prog-desc">Machine Learning, Deep Learning, Data Engineering, Analytics</p>
+          <div class="prog-source">Source: Official Website</div>
+        </div>
+
+        <div class="prog-card" id="prog-btech-aiml" onclick="filterByProgram('BTECH_AIML', 'B.Tech — AI/ML')" role="button" tabindex="0">
+          <div class="prog-icon-wrap prog-indigo">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/></svg>
+          </div>
+          <div class="prog-badge prog-badge-indigo">B.Tech · Hons.</div>
+          <h4 class="prog-name">CSE — AI / ML</h4>
+          <p class="prog-desc">Artificial Intelligence, Neural Networks, Computer Vision, NLP</p>
+          <div class="prog-source">Source: Official Website</div>
+        </div>
+
+        <div class="prog-card" id="prog-bms" onclick="filterByProgram('BMS_DB', 'BMS — Digital Business')" role="button" tabindex="0">
+          <div class="prog-icon-wrap prog-emerald">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="prog-badge prog-badge-emerald">BMS · Hons.</div>
+          <h4 class="prog-name">Digital Business</h4>
+          <p class="prog-desc">Business Management, Digital Marketing, Entrepreneurship</p>
+          <div class="prog-source">Source: Official Website</div>
+        </div>
+
+        <div class="prog-card" id="prog-bms-res" onclick="filterByProgram('BMS_DB_RESEARCH', 'BMS — Digital Business Research')" role="button" tabindex="0">
+          <div class="prog-icon-wrap prog-teal">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div class="prog-badge prog-badge-teal">BMS · Research</div>
+          <h4 class="prog-name">Digital Business<br>with Research</h4>
+          <p class="prog-desc">Business + Research methodology track</p>
+          <div class="prog-source">Source: Official Website</div>
+        </div>
+
+        <div class="prog-card" id="prog-ba-psy" onclick="filterByProgram('BA_PSY', 'BA — Psychology')" role="button" tabindex="0">
+          <div class="prog-icon-wrap prog-rose">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="prog-badge prog-badge-rose">BA · Hons.</div>
+          <h4 class="prog-name">Psychology</h4>
+          <p class="prog-desc">Counselling, Developmental, Clinical, Cognitive Psychology</p>
+          <div class="prog-source">Source: Official Website</div>
+        </div>
+
+        <div class="prog-card" id="prog-ba-eco" onclick="filterByProgram('BA_ECO', 'BA — Economics')" role="button" tabindex="0">
+          <div class="prog-icon-wrap prog-amber">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="prog-badge prog-badge-amber">BA · Hons.</div>
+          <h4 class="prog-name">Economics</h4>
+          <p class="prog-desc">Macroeconomics, Econometrics, Public Policy, Finance</p>
+          <div class="prog-source">Source: Official Website</div>
+        </div>
+
+        <div class="prog-card" id="prog-bdes" onclick="filterByProgram('BDES_CD', 'B.Des — Communication Design')" role="button" tabindex="0">
+          <div class="prog-icon-wrap prog-violet">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          </div>
+          <div class="prog-badge prog-badge-violet">B.Des</div>
+          <h4 class="prog-name">Communication Design</h4>
+          <p class="prog-desc">Visual Design, UI/UX, Branding, Motion, Typography</p>
+          <div class="prog-source">Source: Official Website</div>
+        </div>
+
+        <div class="prog-card" id="prog-ba-llb" onclick="filterByProgram('BA_LLB', 'BA, LLB')" role="button" tabindex="0">
+          <div class="prog-icon-wrap prog-slate">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="prog-badge prog-badge-slate">BA, LLB · Hons.</div>
+          <h4 class="prog-name">Law</h4>
+          <p class="prog-desc">Constitutional Law, Human Rights, Civil, Criminal Law</p>
+          <div class="prog-source">Source: Official Website</div>
+        </div>
+
+        <div class="prog-card" id="prog-bms-llb" onclick="filterByProgram('BMS_LLB', 'BMS, LLB')" role="button" tabindex="0">
+          <div class="prog-icon-wrap prog-orange">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          </div>
+          <div class="prog-badge prog-badge-orange">BMS, LLB · Hons.</div>
+          <h4 class="prog-name">Law + Management</h4>
+          <p class="prog-desc">Corporate Law, Business Regulation, Strategy</p>
+          <div class="prog-source">Source: Official Website</div>
+        </div>
+
+        <div class="prog-card prog-card-research" id="prog-ba-psy-res" onclick="filterByProgram('BA_PSY_RESEARCH', 'BA Psychology Research')" role="button" tabindex="0">
+          <div class="prog-icon-wrap prog-rose">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+          </div>
+          <div class="prog-badge prog-badge-rose">BA · Research</div>
+          <h4 class="prog-name">Psychology<br>with Research</h4>
+          <p class="prog-desc">Research-intensive Psychology track</p>
+          <div class="prog-source">Source: Official Website</div>
+        </div>
+
+        <div class="prog-card prog-card-research" id="prog-ba-eco-res" onclick="filterByProgram('BA_ECO_RESEARCH', 'BA Economics Research')" role="button" tabindex="0">
+          <div class="prog-icon-wrap prog-amber">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+          </div>
+          <div class="prog-badge prog-badge-amber">BA · Research</div>
+          <h4 class="prog-name">Economics<br>with Research</h4>
+          <p class="prog-desc">Applied Economics & research methodology</p>
+          <div class="prog-source">Source: Official Website</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ PROFILE SECTION ══════════ -->
+  <section class="profile-section" id="profile-section">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <div class="eyebrow-dot eyebrow-dot-amber"></div>
+          <span>Synthetic Demo Data</span>
+        </div>
+        <h2 class="section-title">Demo Student Profiles</h2>
+        <p class="section-desc">15 synthetic student profiles across 11 programs. All identifiers are fictional — no real student data is used.</p>
+      </div>
+      <div class="demo-profiles-grid" id="demoProfilesGrid">
+        <!-- Rendered by app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ ABOUT ══════════ -->
+  <section class="about-section" id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-content">
+          <div class="section-eyebrow">
+            <div class="eyebrow-dot eyebrow-dot-green"></div>
+            <span>About the Advisor</span>
+          </div>
+          <h2 class="section-title">Evidence-Grounded Academic Intelligence</h2>
+          <p class="about-text">VU AI Faculty Advisor provides evidence-grounded academic guidance using Vidyashilp University's official academic source documents and synthetic demo student profiles.</p>
+          <p class="about-text">Every answer is grounded in real source documents — the Student Handbook, Semester Spread Structures, Course Offerings, Academic Calendars, and Student SOPs.</p>
+          <div class="about-disclaimer-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span>Academic decisions should be verified with the University or Faculty Advisor when the available sources are incomplete or conflicting.</span>
+          </div>
+        </div>
+        <div class="about-features">
+          <div class="about-feat">
+            <div class="about-feat-icon af-blue">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div>
+              <h4>RAG Architecture</h4>
+              <p>Retrieval-Augmented Generation using local embeddings (384-dim) and pgvector</p>
+            </div>
+          </div>
+          <div class="about-feat">
+            <div class="about-feat-icon af-green">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            </div>
+            <div>
+              <h4>Source Citations</h4>
+              <p>Every factual answer cites the official university document it comes from</p>
+            </div>
+          </div>
+          <div class="about-feat">
+            <div class="about-feat-icon af-amber">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div>
+              <h4>No Hallucination</h4>
+              <p>Answers honestly say "I don't know" when information is unavailable</p>
+            </div>
+          </div>
+          <div class="about-feat">
+            <div class="about-feat-icon af-purple">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <h4>Synthetic Demo Data</h4>
+              <p>15 fictional student profiles — no real personal information used</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="nav-logo" style="width:32px;height:32px;">
+          <div class="nav-logo-inner" style="font-size:0.8rem;">VU</div>
+        </div>
+        <span class="footer-name">VU AI Faculty Advisor</span>
+      </div>
+      <p class="footer-text">Vidyashilp University · Bengaluru · Demo System · Synthetic student data only</p>
+      <div class="footer-tech">
+        <span>Local RAG</span>
+        <span class="footer-sep">·</span>
+        <span>Xenova/all-MiniLM-L6-v2</span>
+        <span class="footer-sep">·</span>
+        <span>384-dim embeddings</span>
+        <span class="footer-sep">·</span>
+        <span>pgvector</span>
+      </div>
+    </div>
+    <div class="footer-credit-row">
+      <div class="footer-credit-divider"></div>
+      <div class="footer-credit">
+        <span class="footer-credit-label">Built by</span>
+        <span class="footer-credit-names">Mrunalini &amp; Chithra</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

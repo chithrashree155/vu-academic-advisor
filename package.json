@@ -1,0 +1,22 @@
+{
+  "name": "vu-academic-advisor",
+  "version": "1.0.0",
+  "description": "Vidyashilp University AI Academic Advisor",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js",
+    "test:phase2": "node scripts/test-phase2.js",
+    "ingest": "node scripts/run-ingestion.js"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^4.3.0",
+    "@supabase/supabase-js": "^2.49.1",
+    "cors": "^2.8.6",
+    "dotenv": "^16.4.7",
+    "express": "^5.2.1",
+    "openai": "^4.86.1",
+    "pdf-parse": "^1.1.1",
+    "xlsx": "^0.18.5"
+  }
+}
