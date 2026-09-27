@@ -21,21 +21,37 @@ const STOP_WORDS = new Set([
 
 class RagRetriever {
   constructor(chunksPath) {
-    this.chunksPath = chunksPath || path.join(__dirname, '../../../data/processed/rag_document_chunks.json');
+    this.chunksPath = chunksPath;
     this.chunks = [];
     this.loadChunks();
   }
 
   loadChunks() {
-    if (fs.existsSync(this.chunksPath)) {
-      try {
-        const raw = fs.readFileSync(this.chunksPath, 'utf8');
-        this.chunks = JSON.parse(raw);
-      } catch (e) {
-        console.error('Failed to load chunks:', e);
-        this.chunks = [];
+    const candidatePaths = [
+      this.chunksPath,
+      path.join(process.cwd(), 'data/processed/rag_document_chunks.json'),
+      path.join(__dirname, '../../../data/processed/rag_document_chunks.json'),
+      path.join(__dirname, '../../data/processed/rag_document_chunks.json')
+    ];
+
+    for (const p of candidatePaths) {
+      if (p && fs.existsSync(p)) {
+        try {
+          const raw = fs.readFileSync(p, 'utf8');
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            this.chunks = parsed;
+            this.chunksPath = p;
+            console.log(`[RagRetriever] Successfully loaded ${this.chunks.length} RAG chunks from: ${p}`);
+            return;
+          }
+        } catch (e) {
+          console.error(`[RagRetriever Error] Failed to read chunks from ${p}:`, e.message);
+        }
       }
     }
+
+    console.warn('[RagRetriever Warning] Could not find or parse rag_document_chunks.json in any expected directory.');
   }
 
   /**
@@ -51,9 +67,9 @@ class RagRetriever {
    */
   async retrieveFromSupabase(supabaseClient, options) {
     const { query, program, batch, topK = 5 } = options;
+    console.log(`[RagRetriever] Generating query embedding for Supabase search: "${query.substring(0, 50)}..."`);
     const queryEmbedding = await this.embedQuery(query);
 
-    // Call Supabase pgvector match function or direct query
     let queryBuilder = supabaseClient
       .from('document_chunks')
       .select('id, content, chunk_index, page_number, section_number, clause_number, batch, program, metadata')
@@ -68,8 +84,10 @@ class RagRetriever {
 
     const { data, error } = await queryBuilder;
     if (error) {
+      console.error('[RagRetriever Supabase Error]:', error.message);
       throw error;
     }
+    console.log(`[RagRetriever] Supabase query returned ${data ? data.length : 0} chunks | Vector Dim: ${queryEmbedding.length}`);
     return { data, queryEmbeddingDimension: queryEmbedding.length };
   }
 
@@ -95,129 +113,121 @@ class RagRetriever {
       this.loadChunks();
     }
 
-    // Step 1: Strict Metadata Filtering
-    const candidateChunks = this.chunks.filter((chunk) => {
-      if (sourceType && chunk.sourceType !== sourceType) {
-        return false;
-      }
-      if (batch) {
-        if (chunk.metadata?.batch && chunk.metadata.batch !== batch) {
-          return false;
-        }
-        if (chunk.batchScope && !chunk.batchScope.includes(batch)) {
-          return false;
-        }
-      }
-      if (program) {
-        if (chunk.program && chunk.program !== program) {
-          return false;
-        }
-        if (chunk.metadata?.program && chunk.metadata.program !== program) {
-          return false;
-        }
-      }
-      if (semester && chunk.metadata?.semester) {
-        if (chunk.metadata.semester !== semester) {
-          return false;
-        }
-      }
-      if (academicYear && chunk.metadata?.academicYear) {
-        if (chunk.metadata.academicYear !== academicYear) {
-          return false;
-        }
-      }
-      return true;
-    });
+    try {
+      // Step 1: Strict Metadata Filtering
+      const candidateChunks = this.chunks.filter((chunk) => {
+        if (!chunk || typeof chunk.content !== 'string') return false;
+        if (sourceType && chunk.sourceType !== sourceType) return false;
 
-    // Step 2: Scoring / Similarity calculation
-    const rawTokens = query
-      .toLowerCase()
-      .replace(/[^\w\s]/g, ' ')
-      .split(/\s+/)
-      .filter(t => t.length > 1);
-
-    const queryTokens = rawTokens.filter(t => !STOP_WORDS.has(t));
-    const isCurriculumQuery = query.toLowerCase().includes('curriculum') || query.toLowerCase().includes('courses in semester');
-
-    const genericWords = new Set(['policy', 'policies', 'rules', 'rule', 'guideline', 'guidelines', 'information', 'detail', 'details', 'tell', 'what', 'how', 'give', 'me', 'about']);
-    const substantiveTokens = queryTokens.filter(t => !genericWords.has(t));
-
-    const scored = candidateChunks.map((chunk) => {
-      const contentLower = chunk.content.toLowerCase();
-      
-      // If query has substantive tokens, at least one MUST match
-      if (substantiveTokens.length > 0) {
-        const hasSubstantiveMatch = substantiveTokens.some(token => contentLower.includes(token));
-        if (!hasSubstantiveMatch) {
-          return {
-            chunkText: chunk.content,
-            documentName: chunk.documentName,
-            sourceType: chunk.sourceType,
-            hierarchyLevel: chunk.hierarchyLevel,
-            pageOrSheet: chunk.metadata?.sourceSheet || chunk.pageNumber || chunk.sectionNumber,
-            clauseNumber: chunk.clauseNumber,
-            metadata: chunk.metadata,
-            similarityScore: 0,
-            rawScore: 0
-          };
+        if (batch) {
+          if (chunk.metadata?.batch && chunk.metadata.batch !== batch) return false;
+          if (chunk.batchScope && Array.isArray(chunk.batchScope) && !chunk.batchScope.includes(batch)) return false;
         }
-      }
+        if (program) {
+          if (chunk.program && chunk.program !== program) return false;
+          if (chunk.metadata?.program && chunk.metadata.program !== program) return false;
+        }
+        if (semester && chunk.metadata?.semester && chunk.metadata.semester !== semester) return false;
+        if (academicYear && chunk.metadata?.academicYear && chunk.metadata.academicYear !== academicYear) return false;
 
-      let matchCount = 0;
-      let exactBonus = 0;
+        return true;
+      });
 
-      for (const token of queryTokens) {
-        if (contentLower.includes(token)) {
-          if (token === 'digii' || token === 'sop' || token === 'attendance' || token === 'registration' || token === 'prerequisite') {
-            matchCount += 2.5;
-          } else {
-            matchCount += 1.0;
+      // Step 2: Scoring / Similarity calculation
+      const rawTokens = query
+        .toLowerCase()
+        .replace(/[^\w\s]/g, ' ')
+        .split(/\s+/)
+        .filter(t => t.length > 1);
+
+      const queryTokens = rawTokens.filter(t => !STOP_WORDS.has(t));
+      const isCurriculumQuery = query.toLowerCase().includes('curriculum') || query.toLowerCase().includes('courses in semester');
+
+      const genericWords = new Set(['policy', 'policies', 'rules', 'rule', 'guideline', 'guidelines', 'information', 'detail', 'details', 'tell', 'what', 'how', 'give', 'me', 'about']);
+      const substantiveTokens = queryTokens.filter(t => !genericWords.has(t));
+
+      const scored = candidateChunks.map((chunk) => {
+        const contentLower = chunk.content.toLowerCase();
+
+        if (substantiveTokens.length > 0) {
+          const hasSubstantiveMatch = substantiveTokens.some(token => contentLower.includes(token));
+          if (!hasSubstantiveMatch) {
+            return {
+              chunkText: chunk.content,
+              documentName: chunk.documentName || 'Official Document',
+              sourceType: chunk.sourceType || 'DOCUMENT',
+              hierarchyLevel: chunk.hierarchyLevel || 3,
+              pageOrSheet: chunk.metadata?.sourceSheet || chunk.pageNumber || chunk.sectionNumber,
+              clauseNumber: chunk.clauseNumber,
+              metadata: chunk.metadata,
+              similarityScore: 0,
+              rawScore: 0
+            };
           }
         }
-      }
 
-      if (queryTokens.length > 1) {
-        const keyPhrase = queryTokens.slice(0, 3).join(' ');
-        if (contentLower.includes(keyPhrase)) {
-          exactBonus += 2.5;
+        let matchCount = 0;
+        let exactBonus = 0;
+
+        for (const token of queryTokens) {
+          if (contentLower.includes(token)) {
+            if (token === 'digii' || token === 'sop' || token === 'attendance' || token === 'registration' || token === 'prerequisite' || token === 'medical') {
+              matchCount += 2.5;
+            } else {
+              matchCount += 1.0;
+            }
+          }
         }
-      }
 
-      const codeMatch = query.match(/[A-Z]{3,4}\d{3}/i);
-      if (codeMatch && contentLower.includes(codeMatch[0].toLowerCase())) {
-        exactBonus += 4.0;
-      }
+        if (queryTokens.length > 1) {
+          const keyPhrase = queryTokens.slice(0, 3).join(' ');
+          if (contentLower.includes(keyPhrase)) {
+            exactBonus += 2.5;
+          }
+        }
 
-      if (isCurriculumQuery && chunk.sourceType === 'CURRICULUM_STRUCTURE') {
-        exactBonus += 3.0;
-      }
+        const codeMatch = query.match(/[A-Z]{3,4}\d{3}/i);
+        if (codeMatch && contentLower.includes(codeMatch[0].toLowerCase())) {
+          exactBonus += 4.0;
+        }
 
-      const score = matchCount + exactBonus;
+        if (isCurriculumQuery && chunk.sourceType === 'CURRICULUM_STRUCTURE') {
+          exactBonus += 3.0;
+        }
 
-      return {
-        chunkText: chunk.content,
-        documentName: chunk.documentName,
-        sourceType: chunk.sourceType,
-        hierarchyLevel: chunk.hierarchyLevel,
-        pageOrSheet: chunk.metadata?.sourceSheet || chunk.pageNumber || chunk.sectionNumber,
-        clauseNumber: chunk.clauseNumber,
-        metadata: chunk.metadata,
-        similarityScore: Math.min(1.0, score / 6.0),
-        rawScore: score
-      };
-    });
+        const score = matchCount + exactBonus;
 
-    const relevant = scored.filter(s => s.rawScore > 0);
+        return {
+          chunkText: chunk.content,
+          documentName: chunk.documentName || 'Official Document',
+          sourceType: chunk.sourceType || 'DOCUMENT',
+          hierarchyLevel: chunk.hierarchyLevel || 3,
+          pageOrSheet: chunk.metadata?.sourceSheet || chunk.pageNumber || chunk.sectionNumber,
+          clauseNumber: chunk.clauseNumber,
+          metadata: chunk.metadata,
+          similarityScore: Math.min(1.0, score / 6.0),
+          rawScore: score
+        };
+      });
 
-    relevant.sort((a, b) => {
-      const aHierarchyBonus = Math.max(0, (8 - a.hierarchyLevel) * 0.15);
-      const bHierarchyBonus = Math.max(0, (8 - b.hierarchyLevel) * 0.15);
-      const aTotal = a.rawScore + aHierarchyBonus;
-      const bTotal = b.rawScore + bHierarchyBonus;
-      return bTotal - aTotal;
-    });
+      const relevant = scored.filter(s => s.rawScore > 0);
 
-    return relevant.slice(0, topK);
+      relevant.sort((a, b) => {
+        const aHierarchyBonus = Math.max(0, (8 - (a.hierarchyLevel || 3)) * 0.15);
+        const bHierarchyBonus = Math.max(0, (8 - (b.hierarchyLevel || 3)) * 0.15);
+        const aTotal = a.rawScore + aHierarchyBonus;
+        const bTotal = b.rawScore + bHierarchyBonus;
+        return bTotal - aTotal;
+      });
+
+      const results = relevant.slice(0, topK);
+      console.log(`[RagRetriever] In-memory search returned ${results.length} relevant chunks for query: "${query.substring(0, 40)}..."`);
+      return results;
+
+    } catch (err) {
+      console.error('[RagRetriever Error] Exception in retrieve():', err);
+      return [];
+    }
   }
 }
 

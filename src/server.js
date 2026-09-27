@@ -32,9 +32,11 @@ app.post('/api/advisory', async (req, res) => {
       return res.status(400).json({ error: 'Query is required.' });
     }
 
+    console.log(`[API /api/advisory] Query: "${query.substring(0, 80)}" | Profile: ${profileId || 'None'}`);
     const startTime = Date.now();
     const result = await processAdvisorQuery(query, profileId);
     const latencyMs = Date.now() - startTime;
+    console.log(`[API /api/advisory] Success | Latency: ${latencyMs}ms | State: ${result.state} | Sources: ${result.sources ? result.sources.length : 0}`);
 
     res.json({
       status: 'success',
@@ -42,10 +44,13 @@ app.post('/api/advisory', async (req, res) => {
       ...result
     });
   } catch (err) {
-    console.error('Advisory endpoint error:', err);
+    console.error('[API /api/advisory Error]:', err.stack || err);
     res.status(500).json({
       status: 'error',
-      error: err.message || 'Internal advisory engine error'
+      state: 'INSUFFICIENT_INFORMATION',
+      answer: "I'm having trouble accessing the academic knowledge base right now. Please try again in a moment.",
+      sources: [],
+      showRetry: true
     });
   }
 });

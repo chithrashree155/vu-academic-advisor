@@ -11,10 +11,18 @@ let pipelinePromise = null;
 
 async function getExtractor() {
   if (!pipelinePromise) {
-    const { pipeline } = await import('@huggingface/transformers');
-    pipelinePromise = pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {
-      dtype: 'fp32'
-    });
+    try {
+      console.log('[EmbeddingEngine] Initializing local ONNX model: Xenova/all-MiniLM-L6-v2 (384 dims)...');
+      const { pipeline } = await import('@huggingface/transformers');
+      pipelinePromise = pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {
+        dtype: 'fp32'
+      });
+      console.log('[EmbeddingEngine] Model pipeline ready.');
+    } catch (err) {
+      console.error('[EmbeddingEngine Error] Failed to load local embedding model:', err.message);
+      pipelinePromise = null;
+      throw err;
+    }
   }
   return pipelinePromise;
 }
@@ -35,7 +43,9 @@ async function generateEmbedding(text) {
     normalize: true
   });
 
-  return Array.from(output.data);
+  const vector = Array.from(output.data);
+  console.log(`[EmbeddingEngine] Vector generated successfully | Dim: ${vector.length}`);
+  return vector;
 }
 
 /**
