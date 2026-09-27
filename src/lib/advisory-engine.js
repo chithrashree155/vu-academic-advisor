@@ -915,7 +915,7 @@ async function processAdvisorQuery(query, profileId = null) {
     // ── LEVEL 5 Fallback: Graceful Temporary System Failure ──
     return {
       state: 'INSUFFICIENT_INFORMATION',
-      answer: "I'm having trouble accessing the academic knowledge base right now. Please try again in a moment.",
+      answer: `[SYSTEM_DIAGNOSTIC_ERROR]: ${err.message || String(err)}\nStack: ${err.stack || 'No stack'}`,
       sources: [],
       ruleResults: null,
       followUp: null,
