@@ -9,7 +9,7 @@
 
 'use strict';
 
-const { retriever } = require('./rag/retriever');
+const { retriever } = require('./rag/retriever.js');
 
 // ============================================================
 // SYNTHETIC DEMO STUDENT PROFILES
