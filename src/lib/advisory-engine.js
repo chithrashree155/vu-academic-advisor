@@ -528,15 +528,43 @@ async function processAdvisorQuery(query, profileId = null) {
       };
     }
 
-    // ── 6. Course Registration Rules ──
-    if ((normalizedQuery.includes('course registration') || normalizedQuery.includes('how to register') || normalizedQuery.includes('register for courses')) &&
-        (normalizedQuery.includes('rule') || normalizedQuery.includes('how') || normalizedQuery.includes('digii') || normalizedQuery.includes('process') || normalizedQuery.includes('step'))) {
+    // ── 6. Course Registration Rules & Requirements ──
+    if (normalizedQuery.includes('late registration')) {
+      const feeNote = profile && !profile.feeCleared
+        ? '\n\n⚠ Note: Your profile currently has pending fee dues, which must be cleared before registering.'
+        : '';
+      return {
+        state: 'ANSWERABLE',
+        answer: `Late registration rules & timeline:\n\n1. Maximum late registration allowed is 1 calendar week (7 days) after the announced registration deadline.\n2. Late registration requires explicit written recommendation/approval from the Dean of the School.\n3. Prescribed late registration fees must be paid on the Digii portal.\n4. No course registration is permitted under any circumstances after the 1-week late registration window closes.${feeNote}`,
+        sources: [
+          {
+            documentTitle: 'SOP STUDENT 19082025 - Final.pdf',
+            hierarchyLevel: 5,
+            pageOrSheet: 'Page 1',
+            clauseNumber: 'Section 1 (Course Registration)',
+            excerpt: 'Late registration allowed up to a maximum of 1 calendar week with Dean approval and late fee.'
+          },
+          {
+            documentTitle: '4. Student Handbook Aug 2026.pdf',
+            hierarchyLevel: 1,
+            pageOrSheet: 'Page 15',
+            clauseNumber: 'Section III, Clause 2.3',
+            excerpt: 'Late registration may be permitted within one week of commencement of classes with recommendation of Dean.'
+          }
+        ],
+        ruleResults: { lateRegistrationLimitWeeks: 1, deanApprovalRequired: true },
+        followUp: null
+      };
+    }
+
+    if (normalizedQuery.includes('registration') &&
+        (normalizedQuery.includes('rule') || normalizedQuery.includes('requirement') || normalizedQuery.includes('how') || normalizedQuery.includes('digii') || normalizedQuery.includes('process') || normalizedQuery.includes('step') || normalizedQuery.includes('course'))) {
       const feeNote = profile && !profile.feeCleared
         ? '\n\n⚠ Your profile shows pending fees. You must clear fees before you can register.'
         : '';
       return {
         state: 'ANSWERABLE',
-        answer: `Course registration is done online via the Digii portal (CollPoll).\n\nKey rules & steps:\n1. Login to Digii portal (vidyashilp.digiicampus.com).\n2. Navigate to "Course Registration" menu.\n3. Add courses for the current semester and click "Complete Registration".\n4. Generate and print the Registration Card, obtain signatures from Faculty Advisor and Program Chair, and submit to Registrar.\n5. Students with pending fees or incomplete documentation cannot register.\n6. Maximum late registration: 1 calendar week (Dean approval required).${feeNote}`,
+        answer: `Course registration is done online via the Digii portal (CollPoll).\n\nKey rules & requirements:\n1. Mandatory online course registration prior to semester commencement.\n2. Login to Digii portal (vidyashilp.digiicampus.com) -> Course Registration menu.\n3. Add required semester courses and submit.\n4. Print Registration Card, obtain Faculty Advisor & Program Chair signatures, and submit to Registrar.\n5. Students with pending fees or incomplete documentation cannot register.\n6. Late registration limit: 1 calendar week (Dean approval required).${feeNote}`,
         sources: [
           {
             documentTitle: 'ERP Course Registration Manual.pdf',
@@ -911,11 +939,11 @@ async function processAdvisorQuery(query, profileId = null) {
     };
 
   } catch (err) {
-    console.error('Advisory Engine error:', err);
+    console.error('[RAG Engine Error]:', err.stack || err);
     // ── LEVEL 5 Fallback: Graceful Temporary System Failure ──
     return {
       state: 'INSUFFICIENT_INFORMATION',
-      answer: `[SYSTEM_DIAGNOSTIC_ERROR]: ${err.message || String(err)}\nStack: ${err.stack || 'No stack'}`,
+      answer: "I'm having trouble accessing the academic knowledge base right now. Please try again in a moment.",
       sources: [],
       ruleResults: null,
       followUp: null,
