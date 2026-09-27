@@ -314,6 +314,70 @@ const SYNTHETIC_PROFILES = [
     currentCourses: [],
     interests: ['Applied Economics', 'Research'],
     notes: 'Research track Economics. Senior semester.'
+  },
+
+  // ── Student 16 ── B.Tech CSE – AI/ML, Sem 5 (Low Attendance Scenario: 68.5%)
+  {
+    id: 'VU-DEMO-016',
+    data_type: 'SYNTHETIC',
+    display_name: 'Student 16',
+    program: 'BTECH_AIML',
+    programName: 'B.Tech (Hons.) CSE – AI/ML',
+    program_type: 'B.Tech',
+    batch: '2024',
+    semester: 5,
+    cgpa: 8.40,
+    attendance: 68.5,
+    feeCleared: true,
+    completedCourses: [
+      { courseCode: 'DATA103', courseName: 'Introduction to Programming', grade: 'A', isPassed: true, credits: 4 },
+      { courseCode: 'DATA201', courseName: 'Foundations to Data Science', grade: 'B+', isPassed: true, credits: 3 },
+      { courseCode: 'DATA301', courseName: 'Machine Learning', grade: 'B', isPassed: true, credits: 4 }
+    ],
+    currentCourses: ['DATA302', 'COMP201'],
+    interests: ['Artificial Intelligence', 'Computer Vision'],
+    notes: 'Completed DATA301 prerequisite, but has low attendance (68.5%) requiring medical relaxation approval.'
+  },
+
+  // ── Student 17 ── B.Tech CSE – Data Science, Sem 5 (Fee Pending Block Scenario)
+  {
+    id: 'VU-DEMO-017',
+    data_type: 'SYNTHETIC',
+    display_name: 'Student 17',
+    program: 'BTECH_DS',
+    programName: 'B.Tech (Hons.) CSE – Data Science',
+    program_type: 'B.Tech',
+    batch: '2024',
+    semester: 5,
+    cgpa: 7.85,
+    attendance: 84.0,
+    feeCleared: false,
+    completedCourses: [
+      { courseCode: 'DATA103', courseName: 'Introduction to Programming', grade: 'B', isPassed: true, credits: 4 },
+      { courseCode: 'DATA201', courseName: 'Foundations to Data Science', grade: 'B+', isPassed: true, credits: 3 }
+    ],
+    currentCourses: ['DATA206', 'DATA301'],
+    interests: ['Database Systems', 'Cloud Computing'],
+    notes: 'Has pending fee dues. Course registration blocked until Digii ERP clearance.'
+  },
+
+  // ── Student 18 ── B.Des – Communication Design, Sem 5 (Minor & Summer Term Registration)
+  {
+    id: 'VU-DEMO-018',
+    data_type: 'SYNTHETIC',
+    display_name: 'Student 18',
+    program: 'BDES_CD',
+    programName: 'Bachelor of Design',
+    program_type: 'B.Des',
+    batch: '2024',
+    semester: 5,
+    cgpa: 8.60,
+    attendance: 88.5,
+    feeCleared: true,
+    completedCourses: [],
+    currentCourses: [],
+    interests: ['Design Thinking', 'Communication Design', 'Minor Courses'],
+    notes: 'B.Des student pursuing Design Minor and Summer Term registration.'
   }
 ];
 

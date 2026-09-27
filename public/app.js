@@ -1,6 +1,6 @@
 /**
- * VU AI Faculty Advisor — Premium Frontend Controller v4
- * Dark glassmorphism UI · 15 synthetic profiles · Responsive ChatGPT-style chat
+ * VU AI Faculty Advisor — Institutional Frontend Controller v5
+ * Institutional UI · 18 synthetic profiles · Evidence-Grounded Chat
  */
 
 'use strict';
