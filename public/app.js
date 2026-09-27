@@ -340,8 +340,8 @@ function renderDemoProfilesSection() {
         <span class="dp-tag dp-tag-sem">Sem ${p.semester}</span>
         <span class="dp-tag">Batch ${escHtml(String(p.batch))}</span>
         <span class="dp-tag dp-tag-synth">⚗ Synthetic</span>
-        ${p.attendance < 75 ? '<span class="dp-tag" style="background:rgba(245,158,11,0.15);color:#fbbf24;border-color:rgba(245,158,11,0.25);">⚠ Att</span>' : ''}
-        ${!p.feeCleared ? '<span class="dp-tag" style="background:rgba(239,68,68,0.1);color:#f87171;border-color:rgba(239,68,68,0.2);">Fees Pending</span>' : ''}
+        ${p.attendance < 75 ? '<span class="dp-tag" style="background:#fffbeb;color:#b45309;border-color:#fde68a;">⚠ Att</span>' : ''}
+        ${!p.feeCleared ? '<span class="dp-tag" style="background:#fceeec;color:#b3193e;border-color:#f87171;">Fees Pending</span>' : ''}
       </div>
       <button class="dp-select-btn" id="dp-btn-${p.id}">
         ${currentProfileId === p.id ? '✓ Selected' : 'Select Profile'}
