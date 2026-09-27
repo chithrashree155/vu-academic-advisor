@@ -656,22 +656,24 @@ img, svg { display: block; }
 
 /* ══════════ ADVISOR SECTION ══════════ */
 .advisor-section {
-  min-height: 90vh;
-  padding: 0 24px 40px;
+  min-height: calc(100vh - var(--nav-h));
+  padding: 0 24px 32px;
   display: flex;
   flex-direction: column;
   scroll-margin-top: var(--nav-h);
 }
 
 .advisor-layout {
-  max-width: 1400px;
+  max-width: 1440px;
   margin: 0 auto;
   width: 100%;
   display: grid;
-  grid-template-columns: 280px 1fr 260px;
+  grid-template-columns: 260px 1fr 260px;
   gap: 16px;
-  align-items: start;
-  min-height: 700px;
+  align-items: stretch;
+  height: calc(100vh - var(--nav-h) - 32px);
+  min-height: 650px;
+  max-height: 920px;
 }
 
 /* ── Profile Panel ── */
@@ -988,7 +990,8 @@ img, svg { display: block; }
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: 700px;
+  height: 100%;
+  min-height: 0;
 }
 
 .chat-header {
@@ -2051,25 +2054,122 @@ img, svg { display: block; }
   color: var(--gold-300);
 }
 
-/* ══════════ UTILITIES ══════════ */
+/* ══════════ UTILITIES & MOBILE CONTROLS ══════════ */
 .hidden { display: none !important; }
 
+.mobile-profile-bar {
+  display: none;
+}
+.mobile-quick-toggle {
+  display: none;
+}
+
 /* ══════════ RESPONSIVE ══════════ */
-@media (max-width: 1200px) {
+
+/* Large Desktop (1920px+) */
+@media (min-width: 1920px) {
   .advisor-layout {
-    grid-template-columns: 260px 1fr 240px;
+    max-width: 1600px;
+    grid-template-columns: 280px 1fr 280px;
+  }
+}
+
+/* Desktop (1280px - 1440px) */
+@media (max-width: 1280px) {
+  .advisor-layout {
+    grid-template-columns: 240px 1fr 240px;
+    gap: 12px;
   }
   .hero-visual { flex: 0 0 340px; height: 340px; }
 }
 
+/* Tablet & Mobile (max-width: 1024px) */
 @media (max-width: 1024px) {
+  .advisor-section {
+    padding: 12px 12px 24px;
+    min-height: auto;
+  }
+
   .advisor-layout {
-    grid-template-columns: 1fr;
-  }
-  .profile-panel, .quick-panel {
-    position: static;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: auto;
     max-height: none;
+    gap: 12px;
   }
+
+  /* Desktop sidebars are replaced on mobile */
+  .profile-panel {
+    display: none !important;
+  }
+
+  /* Show mobile controls */
+  .mobile-profile-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: rgba(19, 43, 88, 0.5);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .mobile-profile-select {
+    flex: 1;
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-default);
+    border-radius: var(--r-md);
+    color: var(--text-primary);
+    font-size: 0.8rem;
+    outline: none;
+  }
+  .mobile-profile-select option {
+    background: #0c1c38;
+    color: #f0f4ff;
+  }
+
+  .mobile-quick-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 12px;
+    background: rgba(201, 154, 0, 0.15);
+    border: 1px solid var(--border-accent);
+    border-radius: var(--r-pill);
+    color: var(--gold-300);
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* Quick Ask drawer overlay on mobile */
+  .quick-panel {
+    display: none;
+    position: fixed;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 150;
+    border-radius: 0;
+    max-height: none;
+    background: rgba(5, 14, 28, 0.96);
+    backdrop-filter: blur(20px);
+    padding: 16px;
+    overflow-y: auto;
+  }
+  .quick-panel.mobile-open {
+    display: block !important;
+  }
+
+  .chat-panel {
+    width: 100%;
+    height: calc(100vh - var(--nav-h) - 24px);
+    min-height: 540px;
+    border-radius: var(--r-lg);
+  }
+
   .hero { flex-direction: column; text-align: center; min-height: auto; padding-bottom: 40px; }
   .hero-content { max-width: 100%; }
   .hero-desc { margin: 0 auto 36px; }
@@ -2080,25 +2180,70 @@ img, svg { display: block; }
   .floating-card { display: none; }
 }
 
+/* Mobile Devices (max-width: 768px) */
 @media (max-width: 768px) {
-  .nav-links { display: none; }
+  .nav-links {
+    display: none;
+    position: fixed;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    background: rgba(5, 14, 28, 0.98);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 16px 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    z-index: 190;
+  }
+  .nav-links.mobile-open {
+    display: flex !important;
+  }
+
   .nav-hamburger { display: flex; }
   .nav-status { display: none; }
   .programs-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
   .demo-profiles-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-  .advisor-section { padding: 0 12px 24px; }
+  .advisor-section { padding: 4px 6px 16px; }
   .programs-section, .about-section, .profile-section { padding-left: 16px; padding-right: 16px; }
   .hero { padding-left: 16px; padding-right: 16px; }
   .footer-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
   .footer-text { flex: none; }
+
+  .user-bubble-col { max-width: 88%; }
+  .chat-header { padding: 12px 16px; }
+  .chat-body { padding: 0; }
+  .chat-history { padding: 14px 12px; gap: 16px; }
+  .chat-input-area { padding: 10px 12px 12px; }
+  .chat-input { font-size: 0.85rem; }
+  .chat-send-btn { width: 40px; height: 40px; }
 }
 
+/* Small Mobile (320px - 414px) */
 @media (max-width: 520px) {
-  .hero-title { font-size: 2.4rem; }
+  .hero-title { font-size: 2.2rem; }
   .hero-stats { gap: 0; flex-wrap: wrap; justify-content: center; }
-  .hero-stat { padding: 8px 16px; }
+  .hero-stat { padding: 6px 12px; }
+  .hero-stat-num { font-size: 1.3rem; }
+  .hero-stat-label { font-size: 0.65rem; }
   .ws-caps { grid-template-columns: 1fr; }
   .programs-grid { grid-template-columns: 1fr 1fr; }
   .nav-cta span { display: none; }
-  .chat-history { padding: 16px; }
+  .nav-brand-sub { display: none; }
+  .chat-panel { height: calc(100vh - var(--nav-h) - 12px); min-height: 480px; }
+  .chat-history { padding: 10px 8px; gap: 12px; }
+  .user-bubble { font-size: 0.84rem; padding: 10px 14px; }
+  .answer-text-v2 { font-size: 0.84rem; line-height: 1.65; }
+  .ac-body { padding: 12px; }
+  .ac-header { padding: 10px 12px; }
+  .sources-block { padding: 10px 12px; }
+}
+
+@media (max-width: 375px) {
+  .advisor-section { padding: 2px 2px 12px; }
+  .chat-header { padding: 10px 12px; }
+  .chat-title { font-size: 0.92rem; }
+  .rag-badge span:not(.rag-dot) { display: none; }
+  .chat-input-wrap { padding-left: 12px; }
 }

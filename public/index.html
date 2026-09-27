@@ -247,7 +247,16 @@
               <span class="rag-dot"></span>
               <span>RAG · Local</span>
             </div>
+            <button class="mobile-quick-toggle" id="mobileQuickToggle" title="Toggle Quick Questions">⚡ Quick Ask</button>
           </div>
+        </div>
+
+        <!-- Mobile Profile Dropdown Bar -->
+        <div class="mobile-profile-bar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <select class="mobile-profile-select" id="mobileProfileSelect">
+            <option value="">Select Student Profile (General Query)</option>
+          </select>
         </div>
 
         <!-- Welcome / Chat area -->
@@ -294,7 +303,7 @@
               <span class="t-dot"></span>
               <span class="t-dot"></span>
               <span class="t-dot"></span>
-              <span class="thinking-text">Retrieving evidence...</span>
+              <span class="thinking-text" id="thinkingText">Checking university sources...</span>
             </div>
           </div>
 

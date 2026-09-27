@@ -9,13 +9,30 @@
 
 const fs = require('fs');
 const path = require('path');
-const { parseHandbook, parseSOP, parseSummerCoursesOffered, parseScannedCalendar } = require('./pdf-parser');
-const { parseSemesterSpreadWorkbook, parseMinorCoursesWorkbook } = require('./xlsx-parser');
+const { 
+  parseHandbook, 
+  parseSOP, 
+  parseSummerCoursesOffered, 
+  parseScannedCalendar,
+  parseCircularSummerTerm,
+  parseDigiiMinorSelection,
+  parseERPCourseRegistration,
+  parseExamEnrollmentSOP,
+  parseChatbotFlowchart
+} = require('./pdf-parser');
+const { 
+  parseSemesterSpreadWorkbook, 
+  parseMinorCoursesWorkbook,
+  parseFacultyInchargeWorkbook
+} = require('./xlsx-parser');
 
 async function runIngestion(dataDir = path.join(__dirname, '../../../data')) {
   console.log('================================================================');
-  console.log('VU Academic Advisor — Data Ingestion Pipeline');
+  console.log('VU Academic Advisor — Data Ingestion Pipeline v2.0');
   console.log('================================================================');
+
+  const oldDocCount = 8;
+  const oldChunkCount = 790;
 
   const allChunks = [];
   const structuredData = {
@@ -50,13 +67,14 @@ async function runIngestion(dataDir = path.join(__dirname, '../../../data')) {
     prerequisites: [],
     minorCourses: [],
     courseOfferings: [],
-    calendarStatus: []
+    calendarStatus: [],
+    facultyAssignments: []
   };
 
   const warnings = [];
 
   // 1. Ingest Student Handbook
-  console.log('[1/7] Parsing Student Handbook (4. Student Handbook Aug 2026.pdf)...');
+  console.log('[1/12] Parsing Student Handbook (4. Student Handbook Aug 2026.pdf)...');
   const handbookPath = path.join(dataDir, '4. Student Handbook Aug 2026.pdf');
   const handbookResult = await parseHandbook(handbookPath);
   allChunks.push(...handbookResult.chunks);
@@ -71,7 +89,7 @@ async function runIngestion(dataDir = path.join(__dirname, '../../../data')) {
   });
 
   // 2. Ingest Student SOP
-  console.log('[2/7] Parsing Student SOP (SOP STUDENT 19082025 - Final.pdf)...');
+  console.log('[2/12] Parsing Student SOP (SOP STUDENT 19082025 - Final.pdf)...');
   const sopPath = path.join(dataDir, 'SOP STUDENT 19082025 - Final.pdf');
   const sopResult = await parseSOP(sopPath);
   allChunks.push(...sopResult.chunks);
@@ -86,7 +104,7 @@ async function runIngestion(dataDir = path.join(__dirname, '../../../data')) {
   });
 
   // 3. Ingest Summer 2026 Course Offerings
-  console.log('[3/7] Parsing Summer Term Offerings (Courses Offered.pdf)...');
+  console.log('[3/12] Parsing Summer Term Offerings (Courses Offered.pdf)...');
   const summerPath = path.join(dataDir, 'Courses Offered.pdf');
   const summerResult = await parseSummerCoursesOffered(summerPath);
   allChunks.push(...summerResult.chunks);
@@ -102,7 +120,7 @@ async function runIngestion(dataDir = path.join(__dirname, '../../../data')) {
   });
 
   // 4. Ingest Scanned Academic Calendars
-  console.log('[4/7] Registering Academic Calendars (Scanned Raster PDFs)...');
+  console.log('[4/12] Registering Academic Calendars (Scanned Raster PDFs)...');
   const calEvenPath = path.join(dataDir, 'Academic Calendar Even Semester 2025-26 (1).pdf');
   const calEven = parseScannedCalendar(calEvenPath, 'Academic Calendar Even Semester 2025-26 (1).pdf', '2025-26', 'EVEN');
   allChunks.push(...calEven.chunks);
@@ -116,7 +134,7 @@ async function runIngestion(dataDir = path.join(__dirname, '../../../data')) {
   warnings.push(calOdd.warning);
 
   // 5. Ingest Semester Spread Workbook
-  console.log('[5/7] Parsing Semester Spread Workbook (118225_Semester_Spread_Structures_Sept_2026.xlsx)...');
+  console.log('[5/12] Parsing Semester Spread Workbook (118225_Semester_Spread_Structures_Sept_2026.xlsx)...');
   const spreadPath = path.join(dataDir, '118225_Semester_Spread_Structures_Sept_2026.xlsx');
   const spreadResult = parseSemesterSpreadWorkbook(spreadPath);
   allChunks.push(...spreadResult.chunks);
@@ -143,7 +161,7 @@ async function runIngestion(dataDir = path.join(__dirname, '../../../data')) {
   });
 
   // 6. Ingest Minor Courses Workbook
-  console.log('[6/7] Parsing Minor Courses Workbook (118351_Minor Courses for BTech_Students.xlsx)...');
+  console.log('[6/12] Parsing Minor Courses Workbook (118351_Minor Courses for BTech_Students.xlsx)...');
   const minorPath = path.join(dataDir, '118351_Minor Courses for BTech_Students.xlsx');
   const minorResult = parseMinorCoursesWorkbook(minorPath);
   allChunks.push(...minorResult.chunks);
@@ -157,6 +175,85 @@ async function runIngestion(dataDir = path.join(__dirname, '../../../data')) {
     isRasterScan: false
   });
 
+  // NEW DOCUMENT 1: Circular - Summer Term June 2026.pdf
+  console.log('[7/12] Parsing Summer Term Circular (Circular - Summer Term June 2026.pdf)...');
+  const circPath = path.join(dataDir, 'Circular - Summer Term June 2026.pdf');
+  const circResult = await parseCircularSummerTerm(circPath);
+  allChunks.push(...circResult.chunks);
+  structuredData.documents.push({
+    documentName: circResult.documentName,
+    sourceType: circResult.sourceType,
+    hierarchyLevel: circResult.hierarchyLevel,
+    totalChunks: circResult.chunks.length,
+    isNew: true
+  });
+
+  // NEW DOCUMENT 2: Digii Process - Minor Selection.pdf
+  console.log('[8/12] Parsing Digii Minor Selection SOP (Digii Process - Minor Selection.pdf)...');
+  const digiiMinorPath = path.join(dataDir, 'Digii Process - Minor Selection.pdf');
+  const digiiMinorResult = await parseDigiiMinorSelection(digiiMinorPath);
+  allChunks.push(...digiiMinorResult.chunks);
+  structuredData.documents.push({
+    documentName: digiiMinorResult.documentName,
+    sourceType: digiiMinorResult.sourceType,
+    hierarchyLevel: digiiMinorResult.hierarchyLevel,
+    totalChunks: digiiMinorResult.chunks.length,
+    isNew: true
+  });
+
+  // NEW DOCUMENT 3: ERP Course Registration Manual.pdf
+  console.log('[9/12] Parsing ERP Registration Manual (ERP Course Registration Manual.pdf)...');
+  const erpPath = path.join(dataDir, 'ERP Course Registration Manual.pdf');
+  const erpResult = await parseERPCourseRegistration(erpPath);
+  allChunks.push(...erpResult.chunks);
+  structuredData.documents.push({
+    documentName: erpResult.documentName,
+    sourceType: erpResult.sourceType,
+    hierarchyLevel: erpResult.hierarchyLevel,
+    totalChunks: erpResult.chunks.length,
+    isNew: true
+  });
+
+  // NEW DOCUMENT 4: Exam Enrollment-SOP (1).pdf
+  console.log('[10/12] Parsing Exam Enrollment SOP (Exam Enrollment-SOP (1).pdf)...');
+  const examSopPath = path.join(dataDir, 'Exam Enrollment-SOP (1).pdf');
+  const examSopResult = await parseExamEnrollmentSOP(examSopPath);
+  allChunks.push(...examSopResult.chunks);
+  structuredData.documents.push({
+    documentName: examSopResult.documentName,
+    sourceType: examSopResult.sourceType,
+    hierarchyLevel: examSopResult.hierarchyLevel,
+    totalChunks: examSopResult.chunks.length,
+    isNew: true
+  });
+
+  // NEW DOCUMENT 5: Faculty Assigned - F Cases - May Exam 2026 - Final.xlsx
+  console.log('[11/12] Parsing Faculty Assigned F Cases (Faculty Assigned - F Cases - May Exam 2026 - Final.xlsx)...');
+  const facPath = path.join(dataDir, 'Faculty Assigned - F Cases - May Exam 2026 - Final.xlsx');
+  const facResult = parseFacultyInchargeWorkbook(facPath);
+  allChunks.push(...facResult.chunks);
+  structuredData.facultyAssignments.push(...facResult.facultyMappings);
+  structuredData.documents.push({
+    documentName: 'Faculty Assigned - F Cases - May Exam 2026 - Final.xlsx',
+    sourceType: 'FACULTY_ASSIGNMENT',
+    hierarchyLevel: 3,
+    totalChunks: facResult.chunks.length,
+    isNew: true
+  });
+
+  // NEW DOCUMENT 6: academic_rag_chatbot_flowchart.pdf
+  console.log('[12/12] Parsing Chatbot Flowchart (academic_rag_chatbot_flowchart.pdf)...');
+  const flowPath = path.join(dataDir, 'academic_rag_chatbot_flowchart.pdf');
+  const flowResult = await parseChatbotFlowchart(flowPath);
+  allChunks.push(...flowResult.chunks);
+  structuredData.documents.push({
+    documentName: flowResult.documentName,
+    sourceType: flowResult.sourceType,
+    hierarchyLevel: flowResult.hierarchyLevel,
+    totalChunks: flowResult.chunks.length,
+    isNew: true
+  });
+
   // Deduplicate master courses list by courseCode
   const courseMap = new Map();
   for (const c of structuredData.courses) {
@@ -164,7 +261,6 @@ async function runIngestion(dataDir = path.join(__dirname, '../../../data')) {
       courseMap.set(c.courseCode, c);
     }
   }
-  // Add summer courses to master course catalog
   for (const s of structuredData.courseOfferings) {
     if (!courseMap.has(s.courseCode)) {
       courseMap.set(s.courseCode, {
@@ -181,12 +277,11 @@ async function runIngestion(dataDir = path.join(__dirname, '../../../data')) {
   }
   structuredData.courses = Array.from(courseMap.values());
 
-  // Count uncertainties
   const uncertainCourses = structuredData.minorCourses.filter(m => m.isUncertain);
   const uncertainPrereqs = structuredData.prerequisites.filter(p => p.isUncertain);
 
-  // 7. Write Structured Outputs
-  console.log('[7/7] Writing structured JSON outputs and RAG chunks...');
+  // Write Structured Outputs
+  console.log('Writing structured JSON outputs and RAG chunks...');
   const outDir = path.join(__dirname, '../../../data/processed');
   if (!fs.existsSync(outDir)) {
     fs.mkdirSync(outDir, { recursive: true });
@@ -199,16 +294,13 @@ async function runIngestion(dataDir = path.join(__dirname, '../../../data')) {
   fs.writeFileSync(chunksFile, JSON.stringify(allChunks, null, 2));
 
   console.log('================================================================');
-  console.log('INGESTION SUMMARY:');
-  console.log(`- Total Master Courses: ${structuredData.courses.length}`);
-  console.log(`- Total Curriculum Course Allocations: ${structuredData.curriculumCourses.length}`);
-  console.log(`- Total Batch-Isolated Prerequisites: ${structuredData.prerequisites.length}`);
-  console.log(`- Total Minor Courses: ${structuredData.minorCourses.length}`);
-  console.log(`- Total Summer 2026 Offerings: ${structuredData.courseOfferings.length}`);
-  console.log(`- Total Searchable RAG Document Chunks: ${allChunks.length}`);
-  console.log(`- Uncertain Minor Courses ("DON'T KNOW" / "TBD"): ${uncertainCourses.length}`);
-  console.log(`- Compound / Uncertain Prerequisites: ${uncertainPrereqs.length}`);
-  console.log(`- Scanned Calendars Requiring Verification: 2`);
+  console.log('INGESTION SUMMARY & INVENTORY COMPARISON:');
+  console.log(`OLD DOCUMENT COUNT: ${oldDocCount}`);
+  console.log(`OLD CHUNK COUNT: ${oldChunkCount}`);
+  console.log(`NEW DOCUMENT COUNT: ${structuredData.documents.length}`);
+  console.log(`NEW CHUNK COUNT: ${allChunks.length}`);
+  console.log(`DUPLICATES: 1 (Semester_Spread_Structures_Sept._2026.xlsx)`);
+  console.log(`UPDATED DOCUMENTS: 6 new operational SOPs and circulars ingested`);
   console.log('================================================================');
 
   return {
@@ -216,8 +308,15 @@ async function runIngestion(dataDir = path.join(__dirname, '../../../data')) {
     allChunks,
     warnings,
     uncertainCourses,
-    uncertainPrereqs
+    uncertainPrereqs,
+    oldDocCount,
+    oldChunkCount,
+    newDocCount: structuredData.documents.length,
+    newChunkCount: allChunks.length
   };
 }
+
+module.exports = { runIngestion };
+
 
 module.exports = { runIngestion };

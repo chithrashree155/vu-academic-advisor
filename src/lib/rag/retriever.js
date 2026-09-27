@@ -139,8 +139,30 @@ class RagRetriever {
     const queryTokens = rawTokens.filter(t => !STOP_WORDS.has(t));
     const isCurriculumQuery = query.toLowerCase().includes('curriculum') || query.toLowerCase().includes('courses in semester');
 
+    const genericWords = new Set(['policy', 'policies', 'rules', 'rule', 'guideline', 'guidelines', 'information', 'detail', 'details', 'tell', 'what', 'how', 'give', 'me', 'about']);
+    const substantiveTokens = queryTokens.filter(t => !genericWords.has(t));
+
     const scored = candidateChunks.map((chunk) => {
       const contentLower = chunk.content.toLowerCase();
+      
+      // If query has substantive tokens, at least one MUST match
+      if (substantiveTokens.length > 0) {
+        const hasSubstantiveMatch = substantiveTokens.some(token => contentLower.includes(token));
+        if (!hasSubstantiveMatch) {
+          return {
+            chunkText: chunk.content,
+            documentName: chunk.documentName,
+            sourceType: chunk.sourceType,
+            hierarchyLevel: chunk.hierarchyLevel,
+            pageOrSheet: chunk.metadata?.sourceSheet || chunk.pageNumber || chunk.sectionNumber,
+            clauseNumber: chunk.clauseNumber,
+            metadata: chunk.metadata,
+            similarityScore: 0,
+            rawScore: 0
+          };
+        }
+      }
+
       let matchCount = 0;
       let exactBonus = 0;
 

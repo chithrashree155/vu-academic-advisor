@@ -1,6 +1,6 @@
 /**
- * VU AI Faculty Advisor — Premium Frontend Controller v3
- * Dark glassmorphism UI · 15 synthetic profiles · ChatGPT-style chat
+ * VU AI Faculty Advisor — Premium Frontend Controller v4
+ * Dark glassmorphism UI · 15 synthetic profiles · Responsive ChatGPT-style chat
  */
 
 'use strict';
@@ -11,6 +11,8 @@ let allProfiles = [];
 let filteredProfiles = [];
 let isLoading = false;
 let currentProgramFilter = '';
+let thinkingTimer = null;
+let lastSubmittedQuery = '';
 
 /* ══════════ CONSTANTS ══════════ */
 const PROGRAM_SHORT = {
@@ -60,9 +62,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadProfiles();
   setupEventListeners();
   setupKeyboardShortcuts();
+  setupMobileNav();
 });
 
-/* ══════════ NAV SCROLL ══════════ */
+/* ══════════ NAV SCROLL & MOBILE ══════════ */
 function setupNav() {
   const nav = document.getElementById('topnav');
   window.addEventListener('scroll', () => {
@@ -70,9 +73,31 @@ function setupNav() {
   }, { passive: true });
 }
 
+function setupMobileNav() {
+  const hamburger = document.getElementById('navHamburger');
+  const navLinks = document.getElementById('navLinks');
+  if (!hamburger || !navLinks) return;
+
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('mobile-open');
+    hamburger.classList.toggle('open');
+  });
+
+  // Close when clicking a link
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('mobile-open');
+      hamburger.classList.remove('open');
+    });
+  });
+}
+
 function scrollToAdvisor() {
-  document.getElementById('advisor').scrollIntoView({ behavior: 'smooth' });
-  setTimeout(() => document.getElementById('queryInput')?.focus(), 600);
+  const advisorSection = document.getElementById('advisor');
+  if (advisorSection) {
+    advisorSection.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => document.getElementById('queryInput')?.focus(), 600);
+  }
 }
 window.scrollToAdvisor = scrollToAdvisor;
 
@@ -84,6 +109,7 @@ async function loadProfiles() {
     allProfiles = data.profiles || [];
     filteredProfiles = allProfiles;
     renderProfileList();
+    renderMobileProfileDropdown();
     renderDemoProfilesSection();
   } catch (err) {
     console.error('Failed to load profiles:', err);
@@ -99,19 +125,19 @@ function applyProgramFilter(programCode) {
 
   if (currentProfileId && !filteredProfiles.find(p => p.id === currentProfileId)) {
     currentProfileId = null;
-    document.getElementById('activeProfileCard').classList.add('hidden');
+    const card = document.getElementById('activeProfileCard');
+    if (card) card.classList.add('hidden');
     updateInputContextBar();
   }
   renderProfileList();
 }
 
 window.filterByProgram = function(programCode, label) {
-  // Set the program filter dropdown
   const sel = document.getElementById('programFilter');
   if (sel) sel.value = programCode;
   applyProgramFilter(programCode);
-  // Scroll to advisor
-  document.getElementById('profile-section').scrollIntoView({ behavior: 'smooth' });
+  const target = document.getElementById('advisor') || document.getElementById('profile-section');
+  if (target) target.scrollIntoView({ behavior: 'smooth' });
 };
 
 function renderProfileList() {
@@ -125,7 +151,7 @@ function renderProfileList() {
 
   const profiles = filteredProfiles.length > 0 ? filteredProfiles : allProfiles;
 
-  profiles.forEach((p, idx) => {
+  profiles.forEach((p) => {
     const num = String(allProfiles.indexOf(p) + 1).padStart(2, '0');
     const item = buildProfileItem(p.id, num, p.display_name, PROGRAM_SHORT[p.program] || p.program, p);
     container.appendChild(item);
@@ -137,6 +163,26 @@ function renderProfileList() {
     note.textContent = 'No students match this filter.';
     container.appendChild(note);
   }
+}
+
+function renderMobileProfileDropdown() {
+  const sel = document.getElementById('mobileProfileSelect');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">Select Student Profile (General Query)</option>';
+
+  allProfiles.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = `${p.display_name} — ${PROGRAM_SHORT[p.program] || p.program} (Sem ${p.semester})`;
+    if (currentProfileId === p.id) opt.selected = true;
+    sel.appendChild(opt);
+  });
+
+  sel.onchange = () => {
+    const val = sel.value || null;
+    const profObj = allProfiles.find(p => p.id === val) || null;
+    selectProfile(val, profObj);
+  };
 }
 
 function buildProfileItem(id, num, name, prog, profileObj) {
@@ -177,17 +223,26 @@ function selectProfile(profileId, profileObj) {
   renderDemoProfilesSection();
   renderActiveProfileCard(profileObj);
   updateInputContextBar();
+
+  // Sync mobile select if present
+  const mSel = document.getElementById('mobileProfileSelect');
+  if (mSel) mSel.value = profileId || '';
 }
 
 function renderActiveProfileCard(p) {
   const card = document.getElementById('activeProfileCard');
+  if (!card) return;
   if (!p) { card.classList.add('hidden'); return; }
 
   card.classList.remove('hidden');
   const num = String(allProfiles.indexOf(p) + 1).padStart(2, '0');
-  document.getElementById('apcAvatar').textContent = num;
-  document.getElementById('apcName').textContent = p.display_name;
-  document.getElementById('apcProgram').textContent = p.programName;
+  const avatarEl = document.getElementById('apcAvatar');
+  const nameEl = document.getElementById('apcName');
+  const progEl = document.getElementById('apcProgram');
+
+  if (avatarEl) avatarEl.textContent = num;
+  if (nameEl) nameEl.textContent = p.display_name;
+  if (progEl) progEl.textContent = p.programName;
 
   const attClass = p.attendance >= 75 ? 'good' : 'bad';
   const feeClass = p.feeCleared ? 'good' : 'bad';
@@ -195,14 +250,14 @@ function renderActiveProfileCard(p) {
   let coursesHtml = '';
   if (p.completedCourses && p.completedCourses.length > 0) {
     const chips = p.completedCourses.map(c =>
-      `<span class="apc-chip" title="${escHtml(c.courseName)} · ${escHtml(c.grade)}">${escHtml(c.courseCode)}</span>`
+      `<span class="apc-chip" title="${escHtml(c.courseName)} · Grade: ${escHtml(c.grade)}">${escHtml(c.courseCode)}</span>`
     ).join('');
     coursesHtml = `
       <div class="apc-courses-title">Completed Courses</div>
       <div class="apc-chips">${chips}</div>
     `;
   } else {
-    coursesHtml = `<div class="apc-no-courses">No course data in source files for this program.</div>`;
+    coursesHtml = `<div class="apc-no-courses">No specific course list in source documents.</div>`;
   }
 
   let currentCoursesHtml = '';
@@ -216,30 +271,33 @@ function renderActiveProfileCard(p) {
     `;
   }
 
-  document.getElementById('apcDetails').innerHTML = `
-    <div class="apc-row">
-      <span class="apc-label">ID</span>
-      <span class="apc-val" style="font-family:monospace;font-size:0.68rem;">${escHtml(p.id)}</span>
-    </div>
-    <div class="apc-row">
-      <span class="apc-label">Batch</span>
-      <span class="apc-val">${escHtml(String(p.batch))} · Sem ${p.semester}</span>
-    </div>
-    <div class="apc-row">
-      <span class="apc-label">CGPA</span>
-      <span class="apc-val">${p.cgpa}</span>
-    </div>
-    <div class="apc-row">
-      <span class="apc-label">Attendance</span>
-      <span class="apc-val ${attClass}">${p.attendance}%</span>
-    </div>
-    <div class="apc-row">
-      <span class="apc-label">Fees</span>
-      <span class="apc-val ${feeClass}">${p.feeCleared ? 'Cleared ✓' : 'Pending ⚠'}</span>
-    </div>
-    ${coursesHtml}
-    ${currentCoursesHtml}
-  `;
+  const detailsEl = document.getElementById('apcDetails');
+  if (detailsEl) {
+    detailsEl.innerHTML = `
+      <div class="apc-row">
+        <span class="apc-label">ID</span>
+        <span class="apc-val" style="font-family:monospace;font-size:0.68rem;">${escHtml(p.id)}</span>
+      </div>
+      <div class="apc-row">
+        <span class="apc-label">Batch</span>
+        <span class="apc-val">${escHtml(String(p.batch))} · Sem ${p.semester}</span>
+      </div>
+      <div class="apc-row">
+        <span class="apc-label">CGPA</span>
+        <span class="apc-val">${p.cgpa}</span>
+      </div>
+      <div class="apc-row">
+        <span class="apc-label">Attendance</span>
+        <span class="apc-val ${attClass}">${p.attendance}%</span>
+      </div>
+      <div class="apc-row">
+        <span class="apc-label">Fees</span>
+        <span class="apc-val ${feeClass}">${p.feeCleared ? 'Cleared ✓' : 'Pending ⚠'}</span>
+      </div>
+      ${coursesHtml}
+      ${currentCoursesHtml}
+    `;
+  }
 }
 
 function updateInputContextBar() {
@@ -259,7 +317,6 @@ function updateInputContextBar() {
   }
 }
 
-/* Demo profiles section (the big card grid) */
 function renderDemoProfilesSection() {
   const grid = document.getElementById('demoProfilesGrid');
   if (!grid) return;
@@ -293,7 +350,7 @@ function renderDemoProfilesSection() {
 
     card.addEventListener('click', () => {
       selectProfile(p.id, p);
-      document.getElementById('advisor').scrollIntoView({ behavior: 'smooth' });
+      scrollToAdvisor();
     });
 
     grid.appendChild(card);
@@ -305,14 +362,12 @@ function setupEventListeners() {
   const form = document.getElementById('advisorForm');
   const programFilter = document.getElementById('programFilter');
 
-  // Program filter
   if (programFilter) {
     programFilter.addEventListener('change', () => {
       applyProgramFilter(programFilter.value);
     });
   }
 
-  // Close active profile
   const apcClose = document.getElementById('apcClose');
   if (apcClose) {
     apcClose.addEventListener('click', () => {
@@ -320,18 +375,18 @@ function setupEventListeners() {
     });
   }
 
-  // Quick action cards (hero area)
+  // Quick action buttons in hero
   document.querySelectorAll('.qa-card[data-query]').forEach(btn => {
     btn.addEventListener('click', () => {
       const q = btn.getAttribute('data-query');
       if (q) {
-        document.getElementById('advisor').scrollIntoView({ behavior: 'smooth' });
-        setTimeout(() => submitQuery(q), 400);
+        scrollToAdvisor();
+        setTimeout(() => submitQuery(q), 300);
       }
     });
   });
 
-  // Quick list buttons (right panel)
+  // Quick list buttons in panel
   document.querySelectorAll('.ql-btn[data-query]').forEach(btn => {
     btn.addEventListener('click', () => {
       const q = btn.getAttribute('data-query');
@@ -339,7 +394,15 @@ function setupEventListeners() {
     });
   });
 
-  // Form submit
+  // Mobile quick ask drawer toggle
+  const mobileQuickToggle = document.getElementById('mobileQuickToggle');
+  const quickPanel = document.getElementById('quickPanel');
+  if (mobileQuickToggle && quickPanel) {
+    mobileQuickToggle.addEventListener('click', () => {
+      quickPanel.classList.toggle('mobile-open');
+    });
+  }
+
   if (form) {
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -365,21 +428,23 @@ function setupKeyboardShortcuts() {
 async function submitQuery(query) {
   if (isLoading) return;
   isLoading = true;
+  lastSubmittedQuery = query;
 
   const queryInput  = document.getElementById('queryInput');
   const submitBtn   = document.getElementById('submitBtn');
   const spinner     = document.getElementById('spinner');
   const btnIcon     = document.getElementById('btnIcon');
 
-  // Hide welcome, show history
   const welcomeEl = document.getElementById('welcomeState');
   if (welcomeEl) welcomeEl.style.display = 'none';
 
-  queryInput.value = '';
-  queryInput.disabled = true;
-  submitBtn.disabled = true;
-  if (spinner) { spinner.classList.remove('hidden'); }
-  if (btnIcon)  { btnIcon.classList.add('hidden'); }
+  if (queryInput) {
+    queryInput.value = '';
+    queryInput.disabled = true;
+  }
+  if (submitBtn) submitBtn.disabled = true;
+  if (spinner) spinner.classList.remove('hidden');
+  if (btnIcon) btnIcon.classList.add('hidden');
 
   appendUserBubble(query);
   showThinking(true);
@@ -391,27 +456,57 @@ async function submitQuery(query) {
       body: JSON.stringify({ query, profileId: currentProfileId })
     });
 
-    if (!res.ok) throw new Error(`Server error: ${res.status}`);
+    showThinking(false);
+
+    if (!res.ok) {
+      // Graceful handling of HTTP errors (Level 5)
+      appendAdvisorResponse({
+        state: 'INSUFFICIENT_INFORMATION',
+        answer: "I'm having trouble accessing the academic knowledge base right now. Please try again in a moment.",
+        sources: [],
+        showRetry: true
+      }, query);
+      return;
+    }
+
     const data = await res.json();
-    showThinking(false);
-    appendAdvisorResponse(data);
+    appendAdvisorResponse(data, query);
+
   } catch (err) {
-    console.error('Advisory error:', err);
+    console.error('Advisory fetch error:', err);
     showThinking(false);
-    appendError(err.message || 'Failed to connect to the advisory server.');
+
+    // LEVEL 5 Graceful Fallback: NEVER expose raw technical error messages
+    appendAdvisorResponse({
+      state: 'INSUFFICIENT_INFORMATION',
+      answer: "I'm having trouble accessing the academic knowledge base right now. Please try again in a moment.",
+      sources: [],
+      showRetry: true
+    }, query);
+
   } finally {
     isLoading = false;
-    queryInput.disabled = false;
-    queryInput.focus();
-    submitBtn.disabled = false;
+    if (queryInput) {
+      queryInput.disabled = false;
+      queryInput.focus();
+    }
+    if (submitBtn) submitBtn.disabled = false;
     if (spinner) spinner.classList.add('hidden');
-    if (btnIcon)  btnIcon.classList.remove('hidden');
+    if (btnIcon) btnIcon.classList.remove('hidden');
   }
 }
+
+window.retryLastQuery = function(q) {
+  const queryToRetry = q || lastSubmittedQuery;
+  if (queryToRetry && !isLoading) {
+    submitQuery(queryToRetry);
+  }
+};
 
 /* ══════════ CHAT RENDERING ══════════ */
 function appendUserBubble(query) {
   const chatHistory = document.getElementById('chatHistory');
+  if (!chatHistory) return;
   const turn = document.createElement('div');
   turn.className = 'chat-turn';
 
@@ -433,8 +528,10 @@ function appendUserBubble(query) {
   return turn;
 }
 
-function appendAdvisorResponse(data) {
+function appendAdvisorResponse(data, originalQuery = '') {
   const chatHistory = document.getElementById('chatHistory');
+  if (!chatHistory) return;
+
   const lastTurn = chatHistory.querySelector('.chat-turn:last-child');
 
   const stateClass = data.state || 'ANSWERABLE';
@@ -454,6 +551,19 @@ function appendAdvisorResponse(data) {
     `;
   }
 
+  // Retry Button (Level 5)
+  let retryHtml = '';
+  if (data.showRetry) {
+    retryHtml = `
+      <div class="retry-action-wrap" style="margin-top:14px;">
+        <button class="btn-retry" onclick="retryLastQuery('${escHtml(originalQuery)}')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+          Try again
+        </button>
+      </div>
+    `;
+  }
+
   // Sources
   let sourcesHtml = '';
   if (data.sources && data.sources.length > 0) {
@@ -469,7 +579,7 @@ function appendAdvisorResponse(data) {
             <span class="src-tier ${isWeb ? 'src-tier-web' : ''}">${isWeb ? 'Web' : `Tier ${s.hierarchyLevel}`}</span>
           </div>
           ${s.pageOrSheet && s.pageOrSheet !== 'N/A' ? `<div class="src-ref">${escHtml(s.pageOrSheet)}${s.clauseNumber && s.clauseNumber !== 'N/A' ? ' · ' + escHtml(s.clauseNumber) : ''}</div>` : ''}
-          ${s.excerpt ? `<div class="src-excerpt">"${escHtml(s.excerpt.slice(0, 200))}${s.excerpt.length > 200 ? '…' : ''}"</div>` : ''}
+          ${s.excerpt ? `<div class="src-excerpt">"${escHtml(s.excerpt.slice(0, 180))}${s.excerpt.length > 180 ? '…' : ''}"</div>` : ''}
         </div>
       `;
     }).join('');
@@ -478,7 +588,7 @@ function appendAdvisorResponse(data) {
       <div class="sources-block">
         <div class="sources-title">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-          Sources (${data.sources.length})
+          Verified Sources (${data.sources.length})
         </div>
         <div class="source-cards">${cards}</div>
       </div>
@@ -502,6 +612,7 @@ function appendAdvisorResponse(data) {
       <div class="ac-body">
         <div class="answer-text-v2">${formattedAnswer}</div>
         ${ruleHtml}
+        ${retryHtml}
       </div>
       ${sourcesHtml}
     </div>
@@ -513,40 +624,38 @@ function appendAdvisorResponse(data) {
     const t = document.createElement('div');
     t.className = 'chat-turn';
     t.innerHTML = html;
-    document.getElementById('chatHistory').appendChild(t);
+    chatHistory.appendChild(t);
   }
 
   scrollToBottom();
 }
 
 function formatAnswer(text) {
-  // Escape first, then convert newlines and bold markers
   let s = escHtml(text);
-  // newlines → <br>
   s = s.replace(/\n/g, '<br>');
-  // bullet points already have • — keep them, just ensure br before
   return s;
-}
-
-function appendError(message) {
-  const chatHistory = document.getElementById('chatHistory');
-  const lastTurn = chatHistory.querySelector('.chat-turn:last-child');
-  const html = `
-    <div class="error-msg">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-      <p><strong>Error:</strong> ${escHtml(message)}</p>
-    </div>
-  `;
-  if (lastTurn) lastTurn.insertAdjacentHTML('beforeend', html);
-  scrollToBottom();
 }
 
 /* ══════════ UI HELPERS ══════════ */
 function showThinking(show) {
   const el = document.getElementById('thinkingWrap');
+  const txt = document.getElementById('thinkingText');
   if (!el) return;
-  if (show) { el.classList.remove('hidden'); scrollToBottom(); }
-  else { el.classList.add('hidden'); }
+
+  if (show) {
+    el.classList.remove('hidden');
+    if (txt) txt.textContent = 'Checking university sources...';
+
+    if (thinkingTimer) clearTimeout(thinkingTimer);
+    thinkingTimer = setTimeout(() => {
+      if (txt) txt.textContent = 'Verifying academic information...';
+    }, 750);
+
+    scrollToBottom();
+  } else {
+    if (thinkingTimer) clearTimeout(thinkingTimer);
+    el.classList.add('hidden');
+  }
 }
 
 function scrollToBottom() {
@@ -564,7 +673,11 @@ function updateNavStatus(online = true) {
   if (!online) {
     dot.style.background = 'var(--red-500)';
     dot.style.boxShadow  = '0 0 8px rgba(239,68,68,0.7)';
-    text.textContent = 'Error';
+    text.textContent = 'Offline';
+  } else {
+    dot.style.background = 'var(--green-500)';
+    dot.style.boxShadow  = '0 0 8px rgba(34,197,94,0.7)';
+    text.textContent = 'Live';
   }
 }
 

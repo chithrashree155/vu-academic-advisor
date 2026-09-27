@@ -77,11 +77,17 @@ async function runSeed() {
   for (const doc of structuredData.documents) {
     if (doc.isDuplicateSkipped) continue;
 
+    let dbSourceType = doc.sourceType;
+    if (dbSourceType === 'SUMMER_CIRCULAR') dbSourceType = 'COURSE_OFFERING';
+    else if (dbSourceType === 'PROCEDURAL_GUIDE') dbSourceType = 'STUDENT_SOP';
+    else if (dbSourceType === 'FACULTY_ASSIGNMENT') dbSourceType = 'CURRICULUM_STRUCTURE';
+    else if (dbSourceType === 'SYSTEM_ARCHITECTURE') dbSourceType = 'STUDENT_HANDBOOK';
+
     const { data, error } = await supabase.from('documents').upsert({
       filename: doc.documentName,
       file_type: doc.documentName.endsWith('.pdf') ? 'pdf' : 'xlsx',
       title: doc.documentName.replace(/\.[^/.]+$/, ''),
-      source_type: doc.sourceType,
+      source_type: dbSourceType,
       hierarchy_level: doc.hierarchyLevel,
       is_verified: true,
       is_raster_scan: Boolean(doc.isRasterScan),

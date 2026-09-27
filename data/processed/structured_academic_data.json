@@ -50,6 +50,48 @@
       "totalMinorCourses": 160,
       "totalChunks": 160,
       "isRasterScan": false
+    },
+    {
+      "documentName": "Circular - Summer Term June 2026.pdf",
+      "sourceType": "SUMMER_CIRCULAR",
+      "hierarchyLevel": 4,
+      "totalChunks": 1,
+      "isNew": true
+    },
+    {
+      "documentName": "Digii Process - Minor Selection.pdf",
+      "sourceType": "PROCEDURAL_GUIDE",
+      "hierarchyLevel": 5,
+      "totalChunks": 1,
+      "isNew": true
+    },
+    {
+      "documentName": "ERP Course Registration Manual.pdf",
+      "sourceType": "PROCEDURAL_GUIDE",
+      "hierarchyLevel": 5,
+      "totalChunks": 1,
+      "isNew": true
+    },
+    {
+      "documentName": "Exam Enrollment-SOP (1).pdf",
+      "sourceType": "PROCEDURAL_GUIDE",
+      "hierarchyLevel": 5,
+      "totalChunks": 2,
+      "isNew": true
+    },
+    {
+      "documentName": "Faculty Assigned - F Cases - May Exam 2026 - Final.xlsx",
+      "sourceType": "FACULTY_ASSIGNMENT",
+      "hierarchyLevel": 3,
+      "totalChunks": 41,
+      "isNew": true
+    },
+    {
+      "documentName": "academic_rag_chatbot_flowchart.pdf",
+      "sourceType": "SYSTEM_ARCHITECTURE",
+      "hierarchyLevel": 7,
+      "totalChunks": 1,
+      "isNew": true
     }
   ],
   "programs": [
@@ -7172,6 +7214,213 @@
           }
         }
       ]
+    }
+  ],
+  "facultyAssignments": [
+    {
+      "courseCode": "CDES221",
+      "courseName": "Information Architecture and Design",
+      "facultyIncharge": "DR. RANJANI  BALASUBRAMANIAN"
+    },
+    {
+      "courseCode": "CDES302",
+      "courseName": "Mapping Content, Audience and Media",
+      "facultyIncharge": "DR. PRABHAKARAN  B"
+    },
+    {
+      "courseCode": "COMP101",
+      "courseName": "Introduction to Digital World",
+      "facultyIncharge": "DR. KIRAN D  C"
+    },
+    {
+      "courseCode": "COMP132",
+      "courseName": "Design Workshop",
+      "facultyIncharge": "DR. MAHENDRA B  M"
+    },
+    {
+      "courseCode": "COMP201",
+      "courseName": "Data Structures",
+      "facultyIncharge": "DR. MEHALA  N"
+    },
+    {
+      "courseCode": "COMP203",
+      "courseName": "Analysis of Algorithms",
+      "facultyIncharge": "DR. MEHALA  N"
+    },
+    {
+      "courseCode": "COMP204",
+      "courseName": "Digital Design and Computer Organization",
+      "facultyIncharge": "DR. MAHENDRA B  M"
+    },
+    {
+      "courseCode": "COMP205",
+      "courseName": "Object Oriented Programming",
+      "facultyIncharge": "DR. KIRAN D  C"
+    },
+    {
+      "courseCode": "COMP207",
+      "courseName": "Operating Systems",
+      "facultyIncharge": "DR. MALLIKARJUNA  MATHADA"
+    },
+    {
+      "courseCode": "COMP208",
+      "courseName": "Computer Networks",
+      "facultyIncharge": "DR. MALLIKARJUNA  MATHADA"
+    },
+    {
+      "courseCode": "COMP209",
+      "courseName": "Databases Management",
+      "facultyIncharge": "DR. MALLIKARJUNA  MATHADA"
+    },
+    {
+      "courseCode": "DATA103",
+      "courseName": "Programming in Python",
+      "facultyIncharge": "MS. JYOTSNA  A N"
+    },
+    {
+      "courseCode": "DATA206",
+      "courseName": "Artificial Intelligence for Decision Making",
+      "facultyIncharge": "MR. ARNOLD  S"
+    },
+    {
+      "courseCode": "DATA207",
+      "courseName": "Human Centric Artificial Intelligence",
+      "facultyIncharge": "MR. RAHUL  BHARATH"
+    },
+    {
+      "courseCode": "DATA301",
+      "courseName": "Machine Learning",
+      "facultyIncharge": "DR. DEVANAND  THANISSERY"
+    },
+    {
+      "courseCode": "ECON101",
+      "courseName": "Introduction to Economics",
+      "facultyIncharge": "DR. JYOTSNA  ROSARIO"
+    },
+    {
+      "courseCode": "ECON105",
+      "courseName": "Principles of Economics",
+      "facultyIncharge": "DR. SHEETAL  BHARAT"
+    },
+    {
+      "courseCode": "ECON208",
+      "courseName": "Microeconomics I",
+      "facultyIncharge": "DR. ASMITA  GOSWAMI"
+    },
+    {
+      "courseCode": "ENGL210",
+      "courseName": "Academic Writing",
+      "facultyIncharge": "DR. TANIA  ISLAM"
+    },
+    {
+      "courseCode": "ETHN105",
+      "courseName": "Introduction to Ethnography",
+      "facultyIncharge": "DR. RANJANA  RAGHUNATHAN"
+    },
+    {
+      "courseCode": "FINA201",
+      "courseName": "Financial and Management Accounting",
+      "facultyIncharge": "DR. UMESH S  MAHTANI"
+    },
+    {
+      "courseCode": "HIST200",
+      "courseName": "Indian Legal and Constitutional History",
+      "facultyIncharge": "DR. KAVYA  SALIM"
+    },
+    {
+      "courseCode": "LAWS101",
+      "courseName": "Fundamentals of Indian Constitution and Human Rights",
+      "facultyIncharge": "MR. ANURAG  SARTHI"
+    },
+    {
+      "courseCode": "LAWS111",
+      "courseName": "Law of Tort including MV Accident and Consumer Protection Laws",
+      "facultyIncharge": "DR. KAVYA  SALIM"
+    },
+    {
+      "courseCode": "LAWS301",
+      "courseName": "Legal Methods",
+      "facultyIncharge": "MR. ARAVINDAN  ANANDAN"
+    },
+    {
+      "courseCode": "MATH131",
+      "courseName": "Introduction to Statistics and Data Analysis",
+      "facultyIncharge": "DR. PRIYAMBADA  TRIPATHI"
+    },
+    {
+      "courseCode": "MATH201",
+      "courseName": "Calculus",
+      "facultyIncharge": "DR. BIJIL  PRAKASH"
+    },
+    {
+      "courseCode": "MATH203",
+      "courseName": "Probability and Statistics",
+      "facultyIncharge": "DR. BIJIL  PRAKASH"
+    },
+    {
+      "courseCode": "MATH204",
+      "courseName": "Linear Algebra",
+      "facultyIncharge": "DR. PRIYAMBADA  TRIPATHI"
+    },
+    {
+      "courseCode": "MATH206",
+      "courseName": "Advanced Statistical Analysis and Research Methods with R",
+      "facultyIncharge": "DR. RAVI KANT  RAI"
+    },
+    {
+      "courseCode": "MGMT202",
+      "courseName": "Organizational Behaviour",
+      "facultyIncharge": "DR. SHAKTI  CHATURVEDI"
+    },
+    {
+      "courseCode": "MGMT306",
+      "courseName": "Operations Research",
+      "facultyIncharge": "MR. ABILASH RAMANI  K"
+    },
+    {
+      "courseCode": "MTSC781",
+      "courseName": "Sustainable Cities and Communities",
+      "facultyIncharge": "DR. ANUPAMA  A.V."
+    },
+    {
+      "courseCode": "PSYC102",
+      "courseName": "Introduction to Psychology",
+      "facultyIncharge": "MR. ABHISHEK  KUMAR"
+    },
+    {
+      "courseCode": "SLAD206",
+      "courseName": "Human Values in Work and Life",
+      "facultyIncharge": "DR. JOBETH ANN WARJRI / DR. TANIA  ISLAM"
+    },
+    {
+      "courseCode": "SLAD211",
+      "courseName": "Mathematics - I",
+      "facultyIncharge": "DR. SHEETAL  BHARAT"
+    },
+    {
+      "courseCode": "UCOR103",
+      "courseName": "Communication Skills",
+      "facultyIncharge": "DR. NEHA  KHURANA"
+    },
+    {
+      "courseCode": "UCOR104",
+      "courseName": "Problem Solving with Design Thinking",
+      "facultyIncharge": "PROF. NARENDRA  RAGHUNATH"
+    },
+    {
+      "courseCode": "UCOR106",
+      "courseName": "Learning to Learn",
+      "facultyIncharge": "DR. JOBETH ANN WARJRI"
+    },
+    {
+      "courseCode": "UCOR201",
+      "courseName": "Introduction to Epistemology",
+      "facultyIncharge": "DR. NEHA  KHURANA"
+    },
+    {
+      "courseCode": "UCOR205",
+      "courseName": "Socio-cultural Perspectives on Indian Life",
+      "facultyIncharge": "DR. RANJANA  RAGHUNATHAN"
     }
   ]
 }

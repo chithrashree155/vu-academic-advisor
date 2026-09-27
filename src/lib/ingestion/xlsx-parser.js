@@ -257,8 +257,6 @@ function parseMinorCoursesWorkbook(filePath) {
           minorCode: minorInfo.code,
           batch: currentBatch,
           semester: sem || 5,
-          courseCode: code,
-          isUncertain: isUncertain
         }
       });
     }
@@ -270,7 +268,46 @@ function parseMinorCoursesWorkbook(filePath) {
   };
 }
 
+function parseFacultyInchargeWorkbook(filePath) {
+  const wb = XLSX.readFile(filePath);
+  const sheet = wb.Sheets['Faculty Incharge'] || wb.Sheets[wb.SheetNames[0]];
+  const chunks = [];
+  const facultyMappings = [];
+  let chunkIdx = 0;
+
+  if (sheet) {
+    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+    for (let r = 1; r < rows.length; r++) {
+      const row = rows[r];
+      if (!row || row.length < 4) continue;
+      const code = sanitizeString(row[1]);
+      const name = sanitizeString(row[2]);
+      const faculty = sanitizeString(row[3]);
+
+      if (code && /^[A-Z]{3,4}\d{3}/.test(code)) {
+        facultyMappings.push({ courseCode: code, courseName: name, facultyIncharge: faculty });
+        chunks.push({
+          chunkIndex: chunkIdx++,
+          documentName: 'Faculty Assigned - F Cases - May Exam 2026 - Final.xlsx',
+          sourceType: 'FACULTY_ASSIGNMENT',
+          hierarchyLevel: 3,
+          pageNumber: 1,
+          sectionNumber: 'Faculty Incharge - Special Provision Exam (F Grade)',
+          clauseNumber: code,
+          batchScope: ['2022', '2023', '2024', '2025', '2026'],
+          content: `Special Provision Examination for F Grade (May Exam 2026): Course Code: ${code} | Course Name: ${name} | Faculty Incharge: ${faculty}.`,
+          metadata: { courseCode: code, facultyIncharge: faculty, examTerm: 'May Exam 2026' }
+        });
+      }
+    }
+  }
+
+  return { facultyMappings, chunks };
+}
+
 module.exports = {
   parseSemesterSpreadWorkbook,
-  parseMinorCoursesWorkbook
+  parseMinorCoursesWorkbook,
+  parseFacultyInchargeWorkbook
 };
+

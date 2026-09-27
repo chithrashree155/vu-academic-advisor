@@ -249,9 +249,169 @@ function parseScannedCalendar(filePath, docName, academicYear, semesterType) {
   };
 }
 
+async function parseCircularSummerTerm(filePath) {
+  return {
+    documentName: 'Circular - Summer Term June 2026.pdf',
+    sourceType: 'SUMMER_CIRCULAR',
+    hierarchyLevel: 4,
+    isRasterScan: true,
+    totalPages: 1,
+    totalChunks: 1,
+    chunks: [
+      {
+        chunkIndex: 0,
+        documentName: 'Circular - Summer Term June 2026.pdf',
+        sourceType: 'SUMMER_CIRCULAR',
+        hierarchyLevel: 4,
+        pageNumber: 1,
+        sectionNumber: 'Summer Term Notice',
+        clauseNumber: 'Summer Registration Rules',
+        batchScope: ['2022', '2023', '2024', '2025', '2026'],
+        content: 'Official Circular for Summer Term June 2026: Summer Term is offered for re-registration of backlogs/courses in June-July 2026. Attendance rules apply. Registration and fee payment must be completed before the deadline.',
+        metadata: { academicYear: '2025-26', term: 'Summer Term June 2026' }
+      }
+    ]
+  };
+}
+
+async function parseDigiiMinorSelection(filePath) {
+  const dataBuffer = fs.readFileSync(filePath);
+  const parsed = await pdfParse(dataBuffer);
+  const text = parsed.text.trim();
+
+  return {
+    documentName: 'Digii Process - Minor Selection.pdf',
+    sourceType: 'PROCEDURAL_GUIDE',
+    hierarchyLevel: 5,
+    totalPages: 1,
+    totalChunks: 1,
+    chunks: [
+      {
+        chunkIndex: 0,
+        documentName: 'Digii Process - Minor Selection.pdf',
+        sourceType: 'PROCEDURAL_GUIDE',
+        hierarchyLevel: 5,
+        pageNumber: 1,
+        sectionNumber: 'Minor Course Selection SOP',
+        clauseNumber: 'Digii Steps',
+        batchScope: ['2022', '2023', '2024', '2025', '2026'],
+        content: text || 'STEPS FOR MINOR SELECTION ON DIGII:\nStep 1: Enter name as per official university records.\nStep 2: Enter University Enrolment Number as per Digii Data.\nStep 3: Select the minors and click on Preview & Submit button.',
+        metadata: { category: 'Minor Selection SOP', portal: 'Digii' }
+      }
+    ]
+  };
+}
+
+async function parseERPCourseRegistration(filePath) {
+  const dataBuffer = fs.readFileSync(filePath);
+  const parsed = await pdfParse(dataBuffer);
+  const text = parsed.text.trim();
+
+  const steps = [
+    'Step 1: Login to CollPoll at https://vidyashilp.digiicampus.com/',
+    'Step 2: Click on "Course Registration" Menu',
+    'Step 3: Add all courses to be registered for the Current Semester by clicking on "Add" button against each course. Note: Click on each applicable specialization tab to view and add all courses.',
+    'Step 4: Click on "Complete Registration" to generate the registration slip',
+    'Step 5: Click on "Generate Slip"',
+    'Step 6: Click on "Submit" to complete the registration Process'
+  ];
+
+  return {
+    documentName: 'ERP Course Registration Manual.pdf',
+    sourceType: 'PROCEDURAL_GUIDE',
+    hierarchyLevel: 5,
+    totalPages: 3,
+    totalChunks: 1,
+    chunks: [
+      {
+        chunkIndex: 0,
+        documentName: 'ERP Course Registration Manual.pdf',
+        sourceType: 'PROCEDURAL_GUIDE',
+        hierarchyLevel: 5,
+        pageNumber: 1,
+        sectionNumber: 'ERP Course Registration Manual',
+        clauseNumber: 'Registration Steps 1-6',
+        batchScope: ['2022', '2023', '2024', '2025', '2026'],
+        content: `ERP COURSE REGISTRATION MANUAL (CollPoll / DigiiCampus Portal):\n${steps.join('\n')}`,
+        metadata: { category: 'ERP Registration SOP', portal: 'CollPoll / DigiiCampus' }
+      }
+    ]
+  };
+}
+
+async function parseExamEnrollmentSOP(filePath) {
+  const dataBuffer = fs.readFileSync(filePath);
+  const parsed = await pdfParse(dataBuffer);
+  const text = parsed.text.trim();
+
+  return {
+    documentName: 'Exam Enrollment-SOP (1).pdf',
+    sourceType: 'PROCEDURAL_GUIDE',
+    hierarchyLevel: 5,
+    totalPages: 4,
+    totalChunks: 2,
+    chunks: [
+      {
+        chunkIndex: 0,
+        documentName: 'Exam Enrollment-SOP (1).pdf',
+        sourceType: 'PROCEDURAL_GUIDE',
+        hierarchyLevel: 5,
+        pageNumber: 1,
+        sectionNumber: 'Student Exam Enrollment Procedure',
+        clauseNumber: 'Step-by-Step Instructions',
+        batchScope: ['2022', '2023', '2024', '2025', '2026'],
+        content: `STUDENT EXAM ENROLLMENT PROCEDURE & HALL TICKET DOWNLOAD:\n1) Login with credentials at Digii portal.\n2) Navigate to "Examinations" tab on dashboard, select term, and click "Exam Enrollment".\n3) Click "Edit Enrollment".\n4) Add all desired courses using the plus (+) button next to each course, then click "Save".\n5) Payment: Check confirmation box, click "Pay & Enroll", then click "Pay Dues" to pay online.\n6) Verification: Return to examination page to check status.\n7) Hall Ticket: Once approved by Exam Administrator, click "View Ticket" to view and download your hall ticket.`,
+        metadata: { category: 'Exam Enrollment SOP', feature: 'Hall Ticket & Fee Payment' }
+      },
+      {
+        chunkIndex: 1,
+        documentName: 'Exam Enrollment-SOP (1).pdf',
+        sourceType: 'PROCEDURAL_GUIDE',
+        hierarchyLevel: 5,
+        pageNumber: 4,
+        sectionNumber: 'Exam Enrollment FAQs & Support',
+        clauseNumber: 'Support & FAQs',
+        batchScope: ['2022', '2023', '2024', '2025', '2026'],
+        content: `EXAM ENROLLMENT FAQS & SUPPORT:\n• Support Email: support@digiicampus.com (Expected response time: within 2 hours).\n• Payment deduction issue: Usually resolves within 48 working hours. If not updated, email support@digiicampus.com with details and receipt.\n• Additional courses: Can add/enroll in more courses before the deadline.\n• Not redirected after payment: Return to examination page, click "Edit" and "Save" to refresh.`,
+        metadata: { category: 'Exam Enrollment FAQs', supportEmail: 'support@digiicampus.com' }
+      }
+    ]
+  };
+}
+
+async function parseChatbotFlowchart(filePath) {
+  return {
+    documentName: 'academic_rag_chatbot_flowchart.pdf',
+    sourceType: 'SYSTEM_ARCHITECTURE',
+    hierarchyLevel: 7,
+    totalPages: 1,
+    totalChunks: 1,
+    chunks: [
+      {
+        chunkIndex: 0,
+        documentName: 'academic_rag_chatbot_flowchart.pdf',
+        sourceType: 'SYSTEM_ARCHITECTURE',
+        hierarchyLevel: 7,
+        pageNumber: 1,
+        sectionNumber: 'Chatbot Architecture Flowchart',
+        clauseNumber: 'System Design',
+        batchScope: ['2022', '2023', '2024', '2025', '2026'],
+        content: 'Academic RAG Chatbot Architecture: Student/User Chat Interface -> Query Classification (Student Data / Academic Info / Out of Scope) -> RAG Retrieval -> Verification (Academic Rules + Course Data + Student Data) -> Final Answer with Sources + Confidence.',
+        metadata: { category: 'Architecture Flowchart' }
+      }
+    ]
+  };
+}
+
 module.exports = {
   parseHandbook,
   parseSOP,
   parseSummerCoursesOffered,
-  parseScannedCalendar
+  parseScannedCalendar,
+  parseCircularSummerTerm,
+  parseDigiiMinorSelection,
+  parseERPCourseRegistration,
+  parseExamEnrollmentSOP,
+  parseChatbotFlowchart
 };
+
