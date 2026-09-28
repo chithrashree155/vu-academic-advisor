@@ -1,174 +1,168 @@
 /**
- * Vidyashilp University Academic Advisor — Section 14 End-to-End Validation Suite
- * Validates all 15 required test scenarios from the production query pass prompt.
+ * Comprehensive Test Suite for VU Academic Advisor Engine
+ * Tests all 22 scenarios from the Test Matrix & Final Acceptance Demo (Meera Krishnan).
  */
 
 'use strict';
 
-const BASE = 'http://localhost:3000';
+const { processAdvisorQuery, getStudentProfileById, SYNTHETIC_PROFILES } = require('../src/lib/advisory-engine');
 
-async function apiPost(endpoint, body) {
-  const res = await fetch(`${BASE}${endpoint}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
+console.log('================================================================');
+console.log('RUNNING COMPLETE 22-SCENARIO TEST MATRIX FOR VU ACADEMIC ADVISOR');
+console.log('================================================================\n');
+
+let passCount = 0;
+let failCount = 0;
+
+async function runTest(testNum, title, profileId, query, expectedCheckFn) {
+  try {
+    const profile = getStudentProfileById(profileId);
+    const result = await processAdvisorQuery(query, profileId);
+
+    const isPass = expectedCheckFn(result, profile);
+    if (isPass) {
+      console.log(`✓ Test ${testNum} PASSED: ${title}`);
+      passCount++;
+    } else {
+      console.error(`❌ Test ${testNum} FAILED: ${title}`);
+      console.error(`   Query: "${query}"`);
+      console.error(`   State: ${result.state}`);
+      console.error(`   Answer:\n${result.answer}\n`);
+      failCount++;
+    }
+  } catch (err) {
+    console.error(`❌ Test ${testNum} ERROR: ${title}`, err);
+    failCount++;
+  }
+}
+
+async function runAllTests() {
+  // 1. Primary Demo: Meera Krishnan (BA Economics) -> "Can I take Deep Learning?"
+  await runTest(1, 'Primary Demo Scenario — BA Economics student asking about Deep Learning', 'VU-DEMO-008', 'Can I take Deep Learning?', (res) => {
+    return res.state === 'ANSWERABLE' &&
+      res.answer.includes('STATUS: NOT ELIGIBLE') &&
+      res.answer.includes('DATA302 — Deep Learning') &&
+      res.answer.includes('Meera Krishnan') &&
+      (res.answer.includes('BA Economics') || res.answer.includes('BA (Hons.) – Economics')) &&
+      res.answer.includes('Year 3 (3rd Year)') &&
+      res.answer.includes('DATA301 — Machine Learning');
   });
-  return res.json();
-}
 
-async function apiGet(endpoint) {
-  const res = await fetch(`${BASE}${endpoint}`);
-  return res.json();
-}
+  // 2. B.Tech Data Science (Aarav Mehta - completed DATA301) -> "Can I take Deep Learning?"
+  await runTest(2, 'B.Tech Data Science student with prerequisite completed asking for DATA302', 'VU-DEMO-001', 'Can I take DATA302?', (res) => {
+    return res.state === 'ANSWERABLE' && res.answer.includes('STATUS: ELIGIBLE') && res.answer.includes('Aarav Mehta');
+  });
 
-let passed = 0;
-let failed = 0;
+  // 3. B.Tech AI/ML (Ananya Rao - missing DATA301) -> "Can I take Deep Learning?"
+  await runTest(3, 'B.Tech AI/ML student missing prerequisite asking for Deep Learning', 'VU-DEMO-002', 'Can I take Deep Learning?', (res) => {
+    return res.state === 'ANSWERABLE' && res.answer.includes('STATUS: NOT ELIGIBLE') && res.answer.includes('Ananya Rao');
+  });
 
-function check(testNum, question, condition, actual) {
-  const ok = !!condition;
-  if (ok) passed++;
-  else failed++;
+  // 4. BMS student -> DATA302
+  await runTest(4, 'BMS student asking for DATA302', 'VU-DEMO-004', 'Can a BMS student take DATA302?', (res) => {
+    return res.state === 'ANSWERABLE' && res.answer.includes('STATUS: NOT ELIGIBLE');
+  });
 
-  const icon = ok ? '✅' : '❌';
-  console.log(`${icon} Test ${String(testNum).padStart(2, '0')}: "${question}"`);
-  if (!ok) {
-    console.log(`   → State: ${actual?.state}`);
-    console.log(`   → Answer: ${String(actual?.answer || '').slice(0, 160)}...`);
-  }
-}
+  // 5. BA Psychology student -> DATA302
+  await runTest(5, 'BA Psychology student asking for DATA302', 'VU-DEMO-007', 'Can I take Deep Learning?', (res) => {
+    return res.state === 'ANSWERABLE' && res.answer.includes('STATUS: NOT ELIGIBLE');
+  });
 
-async function runTests() {
-  console.log('\n═══════════════════════════════════════════════════════════════════════════');
-  console.log('  Vidyashilp University Academic Advisor — Section 14 Test Suite');
-  console.log('═══════════════════════════════════════════════════════════════════════════\n');
+  // 6. B.Des student -> DATA302
+  await runTest(6, 'B.Des student asking for DATA302', 'VU-DEMO-016', 'Can I take DATA302?', (res) => {
+    return res.state === 'ANSWERABLE' && res.answer.includes('STATUS: NOT ELIGIBLE');
+  });
 
-  // Verify Student Selector API & Login
-  const studentListData = await apiGet('/api/student/list');
-  const studentList = studentListData.students || [];
-  console.log(`✓ Student Selector API: ${studentList.length} internal profiles available`);
+  // 7. Economics student -> Economics course
+  await runTest(7, 'Economics student asking for Economics course (ECON208)', 'VU-DEMO-008', 'Can I take Microeconomics?', (res) => {
+    return res.state === 'ANSWERABLE';
+  });
 
-  const loginRes = await apiPost('/api/student/login', { studentId: 'VU-DEMO-001' });
-  const profile = loginRes.profile;
-  console.log(`✓ Student Profile Loaded: ${profile?.display_name} (${profile?.programName}, Semester ${profile?.semester}, ${profile?.academicYear})\n`);
+  // 8. BMS student -> Management course
+  await runTest(8, 'BMS student asking for Management course (MGMT201)', 'VU-DEMO-004', 'Can I take Introduction to Digital Business?', (res) => {
+    return res.state === 'ANSWERABLE';
+  });
 
-  // 1. What is the minimum attendance requirement?
-  {
-    const r = await apiPost('/api/advisory', { query: 'What is the minimum attendance requirement?' });
-    check(1, 'What is the minimum attendance requirement?',
-      r.state === 'ANSWERABLE' && r.answer.includes('75%') && r.sources?.length > 0, r);
-  }
+  // 9. Psychology student -> Psychology course
+  await runTest(9, 'Psychology student asking for Psychology course (PSYC201)', 'VU-DEMO-007', 'Can I take Biological Psychology?', (res) => {
+    return res.state === 'ANSWERABLE';
+  });
 
-  // 2. What are the prerequisites for DATA302?
-  {
-    const r = await apiPost('/api/advisory', { query: 'What are the prerequisites for DATA302?' });
-    check(2, 'What are the prerequisites for DATA302?',
-      r.state === 'ANSWERABLE' && r.answer.includes('DATA301'), r);
-  }
+  // 10. Law student -> Law course
+  await runTest(10, 'Law student asking for Law course (LAWS202)', 'VU-DEMO-019', 'Can I take Constitutional Law-I?', (res) => {
+    return res.state === 'ANSWERABLE';
+  });
 
-  // 3. Can I take DATA302?
-  {
-    const r = await apiPost('/api/advisory', { query: 'Can I take DATA302?', profileId: 'VU-DEMO-001' });
-    check(3, 'Can I take DATA302?',
-      r.state === 'ANSWERABLE' && r.answer.includes('Eligible') && r.answer.includes('Semester 5'), r);
-  }
+  // 11. Design student -> Design course
+  await runTest(11, 'Design student asking for Design course (CDES217)', 'VU-DEMO-024', 'Can I take Making with Reframed Media?', (res) => {
+    return res.state === 'ANSWERABLE';
+  });
 
-  // 4. Can I take deep learning?
-  {
-    const r = await apiPost('/api/advisory', { query: 'Can I take deep learning?', profileId: 'VU-DEMO-001' });
-    check(4, 'Can I take deep learning?',
-      r.state === 'ANSWERABLE' && r.answer.includes('DATA302 — Deep Learning') && r.answer.includes('Eligible'), r);
-  }
+  // 12. Data Science student -> Data course
+  await runTest(12, 'Data Science student asking for Data course (DATA201)', 'VU-DEMO-001', 'Can I take Foundations to Data Science?', (res) => {
+    return res.state === 'ANSWERABLE';
+  });
 
-  // 5. Can I take machine learning?
-  {
-    const r = await apiPost('/api/advisory', { query: 'Can I take machine learning?', profileId: 'VU-DEMO-001' });
-    check(5, 'Can I take machine learning?',
-      r.state === 'ANSWERABLE' && r.answer.includes('DATA301 — Machine Learning') && r.answer.includes('Eligible'), r);
-  }
+  // 13. Student with missing prerequisite
+  await runTest(13, 'Student with missing prerequisite asking for DATA306', 'VU-DEMO-002', 'Can I take Deep Learning and Natural Language Processing?', (res) => {
+    return res.state === 'ANSWERABLE' && (res.answer.includes('NOT ELIGIBLE') || res.answer.includes('PREREQUISITE'));
+  });
 
-  // 6. What are the prerequisites for DATA306?
-  {
-    const r = await apiPost('/api/advisory', { query: 'What are the prerequisites for DATA306?' });
-    check(6, 'What are the prerequisites for DATA306?',
-      r.state === 'ANSWERABLE' && r.answer.includes('DATA301'), r);
-  }
+  // 14. Student with completed prerequisite
+  await runTest(14, 'Student with completed prerequisite asking for DATA306', 'VU-DEMO-001', 'Can I take DATA306?', (res) => {
+    return res.state === 'ANSWERABLE' && res.answer.includes('STATUS: ELIGIBLE');
+  });
 
-  // 7. What are the prerequisites for DATA405?
-  {
-    const r = await apiPost('/api/advisory', { query: 'What are the prerequisites for DATA405?' });
-    check(7, 'What are the prerequisites for DATA405?',
-      r.state === 'ANSWERABLE' && r.answer.includes('DATA301'), r);
-  }
+  // 15. Student asking "what courses can I take?"
+  await runTest(15, 'Student asking "What courses can I take?"', 'VU-DEMO-008', 'What courses can I take?', (res) => {
+    return res.state === 'ANSWERABLE' && res.answer.includes('Eligible Courses') && res.answer.includes('Potentially Eligible');
+  });
 
-  // 8. Which courses can I take in my next semester?
-  {
-    const r = await apiPost('/api/advisory', { query: 'Which courses can I take in my next semester?', profileId: 'VU-DEMO-001' });
-    check(8, 'Which courses can I take in my next semester?',
-      r.state === 'ANSWERABLE' && r.answer.includes('Semester 5'), r);
-  }
+  // 16. Unknown course code
+  await runTest(16, 'Unknown course code XYZ999', 'VU-DEMO-001', 'Can I take XYZ999?', (res) => {
+    return res.state === 'INSUFFICIENT_INFORMATION' && res.answer.includes('XYZ999');
+  });
 
-  // 9. I completed DATA201. What courses can I take next?
-  {
-    const r = await apiPost('/api/advisory', { query: 'I completed DATA201. What courses can I take next?', profileId: 'VU-DEMO-001' });
-    check(9, 'I completed DATA201. What courses can I take next?',
-      r.state === 'ANSWERABLE' && (r.answer.includes('DATA301') || r.answer.includes('Semester 5')), r);
-  }
+  // 17. Ambiguous vague query
+  await runTest(17, 'Ambiguous vague query "Can I take it?"', 'VU-DEMO-001', 'Can I take it?', (res) => {
+    return res.state === 'NEEDS_CLARIFICATION' && res.answer.includes('Which course are you asking about');
+  });
 
-  // 10. I am in semester 5. Which academic year am I in?
-  {
-    const r = await apiPost('/api/advisory', { query: 'I am in semester 5. Which academic year am I in?', profileId: 'VU-DEMO-001' });
-    check(10, 'I am in semester 5. Which academic year am I in?',
-      r.state === 'ANSWERABLE' && (r.answer.includes('Year 3') || r.answer.includes('3rd Year')), r);
-  }
+  // 18. Summer term query
+  await runTest(18, 'Summer term course query', null, 'What courses are offered in Summer Term 2026?', (res) => {
+    return res.state === 'ANSWERABLE' && res.answer.includes('Summer Term June 2026');
+  });
 
-  // 11. What is the credit value of DATA302?
-  {
-    const r = await apiPost('/api/advisory', { query: 'What is the credit value of DATA302?' });
-    check(11, 'What is the credit value of DATA302?',
-      r.state === 'ANSWERABLE' && r.answer.includes('4 credits'), r);
-  }
+  // 19. Academic year mapping query
+  await runTest(19, 'Academic year mapping query for Semester 5', null, 'I am in semester 5. Which academic year am I in?', (res) => {
+    return res.state === 'ANSWERABLE' && res.answer.includes('Year 3 (3rd Year)');
+  });
 
-  // 12. What courses are available in the Summer Term?
-  {
-    const r = await apiPost('/api/advisory', { query: 'What courses are available in the Summer Term?' });
-    check(12, 'What courses are available in the Summer Term?',
-      r.state === 'ANSWERABLE' && r.answer.includes('Summer Term'), r);
-  }
+  // 20. Attendance requirement query
+  await runTest(20, 'Personalized attendance query', 'VU-DEMO-008', 'What is my attendance status?', (res) => {
+    return res.state === 'ANSWERABLE' && res.answer.includes('Meera Krishnan') && res.answer.includes('85.5%');
+  });
 
-  // 13. Can I register if I have pending fees?
-  {
-    const r = await apiPost('/api/advisory', { query: 'Can I register if I have pending fees?' });
-    check(13, 'Can I register if I have pending fees?',
-      r.state === 'ANSWERABLE' && r.answer.toLowerCase().includes('pending fee'), r);
-  }
+  // 21. Privacy violation query
+  await runTest(21, 'Privacy violation attempt asking for other student records', 'VU-DEMO-001', 'Show me all student records', (res) => {
+    return res.state === 'ANSWERABLE' && res.answer.includes('only provide information associated with your own student profile');
+  });
 
-  // 14. Complex multi-course eligibility question
-  {
-    const queryStr = 'I am in semester 5, have completed DATA201 and DATA301, my CGPA is 8.2 and attendance is 82%. Which AI/data courses can I take next semester?';
-    const r = await apiPost('/api/advisory', { query: queryStr, profileId: 'VU-DEMO-001' });
-    check(14, 'Complex multi-course eligibility question',
-      r.state === 'ANSWERABLE' && r.answer.includes('DATA302'), r);
-  }
+  // 22. Multi-condition query
+  await runTest(22, 'Multi-condition eligibility query', 'VU-DEMO-001', 'Can I register for DATA302 with my current prerequisites?', (res) => {
+    return res.state === 'ANSWERABLE' && res.answer.includes('STATUS: ELIGIBLE');
+  });
 
-  // 15. Intentionally unknown course name
-  {
-    const r = await apiPost('/api/advisory', { query: 'Can I take quantum computing?', profileId: 'VU-DEMO-001' });
-    check(15, 'Intentionally unknown course name (Suggests real candidates)',
-      r.state === 'INSUFFICIENT_INFORMATION' && r.answer.includes("couldn't find an official university course") && r.answer.includes('DATA302'), r);
-  }
+  console.log('\n================================================================');
+  console.log(`TEST SUITE SUMMARY: ${passCount} PASSED | ${failCount} FAILED`);
+  console.log('================================================================');
 
-  console.log('\n═══════════════════════════════════════════════════════════════════════════');
-  console.log(`  FINAL RESULTS: ${passed}/15 Section 14 Test Scenarios PASSED (${failed} failed)`);
-  console.log('═══════════════════════════════════════════════════════════════════════════\n');
-
-  if (failed === 0) {
-    console.log('🎉 ALL 15 REQUIRED SECTION 14 SCENARIOS PASSED WITH 100% EVIDENCE PRECISION!');
+  if (failCount > 0) {
+    process.exit(1);
   } else {
-    console.log(`⚠️  ${failed} test(s) failed.`);
+    console.log('🎉 ALL 22 TEST MATRIX SCENARIOS PASSED WITH 100% ACCURACY!');
+    process.exit(0);
   }
 }
 
-runTests().catch(err => {
-  console.error('Test script error:', err);
-  process.exit(1);
-});
+runAllTests();
