@@ -77,7 +77,7 @@ app.post('/api/advisory', async (req, res) => {
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'healthy',
-    system: 'Vidyashilp University VU Advisor',
+    system: 'Vidyashilp University Academic Advisor',
     version: '2.0.0',
     localEmbeddingModel: 'Xenova/all-MiniLM-L6-v2',
     embeddingDimension: 384,

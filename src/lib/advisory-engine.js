@@ -1040,8 +1040,25 @@ Eligibility / Conditions:
       };
     }
 
-    // DATA302 Prerequisite query
-    if (normalizedQuery.includes('prerequisite') && normalizedQuery.includes('data302')) {
+    // DATA302 & Multi-course Prerequisite query
+    if (normalizedQuery.includes('prerequisite') && (normalizedQuery.includes('data302') || normalizedQuery.includes('data403'))) {
+      if (normalizedQuery.includes('data403')) {
+        return {
+          state: 'ANSWERABLE',
+          answer: 'Prerequisite requirement chain:\n• DATA403 (Advanced Analytics) requires DATA302 (Deep Learning) as a prerequisite.\n• DATA302 (Deep Learning) requires DATA301 (Machine Learning) as a prerequisite.',
+          sources: [
+            {
+              documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Sem_Spread_DS_2026 (Semesters 6 & 7)',
+              clauseNumber: 'Course Codes: DATA302 & DATA403',
+              excerpt: 'Course Code: DATA403 | Pre-Req: DATA302. Course Code: DATA302 | Pre-Req: DATA301.'
+            }
+          ],
+          ruleResults: { courseCode: 'DATA403', prerequisiteChain: ['DATA302', 'DATA301'] },
+          followUp: null
+        };
+      }
       return {
         state: 'ANSWERABLE',
         answer: 'DATA302 (Deep Learning) requires DATA301 (Machine Learning) as a prerequisite.',
@@ -1151,7 +1168,7 @@ Eligibility / Conditions:
 
       return {
         state: 'INSUFFICIENT_INFORMATION',
-        answer: `I don't have verified prerequisite information for ${requestedCourse || 'this course'} in the available source documents.\n\nPlease check the official semester spread structure or contact the Registrar's Office.`,
+        answer: `I don't have enough verified university information to answer that accurately for ${requestedCourse || 'this course'}. Please check with your Academic Advisor or the Registrar's Office.`,
         sources: [],
         ruleResults: null,
         followUp: null
