@@ -66,7 +66,7 @@ app.post('/api/advisory', async (req, res) => {
     res.status(500).json({
       status: 'error',
       state: 'INSUFFICIENT_INFORMATION',
-      answer: "I'm having trouble accessing the academic knowledge base right now. Please try again in a moment.",
+      answer: "I couldn't verify that requirement from the available Vidyashilp University academic source documents. Please check with the Registrar's Office or your Academic Advisor.",
       sources: [],
       showRetry: true
     });

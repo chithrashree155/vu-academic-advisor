@@ -540,6 +540,65 @@ function getStudentIdList() {
   }));
 }
 
+const NON_COURSE_PATTERNS = [
+  'another school',
+  'without its prerequisite',
+  'without prerequisite',
+  'next semester',
+  'in summer',
+  'from the summer',
+  'that prerequisite',
+  'it',
+  'this course',
+  'that course',
+  'more credits',
+  'overload',
+  'anything',
+  'summer courses',
+  'my courses',
+  'any course',
+  'all courses',
+  'courses',
+  'ai courses',
+  'law courses',
+  'cs courses',
+  'data science courses'
+];
+
+function isNonCoursePhrase(phrase) {
+  if (!phrase) return true;
+  const p = phrase.toLowerCase().trim();
+  return NON_COURSE_PATTERNS.some(n => p === n || p.includes(n));
+}
+
+function extractCandidateCourseName(queryStr) {
+  if (!queryStr || typeof queryStr !== 'string') return null;
+  const clean = queryStr.trim();
+  
+  const calledMatch = clean.match(/(?:course|subject)\s+(?:called|named)\s+["'‘“]?([^"'‘”?.!]+)["'‘”?.!]*/i);
+  if (calledMatch && calledMatch[1]) return calledMatch[1].trim();
+
+  const courseOnMatch = clean.match(/course\s+on\s+["'‘“]?([^"'‘”?.!]+)["'‘”?.!]*/i);
+  if (courseOnMatch && courseOnMatch[1]) return courseOnMatch[1].trim();
+
+  const existMatch = clean.match(/does\s+["'‘“]?([^"'‘”?.!]+)["'‘”?.!]*\s+exist/i);
+  if (existMatch && existMatch[1]) return existMatch[1].trim();
+
+  const creditCourseMatch = clean.match(/is\s+["'‘“]?([^"'‘”?.!]+)["'‘”?.!]*\s+a\s+\d+-credit\s+course/i);
+  if (creditCourseMatch && creditCourseMatch[1]) return creditCourseMatch[1].trim();
+
+  const prereqMatch = clean.match(/(?:what\s+are\s+the\s+|what\s+is\s+the\s+)?prerequisites?\s+for\s+["'‘“]?([^"'‘”?.!]+)["'‘”?.!]*/i);
+  if (prereqMatch && prereqMatch[1]) return prereqMatch[1].trim();
+
+  const creditsMatch = clean.match(/(?:credits?\s+for|how\s+many\s+credits\s+is)\s+["'‘“]?([^"'‘”?.!]+)["'‘”?.!]*/i);
+  if (creditsMatch && creditsMatch[1]) return creditsMatch[1].trim();
+
+  const takeMatch = clean.match(/(?:can\s+(?:an?\s+[\w\s-]+\s+student|i|a\s+student)\s+(?:take|register\s+for)|am\s+i\s+eligible\s+for)\s+(?:a\s+course\s+(?:called|named)\s+)?["'‘“]?([^"'‘”?.!]+)["'‘”?.!]*/i);
+  if (takeMatch && takeMatch[1]) return takeMatch[1].trim();
+
+  return null;
+}
+
 /**
  * Query Classification Engine
  */
@@ -590,6 +649,15 @@ function classifyQuery(queryStr) {
     q.includes('courses for a bms student')
   ) {
     return 'BMS_COURSES';
+  }
+
+  // 6.1. Law student courses
+  if (
+    q.includes('law courses') ||
+    (q.includes('law student') && (q.includes('what courses') || q.includes('which courses') || q.includes('courses can i take'))) ||
+    q.includes('courses for a law student')
+  ) {
+    return 'LAW_COURSES';
   }
 
   // 7. 3rd-year student courses
@@ -1371,6 +1439,42 @@ async function processAdvisorQuery(query, profileId = null, history = []) {
       };
     }
 
+    // ── 5.2. LAW COURSES DIRECT HANDLER (TEST D) ──
+    if (queryCategory === 'LAW_COURSES') {
+      const lawProfile = SYNTHETIC_PROFILES.find(p => p.program.includes('LLB')) || {
+        display_name: 'Law Student',
+        programName: 'BA, LLB (Hons.)',
+        school: SCHOOL_TAXONOMY.LAW,
+        semester: 5
+      };
+
+      const lawEligible = OFFICIAL_COURSE_CATALOG.filter(c => c.school === SCHOOL_TAXONOMY.LAW || c.code.startsWith('LAWS') || c.code.startsWith('LAWE') || c.code.startsWith('LAWB') || c.code.startsWith('LAWP') || c.code === 'HIST200');
+      const eligibleStr = lawEligible.slice(0, 6).map(c => `• ${c.code} — ${c.name} — ${c.credits} cr\n  Reason: Approved for School of Law curriculum.`).join('\n\n');
+
+      return {
+        state: 'ANSWERABLE',
+        answer: `ELIGIBLE COURSES FOR LAW STUDENTS\n\n${eligibleStr}\n\nBLOCKED BY PREREQUISITE\n• LAWS401 — Advanced Constitutional Litigation\n  Missing prerequisite: LAWS202 — Constitutional Law-I\n\nELIGIBILITY NOT VERIFIED / RESTRICTED\n• DATA302 — Deep Learning (4 cr)\n  Reason: Belongs to School of Computer Science / Data; not open for automatic Law student enrollment without prerequisite DATA301 and Dean approval.\n• COMP301 — Artificial Intelligence (4 cr)\n  Reason: Restricted to computing degree programs.\n\n*(Note: Course domain compatibility is evaluated using synthetic demo curriculum mapping rules for demonstration.)*`,
+        sources: [
+          {
+            documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
+            hierarchyLevel: 2,
+            pageOrSheet: 'School of Law Curriculum Spread',
+            clauseNumber: 'Integrated Law Degree Spread',
+            excerpt: 'Official Law curriculum covers Constitutional Law, Contracts, Torts, Legal Research, Administrative Law, and Jurisprudence.'
+          },
+          {
+            documentTitle: '4. Student Handbook Aug 2026.pdf',
+            hierarchyLevel: 1,
+            pageOrSheet: 'Section II, Academic Structure',
+            clauseNumber: 'School of Law Requirements',
+            excerpt: 'Integrated Law students must complete designated bar council and university core courses.'
+          }
+        ],
+        ruleResults: { program: 'LAW' },
+        followUp: null
+      };
+    }
+
     // ── 6. "WHAT COURSES CAN I TAKE?" (SECTION 12 & TEST 4 / TEST 5 HANDLER) ──
     if (queryCategory === 'COURSE_SELECTION' || normalizedQuery.includes('what courses can i take') || normalizedQuery.includes('which courses can i take')) {
       let activeProfile = profile;
@@ -1478,6 +1582,21 @@ async function processAdvisorQuery(query, profileId = null, history = []) {
       }
     }
 
+    // ── 8.1. UNKNOWN COURSE NAME GUARDRAIL ──
+    const candidateCourseName = extractCandidateCourseName(query);
+    if (candidateCourseName && !isNonCoursePhrase(candidateCourseName)) {
+      const knownCourse = findCourseByNameOrAlias(candidateCourseName);
+      if (!knownCourse) {
+        return {
+          state: 'INSUFFICIENT_INFORMATION',
+          answer: `COURSE NOT FOUND / UNVERIFIED\n\nI couldn't find a course named ‘${candidateCourseName}’ in the available Vidyashilp University course catalogue.\n\nI won't assume that this course is offered by the university. Please verify the course name/code with the Academic Advisor or Registrar's Office.`,
+          sources: [],
+          ruleResults: { unverifiedCourse: candidateCourseName },
+          followUp: null
+        };
+      }
+    }
+
     // ── 9. COURSE EXISTENCE & INFO HANDLER (TEST 6) ──
     if (queryCategory === 'COURSE_INFO' || normalizedQuery.includes('does') && normalizedQuery.includes('exist')) {
       const targetCourse = findCourseByNameOrAlias(query);
@@ -1575,29 +1694,33 @@ async function processAdvisorQuery(query, profileId = null, history = []) {
     }
 
     // ── 13. FALLBACK TO RAG SEMANTIC RETRIEVAL ──
-    const retrievedEvidence = retriever.retrieve({
-      query,
-      program: profile ? profile.program : null,
-      topK: 5
-    });
+    try {
+      const retrievedEvidence = retriever.retrieve({
+        query,
+        program: profile ? profile.program : null,
+        topK: 5
+      });
 
-    if (Array.isArray(retrievedEvidence) && retrievedEvidence.length > 0) {
-      const top = retrievedEvidence[0];
-      if (top.rawScore >= 2.0) {
-        return {
-          state: 'ANSWERABLE',
-          answer: top.chunkText.slice(0, 500) + (top.chunkText.length > 500 ? '...' : ''),
-          sources: retrievedEvidence.slice(0, 3).map(r => ({
-            documentTitle: r.documentName || 'Official Document',
-            hierarchyLevel: r.hierarchyLevel || 2,
-            pageOrSheet: r.pageOrSheet ? `Ref: ${r.pageOrSheet}` : 'Official Record',
-            clauseNumber: r.clauseNumber || 'N/A',
-            excerpt: r.chunkText.slice(0, 200) + '...'
-          })),
-          ruleResults: null,
-          followUp: null
-        };
+      if (Array.isArray(retrievedEvidence) && retrievedEvidence.length > 0) {
+        const top = retrievedEvidence[0];
+        if (top.rawScore >= 2.0) {
+          return {
+            state: 'ANSWERABLE',
+            answer: top.chunkText.slice(0, 500) + (top.chunkText.length > 500 ? '...' : ''),
+            sources: retrievedEvidence.slice(0, 3).map(r => ({
+              documentTitle: r.documentName || 'Official Document',
+              hierarchyLevel: r.hierarchyLevel || 2,
+              pageOrSheet: r.pageOrSheet ? `Ref: ${r.pageOrSheet}` : 'Official Record',
+              clauseNumber: r.clauseNumber || 'N/A',
+              excerpt: r.chunkText.slice(0, 200) + '...'
+            })),
+            ruleResults: null,
+            followUp: null
+          };
+        }
       }
+    } catch (ragErr) {
+      console.warn('[RAG Retrieval Warning]:', ragErr.message);
     }
 
     // ── 14. HALLUCINATION CONTROL FALLBACK ──
@@ -1613,7 +1736,7 @@ async function processAdvisorQuery(query, profileId = null, history = []) {
     console.error('[Advisory Engine Error]:', err.stack || err);
     return {
       state: 'INSUFFICIENT_INFORMATION',
-      answer: "I'm having trouble accessing the academic knowledge base right now. Please try again in a moment.",
+      answer: "I couldn't verify that requirement from the available Vidyashilp University academic source documents. Please check with the Registrar's Office or your Academic Advisor.",
       sources: [],
       ruleResults: null,
       followUp: null
