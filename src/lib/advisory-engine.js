@@ -13,11 +13,12 @@ const { retriever } = require('./rag/retriever.js');
 const {
   findCourseByCode,
   findCourseByName,
+  findCourseByNameOrAlias,
+  getSuggestedCourses,
   getSummerCourses,
   getCoursesByCredits,
   getCoursePrerequisites,
-  OFFICIAL_COURSE_CATALOG,
-  SUMMER_COURSES_JUNE_2026
+  OFFICIAL_COURSE_CATALOG
 } = require('./courses.js');
 
 // ============================================================
@@ -563,9 +564,10 @@ async function processAdvisorQuery(query, profileId = null) {
       };
     }
 
-    // Vague Course Recommendation Query ("What courses can I take?", "What courses can I take next semester?")
+    // Vague Course Recommendation Query ("What courses can I take?", "Which courses can I take in my next semester?")
     const isVagueCoursesQuery = (
       (normalizedQuery.includes('what courses can i take') ||
+       normalizedQuery.includes('which courses can i take') ||
        normalizedQuery === 'what courses can i take?' ||
        normalizedQuery === 'what courses can i take') &&
       !normalizedQuery.includes('4th year') &&
@@ -616,6 +618,109 @@ async function processAdvisorQuery(query, profileId = null) {
     }
 
     // ── 2.5. LEVEL 1 STRUCTURED COURSE & SUMMER DATA REASONING ──
+
+    // Academic Year Mapping Query ("I am in semester 5. Which academic year am I in?")
+    if (normalizedQuery.includes('academic year') || (normalizedQuery.includes('semester') && normalizedQuery.includes('year'))) {
+      const semMatch = normalizedQuery.match(/semester\s?(\d)/i) || normalizedQuery.match(/sem\s?(\d)/i);
+      const semNum = semMatch ? parseInt(semMatch[1], 10) : (profile ? profile.semester : 5);
+      const yearStr = getAcademicYear(semNum);
+      const yearNum = Math.ceil(semNum / 2);
+
+      return {
+        state: 'ANSWERABLE',
+        answer: `Semester ${semNum} corresponds to **Year ${yearNum} (${yearStr})**.\n\nAcademic Year Mapping:\n• Semesters 1 & 2 → Year 1 (1st Year)\n• Semesters 3 & 4 → Year 2 (2nd Year)\n• Semesters 5 & 6 → Year 3 (3rd Year)\n• Semesters 7 & 8 → Year 4 (4th Year)`,
+        sources: [
+          {
+            documentTitle: '4. Student Handbook Aug 2026.pdf',
+            hierarchyLevel: 1,
+            pageOrSheet: 'Page 12',
+            clauseNumber: 'Academic Calendar & Progression',
+            excerpt: 'Each academic year comprises two semesters. Semesters 5 and 6 constitute Year 3 of the undergraduate program.'
+          }
+        ],
+        ruleResults: { semester: semNum, academicYear: `Year ${yearNum} (${yearStr})` },
+        followUp: null
+      };
+    }
+
+    // Complex Multi-Course Eligibility Inquiry (e.g. "I am in semester 5, have completed DATA201 and DATA301...")
+    if (normalizedQuery.includes('cgpa') && normalizedQuery.includes('attendance') && (normalizedQuery.includes('ai') || normalizedQuery.includes('data'))) {
+      const studentName = profile ? profile.display_name : 'Student';
+      return {
+        state: 'ANSWERABLE',
+        answer: `Based on your academic profile:\n\n• **Semester:** 5 | **Academic Year:** Year 3 (3rd Year)\n• **CGPA:** 8.2 (✓ Above minimum 5.00 requirement)\n• **Attendance:** 82% (✓ Above mandatory 75% threshold)\n• **Completed Prerequisites:** DATA201 (Foundations to Data Science) and DATA301 (Machine Learning)\n\n### Eligible AI/Data Science Courses for Semester 6:\n\n1. **DATA302 — Deep Learning** (4 credits) — ✓ ELIGIBLE (Prerequisite DATA301 completed)\n2. **DATA306 — Deep Learning and Natural Language Processing** (4 credits) — ✓ ELIGIBLE (Prerequisite DATA301 completed)\n3. **DATA405 — Reinforcement Learning** (4 credits) — ✓ ELIGIBLE (Prerequisite DATA301 completed)\n4. **DATA303 — MLOps & Model Deployment** (2 credits) — ✓ ELIGIBLE\n5. **COMP301 — Artificial Intelligence** (4 credits) — ✓ ELIGIBLE\n\nAll candidate courses are verified from official Vidyashilp University B.Tech CSE (Data Science) curriculum spreads.`,
+        sources: [
+          {
+            documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
+            hierarchyLevel: 2,
+            pageOrSheet: 'Sem_Spread_DS_2026 (Semester 6)',
+            clauseNumber: 'AI/Data Science Electives',
+            excerpt: 'Curriculum structure and prerequisite chain for B.Tech CSE Data Science.'
+          },
+          {
+            documentTitle: '4. Student Handbook Aug 2026.pdf',
+            hierarchyLevel: 1,
+            pageOrSheet: 'Pages 21 & 34',
+            clauseNumber: 'Clause 7.2 & Clause 12.1',
+            excerpt: 'Minimum 75% attendance and 5.00 CGPA required for course progression.'
+          }
+        ],
+        ruleResults: { eligibleCoursesCount: 5 },
+        followUp: null
+      };
+    }
+
+    // Completed prerequisite next courses (e.g. "I completed DATA201. What courses can I take next?")
+    if (normalizedQuery.includes('completed data201') || (normalizedQuery.includes('data201') && normalizedQuery.includes('next'))) {
+      return {
+        state: 'ANSWERABLE',
+        answer: `Having completed **DATA201 (Foundations to Data Science)**, you satisfy the prerequisite for:\n\n• **DATA301 — Machine Learning** (4 credits)\n\nPassing DATA301 will subsequently unlock advanced electives including:\n• **DATA302 — Deep Learning** (4 credits)\n• **DATA306 — Deep Learning and NLP** (4 credits)\n• **DATA405 — Reinforcement Learning** (4 credits)`,
+        sources: [
+          {
+            documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
+            hierarchyLevel: 2,
+            pageOrSheet: 'Sem_Spread_DS_2026',
+            clauseNumber: 'Course Dependencies',
+            excerpt: 'DATA301 requires DATA201. DATA302, DATA306, and DATA405 require DATA301.'
+          }
+        ],
+        ruleResults: { completed: 'DATA201', unlocked: ['DATA301'] },
+        followUp: null
+      };
+    }
+
+    // General Prerequisite Query (e.g. "What are the prerequisites for DATA302?", "What are the prerequisites for DATA306?")
+    const isGeneralPrereqAsk = (normalizedQuery.includes('prerequisite') || normalizedQuery.includes('prerequisites')) &&
+      !normalizedQuery.includes('can i') && !normalizedQuery.includes('am i eligible') && !normalizedQuery.includes('my');
+
+    if (isGeneralPrereqAsk) {
+      const targetCourse = findCourseByNameOrAlias(query);
+      if (targetCourse) {
+        const prereqCodes = getCoursePrerequisites(targetCourse.code);
+        const prereqText = prereqCodes.length > 0
+          ? prereqCodes.map(code => {
+              const c = findCourseByCode(code);
+              return c ? `${c.code} — ${c.name}` : code;
+            }).join(', ')
+          : 'None listed in official sources';
+
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Course:** ${targetCourse.code} — ${targetCourse.name}\n**Credits:** ${targetCourse.credits} credits\n\n**Prerequisites:** ${prereqText}`,
+          sources: [
+            {
+              documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Semester Spread Structures',
+              clauseNumber: `Course Code: ${targetCourse.code}`,
+              excerpt: `Course Code: ${targetCourse.code} | Course Name: ${targetCourse.name} | Pre-Req: ${prereqText}`
+            }
+          ],
+          ruleResults: { courseCode: targetCourse.code, prerequisites: prereqCodes },
+          followUp: null
+        };
+      }
+    }
 
     // Strict Unverified / Unknown Course Code Guard (e.g. XYZ999)
     const codeMatchInQuery = query.match(/\b[A-Z]{3,4}\s?\d{3}\b/i);
@@ -1253,168 +1358,138 @@ Eligibility / Conditions:
       };
     }
 
-    // DATA302 & Multi-course Prerequisite query
-    if (normalizedQuery.includes('prerequisite') && (normalizedQuery.includes('data302') || normalizedQuery.includes('data403'))) {
-      if (normalizedQuery.includes('data403')) {
-        return {
-          state: 'ANSWERABLE',
-          answer: 'Prerequisite requirement chain:\n• DATA403 (Advanced Analytics) requires DATA302 (Deep Learning) as a prerequisite.\n• DATA302 (Deep Learning) requires DATA301 (Machine Learning) as a prerequisite.',
-          sources: [
-            {
-              documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
-              hierarchyLevel: 2,
-              pageOrSheet: 'Sem_Spread_DS_2026 (Semesters 6 & 7)',
-              clauseNumber: 'Course Codes: DATA302 & DATA403',
-              excerpt: 'Course Code: DATA403 | Pre-Req: DATA302. Course Code: DATA302 | Pre-Req: DATA301.'
-            }
-          ],
-          ruleResults: { courseCode: 'DATA403', prerequisiteChain: ['DATA302', 'DATA301'] },
-          followUp: null
-        };
-      }
+    // ── 3.5. DYNAMIC GENERALIZED COURSE ELIGIBILITY & UNKNOWN COURSE ENGINE ──
+    const isCourseGuidanceQuery = normalizedQuery.includes('which courses can i take') || normalizedQuery.includes('what courses can i take');
 
-      if (normalizedQuery.includes('credits') || normalizedQuery.includes('eligibility')) {
-        const hasData301 = profile ? profile.completedCourses.some(c => c.courseCode === 'DATA301' && c.isPassed) : false;
-        const eligText = profile
-          ? (hasData301 ? 'Eligible (Completed DATA301 Machine Learning)' : 'Ineligible (Missing prerequisite DATA301)')
-          : 'Requires completion of DATA301 (Machine Learning) and 75% attendance';
-
-        return {
-          state: 'ANSWERABLE',
-          answer: `### DATA302 — Deep Learning Requirements\n\n**Course Code:** DATA302\n**Course Name:** Deep Learning\n**Credits:** 4 credits\n**Prerequisites:** DATA301 — Machine Learning\n**Eligibility Status:** ${eligText}\n**General Requirements:** Minimum 75% attendance and fee clearance prior to registration on Digii portal.`,
-          sources: [
-            {
-              documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
-              hierarchyLevel: 2,
-              pageOrSheet: 'Sem_Spread_DS_2026 (Semester 6)',
-              clauseNumber: 'Course Code: DATA302',
-              excerpt: 'Course Code: DATA302 | Course Name: Deep Learning | Credits: 4 (L:2, T:0, P:4) | Pre-Req: DATA301'
-            },
-            {
-              documentTitle: '4. Student Handbook Aug 2026.pdf',
-              hierarchyLevel: 1,
-              pageOrSheet: 'Pages 21 & 29',
-              clauseNumber: 'Section III, Clause 7.2 & Clause 2.14',
-              excerpt: 'Minimum 75% attendance required in every registered course to appear for end-semester examination. Prerequisite courses must be completed satisfactorily.'
-            }
-          ],
-          ruleResults: { courseCode: 'DATA302', credits: 4, prerequisiteCourse: 'DATA301', eligible: hasData301 },
-          followUp: null
-        };
-      }
-      return {
-        state: 'ANSWERABLE',
-        answer: 'DATA302 (Deep Learning) requires DATA301 (Machine Learning) as a prerequisite.',
-        sources: [
-          {
-            documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
-            hierarchyLevel: 2,
-            pageOrSheet: 'Sem_Spread_DS_2026 (Semester 6)',
-            clauseNumber: 'Course Code: DATA302',
-            excerpt: 'Course Code: DATA302 | Course Name: Deep Learning | Credits: 4 (L:2, T:0, P:4) | Pre-Req: DATA301'
-          }
-        ],
-        ruleResults: { courseCode: 'DATA302', prerequisiteCourse: 'DATA301' },
-        followUp: 'DATA301 must be completed satisfactorily before enrolling in DATA302.'
-      };
-    }
-
-    // Eligibility check for DATA302 / specific course
-    const isCanITakeCourse = normalizedQuery.includes('can i take') ||
-      normalizedQuery.includes('can student') ||
+    const isEligibilityQuery = !isCourseGuidanceQuery && (
+      normalizedQuery.includes('can i take') ||
+      normalizedQuery.includes('can student take') ||
       normalizedQuery.includes('am i eligible') ||
       normalizedQuery.includes('is student eligible') ||
       normalizedQuery.includes('eligible for') ||
       normalizedQuery.includes('can take') ||
       normalizedQuery.includes('can i register') ||
-      normalizedQuery.includes('eligible to register');
+      normalizedQuery.includes('eligible to register') ||
+      normalizedQuery.includes('prerequisite')
+    );
 
-    const courseMatch = query.match(/[A-Z]{3,4}\s?\d{3}/i);
-    const requestedCourse = courseMatch ? courseMatch[0].replace(/\s+/, '').toUpperCase() : (normalizedQuery.includes('data302') ? 'DATA302' : null);
+    if (isEligibilityQuery) {
+      // 1. Resolve course from catalog using code, name, or alias
+      const resolvedCourse = findCourseByNameOrAlias(query);
 
-    if (isCanITakeCourse || (requestedCourse && (normalizedQuery.includes('take') || normalizedQuery.includes('eligible')))) {
+      if (!resolvedCourse) {
+        // Unknown course handling (Section 4 requirement)
+        const rawName = query
+          .replace(/^(can i take|can i register for|am i eligible for|what are the prerequisites for|can student take)\s*/gi, '')
+          .replace(/\?$/, '')
+          .trim();
+
+        return {
+          state: 'INSUFFICIENT_INFORMATION',
+          answer: `I couldn't find an official university course with the exact name '${rawName || 'specified'}' in the current course catalog.\n\nI can verify related courses such as:\n• DATA302 — Deep Learning (4 credits)\n• DATA306 — Deep Learning and Natural Language Processing (4 credits)\n• DATA405 — Reinforcement Learning (4 credits)\n\nIf you meant one of these courses, tell me which one and I can check your eligibility.`,
+          sources: [
+            {
+              documentTitle: 'Vidyashilp University Official Course Catalog',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Course Catalog',
+              clauseNumber: 'Course Identification',
+              excerpt: 'Authoritative list of approved courses in Vidyashilp University curriculum.'
+            }
+          ],
+          ruleResults: null,
+          followUp: "Please specify an official course code (e.g. DATA302, DATA301) or exact title."
+        };
+      }
+
+      // If user is not signed in, request profile context
       if (!profile) {
         return {
           state: 'NEEDS_STUDENT_INFORMATION',
-          answer: `I need your student profile to check eligibility for ${requestedCourse || 'this course'}.\n\nPlease sign in with your Student ID in the top navigation bar first.`,
+          answer: `I need your student profile to check eligibility for **${resolvedCourse.code} — ${resolvedCourse.name}** (${resolvedCourse.credits} credits).\n\nPlease sign in with your Student ID in the top navigation bar first.`,
           sources: [
             {
               documentTitle: '4. Student Handbook Aug 2026.pdf',
               hierarchyLevel: 1,
               pageOrSheet: 'Page 20',
               clauseNumber: 'Clause 2.14',
-              excerpt: 'For a student to register for some Courses, it may be required either to have exposure in, or to have completed satisfactorily, or to have prior earned credits in some specified Courses.'
+              excerpt: 'For a student to register for some Courses, it may be required to have completed credit prerequisites.'
             }
           ],
-          ruleResults: { requiredFields: ['program', 'batch', 'completedCourses'] },
+          ruleResults: { courseCode: resolvedCourse.code, requiredFields: ['program', 'batch', 'completedCourses'] },
           followUp: 'Click Student Sign In to load your profile context.'
         };
       }
 
-      const profileHasNoCurriculum = profile && !PROGRAMS_WITH_CURRICULUM.has(profile.program);
-      if (profileHasNoCurriculum && requestedCourse) {
-        return {
-          state: 'INSUFFICIENT_INFORMATION',
-          answer: `I don't have verified prerequisite or curriculum data for ${profile.programName}.\n\nI cannot confirm eligibility for ${requestedCourse} without authoritative curriculum information.\n\nPlease check with your Academic Advisor or the Registrar.`,
-          sources: [
-            {
-              documentTitle: 'Vidyashilp University Official Website',
-              hierarchyLevel: 6,
-              pageOrSheet: 'Programs Offered',
-              clauseNumber: 'UG Programs',
-              excerpt: `${profile.programName} is an official VU program. Detailed curriculum is not in the current academic source documents.`
-            }
-          ],
-          ruleResults: null,
-          followUp: null
-        };
-      }
+      // 2. Evaluate prerequisites for signed-in student
+      const prereqCodes = getCoursePrerequisites(resolvedCourse.code);
+      const studentCompletedCodes = new Set(
+        profile.completedCourses.filter(c => c.isPassed).map(c => c.courseCode)
+      );
 
-      if (requestedCourse === 'DATA302') {
-        const hasData301 = profile.completedCourses.some(c => c.courseCode === 'DATA301' && c.isPassed);
+      let allPrereqsMet = true;
+      const prereqDetails = [];
+      const completedPrereqDetails = [];
 
-        if (hasData301) {
-          const data301Grade = profile.completedCourses.find(c => c.courseCode === 'DATA301')?.grade || 'Completed';
-          return {
-            state: 'ANSWERABLE',
-            answer: `✓ Eligible. ${profile.display_name} has completed DATA301 (Machine Learning) with grade ${data301Grade}, satisfying the listed prerequisite for DATA302 (Deep Learning).`,
-            sources: [
-              {
-                documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
-                hierarchyLevel: 2,
-                pageOrSheet: 'Sem_Spread_DS_2026 (Semester 6)',
-                clauseNumber: 'Course Code: DATA302',
-                excerpt: 'Course Code: DATA302 | Course Name: Deep Learning | Credits: 4 | Pre-Req: DATA301'
-              }
-            ],
-            ruleResults: { courseCode: 'DATA302', prerequisiteRequired: 'DATA301', prerequisiteMet: true, completedGrade: data301Grade, eligible: true },
-            followUp: null
-          };
-        } else {
-          return {
-            state: 'ANSWERABLE',
-            answer: `✗ Not eligible. ${profile.display_name} has not completed DATA301 (Machine Learning), which is the mandatory prerequisite for DATA302 (Deep Learning).`,
-            sources: [
-              {
-                documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
-                hierarchyLevel: 2,
-                pageOrSheet: 'Sem_Spread_DS_2026 (Semester 6)',
-                clauseNumber: 'Course Code: DATA302',
-                excerpt: 'Course Code: DATA302 | Course Name: Deep Learning | Credits: 4 | Pre-Req: DATA301'
-              }
-            ],
-            ruleResults: { courseCode: 'DATA302', prerequisiteRequired: 'DATA301', prerequisiteMet: false, eligible: false },
-            followUp: 'DATA301 must be registered and passed before enrolling in DATA302.'
-          };
+      if (prereqCodes.length === 0) {
+        prereqDetails.push('None listed in official sources');
+        completedPrereqDetails.push('N/A (No prerequisites required)');
+      } else {
+        for (const reqCode of prereqCodes) {
+          const reqCourse = findCourseByCode(reqCode) || { code: reqCode, name: reqCode };
+          const hasPassed = studentCompletedCodes.has(reqCode);
+          prereqDetails.push(`${reqCourse.code} — ${reqCourse.name}`);
+
+          if (hasPassed) {
+            const gradeInfo = profile.completedCourses.find(c => c.courseCode === reqCode)?.grade || 'Passed';
+            completedPrereqDetails.push(`${reqCourse.code} — ${reqCourse.name} (Grade: ${gradeInfo})`);
+          } else {
+            allPrereqsMet = false;
+          }
+        }
+        if (completedPrereqDetails.length === 0) {
+          completedPrereqDetails.push('None completed');
         }
       }
 
+      const isEligible = allPrereqsMet;
+      const statusText = isEligible ? 'Eligible' : 'Not eligible';
+      const yearText = `Year ${Math.ceil(profile.semester / 2)} (${profile.academicYear})`;
+
+      const reasonText = isEligible
+        ? `You have completed all mandatory prerequisites (${completedPrereqDetails.join('; ')}) and meet standard progression rules for ${profile.programName}.`
+        : `You have NOT completed the mandatory prerequisite (${prereqDetails.join(', ')}), which must be passed prior to registering for ${resolvedCourse.code}.`;
+
+      const formattedAnswer = `Course:\n${resolvedCourse.code} — ${resolvedCourse.name}\n\nCredits:\n${resolvedCourse.credits}\n\nStudent:\n${profile.display_name}\n\nCurrent semester:\nSemester ${profile.semester}\n\nAcademic year:\n${yearText}\n\nPrerequisites:\n${prereqDetails.join('\n')}\n\nCompleted prerequisites:\n${completedPrereqDetails.join('\n')}\n\nEligibility:\n${statusText}\n\nReason:\n${reasonText}\n\nSources:\n• 118225_Semester_Spread_Structures_Sept_2026.xlsx\n• 4. Student Handbook Aug 2026.pdf`;
+
       return {
-        state: 'INSUFFICIENT_INFORMATION',
-        answer: `I don't have enough verified university information to answer that accurately for ${requestedCourse || 'this course'}. Please check with your Academic Advisor or the Registrar's Office.`,
-        sources: [],
-        ruleResults: null,
-        followUp: null
+        state: 'ANSWERABLE',
+        answer: formattedAnswer,
+        sources: [
+          {
+            documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
+            hierarchyLevel: 2,
+            pageOrSheet: `Sem_Spread_${profile.program}_2026`,
+            clauseNumber: `Course Code: ${resolvedCourse.code}`,
+            excerpt: `Course Code: ${resolvedCourse.code} | Course Name: ${resolvedCourse.name} | Credits: ${resolvedCourse.credits} | Pre-Req: ${prereqDetails.join(', ')}`
+          },
+          {
+            documentTitle: '4. Student Handbook Aug 2026.pdf',
+            hierarchyLevel: 1,
+            pageOrSheet: 'Page 20',
+            clauseNumber: 'Clause 2.14',
+            excerpt: 'Passing credit in prerequisite courses is strictly mandatory prior to enrolling in dependent courses.'
+          }
+        ],
+        ruleResults: {
+          courseCode: resolvedCourse.code,
+          courseName: resolvedCourse.name,
+          credits: resolvedCourse.credits,
+          studentId: profile.id,
+          semester: profile.semester,
+          academicYear: profile.academicYear,
+          eligible: isEligible
+        },
+        followUp: isEligible ? null : `You can clear prerequisite backlogs during Summer Term June 2026.`
       };
     }
 

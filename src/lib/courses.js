@@ -27,6 +27,7 @@ const OFFICIAL_COURSE_CATALOG = [
   { code: 'COMP201', name: 'Data Structures', credits: 4, isSummer: false },
   { code: 'DATA132', name: 'Data Visualization and Story Telling', credits: 3, isSummer: false },
   { code: 'COMP209', name: 'Databases Management', credits: 4, isSummer: false },
+  { code: 'DATA301', name: 'Machine Learning', credits: 4, isSummer: false },
   { code: 'DATA302', name: 'Deep Learning', credits: 4, isSummer: false },
   { code: 'DATA306', name: 'Deep Learning and Natural Language Processing', credits: 4, isSummer: false },
   { code: 'COMP132', name: 'Design Workshop', credits: 2, isSummer: false },
@@ -50,6 +51,8 @@ const OFFICIAL_COURSE_CATALOG = [
   { code: 'CDES702', name: 'Integrative Design Studio II', credits: 4, isSummer: false },
   { code: 'CDES403', name: 'Interactive Narratives', credits: 6, isSummer: false },
   { code: 'COMP302', name: 'Internet of Things', credits: 2, isSummer: false },
+
+  // SUMMER TERM — JUNE 2026
   { code: 'MGMT201', name: 'Introduction to Digital Business', credits: 2, isSummer: true },
   { code: 'UCOR201', name: 'Introduction to Epistemology', credits: 2, isSummer: true },
   { code: 'ETHN105', name: 'Introduction to Ethnography', credits: 2, isSummer: true },
@@ -94,14 +97,46 @@ const OFFICIAL_COURSE_CATALOG = [
   { code: 'LAWE497', name: 'Women and the Law', credits: 4, isSummer: true }
 ];
 
-// Additional prerequisite course aliases used in curriculum spreads
+// Verified prerequisite map
 const COURSE_PREREQUISITES = {
   'DATA302': ['DATA301'],
   'DATA301': ['DATA201'],
   'DATA206': ['DATA103'],
   'DATA403': ['DATA302'],
   'COMP203': ['COMP201'],
-  'COMP209': ['DATA103']
+  'COMP209': ['DATA103'],
+  'DATA306': ['DATA301'],
+  'DATA405': ['DATA301']
+};
+
+// Common natural language aliases mapping to official course codes
+const COURSE_ALIASES = {
+  'machine learning': 'DATA301',
+  'ml': 'DATA301',
+  'deep learning': 'DATA302',
+  'dl': 'DATA302',
+  'artificial intelligence': 'COMP301',
+  'ai': 'COMP301',
+  'data structures': 'COMP201',
+  'dsa': 'COMP201',
+  'algorithms': 'COMP203',
+  'analysis of algorithms': 'COMP203',
+  'databases': 'COMP209',
+  'database management': 'COMP209',
+  'dbms': 'COMP209',
+  'reinforcement learning': 'DATA405',
+  'rl': 'DATA405',
+  'natural language processing': 'DATA306',
+  'nlp': 'DATA306',
+  'mlops': 'DATA303',
+  'model deployment': 'DATA303',
+  'linear algebra': 'MATH204',
+  'calculus': 'MATH201',
+  'probability': 'MATH203',
+  'statistics': 'MATH203',
+  'cloud computing': 'COMP403',
+  'python': 'DATA103',
+  'programming in python': 'DATA103'
 };
 
 /**
@@ -114,21 +149,47 @@ function findCourseByCode(code) {
 }
 
 /**
- * Finds a course by name (case-insensitive keyword/phrase match)
+ * Finds a course by name or natural language alias
  */
-function findCourseByName(nameQuery) {
-  if (!nameQuery || typeof nameQuery !== 'string') return null;
-  const clean = nameQuery.toLowerCase().trim();
-  
-  // Direct match
+function findCourseByNameOrAlias(queryStr) {
+  if (!queryStr || typeof queryStr !== 'string') return null;
+  const clean = queryStr.toLowerCase().trim();
+
+  // 1. Direct course code match
+  const codeMatch = queryStr.match(/\b[A-Z]{3,4}\s?\d{3}\b/i);
+  if (codeMatch) {
+    const found = findCourseByCode(codeMatch[0]);
+    if (found) return found;
+  }
+
+  // 2. Alias match
+  for (const [alias, targetCode] of Object.entries(COURSE_ALIASES)) {
+    if (clean.includes(alias) || alias === clean) {
+      const found = findCourseByCode(targetCode);
+      if (found) return found;
+    }
+  }
+
+  // 3. Exact title match
   const exact = OFFICIAL_COURSE_CATALOG.find(c => c.name.toLowerCase() === clean);
   if (exact) return exact;
 
-  // Substring match for distinct course titles
+  // 4. Substring match
   return OFFICIAL_COURSE_CATALOG.find(c => {
     const title = c.name.toLowerCase();
     return title.includes(clean) || clean.includes(title);
   }) || null;
+}
+
+/**
+ * Returns 3 candidate real courses for suggestion when an unknown course is queried
+ */
+function getSuggestedCourses() {
+  return [
+    findCourseByCode('DATA302'),
+    findCourseByCode('DATA306'),
+    findCourseByCode('DATA405')
+  ].filter(Boolean);
 }
 
 /**
@@ -156,8 +217,11 @@ function getCoursePrerequisites(courseCode) {
 module.exports = {
   OFFICIAL_COURSE_CATALOG,
   COURSE_PREREQUISITES,
+  COURSE_ALIASES,
   findCourseByCode,
-  findCourseByName,
+  findCourseByName: findCourseByNameOrAlias,
+  findCourseByNameOrAlias,
+  getSuggestedCourses,
   getSummerCourses,
   getCoursesByCredits,
   getCoursePrerequisites

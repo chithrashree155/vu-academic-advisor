@@ -1,6 +1,6 @@
 /**
- * Vidyashilp University Academic Advisor — 18-Question Section 30 Final Validation Suite
- * Executes all 18 required test questions from prompt Section 30 plus privacy, academic year, and hallucination checks.
+ * Vidyashilp University Academic Advisor — Section 14 End-to-End Validation Suite
+ * Validates all 15 required test scenarios from the production query pass prompt.
  */
 
 'use strict';
@@ -24,22 +24,22 @@ async function apiGet(endpoint) {
 let passed = 0;
 let failed = 0;
 
-function check(testNum, category, question, condition, actual) {
+function check(testNum, question, condition, actual) {
   const ok = !!condition;
   if (ok) passed++;
   else failed++;
 
   const icon = ok ? '✅' : '❌';
-  console.log(`${icon} Q${String(testNum).padStart(2, '0')} [${category}] "${question}"`);
+  console.log(`${icon} Test ${String(testNum).padStart(2, '0')}: "${question}"`);
   if (!ok) {
     console.log(`   → State: ${actual?.state}`);
-    console.log(`   → Answer: ${String(actual?.answer || '').slice(0, 140)}...`);
+    console.log(`   → Answer: ${String(actual?.answer || '').slice(0, 160)}...`);
   }
 }
 
 async function runTests() {
   console.log('\n═══════════════════════════════════════════════════════════════════════════');
-  console.log('  Vidyashilp University Academic Advisor — Section 30 Required 18-Question Test Suite');
+  console.log('  Vidyashilp University Academic Advisor — Section 14 Test Suite');
   console.log('═══════════════════════════════════════════════════════════════════════════\n');
 
   // Verify Student Selector API & Login
@@ -51,148 +51,118 @@ async function runTests() {
   const profile = loginRes.profile;
   console.log(`✓ Student Profile Loaded: ${profile?.display_name} (${profile?.programName}, Semester ${profile?.semester}, ${profile?.academicYear})\n`);
 
-  // ── BASIC ──
   // 1. What is the minimum attendance requirement?
   {
     const r = await apiPost('/api/advisory', { query: 'What is the minimum attendance requirement?' });
-    check(1, 'BASIC', 'What is the minimum attendance requirement?',
+    check(1, 'What is the minimum attendance requirement?',
       r.state === 'ANSWERABLE' && r.answer.includes('75%') && r.sources?.length > 0, r);
   }
 
-  // 2. What is DATA302?
-  {
-    const r = await apiPost('/api/advisory', { query: 'What is DATA302?' });
-    check(2, 'BASIC', 'What is DATA302?',
-      r.state === 'ANSWERABLE' && r.answer.includes('Deep Learning') && r.answer.includes('4 credits'), r);
-  }
-
-  // 3. How many credits is DATA302?
-  {
-    const r = await apiPost('/api/advisory', { query: 'How many credits is DATA302?' });
-    check(3, 'BASIC', 'How many credits is DATA302?',
-      r.state === 'ANSWERABLE' && r.answer.includes('4 credits'), r);
-  }
-
-  // 4. What are the prerequisites for DATA302?
+  // 2. What are the prerequisites for DATA302?
   {
     const r = await apiPost('/api/advisory', { query: 'What are the prerequisites for DATA302?' });
-    check(4, 'BASIC', 'What are the prerequisites for DATA302?',
+    check(2, 'What are the prerequisites for DATA302?',
       r.state === 'ANSWERABLE' && r.answer.includes('DATA301'), r);
   }
 
-  // ── COURSE ──
-  // 5. What is COMP301?
+  // 3. Can I take DATA302?
   {
-    const r = await apiPost('/api/advisory', { query: 'What is COMP301?' });
-    check(5, 'COURSE', 'What is COMP301?',
-      r.state === 'ANSWERABLE' && r.answer.includes('Artificial Intelligence') && r.answer.includes('4 credits'), r);
+    const r = await apiPost('/api/advisory', { query: 'Can I take DATA302?', profileId: 'VU-DEMO-001' });
+    check(3, 'Can I take DATA302?',
+      r.state === 'ANSWERABLE' && r.answer.includes('Eligible') && r.answer.includes('Semester 5'), r);
   }
 
-  // 6. How many credits is COMP201?
+  // 4. Can I take deep learning?
   {
-    const r = await apiPost('/api/advisory', { query: 'How many credits is COMP201?' });
-    check(6, 'COURSE', 'How many credits is COMP201?',
-      r.state === 'ANSWERABLE' && r.answer.includes('4 credits'), r);
+    const r = await apiPost('/api/advisory', { query: 'Can I take deep learning?', profileId: 'VU-DEMO-001' });
+    check(4, 'Can I take deep learning?',
+      r.state === 'ANSWERABLE' && r.answer.includes('DATA302 — Deep Learning') && r.answer.includes('Eligible'), r);
   }
 
-  // 7. What is DATA303?
+  // 5. Can I take machine learning?
   {
-    const r = await apiPost('/api/advisory', { query: 'What is DATA303?' });
-    check(7, 'COURSE', 'What is DATA303?',
-      r.state === 'ANSWERABLE' && (r.answer.includes('MLOps') || r.answer.includes('2 credits')), r);
+    const r = await apiPost('/api/advisory', { query: 'Can I take machine learning?', profileId: 'VU-DEMO-001' });
+    check(5, 'Can I take machine learning?',
+      r.state === 'ANSWERABLE' && r.answer.includes('DATA301 — Machine Learning') && r.answer.includes('Eligible'), r);
   }
 
-  // 8. Which courses have 4 credits?
+  // 6. What are the prerequisites for DATA306?
   {
-    const r = await apiPost('/api/advisory', { query: 'Which courses have 4 credits?' });
-    check(8, 'COURSE', 'Which courses have 4 credits?',
-      r.state === 'ANSWERABLE' && r.answer.includes('4 credits') && r.answer.includes('COMP201'), r);
+    const r = await apiPost('/api/advisory', { query: 'What are the prerequisites for DATA306?' });
+    check(6, 'What are the prerequisites for DATA306?',
+      r.state === 'ANSWERABLE' && r.answer.includes('DATA301'), r);
   }
 
-  // ── SUMMER ──
-  // 9. What courses are offered during Summer Term June 2026?
+  // 7. What are the prerequisites for DATA405?
   {
-    const r = await apiPost('/api/advisory', { query: 'What courses are offered during Summer Term June 2026?' });
-    check(9, 'SUMMER', 'What courses are offered during Summer Term June 2026?',
-      r.state === 'ANSWERABLE' && r.answer.includes('Summer Term') && r.answer.includes('42'), r);
+    const r = await apiPost('/api/advisory', { query: 'What are the prerequisites for DATA405?' });
+    check(7, 'What are the prerequisites for DATA405?',
+      r.state === 'ANSWERABLE' && r.answer.includes('DATA301'), r);
   }
 
-  // 10. Is DATA303 offered during Summer Term June 2026?
+  // 8. Which courses can I take in my next semester?
   {
-    const r = await apiPost('/api/advisory', { query: 'Is DATA303 offered during Summer Term June 2026?' });
-    check(10, 'SUMMER', 'Is DATA303 offered during Summer Term June 2026?',
-      r.state === 'ANSWERABLE' && r.answer.includes('Yes') && r.answer.includes('DATA303'), r);
-  }
-
-  // ── COMPLEX ──
-  // 11. Can a Data Science student take DATA302 based on their completed courses?
-  {
-    const r = await apiPost('/api/advisory', { query: 'Can a Data Science student take DATA302 based on their completed courses?', profileId: 'VU-DEMO-001' });
-    check(11, 'COMPLEX', 'Can a Data Science student take DATA302 based on completed courses?',
-      r.state === 'ANSWERABLE' && r.answer.includes('Eligible'), r);
-  }
-
-  // 12. What courses can a Semester 5 Data Science student take?
-  {
-    const r = await apiPost('/api/advisory', { query: 'What courses can I take?', profileId: 'VU-DEMO-001' });
-    check(12, 'COMPLEX', 'What courses can a Semester 5 Data Science student take?',
+    const r = await apiPost('/api/advisory', { query: 'Which courses can I take in my next semester?', profileId: 'VU-DEMO-001' });
+    check(8, 'Which courses can I take in my next semester?',
       r.state === 'ANSWERABLE' && r.answer.includes('Semester 5'), r);
   }
 
-  // 13. What are the prerequisites, credits, and eligibility requirements for DATA302?
+  // 9. I completed DATA201. What courses can I take next?
   {
-    const r = await apiPost('/api/advisory', { query: 'What are the prerequisites, credits, and eligibility requirements for DATA302?', profileId: 'VU-DEMO-001' });
-    check(13, 'COMPLEX', 'Prerequisites, credits, and eligibility requirements for DATA302',
-      r.state === 'ANSWERABLE' && r.answer.includes('DATA301') && r.answer.includes('4'), r);
+    const r = await apiPost('/api/advisory', { query: 'I completed DATA201. What courses can I take next?', profileId: 'VU-DEMO-001' });
+    check(9, 'I completed DATA201. What courses can I take next?',
+      r.state === 'ANSWERABLE' && (r.answer.includes('DATA301') || r.answer.includes('Semester 5')), r);
   }
 
-  // 14. Compare two courses using only verified university information.
+  // 10. I am in semester 5. Which academic year am I in?
   {
-    const r = await apiPost('/api/advisory', { query: 'Compare COMP201 and DATA302 using only verified university information' });
-    check(14, 'COMPLEX', 'Compare two courses using only verified university information',
-      r.state === 'ANSWERABLE' && r.answer.includes('COMP201') && r.answer.includes('DATA302'), r);
+    const r = await apiPost('/api/advisory', { query: 'I am in semester 5. Which academic year am I in?', profileId: 'VU-DEMO-001' });
+    check(10, 'I am in semester 5. Which academic year am I in?',
+      r.state === 'ANSWERABLE' && (r.answer.includes('Year 3') || r.answer.includes('3rd Year')), r);
   }
 
-  // 15. What 4-credit courses are available to this student based on their program and completed courses?
+  // 11. What is the credit value of DATA302?
   {
-    const r = await apiPost('/api/advisory', { query: 'What 4-credit courses are available to this student based on their program and completed courses?', profileId: 'VU-DEMO-001' });
-    check(15, 'COMPLEX', 'What 4-credit courses are available to this student?',
+    const r = await apiPost('/api/advisory', { query: 'What is the credit value of DATA302?' });
+    check(11, 'What is the credit value of DATA302?',
       r.state === 'ANSWERABLE' && r.answer.includes('4 credits'), r);
   }
 
-  // ── MISSING INFORMATION ──
-  // 16. Can I take this course next semester?
+  // 12. What courses are available in the Summer Term?
   {
-    const r = await apiPost('/api/advisory', { query: 'Can I take this course next semester?' });
-    check(16, 'MISSING_INFO', 'Can I take this course next semester? (Prompts for course)',
-      r.state === 'NEEDS_CLARIFICATION' && r.answer.includes('Which course'), r);
+    const r = await apiPost('/api/advisory', { query: 'What courses are available in the Summer Term?' });
+    check(12, 'What courses are available in the Summer Term?',
+      r.state === 'ANSWERABLE' && r.answer.includes('Summer Term'), r);
   }
 
-  // 17. Am I eligible?
+  // 13. Can I register if I have pending fees?
   {
-    const r = await apiPost('/api/advisory', { query: 'Am I eligible?' });
-    check(17, 'MISSING_INFO', 'Am I eligible? (Prompts for course & profile)',
-      r.state === 'NEEDS_CLARIFICATION' && r.answer.includes('Which course'), r);
+    const r = await apiPost('/api/advisory', { query: 'Can I register if I have pending fees?' });
+    check(13, 'Can I register if I have pending fees?',
+      r.state === 'ANSWERABLE' && r.answer.toLowerCase().includes('pending fee'), r);
   }
 
-  // 18. Ask about an unknown course.
+  // 14. Complex multi-course eligibility question
   {
-    const r = await apiPost('/api/advisory', { query: 'Is XYZ999 a prerequisite for DATA302?' });
-    check(18, 'MISSING_INFO', 'Is XYZ999 a prerequisite for DATA302? (Unknown course guard)',
-      r.state === 'INSUFFICIENT_INFORMATION' && r.answer.includes("couldn't verify"), r);
+    const queryStr = 'I am in semester 5, have completed DATA201 and DATA301, my CGPA is 8.2 and attendance is 82%. Which AI/data courses can I take next semester?';
+    const r = await apiPost('/api/advisory', { query: queryStr, profileId: 'VU-DEMO-001' });
+    check(14, 'Complex multi-course eligibility question',
+      r.state === 'ANSWERABLE' && r.answer.includes('DATA302'), r);
   }
 
-  // ── EXTRA AUDIT: STUDENT ACADEMIC YEAR DERIVATION TEST ──
-  console.log('\n── Academic Year Derivation Check ──');
-  const isYear3 = profile?.academicYear === '3rd Year';
-  console.log(`${isYear3 ? '✅' : '❌'} Semester 5 -> 3rd Year Mapping: ${profile?.academicYear}`);
+  // 15. Intentionally unknown course name
+  {
+    const r = await apiPost('/api/advisory', { query: 'Can I take quantum computing?', profileId: 'VU-DEMO-001' });
+    check(15, 'Intentionally unknown course name (Suggests real candidates)',
+      r.state === 'INSUFFICIENT_INFORMATION' && r.answer.includes("couldn't find an official university course") && r.answer.includes('DATA302'), r);
+  }
 
   console.log('\n═══════════════════════════════════════════════════════════════════════════');
-  console.log(`  FINAL RESULTS: ${passed}/18 Section 30 Test Questions PASSED (${failed} failed)`);
+  console.log(`  FINAL RESULTS: ${passed}/15 Section 14 Test Scenarios PASSED (${failed} failed)`);
   console.log('═══════════════════════════════════════════════════════════════════════════\n');
 
-  if (failed === 0 && isYear3) {
-    console.log('🎉 ALL 18 REQUIRED SECTION 30 SCENARIOS PASSED WITH 100% EVIDENCE ACCURACY!');
+  if (failed === 0) {
+    console.log('🎉 ALL 15 REQUIRED SECTION 14 SCENARIOS PASSED WITH 100% EVIDENCE PRECISION!');
   } else {
     console.log(`⚠️  ${failed} test(s) failed.`);
   }
