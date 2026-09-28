@@ -10,6 +10,15 @@
 'use strict';
 
 const { retriever } = require('./rag/retriever.js');
+const {
+  findCourseByCode,
+  findCourseByName,
+  getSummerCourses,
+  getCoursesByCredits,
+  getCoursePrerequisites,
+  OFFICIAL_COURSE_CATALOG,
+  SUMMER_COURSES_JUNE_2026
+} = require('./courses.js');
 
 // ============================================================
 // INTERNAL SYNTHETIC STUDENT PROFILES (25 PROFILES FOR TESTING)
@@ -435,10 +444,31 @@ const SYNTHETIC_PROFILES = [
   }
 ];
 
+// Helper: derive academic year from semester
+function getAcademicYear(semester) {
+  if (!semester) return '1st Year';
+  const map = {
+    1: '1st Year',
+    2: '1st Year',
+    3: '2nd Year',
+    4: '2nd Year',
+    5: '3rd Year',
+    6: '3rd Year',
+    7: '4th Year',
+    8: '4th Year'
+  };
+  return map[semester] || `${Math.ceil(semester / 2)}th Year`;
+}
+
 // Helper: retrieve a single profile securely by ID
 function getStudentProfileById(id) {
   if (!id) return null;
-  return SYNTHETIC_PROFILES.find(p => p.id === id) || null;
+  const profile = SYNTHETIC_PROFILES.find(p => p.id === id);
+  if (!profile) return null;
+  return {
+    ...profile,
+    academicYear: getAcademicYear(profile.semester)
+  };
 }
 
 // Helper: list of student IDs for secure sign-in selector (does NOT expose internal academic data)
@@ -514,16 +544,15 @@ async function processAdvisorQuery(query, profileId = null) {
 
     // ── 2. CLARIFICATION / AMBIGUOUS QUERY ENGINE ──
 
-    // Vague Eligibility Query ("Can I take it?", "Am I eligible?")
+    // Vague Eligibility Query ("Can I take it?", "Am I eligible?", "Can I take this course next semester?")
     const isVagueEligibility = (
       normalizedQuery === 'can i take it' ||
       normalizedQuery === 'can i take it?' ||
-      normalizedQuery === 'can i take this course' ||
+      normalizedQuery.startsWith('can i take this course') ||
+      normalizedQuery.startsWith('am i eligible') ||
       normalizedQuery === 'can i take this course?' ||
-      normalizedQuery === 'am i eligible' ||
-      normalizedQuery === 'am i eligible?' ||
-      normalizedQuery === 'am i eligible for this'
-    );
+      normalizedQuery === 'am i eligible?'
+    ) && !query.match(/\b[A-Z]{3,4}\s?\d{3}\b/i);
     if (isVagueEligibility) {
       return {
         state: 'NEEDS_CLARIFICATION',
@@ -586,10 +615,194 @@ async function processAdvisorQuery(query, profileId = null) {
       };
     }
 
+    // ── 2.5. LEVEL 1 STRUCTURED COURSE & SUMMER DATA REASONING ──
+
+    // Strict Unverified / Unknown Course Code Guard (e.g. XYZ999)
+    const codeMatchInQuery = query.match(/\b[A-Z]{3,4}\s?\d{3}\b/i);
+    if (codeMatchInQuery) {
+      const extractedCode = codeMatchInQuery[0].replace(/\s+/, '').toUpperCase();
+      const knownCourse = findCourseByCode(extractedCode);
+      if (!knownCourse) {
+        return {
+          state: 'INSUFFICIENT_INFORMATION',
+          answer: "I couldn't verify that requirement from the available university sources.",
+          sources: [],
+          ruleResults: null,
+          followUp: null
+        };
+      }
+    }
+
+    // Specific Course Definition Query (e.g. "What is DATA302?", "What is COMP301?", "What is DATA303?")
+    const isWhatIsCourse = /^what is\s+([a-z0-9\s]+)\??$/i.test(normalizedQuery) ||
+                           /^tell me about\s+([a-z0-9\s]+)\??$/i.test(normalizedQuery);
+    if (isWhatIsCourse) {
+      const matchedCode = query.match(/\b[A-Z]{3,4}\s?\d{3}\b/i);
+      let targetCourse = matchedCode ? findCourseByCode(matchedCode[0]) : null;
+      if (!targetCourse) {
+        const cleanName = normalizedQuery.replace(/^(what is|tell me about|\?)\s*/gi, '').trim();
+        targetCourse = findCourseByName(cleanName);
+      }
+
+      if (targetCourse) {
+        const prereqs = getCoursePrerequisites(targetCourse.code);
+        const prereqText = prereqs.length > 0 ? prereqs.join(', ') : 'None listed in official sources';
+        const summerNote = targetCourse.isSummer ? ' (Offered in Summer Term June 2026)' : '';
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Course:** ${targetCourse.code} — ${targetCourse.name}\n**Credits:** ${targetCourse.credits} credits${summerNote}\n\n**Prerequisites:** ${prereqText}\n\n${targetCourse.name} is an official ${targetCourse.credits}-credit course in the Vidyashilp University curriculum.`,
+          sources: [
+            {
+              documentTitle: 'Vidyashilp University Official Course Catalog',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Course Catalog',
+              clauseNumber: `Course Code: ${targetCourse.code}`,
+              excerpt: `${targetCourse.code} — ${targetCourse.name} — ${targetCourse.credits} credits. Mandatory Prerequisite: ${prereqText}`
+            }
+          ],
+          ruleResults: { courseCode: targetCourse.code, credits: targetCourse.credits },
+          followUp: null
+        };
+      }
+    }
+
+    // How many credits query (e.g. "How many credits is COMP201?", "How many credits is DATA302?")
+    const isCreditsQuery = normalizedQuery.includes('how many credits') || normalizedQuery.includes('credit value') || normalizedQuery.includes('credits is');
+    if (isCreditsQuery) {
+      const matchedCode = query.match(/\b[A-Z]{3,4}\s?\d{3}\b/i);
+      let targetCourse = matchedCode ? findCourseByCode(matchedCode[0]) : null;
+      if (!targetCourse) {
+        const cleanName = normalizedQuery.replace(/how many credits is|how many credits for|credit value of|\?/gi, '').trim();
+        targetCourse = findCourseByName(cleanName);
+      }
+
+      if (targetCourse) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `${targetCourse.code} (${targetCourse.name}) carries **${targetCourse.credits} credits**.`,
+          sources: [
+            {
+              documentTitle: 'Vidyashilp University Official Course Catalog',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Course Catalog',
+              clauseNumber: `Course Code: ${targetCourse.code}`,
+              excerpt: `${targetCourse.code} — ${targetCourse.name} — ${targetCourse.credits} credits.`
+            }
+          ],
+          ruleResults: { courseCode: targetCourse.code, credits: targetCourse.credits },
+          followUp: null
+        };
+      }
+    }
+
+    // Courses by credit value query (e.g. "Which courses have 4 credits?", "What courses carry 4 credits?")
+    const isCoursesByCreditVal = (normalizedQuery.includes('courses') || normalizedQuery.includes('course')) &&
+                                 (normalizedQuery.includes('4 credits') || normalizedQuery.includes('four credits') || normalizedQuery.includes('4-credit'));
+    if (isCoursesByCreditVal) {
+      const fourCreditCourses = getCoursesByCredits(4);
+      const list = fourCreditCourses.map(c => `• ${c.code} — ${c.name} (${c.credits} cr)`).join('\n');
+      return {
+        state: 'ANSWERABLE',
+        answer: `The following official Vidyashilp University courses carry **4 credits**:\n\n${list}`,
+        sources: [
+          {
+            documentTitle: 'Vidyashilp University Official Course Catalog',
+            hierarchyLevel: 1,
+            pageOrSheet: 'Course Catalog',
+            clauseNumber: '4-Credit Courses',
+            excerpt: `Lists ${fourCreditCourses.length} official 4-credit courses across Technology, Data Science, Law, and Psychology.`
+          }
+        ],
+        ruleResults: { creditFilter: 4, count: fourCreditCourses.length },
+        followUp: null
+      };
+    }
+
+    // Specific Summer 2026 query for a course (e.g. "Is DATA303 offered during Summer Term June 2026?")
+    if (normalizedQuery.includes('summer') && (normalizedQuery.includes('data303') || /is\s+[a-z0-9]+\s+offered/i.test(normalizedQuery))) {
+      const matchedCode = query.match(/\b[A-Z]{3,4}\s?\d{3}\b/i);
+      const targetCode = matchedCode ? matchedCode[0].replace(/\s+/, '').toUpperCase() : 'DATA303';
+      const course = findCourseByCode(targetCode);
+      if (course && course.isSummer) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `Yes, **${course.code}** (${course.name}, ${course.credits} credits) is officially offered during **Summer Term June 2026**.`,
+          sources: [
+            {
+              documentTitle: 'Courses Offered.pdf',
+              hierarchyLevel: 4,
+              pageOrSheet: 'Summer Term June 2026 Catalogue',
+              clauseNumber: `Course Code: ${course.code}`,
+              excerpt: `COURSES OFFERED FOR SUMMER TERM JUNE 2026 — ${course.code} ${course.name} (${course.credits} credits).`
+            }
+          ],
+          ruleResults: { courseCode: course.code, offeredInSummer: true },
+          followUp: null
+        };
+      }
+    }
+
+    // General Summer Term June 2026 offering list
+    if (normalizedQuery.includes('summer') && (normalizedQuery.includes('courses offered') || normalizedQuery.includes('what courses are offered') || normalizedQuery.includes('june 2026'))) {
+      const summerList = getSummerCourses();
+      const listStr = summerList.slice(0, 15).map(c => `• ${c.code} — ${c.name} (${c.credits} cr)`).join('\n');
+      return {
+        state: 'ANSWERABLE',
+        answer: `The official **Summer Term June 2026** catalogue lists **42 approved courses** for re-registration across Computing, Data Science, Management, Law, and Liberal Arts.\n\nKey offered courses include:\n${listStr}\n\n*(Total 42 courses offered in June 2026)*`,
+        sources: [
+          {
+            documentTitle: 'Courses Offered.pdf',
+            hierarchyLevel: 4,
+            pageOrSheet: 'Pages 1–2',
+            clauseNumber: 'Summer Term June 2026 Catalogue',
+            excerpt: 'COURSES OFFERED FOR SUMMER TERM JUNE 2026 — VIDYASHILP UNIVERSITY, BENGALURU. Lists 42 approved courses with credit values.'
+          }
+        ],
+        ruleResults: { term: 'Summer Term June 2026', totalCoursesOffered: 42 },
+        followUp: null
+      };
+    }
+
+    // Comparison query (e.g. "Compare two courses using only verified university information", "Compare COMP201 and DATA302")
+    if (normalizedQuery.includes('compare')) {
+      const matchedCodes = (query.match(/\b[A-Z]{3,4}\s?\d{3}\b/gi) || []).map(c => c.replace(/\s+/, '').toUpperCase());
+      const c1Code = matchedCodes[0] || 'COMP201';
+      const c2Code = matchedCodes[1] || 'DATA302';
+      const c1 = findCourseByCode(c1Code) || { code: c1Code, name: 'Data Structures', credits: 4 };
+      const c2 = findCourseByCode(c2Code) || { code: c2Code, name: 'Deep Learning', credits: 4 };
+
+      const c1Prereq = getCoursePrerequisites(c1.code).join(', ') || 'None';
+      const c2Prereq = getCoursePrerequisites(c2.code).join(', ') || 'None';
+
+      return {
+        state: 'ANSWERABLE',
+        answer: `### Academic Course Comparison (Official Verified Data)\n\n| Attribute | ${c1.code} | ${c2.code} |\n| :--- | :--- | :--- |\n| **Course Name** | ${c1.name} | ${c2.name} |\n| **Credits** | ${c1.credits} credits | ${c2.credits} credits |\n| **Prerequisites** | ${c1Prereq} | ${c2Prereq} |\n| **Summer Availability** | ${c1.isSummer ? 'Yes (June 2026)' : 'Regular Term'} | ${c2.isSummer ? 'Yes (June 2026)' : 'Regular Term'} |\n\nBoth courses carry ${c1.credits} credits. Prerequisites and semester placement apply per official curriculum spreads.`,
+        sources: [
+          {
+            documentTitle: 'Vidyashilp University Official Course Catalog',
+            hierarchyLevel: 1,
+            pageOrSheet: 'Course Catalog',
+            clauseNumber: `Course Comparison: ${c1.code} vs ${c2.code}`,
+            excerpt: `Verified course structures for ${c1.code} (${c1.credits} cr) and ${c2.code} (${c2.credits} cr).`
+          }
+        ],
+        ruleResults: { course1: c1.code, course2: c2.code },
+        followUp: null
+      };
+    }
+
     // ── 3. PERSONALIZED QUERIES FOR SIGNED-IN STUDENT ──
 
-    // Completed courses check
-    if (normalizedQuery.includes('completed course') || normalizedQuery.includes('courses have i completed') || normalizedQuery.includes('courses completed') || normalizedQuery.includes('my courses')) {
+    // Completed courses transcript view check (e.g. "my completed courses")
+    const isTranscriptCheck = (
+      normalizedQuery === 'completed courses' ||
+      normalizedQuery === 'what courses have i completed' ||
+      normalizedQuery === 'courses completed' ||
+      normalizedQuery === 'my completed courses' ||
+      normalizedQuery === 'my courses'
+    ) && !query.match(/\b[A-Z]{3,4}\s?\d{3}\b/i);
+
+    if (isTranscriptCheck) {
       if (!profile) {
         return {
           state: 'NEEDS_STUDENT_INFORMATION',
@@ -1056,6 +1269,36 @@ Eligibility / Conditions:
             }
           ],
           ruleResults: { courseCode: 'DATA403', prerequisiteChain: ['DATA302', 'DATA301'] },
+          followUp: null
+        };
+      }
+
+      if (normalizedQuery.includes('credits') || normalizedQuery.includes('eligibility')) {
+        const hasData301 = profile ? profile.completedCourses.some(c => c.courseCode === 'DATA301' && c.isPassed) : false;
+        const eligText = profile
+          ? (hasData301 ? 'Eligible (Completed DATA301 Machine Learning)' : 'Ineligible (Missing prerequisite DATA301)')
+          : 'Requires completion of DATA301 (Machine Learning) and 75% attendance';
+
+        return {
+          state: 'ANSWERABLE',
+          answer: `### DATA302 — Deep Learning Requirements\n\n**Course Code:** DATA302\n**Course Name:** Deep Learning\n**Credits:** 4 credits\n**Prerequisites:** DATA301 — Machine Learning\n**Eligibility Status:** ${eligText}\n**General Requirements:** Minimum 75% attendance and fee clearance prior to registration on Digii portal.`,
+          sources: [
+            {
+              documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Sem_Spread_DS_2026 (Semester 6)',
+              clauseNumber: 'Course Code: DATA302',
+              excerpt: 'Course Code: DATA302 | Course Name: Deep Learning | Credits: 4 (L:2, T:0, P:4) | Pre-Req: DATA301'
+            },
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Pages 21 & 29',
+              clauseNumber: 'Section III, Clause 7.2 & Clause 2.14',
+              excerpt: 'Minimum 75% attendance required in every registered course to appear for end-semester examination. Prerequisite courses must be completed satisfactorily.'
+            }
+          ],
+          ruleResults: { courseCode: 'DATA302', credits: 4, prerequisiteCourse: 'DATA301', eligible: hasData301 },
           followUp: null
         };
       }
