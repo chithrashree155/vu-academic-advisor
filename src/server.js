@@ -1,13 +1,13 @@
 /**
- * Express Server for Vidyashilp University AI Academic Advisor MVP
- * Serves API endpoints and responsive Web UI on http://localhost:3000
+ * Express Server for Vidyashilp University VU Advisor
+ * Serves secure API endpoints and responsive Web UI on http://localhost:3000
  */
 
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { processAdvisorQuery, SYNTHETIC_PROFILES } = require('./lib/advisory-engine');
+const { processAdvisorQuery, getStudentProfileById, getStudentIdList } = require('./lib/advisory-engine');
 
 const app = express();
 const PORT = process.env.APP_PORT || 3000;
@@ -16,15 +16,33 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
-// 1. Get Synthetic Demo Profiles
-app.get('/api/profiles', (req, res) => {
+// 1. Secure Student Login / Single Profile Fetch Endpoint
+app.post('/api/student/login', (req, res) => {
+  const { studentId } = req.body;
+  if (!studentId) {
+    return res.status(400).json({ status: 'error', message: 'Student ID is required.' });
+  }
+
+  const profile = getStudentProfileById(studentId);
+  if (!profile) {
+    return res.status(404).json({ status: 'error', message: 'Student record not found.' });
+  }
+
   res.json({
     status: 'success',
-    profiles: SYNTHETIC_PROFILES
+    profile
   });
 });
 
-// 2. Advisory Query Endpoint
+// 2. Student List for ID selector ONLY (returns ID & Name only, NO private CGPA/attendance/courses)
+app.get('/api/student/list', (req, res) => {
+  res.json({
+    status: 'success',
+    students: getStudentIdList()
+  });
+});
+
+// 3. Advisory Query Endpoint
 app.post('/api/advisory', async (req, res) => {
   try {
     const { query, profileId } = req.body;
@@ -55,12 +73,12 @@ app.post('/api/advisory', async (req, res) => {
   }
 });
 
-// 3. System Health Check
+// 4. System Health Check
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'healthy',
-    system: 'Vidyashilp University AI Academic Advisor',
-    version: '1.0.0-MVP',
+    system: 'Vidyashilp University VU Advisor',
+    version: '2.0.0',
     localEmbeddingModel: 'Xenova/all-MiniLM-L6-v2',
     embeddingDimension: 384,
     supabaseStatus: 'CONNECTED'
@@ -71,7 +89,7 @@ app.get('/api/health', (req, res) => {
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`================================================================`);
-    console.log(`VU AI Academic Advisor MVP is running!`);
+    console.log(`VU Advisor (Vidyashilp University) is running!`);
     console.log(`URL: http://localhost:${PORT}`);
     console.log(`Local Embeddings: Xenova/all-MiniLM-L6-v2 (384 dimensions)`);
     console.log(`Database: Supabase PostgreSQL + pgvector`);

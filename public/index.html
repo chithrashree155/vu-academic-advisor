@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VU AI Faculty Advisor — Vidyashilp University</title>
-  <meta name="description" content="VU AI Faculty Advisor — evidence-grounded academic intelligence for Vidyashilp University students. Check prerequisites, attendance, eligibility and more.">
+  <title>VU Advisor — Vidyashilp University</title>
+  <meta name="description" content="VU Advisor — evidence-grounded academic assistant for Vidyashilp University students. Check prerequisites, attendance, course eligibility and registration policies.">
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,7 +29,7 @@
         </div>
         <div class="nav-brand-text">
           <span class="nav-brand-university">Vidyashilp University</span>
-          <span class="nav-brand-name">Academic Advisor</span>
+          <span class="nav-brand-name">VU Advisor</span>
         </div>
       </a>
 
@@ -37,19 +37,31 @@
         <a class="nav-link active" href="#hero" id="navAdvisor">Advisor</a>
         <a class="nav-link" href="#how-it-works" id="navHowItWorks">How It Works</a>
         <a class="nav-link" href="#programs" id="navPrograms">Programs</a>
-        <a class="nav-link" href="#profile-section" id="navProfile">My Profile</a>
         <a class="nav-link" href="#about" id="navAbout">About</a>
       </div>
 
       <div class="nav-actions">
-        <div class="nav-status" id="navStatus">
-          <span class="nav-status-dot"></span>
-          <span class="nav-status-text">Live</span>
+        <!-- Unauthenticated state -->
+        <div id="navAuthLoggedOut" class="nav-auth-wrap">
+          <button class="nav-btn-signin" id="navSignInBtn" onclick="openStudentModal()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Student Sign In
+          </button>
         </div>
-        <button class="nav-cta" id="navCta" onclick="scrollToAdvisor()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          Ask Advisor
-        </button>
+
+        <!-- Authenticated state -->
+        <div id="navAuthLoggedIn" class="nav-auth-wrap hidden">
+          <div class="nav-user-chip" onclick="openProfileDrawer()">
+            <div class="nuc-avatar" id="navAvatar">AM</div>
+            <div class="nuc-info">
+              <span class="nuc-name" id="navUserName">Aarav Mehta</span>
+              <span class="nuc-prog" id="navUserProg">B.Tech DS</span>
+            </div>
+          </div>
+          <button class="nav-btn-profile" onclick="openProfileDrawer()">My Profile</button>
+          <button class="nav-btn-signout" onclick="signOutStudent()" title="Sign Out">✕</button>
+        </div>
+
         <button class="nav-hamburger" id="navHamburger" aria-label="Menu">
           <span></span><span></span><span></span>
         </button>
@@ -67,23 +79,23 @@
       </div>
       <h1 class="hero-title">
         Your Academic<br>
-        <span class="hero-title-accent">AI Advisor</span>
+        <span class="hero-title-accent">AI Assistant</span>
       </h1>
-      <p class="hero-desc">Ask about prerequisites, attendance, eligibility and course registration — grounded in official Vidyashilp University documents. No guesswork. Cited answers.</p>
+      <p class="hero-desc">Ask about prerequisites, attendance, course eligibility, and registration policies — grounded in official Vidyashilp University documents.</p>
       <div class="hero-actions">
         <button class="btn-primary-lg" id="heroAskBtn" onclick="scrollToAdvisor()">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          Ask your advisor
+          Ask VU Advisor
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </button>
-        <button class="btn-ghost-lg" onclick="document.getElementById('programs').scrollIntoView({behavior:'smooth'})">
-          Explore Programs
+        <button class="btn-ghost-lg" onclick="openStudentModal()">
+          Student Access
         </button>
       </div>
       <div class="hero-stats">
         <div class="hero-stat">
-          <span class="hero-stat-num">18</span>
-          <span class="hero-stat-label">Student Profiles</span>
+          <span class="hero-stat-num">Private</span>
+          <span class="hero-stat-label">Student Access</span>
         </div>
         <div class="hero-stat-div"></div>
         <div class="hero-stat">
@@ -149,160 +161,11 @@
     </div>
   </section>
 
-  <!-- ══════════ QUICK ACTIONS ══════════ -->
-  <section class="quick-section" id="quick-actions">
-    <div class="section-inner">
-      <div class="qa-grid" id="qaGrid">
-        <button class="qa-card" id="qa-attendance" data-query="What is the minimum attendance requirement?">
-          <div class="qa-icon">📋</div>
-          <span class="qa-label">Attendance</span>
-        </button>
-        <button class="qa-card" id="qa-eligibility" data-query="Can I take DATA302?">
-          <div class="qa-icon">✓</div>
-          <span class="qa-label">Eligibility</span>
-        </button>
-        <button class="qa-card" id="qa-calendar" data-query="What is the academic calendar for this semester?">
-          <div class="qa-icon">📅</div>
-          <span class="qa-label">Calendar</span>
-        </button>
-        <button class="qa-card" id="qa-registration" data-query="What are the course registration rules?">
-          <div class="qa-icon">📝</div>
-          <span class="qa-label">Registration</span>
-        </button>
-        <button class="qa-card" id="qa-prereq" data-query="What is the prerequisite for DATA302?">
-          <div class="qa-icon">🔗</div>
-          <span class="qa-label">Prerequisites</span>
-        </button>
-        <button class="qa-card" id="qa-summer" data-query="What courses are offered in Summer Term 2026?">
-          <div class="qa-icon">☀</div>
-          <span class="qa-label">Summer Term</span>
-        </button>
-        <button class="qa-card" id="qa-minors" data-query="What minor courses are available?">
-          <div class="qa-icon">📚</div>
-          <span class="qa-label">Minors</span>
-        </button>
-        <button class="qa-card" id="qa-programs" data-query="What programs are offered at Vidyashilp University?">
-          <div class="qa-icon">🏛</div>
-          <span class="qa-label">Programs</span>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════ HOW IT WORKS SECTION ══════════ -->
-  <section class="how-it-works-section" id="how-it-works">
-    <div class="section-inner">
-      <div class="section-header">
-        <div class="section-eyebrow">
-          <div class="eyebrow-dot"></div>
-          <span>Architecture &amp; RAG Workflow</span>
-        </div>
-        <h2 class="section-title hiw-section-title">HOW THE ACADEMIC ADVISOR WORKS</h2>
-        <p class="section-desc hiw-section-desc">Evidence-grounded intelligence powered by Retrieval-Augmented Generation (RAG) and official university source documents.</p>
-      </div>
-
-      <div class="hiw-grid">
-        <!-- Step 1 -->
-        <div class="hiw-card">
-          <div class="hiw-step-header">
-            <span class="hiw-num">01</span>
-            <span class="hiw-tag">INPUT</span>
-          </div>
-          <h3 class="hiw-title">ASK</h3>
-          <p class="hiw-desc">Student asks an academic question regarding course prerequisites, attendance policies, fee clearances, or summer registration.</p>
-        </div>
-
-        <!-- Step 2 -->
-        <div class="hiw-card">
-          <div class="hiw-step-header">
-            <span class="hiw-num">02</span>
-            <span class="hiw-tag">RAG SEARCH</span>
-          </div>
-          <h3 class="hiw-title">RETRIEVE</h3>
-          <p class="hiw-desc">The engine generates local 384-dim embeddings to search pgvector and retrieve exact verified chunks from official VU source documents.</p>
-        </div>
-
-        <!-- Step 3 -->
-        <div class="hiw-card">
-          <div class="hiw-step-header">
-            <span class="hiw-num">03</span>
-            <span class="hiw-tag">VERIFICATION</span>
-          </div>
-          <h3 class="hiw-title">VERIFY</h3>
-          <p class="hiw-desc">University handbook rules, semester spreads, and synthetic student transcript records are evaluated together for eligibility.</p>
-        </div>
-
-        <!-- Step 4 -->
-        <div class="hiw-card">
-          <div class="hiw-step-header">
-            <span class="hiw-num">04</span>
-            <span class="hiw-tag">RESPONSE</span>
-          </div>
-          <h3 class="hiw-title">RESPOND</h3>
-          <p class="hiw-desc">The advisor provides a concise answer with official document citations, or requests missing student details when information is required.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════ ADVISOR SECTION (MAIN) ══════════ -->
+  <!-- ══════════ ADVISOR SECTION (MAIN WORKSPACE) ══════════ -->
   <section class="advisor-section" id="advisor">
     <div class="advisor-layout">
 
-      <!-- LEFT: Student Profile Panel -->
-      <aside class="profile-panel" id="profilePanel">
-        <div class="panel-header">
-          <div class="panel-header-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </div>
-          <div>
-            <h3 class="panel-title">Student Profiles</h3>
-            <p class="panel-sub">Synthetic profiles</p>
-          </div>
-          <div class="synthetic-badge-mini">⚗ SYNTHETIC</div>
-        </div>
-
-        <!-- Program Filter -->
-        <div class="filter-wrap">
-          <svg class="filter-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-          <select class="program-select-v2" id="programFilter">
-            <option value="">All Programs</option>
-            <option value="BTECH_DS">B.Tech — Data Science</option>
-            <option value="BTECH_AIML">B.Tech — AI/ML</option>
-            <option value="BMS_DB">BMS — Digital Business</option>
-            <option value="BMS_DB_RESEARCH">BMS — Digital Business (Research)</option>
-            <option value="BA_PSY">BA — Psychology</option>
-            <option value="BA_ECO">BA — Economics</option>
-            <option value="BA_PSY_RESEARCH">BA — Psychology (Research)</option>
-            <option value="BA_ECO_RESEARCH">BA — Economics (Research)</option>
-            <option value="BDES_CD">B.Des — Communication Design</option>
-            <option value="BA_LLB">BA, LLB</option>
-            <option value="BMS_LLB">BMS, LLB</option>
-          </select>
-        </div>
-
-        <!-- Profile Grid -->
-        <div class="profile-scroll" id="profileGrid">
-          <!-- Rendered by app.js -->
-        </div>
-
-        <!-- Active Profile Card -->
-        <div class="active-profile-card hidden" id="activeProfileCard">
-          <div class="apc-header">
-            <div class="apc-avatar" id="apcAvatar">01</div>
-            <div class="apc-info">
-              <div class="apc-name" id="apcName">Aarav Mehta</div>
-              <div class="apc-program" id="apcProgram">B.Tech Data Science</div>
-            </div>
-            <button class="apc-close" id="apcClose" title="Deselect student">×</button>
-          </div>
-          <div class="apc-details" id="apcDetails">
-            <!-- Rendered dynamically -->
-          </div>
-        </div>
-      </aside>
-
-      <!-- CENTER: Chat Interface -->
+      <!-- CENTER/LEFT: Chat Interface (Primary Workspace) -->
       <main class="chat-panel" id="chatPanel">
         <div class="chat-header">
           <div class="chat-header-left">
@@ -313,25 +176,25 @@
               <div class="chat-avatar-pulse"></div>
             </div>
             <div>
-              <h2 class="chat-title">VU AI Advisor</h2>
-              <p class="chat-sub">Evidence-grounded · Citing official documents</p>
+              <h2 class="chat-title">VU Advisor</h2>
+              <p class="chat-sub">Evidence-Grounded AI Assistant · Vidyashilp University</p>
             </div>
           </div>
           <div class="chat-header-right">
             <div class="rag-badge">
               <span class="rag-dot"></span>
-              <span>RAG · Local</span>
+              <span>RAG · Evidence Verified</span>
             </div>
-            <button class="mobile-quick-toggle" id="mobileQuickToggle" title="Toggle Quick Questions">⚡ Quick Ask</button>
           </div>
         </div>
 
-        <!-- Mobile Profile Dropdown Bar -->
-        <div class="mobile-profile-bar">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          <select class="mobile-profile-select" id="mobileProfileSelect">
-            <option value="">Select Student Profile (General Query)</option>
-          </select>
+        <!-- Student Context Banner (Appears when signed in) -->
+        <div id="studentContextBanner" class="student-context-banner hidden">
+          <div class="scb-info">
+            <span class="scb-icon">👤</span>
+            <span>Active Student: <strong id="scbName">Aarav Mehta</strong> (<span id="scbProg">B.Tech DS</span>)</span>
+          </div>
+          <button class="scb-btn-profile" onclick="openProfileDrawer()">View Record</button>
         </div>
 
         <!-- Welcome / Chat area -->
@@ -343,8 +206,8 @@
               <div class="ws-icon-wrap">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
               </div>
-              <h3 class="ws-title">Ask your Faculty Advisor</h3>
-              <p class="ws-desc">Select a demo student profile, then type your question below or use a quick action above.</p>
+              <h3 class="ws-title">Welcome to VU Advisor</h3>
+              <p class="ws-desc">Ask any academic policy question or sign in with your Student ID to receive personalized course eligibility and progress checks.</p>
               <div class="ws-caps">
                 <div class="ws-cap">
                   <div class="ws-cap-icon green">✓</div>
@@ -378,22 +241,21 @@
               <span class="t-dot"></span>
               <span class="t-dot"></span>
               <span class="t-dot"></span>
-              <span class="thinking-text" id="thinkingText">Checking university sources...</span>
+              <span class="thinking-text" id="thinkingText">Searching university source documents...</span>
             </div>
           </div>
 
         </div>
 
-        <!-- Input -->
+        <!-- Input Area -->
         <div class="chat-input-area" id="chatInputArea">
-          <div class="input-context-bar" id="inputContextBar"></div>
           <form class="chat-form" id="advisorForm">
             <div class="chat-input-wrap">
               <input
                 type="text"
                 id="queryInput"
                 class="chat-input"
-                placeholder="Ask about prerequisites, attendance, eligibility, registration…"
+                placeholder="Ask about prerequisites, attendance, eligibility, registration rules…"
                 autocomplete="off"
               />
               <button type="submit" id="submitBtn" class="chat-send-btn">
@@ -402,11 +264,11 @@
               </button>
             </div>
           </form>
-          <p class="input-sub-hint">Press <kbd>Enter</kbd> to ask &nbsp;·&nbsp; Select a demo student for personalised answers &nbsp;·&nbsp; Powered by RAG</p>
+          <p class="input-sub-hint">Press <kbd>Enter</kbd> to submit &nbsp;·&nbsp; Answers cite official Vidyashilp University source documents</p>
         </div>
       </main>
 
-      <!-- RIGHT: Quick Questions Panel -->
+      <!-- RIGHT: Quick Ask Panel -->
       <aside class="quick-panel" id="quickPanel">
         <div class="panel-header">
           <div class="panel-header-icon">
@@ -414,93 +276,145 @@
           </div>
           <div>
             <h3 class="panel-title">Quick Ask</h3>
-            <p class="panel-sub">Common questions</p>
+            <p class="panel-sub">Common academic inquiries</p>
           </div>
         </div>
         <div class="quick-list">
-          <button class="ql-btn" id="ql-attendance" data-query="What is the minimum attendance requirement?">
+          <button class="ql-btn" data-query="What is the minimum attendance requirement?">
             <span class="ql-icon">📋</span>
             <div class="ql-text">
-              <span class="ql-title">Attendance</span>
-              <span class="ql-sub">Min 75% requirement</span>
+              <span class="ql-title">Attendance Requirement</span>
+              <span class="ql-sub">Min 75% rule &amp; medical relaxation</span>
             </div>
             <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
-          <button class="ql-btn" id="ql-registration" data-query="What are the course registration rules?">
+
+          <button class="ql-btn" data-query="What are the course registration rules?">
             <span class="ql-icon">📝</span>
             <div class="ql-text">
-              <span class="ql-title">Registration</span>
-              <span class="ql-sub">Digii portal rules</span>
+              <span class="ql-title">Registration Rules</span>
+              <span class="ql-sub">Digii portal &amp; 1-week late fee</span>
             </div>
             <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
-          <button class="ql-btn" id="ql-prereq" data-query="What is the prerequisite for DATA302?">
+
+          <button class="ql-btn" data-query="What is the prerequisite for DATA302?">
             <span class="ql-icon">🔗</span>
             <div class="ql-text">
-              <span class="ql-title">DATA302 Prereq</span>
-              <span class="ql-sub">Deep Learning</span>
+              <span class="ql-title">Course Prerequisites</span>
+              <span class="ql-sub">DATA302 Machine Learning rule</span>
             </div>
             <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
-          <button class="ql-btn" id="ql-eligible" data-query="Can I take DATA302?">
+
+          <button class="ql-btn" data-query="Can I take DATA302?">
             <span class="ql-icon">🎓</span>
             <div class="ql-text">
               <span class="ql-title">My Eligibility</span>
-              <span class="ql-sub">Check DATA302</span>
+              <span class="ql-sub">Check course eligibility</span>
             </div>
             <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
-          <button class="ql-btn" id="ql-summer" data-query="What courses are offered in Summer Term 2026?">
+
+          <button class="ql-btn" data-query="What courses are offered in Summer Term 2026?">
             <span class="ql-icon">☀</span>
             <div class="ql-text">
               <span class="ql-title">Summer Term</span>
-              <span class="ql-sub">June 2026 offerings</span>
+              <span class="ql-sub">73 approved June 2026 courses</span>
             </div>
             <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
-          <button class="ql-btn" id="ql-sumrules" data-query="What are the Summer Term registration rules?">
-            <span class="ql-icon">📅</span>
-            <div class="ql-text">
-              <span class="ql-title">Summer Rules</span>
-              <span class="ql-sub">Registration policy</span>
-            </div>
-            <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-          </button>
-          <button class="ql-btn" id="ql-minors" data-query="What minor courses are available?">
+
+          <button class="ql-btn" data-query="What minor courses are available?">
             <span class="ql-icon">📚</span>
             <div class="ql-text">
               <span class="ql-title">Minor Courses</span>
-              <span class="ql-sub">B.Tech minors</span>
+              <span class="ql-sub">B.Tech minor baskets</span>
             </div>
             <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
-          <button class="ql-btn" id="ql-fees" data-query="Can I register with pending fees?">
+
+          <button class="ql-btn" data-query="Can I register with pending fees?">
             <span class="ql-icon">💳</span>
             <div class="ql-text">
               <span class="ql-title">Pending Fees</span>
-              <span class="ql-sub">Registration block</span>
+              <span class="ql-sub">Fee clearance policy</span>
             </div>
             <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
-          <button class="ql-btn" id="ql-programs" data-query="What programs are offered at Vidyashilp University?">
+
+          <button class="ql-btn" data-query="What programs are offered at Vidyashilp University?">
             <span class="ql-icon">🏛</span>
             <div class="ql-text">
-              <span class="ql-title">Programs</span>
-              <span class="ql-sub">All UG programs</span>
+              <span class="ql-title">Programs Offered</span>
+              <span class="ql-sub">Official UG degree programs</span>
             </div>
             <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
-          <button class="ql-btn" id="ql-calendar" data-query="What is the academic calendar for this semester?">
+
+          <button class="ql-btn" data-query="What is the academic calendar for this semester?">
             <span class="ql-icon">📆</span>
             <div class="ql-text">
               <span class="ql-title">Academic Calendar</span>
-              <span class="ql-sub">Semester dates</span>
+              <span class="ql-sub">Semester schedule &amp; key dates</span>
             </div>
             <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
       </aside>
 
+    </div>
+  </section>
+
+  <!-- ══════════ HOW IT WORKS SECTION ══════════ -->
+  <section class="how-it-works-section" id="how-it-works">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-eyebrow">
+          <div class="eyebrow-dot"></div>
+          <span>Architecture &amp; Workflow</span>
+        </div>
+        <h2 class="section-title hiw-section-title">HOW VU ADVISOR WORKS</h2>
+        <p class="section-desc hiw-section-desc">Evidence-grounded intelligence powered by Retrieval-Augmented Generation (RAG) and official university source documents.</p>
+      </div>
+
+      <div class="hiw-grid">
+        <div class="hiw-card">
+          <div class="hiw-step-header">
+            <span class="hiw-num">01</span>
+            <span class="hiw-tag">QUERY</span>
+          </div>
+          <h3 class="hiw-title">ASK</h3>
+          <p class="hiw-desc">Ask an academic question regarding course prerequisites, attendance policies, fee clearances, or summer registration.</p>
+        </div>
+
+        <div class="hiw-card">
+          <div class="hiw-step-header">
+            <span class="hiw-num">02</span>
+            <span class="hiw-tag">RETRIEVAL</span>
+          </div>
+          <h3 class="hiw-title">RETRIEVE</h3>
+          <p class="hiw-desc">The engine generates local 384-dim embeddings to search pgvector and retrieve exact verified chunks from official VU source documents.</p>
+        </div>
+
+        <div class="hiw-card">
+          <div class="hiw-step-header">
+            <span class="hiw-num">03</span>
+            <span class="hiw-tag">VERIFICATION</span>
+          </div>
+          <h3 class="hiw-title">VERIFY</h3>
+          <p class="hiw-desc">University handbook rules, semester spreads, and authenticated student transcript records are evaluated together for eligibility.</p>
+        </div>
+
+        <div class="hiw-card">
+          <div class="hiw-step-header">
+            <span class="hiw-num">04</span>
+            <span class="hiw-tag">RESPONSE</span>
+          </div>
+          <h3 class="hiw-title">RESPOND</h3>
+          <p class="hiw-desc">The advisor provides a concise answer with official document citations, or requests missing clarification when information is incomplete.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -512,71 +426,52 @@
           <div class="eyebrow-dot"></div>
           <span>Vidyashilp University</span>
         </div>
-        <h2 class="section-title ug-programs-title">OUR PROGRAMS</h2>
-        <div class="program-cat-pill">UNDERGRADUATE</div>
+        <h2 class="section-title ug-programs-title">UNDERGRADUATE PROGRAMS</h2>
+        <div class="program-cat-pill">OFFICIAL DEGREES</div>
       </div>
 
       <div class="ug-programs-container">
-        <!-- Row 1 -->
         <div class="ug-program-row">
-          <div class="ug-program-card" id="prog-btech-ds" onclick="filterByProgram('BTECH_DS', 'B.Tech — Data Science')" role="button" tabindex="0">
+          <div class="ug-program-card">
             <h3 class="ug-prog-primary">Bachelor of Technology (Hons.)</h3>
             <p class="ug-prog-secondary">Computer Science &amp; Engineering (Data Science)</p>
           </div>
-          <div class="ug-program-card" id="prog-btech-aiml" onclick="filterByProgram('BTECH_AIML', 'B.Tech — AI/ML')" role="button" tabindex="0">
+          <div class="ug-program-card">
             <h3 class="ug-prog-primary">Bachelor of Technology (Hons.)</h3>
             <p class="ug-prog-secondary">Computer Science &amp; Engineering (AI/ML)</p>
           </div>
         </div>
 
-        <!-- Row 2 -->
         <div class="ug-program-row">
-          <div class="ug-program-card" id="prog-ba-eco" onclick="filterByProgram('BA_ECO', 'BA — Economics')" role="button" tabindex="0">
+          <div class="ug-program-card">
             <h3 class="ug-prog-primary">Bachelor of Arts (Hons.) in Economics</h3>
           </div>
-          <div class="ug-program-card" id="prog-ba-psy" onclick="filterByProgram('BA_PSY', 'BA — Psychology')" role="button" tabindex="0">
+          <div class="ug-program-card">
             <h3 class="ug-prog-primary">Bachelor of Arts (Hons.) in Psychology</h3>
           </div>
         </div>
 
-        <!-- Row 3 -->
         <div class="ug-program-row">
-          <div class="ug-program-card" id="prog-bdes" onclick="filterByProgram('BDES_CD', 'B.Des — Communication Design')" role="button" tabindex="0">
+          <div class="ug-program-card">
             <h3 class="ug-prog-primary">Bachelor of Design</h3>
+            <p class="ug-prog-secondary">Communication Design</p>
           </div>
-          <div class="ug-program-card" id="prog-bms" onclick="filterByProgram('BMS_DB', 'BMS — Digital Business')" role="button" tabindex="0">
+          <div class="ug-program-card">
             <h3 class="ug-prog-primary">Bachelor of Management Studies (Hons.)</h3>
+            <p class="ug-prog-secondary">Digital Business</p>
           </div>
         </div>
 
-        <!-- Row 4 -->
         <div class="ug-program-row ug-row-last">
-          <div class="ug-program-card" id="prog-ba-llb" onclick="filterByProgram('BA_LLB', 'BA, LLB')" role="button" tabindex="0">
+          <div class="ug-program-card">
             <h3 class="ug-prog-primary">Bachelor of Arts, Bachelor of Laws</h3>
             <p class="ug-prog-secondary">(B.A., L.L.B.) (Hons.)</p>
           </div>
-          <div class="ug-program-card" id="prog-bms-llb" onclick="filterByProgram('BMS_LLB', 'BMS, LLB')" role="button" tabindex="0">
+          <div class="ug-program-card">
             <h3 class="ug-prog-primary">Bachelor of Management Studies, Bachelor of Laws</h3>
             <p class="ug-prog-secondary">(B.M.S., L.L.B.) (Hons.)</p>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════ PROFILE SECTION ══════════ -->
-  <section class="profile-section" id="profile-section">
-    <div class="section-inner">
-      <div class="section-header">
-        <div class="section-eyebrow">
-          <div class="eyebrow-dot eyebrow-dot-amber"></div>
-          <span>Synthetic Testing Data</span>
-        </div>
-        <h2 class="section-title demo-profiles-title">Student Profiles</h2>
-        <p class="section-desc">18 synthetic student profiles across undergraduate programs used for academic eligibility testing.</p>
-      </div>
-      <div class="demo-profiles-grid" id="demoProfilesGrid">
-        <!-- Rendered by app.js -->
       </div>
     </div>
   </section>
@@ -588,14 +483,14 @@
         <div class="about-content">
           <div class="section-eyebrow">
             <div class="eyebrow-dot eyebrow-dot-green"></div>
-            <span>About the Advisor</span>
+            <span>About the System</span>
           </div>
           <h2 class="section-title">Evidence-Grounded Academic Intelligence</h2>
-          <p class="about-text">VU AI Faculty Advisor provides evidence-grounded academic guidance using Vidyashilp University's official academic source documents and synthetic student profiles.</p>
+          <p class="about-text">VU Advisor provides evidence-grounded academic guidance using Vidyashilp University's official academic source documents and private student records.</p>
           <p class="about-text">Every answer is grounded in real source documents — the Student Handbook, Semester Spread Structures, Course Offerings, Academic Calendars, and Student SOPs.</p>
           <div class="about-disclaimer-box">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            <span>Academic decisions should be verified with the University or Faculty Advisor when the available sources are incomplete or conflicting.</span>
+            <span>Academic decisions should be verified with the University Registrar or Academic Advisor when available sources are incomplete or conflicting.</span>
           </div>
         </div>
         <div class="about-features">
@@ -623,7 +518,7 @@
             </div>
             <div>
               <h4>No Hallucination</h4>
-              <p>Answers honestly say "I don't know" when information is unavailable</p>
+              <p>Answers honestly state when information cannot be verified from sources</p>
             </div>
           </div>
           <div class="about-feat">
@@ -631,8 +526,8 @@
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </div>
             <div>
-              <h4>Synthetic Student Data</h4>
-              <p>18 anonymized synthetic student profiles — no real personal information used</p>
+              <h4>Private Student Data</h4>
+              <p>Strict server-side isolation — student records are never exposed publicly</p>
             </div>
           </div>
         </div>
@@ -647,9 +542,9 @@
         <div class="nav-logo" style="width:32px;height:32px;">
           <div class="nav-logo-inner" style="font-size:0.8rem;">VU</div>
         </div>
-        <span class="footer-name">VU AI Faculty Advisor</span>
+        <span class="footer-name">VU Advisor</span>
       </div>
-      <p class="footer-text">Vidyashilp University · Bengaluru · Demo System · Synthetic student data only</p>
+      <p class="footer-text">Vidyashilp University · Bengaluru · Academic Assistant Portal</p>
       <div class="footer-tech">
         <span>Local RAG</span>
         <span class="footer-sep">·</span>
@@ -668,6 +563,101 @@
       </div>
     </div>
   </footer>
+
+  <!-- ══════════ STUDENT ACCESS MODAL ══════════ -->
+  <div id="studentModal" class="modal-backdrop hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="modal-icon">🔒</span>
+          <div>
+            <h3 class="modal-title">Student Access Portal</h3>
+            <p class="modal-sub">Sign in with your Student ID to access personalized academic records.</p>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeStudentModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="studentSignInForm" onsubmit="handleStudentSignIn(event)">
+          <div class="form-group">
+            <label class="form-label" for="studentIdSelect">Select or Enter Student ID / Roll Number</label>
+            <select id="studentIdSelect" class="form-select">
+              <option value="">-- Select Student ID --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="manualStudentId">Or enter Student ID manually:</label>
+            <input type="text" id="manualStudentId" class="form-input" placeholder="e.g. VU-DEMO-001" />
+          </div>
+          <div class="modal-actions">
+            <button type="submit" class="btn-modal-submit">Sign In as Student</button>
+            <button type="button" class="btn-modal-cancel" onclick="closeStudentModal()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ MY PROFILE DRAWER / MODAL ══════════ -->
+  <div id="profileDrawer" class="drawer-backdrop hidden">
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <div class="drawer-title-wrap">
+          <div class="drawer-avatar" id="drawerAvatar">AM</div>
+          <div>
+            <h3 class="drawer-name" id="drawerName">Aarav Mehta</h3>
+            <p class="drawer-prog" id="drawerProg">B.Tech (Hons.) CSE – Data Science</p>
+          </div>
+        </div>
+        <button class="drawer-close" onclick="closeProfileDrawer()">✕</button>
+      </div>
+
+      <div class="drawer-body">
+        <div class="drawer-stats-grid">
+          <div class="ds-card">
+            <span class="ds-label">Student ID</span>
+            <span class="ds-val" id="drawerId">VU-DEMO-001</span>
+          </div>
+          <div class="ds-card">
+            <span class="ds-label">Semester</span>
+            <span class="ds-val" id="drawerSem">Semester 5</span>
+          </div>
+          <div class="ds-card">
+            <span class="ds-label">CGPA</span>
+            <span class="ds-val" id="drawerCgpa">8.72</span>
+          </div>
+          <div class="ds-card">
+            <span class="ds-label">Attendance</span>
+            <span class="ds-val" id="drawerAtt">86.5%</span>
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <h4 class="ds-section-title">Fee Clearance Status</h4>
+          <div id="drawerFeeBadge" class="status-pill status-good">✓ Fees Cleared</div>
+        </div>
+
+        <div class="drawer-section">
+          <h4 class="ds-section-title">Completed Courses Transcript</h4>
+          <div id="drawerCompletedCourses" class="drawer-courses-list">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <h4 class="ds-section-title">Current Semester Courses</h4>
+          <div id="drawerCurrentCourses" class="drawer-courses-chips">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer-footer">
+        <button class="btn-drawer-ask" onclick="askAboutMyEligibility()">Check My Course Eligibility</button>
+        <button class="btn-drawer-signout" onclick="signOutStudent()">Sign Out</button>
+      </div>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>
