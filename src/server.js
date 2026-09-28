@@ -45,14 +45,14 @@ app.get('/api/student/list', (req, res) => {
 // 3. Advisory Query Endpoint
 app.post('/api/advisory', async (req, res) => {
   try {
-    const { query, profileId } = req.body;
+    const { query, profileId, history } = req.body;
     if (!query || typeof query !== 'string' || query.trim() === '') {
       return res.status(400).json({ error: 'Query is required.' });
     }
 
-    console.log(`[API /api/advisory] Query: "${query.substring(0, 80)}" | Profile: ${profileId || 'None'}`);
+    console.log(`[API /api/advisory] Query: "${query.substring(0, 80)}" | Profile: ${profileId || 'None'} | History: ${Array.isArray(history) ? history.length : 0}`);
     const startTime = Date.now();
-    const result = await processAdvisorQuery(query, profileId);
+    const result = await processAdvisorQuery(query, profileId, history);
     const latencyMs = Date.now() - startTime;
     console.log(`[API /api/advisory] Success | Latency: ${latencyMs}ms | State: ${result.state} | Sources: ${result.sources ? result.sources.length : 0}`);
 

@@ -272,6 +272,8 @@ function setupChatForm() {
   }
 }
 
+let chatHistoryStore = [];
+
 async function sendQuery(queryText) {
   if (isSubmitting || !queryText) return;
   isSubmitting = true;
@@ -282,6 +284,7 @@ async function sendQuery(queryText) {
 
   // Render User Message
   renderUserMessage(queryText);
+  chatHistoryStore.push({ sender: 'user', text: queryText });
 
   // Show thinking indicator
   const thinking = document.getElementById('thinkingWrap');
@@ -293,7 +296,8 @@ async function sendQuery(queryText) {
   try {
     const payload = {
       query: queryText,
-      profileId: activeStudentProfile ? activeStudentProfile.id : null
+      profileId: activeStudentProfile ? activeStudentProfile.id : null,
+      history: chatHistoryStore.slice(-6)
     };
 
     const res = await fetch('/api/advisory', {
@@ -307,6 +311,7 @@ async function sendQuery(queryText) {
     if (thinking) thinking.classList.add('hidden');
 
     if (data && (data.answer || data.state)) {
+      chatHistoryStore.push({ sender: 'advisor', text: data.answer });
       renderAdvisorMessage(data);
     } else {
       renderAdvisorMessage({
