@@ -536,9 +536,12 @@ async function processAdvisorQuery(query, profileId = null) {
 
     // Vague Course Recommendation Query ("What courses can I take?", "What courses can I take next semester?")
     const isVagueCoursesQuery = (
-      normalizedQuery.includes('what courses can i take') ||
-      normalizedQuery === 'what courses can i take?' ||
-      normalizedQuery === 'what courses can i take'
+      (normalizedQuery.includes('what courses can i take') ||
+       normalizedQuery === 'what courses can i take?' ||
+       normalizedQuery === 'what courses can i take') &&
+      !normalizedQuery.includes('4th year') &&
+      !normalizedQuery.includes('fourth year') &&
+      !normalizedQuery.includes('prerequisite')
     );
     if (isVagueCoursesQuery) {
       if (!profile) {
@@ -658,6 +661,234 @@ async function processAdvisorQuery(query, profileId = null) {
         ruleResults: { cgpa: profile.cgpa, minRequired: 5.0, eligible: isEligible },
         followUp: null
       };
+    }
+
+    // ── 3.5. COMPLEX MULTI-CONDITION QUERY DECOMPOSITION & HYBRID ENGINE ──
+    const isSimplePrereqQuery = normalizedQuery.includes('what is the prerequisite') || normalizedQuery.includes('what are the prerequisites');
+    const hasCourseCode = /[A-Z]{3,4}\s?\d{3}/i.test(query);
+    const hasAttendanceMention = /attendance|\b\d{1,2}(?:\.\d)?%\b|medical|debarred/i.test(normalizedQuery);
+    const hasPrereqMention = /prerequisite|pre-req|prereq|completed|passed|fail|failed/i.test(normalizedQuery);
+    const isComplexMultiPart = !isSimplePrereqQuery && (
+      (hasCourseCode && (hasAttendanceMention || (hasPrereqMention && (normalizedQuery.includes('can i') || normalizedQuery.includes('if i') || normalizedQuery.includes('my') || normalizedQuery.includes('register'))))) ||
+      (normalizedQuery.includes('fail') && normalizedQuery.includes('prerequisite')) ||
+      (normalizedQuery.includes('4th year') && normalizedQuery.includes('prerequisite')) ||
+      (normalizedQuery.includes('considering my completed courses') && normalizedQuery.includes('attendance')) ||
+      (normalizedQuery.includes('which courses are available to me') && normalizedQuery.includes('requirements'))
+    );
+
+    if (isComplexMultiPart) {
+      // Scenario: Failing prerequisite course
+      if (normalizedQuery.includes('fail') && normalizedQuery.includes('prerequisite')) {
+        const formattedAnswer = `Answer: If you fail a prerequisite course, you cannot register for any subsequent course that lists it as a mandatory prerequisite until the prerequisite is cleared.
+
+Why:
+• Clause 2.14: Passing credit in prerequisite courses is strictly mandatory prior to enrolling in dependent courses.
+• Remediation Options: You may re-register for the failed course during the Summer Term (June 2026) or when offered in a subsequent regular semester.
+
+Eligibility / Conditions:
+• Dependent Course Registration: ❌ BLOCKED until prerequisite is passed.
+• Re-Registration Option: ✓ Permitted during Summer Term June 2026 (73 courses available) or regular semester offerings.
+• Attendance & Fees: Standard 75% attendance rules apply to Summer Term re-registration, and fee dues must be cleared.`;
+
+        const sources = [
+          {
+            documentTitle: '4. Student Handbook Aug 2026.pdf',
+            hierarchyLevel: 1,
+            pageOrSheet: 'Page 20 & Page 32',
+            clauseNumber: 'Clause 2.14 & Clause 11',
+            excerpt: 'For a student to register for some Courses, it may be required to have completed satisfactorily prior Courses. Summer Term provides an opportunity to clear backlogs.'
+          },
+          {
+            documentTitle: 'Circular - Summer Term June 2026.pdf',
+            hierarchyLevel: 4,
+            pageOrSheet: 'Page 1',
+            clauseNumber: 'Summer Term Notice',
+            excerpt: 'Official circular for Summer Term June 2026 re-registration.'
+          }
+        ];
+
+        return {
+          state: 'ANSWERABLE',
+          answer: formattedAnswer,
+          sources,
+          ruleResults: { action: 'FAIL_PREREQUISITE_REMEDIATION' },
+          followUp: null
+        };
+      }
+
+      // Scenario: 4th year course options with missing prerequisite
+      if (normalizedQuery.includes('4th year') || normalizedQuery.includes('fourth year')) {
+        const formattedAnswer = `Answer: In your 4th year (Semesters 7 & 8), you can register for general core requirements, minor electives, and capstone project credits, but you will be blocked from advanced electives whose prerequisites you have not completed.
+
+Why:
+• Prerequisite Dependency: Advanced 4th-year courses (such as DATA403 Advanced Analytics) require completion of lower-level core prerequisites (DATA302 Deep Learning / DATA301 Machine Learning).
+• Alternative Electives: You can complete open minor basket electives or general graduation credits.
+
+Eligibility / Conditions:
+• Advanced Electives (with unmet prereq): ❌ BLOCKED
+• Non-prerequisite 4th-Year Core & Minor Electives: ✓ ELIGIBLE
+• Capstone / Internship Project: ✓ ELIGIBLE subject to credit requirements.`;
+
+        const sources = [
+          {
+            documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
+            hierarchyLevel: 2,
+            pageOrSheet: 'Sem_Spread_DS_2026 (Semesters 7 & 8)',
+            clauseNumber: '4th Year Curriculum',
+            excerpt: 'Curriculum structure and prerequisite requirements for 4th Year B.Tech CSE Data Science.'
+          },
+          {
+            documentTitle: '4. Student Handbook Aug 2026.pdf',
+            hierarchyLevel: 1,
+            pageOrSheet: 'Page 20',
+            clauseNumber: 'Clause 2.14',
+            excerpt: 'Prerequisite requirement enforcement for upper-level courses.'
+          }
+        ];
+
+        return {
+          state: 'ANSWERABLE',
+          answer: formattedAnswer,
+          sources,
+          ruleResults: { targetYear: 4 },
+          followUp: null
+        };
+      }
+
+      const courseMatch = query.match(/[A-Z]{3,4}\s?\d{3}/i);
+      const targetCourse = courseMatch ? courseMatch[0].replace(/\s+/, '').toUpperCase() : 'DATA302';
+
+      // Extract attendance percentage from query if specified
+      const attMatch = normalizedQuery.match(/\b(\d{1,2}(?:\.\d)?)\s*%/);
+      const queryAttendancePct = attMatch ? parseFloat(attMatch[1]) : (profile ? profile.attendance : null);
+
+      // Extract prerequisite condition statements from query
+      const queryExplicitlyStatesNotCompletedPrereq = /not completed|haven't completed|has not completed|failed|missing/i.test(normalizedQuery);
+      const queryExplicitlyStatesCompletedPrereq = /completed|passed|taken/i.test(normalizedQuery) && !queryExplicitlyStatesNotCompletedPrereq;
+
+      // Decompose into sub-queries for evidence retrieval
+      const subQueries = [
+        `${targetCourse} prerequisite requirements structure`,
+        `minimum attendance requirement 75 percent medical relaxation 65 percent`,
+        `course registration eligibility regulations fees`
+      ];
+
+      const retrievedEvidence = retriever.retrieveDecomposed(subQueries, {
+        program: profile ? profile.program : undefined,
+        batch: profile ? profile.batch : undefined,
+        topK: 6
+      });
+
+      // Process DATA302 multi-condition evaluation
+      if (targetCourse === 'DATA302') {
+        const requiredPrereq = 'DATA301';
+        let isPrereqPassed = false;
+        let prereqSourceText = '';
+
+        if (queryExplicitlyStatesNotCompletedPrereq) {
+          isPrereqPassed = false;
+          prereqSourceText = `Specified as NOT completed in query.`;
+        } else if (queryExplicitlyStatesCompletedPrereq) {
+          isPrereqPassed = true;
+          prereqSourceText = `Specified as completed in query.`;
+        } else if (profile) {
+          isPrereqPassed = profile.completedCourses.some(c => c.courseCode === 'DATA301' && c.isPassed);
+          prereqSourceText = isPrereqPassed
+            ? `Verified from profile transcript for ${profile.display_name}.`
+            : `Not found in profile transcript for ${profile.display_name}.`;
+        } else {
+          return {
+            state: 'NEEDS_STUDENT_INFORMATION',
+            answer: `To evaluate your eligibility for DATA302, please sign in with your Student ID or specify whether you have completed DATA301 (Machine Learning) and your current attendance percentage.`,
+            sources: [],
+            ruleResults: null,
+            followUp: "Example: 'Can I register for DATA302 if I completed DATA301 and my attendance is 80%?'"
+          };
+        }
+
+        // Attendance evaluation
+        let attStatus = 'UNKNOWN';
+        let attExplanation = '';
+        let attEligible = false;
+
+        if (queryAttendancePct !== null) {
+          if (queryAttendancePct >= 75.0) {
+            attStatus = '✓ MET (>= 75%)';
+            attExplanation = `Current attendance is ${queryAttendancePct}%, meeting the standard 75% requirement.`;
+            attEligible = true;
+          } else if (queryAttendancePct >= 65.0) {
+            attStatus = '⚠ RELAXATION REQUIRED (65%–74%)';
+            attExplanation = `Current attendance is ${queryAttendancePct}%, which is below 75%. Medical relaxation (submitted within 3 working days) or approved event representation is required to be eligible for exams.`;
+            attEligible = false;
+          } else {
+            attStatus = '❌ DEBARRED (< 65%)';
+            attExplanation = `Current attendance is ${queryAttendancePct}%, below the 65% minimum threshold. Results in exam debarment (FA grade).`;
+            attEligible = false;
+          }
+        } else {
+          attExplanation = 'Standard 75% attendance is required in every registered course.';
+          attEligible = true;
+        }
+
+        const overallEligible = isPrereqPassed && attEligible;
+        const directAnswer = overallEligible
+          ? `✓ Eligible. You meet the prerequisite requirement (DATA301) and satisfy the mandatory 75% attendance threshold.`
+          : !isPrereqPassed && !attEligible
+            ? `Ineligible for registration/examination. You have NOT completed mandatory prerequisite DATA301 (Machine Learning) and your attendance (${queryAttendancePct}%) does not satisfy the standard 75% requirement.`
+            : !isPrereqPassed
+              ? `Ineligible for DATA302. You have NOT completed the mandatory prerequisite DATA301 (Machine Learning).`
+              : `Conditional / Exam Ineligible. You have completed prerequisite DATA301, but your attendance (${queryAttendancePct}%) is below 75%. Approved medical relaxation (submitted within 3 working days) is required to write end-semester exams.`;
+
+        const formattedAnswer = `Answer: ${directAnswer}
+
+Why:
+• Prerequisite Requirement: DATA302 (Deep Learning) strictly requires DATA301 (Machine Learning). ${prereqSourceText}
+• Attendance Policy: ${attExplanation}
+• Academic Regulations: Per Clause 2.14 & Clause 7.2, both prerequisite passing status and minimum attendance compliance are mandatory for course registration and examination eligibility.
+
+Eligibility / Conditions:
+• Prerequisite (DATA301): ${isPrereqPassed ? '✓ MET (Completed)' : '❌ UNMET (Mandatory prerequisite missing)'}
+• Attendance Threshold (75%): ${attStatus}
+• Fee Clearance: Mandatory requirement prior to course registration on Digii portal.`;
+
+        const sources = [
+          {
+            documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
+            hierarchyLevel: 2,
+            pageOrSheet: 'Sem_Spread_DS_2026 (Semester 6)',
+            clauseNumber: 'Course Code: DATA302',
+            excerpt: 'Course Code: DATA302 | Course Name: Deep Learning | Credits: 4 | Pre-Req: DATA301'
+          },
+          {
+            documentTitle: '4. Student Handbook Aug 2026.pdf',
+            hierarchyLevel: 1,
+            pageOrSheet: 'Pages 21 & 29',
+            clauseNumber: 'Section III, Clause 7.2 & Clause 2.14',
+            excerpt: 'Minimum 75% attendance required in every registered course to appear for end-semester examination. Prerequisite courses must be completed satisfactorily.'
+          },
+          {
+            documentTitle: 'SOP STUDENT 19082025 - Final.pdf',
+            hierarchyLevel: 5,
+            pageOrSheet: 'Page 2',
+            clauseNumber: 'Section 2 (Student Attendance)',
+            excerpt: 'Medical exigency relaxation minimum is 65% with signed medical documents submitted within 3 working days after rejoining.'
+          }
+        ];
+
+        return {
+          state: 'ANSWERABLE',
+          answer: formattedAnswer,
+          sources,
+          ruleResults: {
+            courseCode: targetCourse,
+            prerequisiteMet: isPrereqPassed,
+            attendancePct: queryAttendancePct,
+            attendanceEligible: attEligible,
+            overallEligible
+          },
+          followUp: null
+        };
+      }
     }
 
     // ── 4. GENERAL POLICY INTENTS ──

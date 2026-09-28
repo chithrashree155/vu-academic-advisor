@@ -229,6 +229,45 @@ class RagRetriever {
       return [];
     }
   }
+
+  /**
+   * Decomposed Retrieval for Complex Multi-Part Queries
+   * Takes an array of sub-query strings, retrieves evidence for each sub-requirement,
+   * deduplicates results, and ranks combined evidence.
+   */
+  retrieveDecomposed(subQueries = [], options = {}) {
+    if (!Array.isArray(subQueries) || subQueries.length === 0) {
+      return this.retrieve(options);
+    }
+
+    const allResults = [];
+    const seenTexts = new Set();
+    const topPerSubQuery = Math.max(2, Math.floor((options.topK || 6) / subQueries.length));
+
+    for (const subQuery of subQueries) {
+      if (!subQuery || typeof subQuery !== 'string') continue;
+      const subOptions = { ...options, query: subQuery, topK: topPerSubQuery };
+      const chunks = this.retrieve(subOptions);
+
+      for (const chunk of chunks) {
+        const textSnippet = chunk.chunkText.slice(0, 100);
+        if (!seenTexts.has(textSnippet)) {
+          seenTexts.add(textSnippet);
+          allResults.push({ ...chunk, subQueryOrigin: subQuery });
+        }
+      }
+    }
+
+    allResults.sort((a, b) => {
+      const aBonus = Math.max(0, (8 - (a.hierarchyLevel || 3)) * 0.15);
+      const bBonus = Math.max(0, (8 - (b.hierarchyLevel || 3)) * 0.15);
+      return (b.rawScore + bBonus) - (a.rawScore + aBonus);
+    });
+
+    const finalResults = allResults.slice(0, options.topK || 6);
+    console.log(`[RagRetriever] Decomposed retrieval collected ${finalResults.length} chunks across ${subQueries.length} sub-queries.`);
+    return finalResults;
+  }
 }
 
 const retriever = new RagRetriever();

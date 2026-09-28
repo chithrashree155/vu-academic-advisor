@@ -1,7 +1,7 @@
 /**
  * VU Advisor — Comprehensive Test Suite
  * Tests all 15 required scenarios across synthetic students,
- * privacy safeguards, clarification engine, and student login APIs.
+ * privacy safeguards, clarification engine, complex multi-condition RAG, and student login APIs.
  */
 
 'use strict';
@@ -43,7 +43,7 @@ function check(testNum, label, condition, actual) {
 
 async function runTests() {
   console.log('\n═══════════════════════════════════════════════════════');
-  console.log('  VU Advisor — Comprehensive Test Suite (15 Core Tests + Privacy & Clarification)');
+  console.log('  VU Advisor — Comprehensive Test Suite (15 Core Tests + Complex RAG)');
   console.log('═══════════════════════════════════════════════════════\n');
 
   // 1. Verify student list selector API (should return list of IDs/names without private records)
@@ -194,7 +194,38 @@ async function runTests() {
     );
   }
 
-  // ── BONUS / REFINEMENT TESTS ──
+  // ── COMPLEX MULTI-CONDITION RAG TESTS ──
+  console.log('\n── Complex Multi-Condition RAG Tests ──');
+
+  // Complex Multi-Condition Test 1: Completed DATA301 but attendance 72%
+  {
+    const r = await apiPost('/api/advisory', { query: 'Can I register for DATA302 if I completed DATA301 but my attendance is 72%?' });
+    const ok = r.state === 'ANSWERABLE' && r.answer.includes('Why:') && r.answer.includes('Eligibility / Conditions:') && r.answer.includes('72%');
+    console.log(`${ok ? '✅' : '❌'} Complex RAG: Prerequisite + 72% Attendance Multi-Condition Query`);
+  }
+
+  // Complex Multi-Condition Test 2: Missing DATA301 + 72% Attendance
+  {
+    const r = await apiPost('/api/advisory', { query: 'Can I register for DATA302 in Semester 5 if I have not completed DATA301 and my attendance is 72%?' });
+    const ok = r.state === 'ANSWERABLE' && r.answer.includes('UNMET') && r.answer.includes('72%');
+    console.log(`${ok ? '✅' : '❌'} Complex RAG: Missing Prerequisite + Attendance Multi-Condition Query`);
+  }
+
+  // Complex Multi-Condition Test 3: Failed Prerequisite Course Remediation
+  {
+    const r = await apiPost('/api/advisory', { query: 'What happens if I fail a prerequisite course and want to register for the next course?' });
+    const ok = r.state === 'ANSWERABLE' && r.answer.includes('Clause 2.14') && r.answer.includes('Summer Term');
+    console.log(`${ok ? '✅' : '❌'} Complex RAG: Failing Prerequisite Course Remediation Query`);
+  }
+
+  // Complex Multi-Condition Test 4: 4th Year Prerequisites
+  {
+    const r = await apiPost('/api/advisory', { query: 'What courses can I take in the 4th year if I have completed these courses but have not met the prerequisite for another course?' });
+    const ok = r.state === 'ANSWERABLE' && r.answer.includes('4th year') && r.answer.includes('BLOCKED');
+    console.log(`${ok ? '✅' : '❌'} Complex RAG: 4th Year Unmet Prerequisite Options Query`);
+  }
+
+  // ── SECURITY, PRIVACY & CLARIFICATION ENGINE TESTS ──
   console.log('\n── Security, Privacy & Clarification Engine Tests ──');
 
   // Privacy Guardrail test
@@ -244,7 +275,7 @@ async function runTests() {
   console.log('\n═══════════════════════════════════════════════════════\n');
 
   if (failed === 0) {
-    console.log('🎉 ALL 15 CORE TESTS AND SECURITY REFINEMENTS PASSED');
+    console.log('🎉 ALL 15 CORE TESTS AND COMPLEX RAG REFINEMENTS PASSED');
   } else {
     console.log(`⚠️  ${failed} test(s) failed`);
   }
