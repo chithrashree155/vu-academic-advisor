@@ -16,11 +16,11 @@ const { retriever } = require('./rag/retriever.js');
 // data_type = "SYNTHETIC" — NOT real student data
 // ============================================================
 const SYNTHETIC_PROFILES = [
-  // ── Student 01 ── B.Tech CSE – Data Science, Sem 5
+  // ── Student 01 (Aarav Mehta) ── B.Tech CSE – Data Science, Sem 5
   {
     id: 'VU-DEMO-001',
     data_type: 'SYNTHETIC',
-    display_name: 'Student 01',
+    display_name: 'Aarav Mehta',
     program: 'BTECH_DS',
     programName: 'B.Tech (Hons.) CSE – Data Science',
     program_type: 'B.Tech',
@@ -40,11 +40,11 @@ const SYNTHETIC_PROFILES = [
     notes: 'Has completed DATA301. Eligible for DATA302.'
   },
 
-  // ── Student 02 ── B.Tech CSE – AI/ML, Sem 3
+  // ── Student 02 (Ananya Rao) ── B.Tech CSE – AI/ML, Sem 3
   {
     id: 'VU-DEMO-002',
     data_type: 'SYNTHETIC',
-    display_name: 'Student 02',
+    display_name: 'Ananya Rao',
     program: 'BTECH_AIML',
     programName: 'B.Tech (Hons.) CSE – AI/ML',
     program_type: 'B.Tech',
@@ -62,11 +62,11 @@ const SYNTHETIC_PROFILES = [
     notes: 'Early semester. Has not yet taken DATA301.'
   },
 
-  // ── Student 03 ── B.Tech CSE – Data Science, Sem 7
+  // ── Student 03 (Rohan Nair) ── B.Tech CSE – Data Science, Sem 7
   {
     id: 'VU-DEMO-003',
     data_type: 'SYNTHETIC',
-    display_name: 'Student 03',
+    display_name: 'Rohan Nair',
     program: 'BTECH_DS',
     programName: 'B.Tech (Hons.) CSE – Data Science',
     program_type: 'B.Tech',
@@ -88,11 +88,11 @@ const SYNTHETIC_PROFILES = [
     notes: 'Senior student. Strong academic record.'
   },
 
-  // ── Student 04 ── BMS – Digital Business, Sem 3
+  // ── Student 04 (Ishita Kapoor) ── BMS – Digital Business, Sem 3
   {
     id: 'VU-DEMO-004',
     data_type: 'SYNTHETIC',
-    display_name: 'Student 04',
+    display_name: 'Ishita Kapoor',
     program: 'BMS_DB',
     programName: 'BMS (Hons.) – Digital Business',
     program_type: 'BMS',
@@ -107,11 +107,11 @@ const SYNTHETIC_PROFILES = [
     notes: 'BMS student. Detailed curriculum not in source files.'
   },
 
-  // ── Student 05 ── BMS – Digital Business, Sem 5
+  // ── Student 05 (Arjun Menon) ── BMS – Digital Business, Sem 5
   {
     id: 'VU-DEMO-005',
     data_type: 'SYNTHETIC',
-    display_name: 'Student 05',
+    display_name: 'Arjun Menon',
     program: 'BMS_DB',
     programName: 'BMS (Hons.) – Digital Business',
     program_type: 'BMS',
@@ -126,11 +126,11 @@ const SYNTHETIC_PROFILES = [
     notes: 'Fees pending. BMS curriculum details not in source files.'
   },
 
-  // ── Student 06 ── BMS with Research – Digital Business, Sem 7
+  // ── Student 06 (Kavya Reddy) ── BMS with Research – Digital Business, Sem 7
   {
     id: 'VU-DEMO-006',
     data_type: 'SYNTHETIC',
-    display_name: 'Student 06',
+    display_name: 'Kavya Reddy',
     program: 'BMS_DB_RESEARCH',
     programName: 'BMS (Hons. with Research) – Digital Business',
     program_type: 'BMS',
@@ -145,11 +145,11 @@ const SYNTHETIC_PROFILES = [
     notes: 'Research track. Senior semester.'
   },
 
-  // ── Student 07 ── BA – Psychology, Sem 3
+  // ── Student 07 (Aditya Sharma) ── BA – Psychology, Sem 3
   {
     id: 'VU-DEMO-007',
     data_type: 'SYNTHETIC',
-    display_name: 'Student 07',
+    display_name: 'Aditya Sharma',
     program: 'BA_PSY',
     programName: 'BA (Hons.) – Psychology',
     program_type: 'BA',
@@ -164,11 +164,11 @@ const SYNTHETIC_PROFILES = [
     notes: 'Psychology student. Detailed curriculum not in source files.'
   },
 
-  // ── Student 08 ── BA – Psychology, Sem 5
+  // ── Student 08 (Nisha Iyer) ── BA – Psychology, Sem 5
   {
     id: 'VU-DEMO-008',
     data_type: 'SYNTHETIC',
-    display_name: 'Student 08',
+    display_name: 'Nisha Iyer',
     program: 'BA_PSY',
     programName: 'BA (Hons.) – Psychology',
     program_type: 'BA',
@@ -183,11 +183,11 @@ const SYNTHETIC_PROFILES = [
     notes: 'Mid-program Psychology student.'
   },
 
-  // ── Student 09 ── BA – Economics, Sem 3
+  // ── Student 09 (Vihaan Patel) ── BA – Economics, Sem 3
   {
     id: 'VU-DEMO-009',
     data_type: 'SYNTHETIC',
-    display_name: 'Student 09',
+    display_name: 'Vihaan Patel',
     program: 'BA_ECO',
     programName: 'BA (Hons.) – Economics',
     program_type: 'BA',
@@ -202,11 +202,11 @@ const SYNTHETIC_PROFILES = [
     notes: 'Economics student. Detailed curriculum not in source files.'
   },
 
-  // ── Student 10 ── BA – Economics, Sem 5
+  // ── Student 10 (Meera Krishnan) ── BA – Economics, Sem 5
   {
     id: 'VU-DEMO-010',
     data_type: 'SYNTHETIC',
-    display_name: 'Student 10',
+    display_name: 'Meera Krishnan',
     program: 'BA_ECO',
     programName: 'BA (Hons.) – Economics',
     program_type: 'BA',
@@ -221,11 +221,11 @@ const SYNTHETIC_PROFILES = [
     notes: 'Mid-program Economics student.'
   },
 
-  // ── Student 11 ── B.Des – Communication Design, Sem 3
+  // ── Student 11 (Siddharth Joshi) ── B.Des – Communication Design, Sem 3
   {
     id: 'VU-DEMO-011',
     data_type: 'SYNTHETIC',
-    display_name: 'Student 11',
+    display_name: 'Siddharth Joshi',
     program: 'BDES_CD',
     programName: 'B.Des – Communication Design',
     program_type: 'B.Des',
@@ -240,11 +240,11 @@ const SYNTHETIC_PROFILES = [
     notes: 'Design student. Curriculum details not in source files.'
   },
 
-  // ── Student 12 ── BA LLB, Sem 5
+  // ── Student 12 (Tanvi Malhotra) ── BA LLB, Sem 5
   {
     id: 'VU-DEMO-012',
     data_type: 'SYNTHETIC',
-    display_name: 'Student 12',
+    display_name: 'Tanvi Malhotra',
     program: 'BA_LLB',
     programName: 'BA, LLB (Hons.)',
     program_type: 'LLB',
@@ -259,11 +259,11 @@ const SYNTHETIC_PROFILES = [
     notes: 'Law student. Curriculum details not in source files.'
   },
 
-  // ── Student 13 ── BMS LLB, Sem 7
+  // ── Student 13 (Karan Bhat) ── BMS LLB, Sem 7
   {
     id: 'VU-DEMO-013',
     data_type: 'SYNTHETIC',
-    display_name: 'Student 13',
+    display_name: 'Karan Bhat',
     program: 'BMS_LLB',
     programName: 'BMS, LLB (Hons.)',
     program_type: 'LLB',
@@ -278,11 +278,11 @@ const SYNTHETIC_PROFILES = [
     notes: 'Senior law-management student.'
   },
 
-  // ── Student 14 ── BA Psychology with Research, Sem 7
+  // ── Student 14 (Diya Srinivasan) ── BA Psychology with Research, Sem 7
   {
     id: 'VU-DEMO-014',
     data_type: 'SYNTHETIC',
-    display_name: 'Student 14',
+    display_name: 'Diya Srinivasan',
     program: 'BA_PSY_RESEARCH',
     programName: 'BA (Hons. with Research) – Psychology',
     program_type: 'BA',
@@ -297,11 +297,11 @@ const SYNTHETIC_PROFILES = [
     notes: 'Research track. Near graduation.'
   },
 
-  // ── Student 15 ── BA Economics with Research, Sem 7
+  // ── Student 15 (Reyansh Gupta) ── BA Economics with Research, Sem 7
   {
     id: 'VU-DEMO-015',
     data_type: 'SYNTHETIC',
-    display_name: 'Student 15',
+    display_name: 'Reyansh Gupta',
     program: 'BA_ECO_RESEARCH',
     programName: 'BA (Hons. with Research) – Economics',
     program_type: 'BA',
@@ -316,11 +316,11 @@ const SYNTHETIC_PROFILES = [
     notes: 'Research track Economics. Senior semester.'
   },
 
-  // ── Student 16 ── B.Tech CSE – AI/ML, Sem 5 (Low Attendance Scenario: 68.5%)
+  // ── Student 16 (Sneha Kulkarni) ── B.Tech CSE – AI/ML, Sem 5 (Low Attendance Scenario: 68.5%)
   {
     id: 'VU-DEMO-016',
     data_type: 'SYNTHETIC',
-    display_name: 'Student 16',
+    display_name: 'Sneha Kulkarni',
     program: 'BTECH_AIML',
     programName: 'B.Tech (Hons.) CSE – AI/ML',
     program_type: 'B.Tech',
@@ -339,11 +339,11 @@ const SYNTHETIC_PROFILES = [
     notes: 'Completed DATA301 prerequisite, but has low attendance (68.5%) requiring medical relaxation approval.'
   },
 
-  // ── Student 17 ── B.Tech CSE – Data Science, Sem 5 (Fee Pending Block Scenario)
+  // ── Student 17 (Dhruv Shetty) ── B.Tech CSE – Data Science, Sem 5 (Fee Pending Block Scenario)
   {
     id: 'VU-DEMO-017',
     data_type: 'SYNTHETIC',
-    display_name: 'Student 17',
+    display_name: 'Dhruv Shetty',
     program: 'BTECH_DS',
     programName: 'B.Tech (Hons.) CSE – Data Science',
     program_type: 'B.Tech',
@@ -361,11 +361,11 @@ const SYNTHETIC_PROFILES = [
     notes: 'Has pending fee dues. Course registration blocked until Digii ERP clearance.'
   },
 
-  // ── Student 18 ── B.Des – Communication Design, Sem 5 (Minor & Summer Term Registration)
+  // ── Student 18 (Aditi Verma) ── B.Des – Communication Design, Sem 5 (Minor & Summer Term Registration)
   {
     id: 'VU-DEMO-018',
     data_type: 'SYNTHETIC',
-    display_name: 'Student 18',
+    display_name: 'Aditi Verma',
     program: 'BDES_CD',
     programName: 'Bachelor of Design',
     program_type: 'B.Des',
@@ -816,6 +816,16 @@ async function processAdvisorQuery(query, profileId = null) {
         ruleResults: null,
         followUp: null
       };
+    }
+
+    // ── 13b. BMS program specific query ──
+    if (normalizedQuery.includes('bms')) {
+      return noCurriculumResponse('BMS (Hons.) – Digital Business');
+    }
+
+    // ── 13c. Design / B.Des program specific query ──
+    if (normalizedQuery.includes('design') || normalizedQuery.includes('b.des') || normalizedQuery.includes('bdes')) {
+      return noCurriculumResponse('B.Des – Communication Design');
     }
 
     // ── 14. Minor Courses ──

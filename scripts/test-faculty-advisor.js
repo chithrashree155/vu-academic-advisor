@@ -77,19 +77,19 @@ async function runTests() {
     );
   }
 
-  // ── TEST 4: DATA302 eligibility — Student 01 (eligible, has DATA301) ──
+  // ── TEST 4: DATA302 eligibility — Aarav Mehta (Student 01, eligible, has DATA301) ──
   {
     const r = await apiPost('/api/advisory', { query: 'Can I take DATA302?', profileId: 'VU-DEMO-001' });
-    check(4, 'DATA302 eligibility — Student 01 (eligible)',
+    check(4, 'DATA302 eligibility — Aarav Mehta (eligible)',
       r.state === 'ANSWERABLE' && r.answer.includes('Eligible') && r.ruleResults?.eligible === true,
       r
     );
   }
 
-  // ── TEST 5: DATA302 eligibility — Student 02 (not eligible, missing DATA301) ──
+  // ── TEST 5: DATA302 eligibility — Ananya Rao (Student 02, not eligible, missing DATA301) ──
   {
     const r = await apiPost('/api/advisory', { query: 'Can I take DATA302?', profileId: 'VU-DEMO-002' });
-    check(5, 'DATA302 eligibility — Student 02 (not eligible)',
+    check(5, 'DATA302 eligibility — Ananya Rao (not eligible)',
       r.state === 'ANSWERABLE' && r.ruleResults?.eligible === false,
       r
     );
@@ -131,7 +131,7 @@ async function runTests() {
     );
   }
 
-  // ── TEST 10: Psychology program question — Student 07 ──
+  // ── TEST 10: Psychology program question — Aditya Sharma (Student 07) ──
   {
     const r = await apiPost('/api/advisory', { query: 'What courses are in the Psychology curriculum?', profileId: 'VU-DEMO-007' });
     check(10, 'Psychology program question — INSUFFICIENT_INFORMATION',
@@ -140,7 +140,7 @@ async function runTests() {
     );
   }
 
-  // ── TEST 11: Economics program question — Student 09 ──
+  // ── TEST 11: Economics program question — Vihaan Patel (Student 09) ──
   {
     const r = await apiPost('/api/advisory', { query: 'What are the prerequisite courses for Economics?', profileId: 'VU-DEMO-009' });
     check(11, 'Economics program question — INSUFFICIENT_INFORMATION',
@@ -149,7 +149,7 @@ async function runTests() {
     );
   }
 
-  // ── TEST 12: BMS program question — Student 04 ──
+  // ── TEST 12: BMS program question — Ishita Kapoor (Student 04) ──
   {
     const r = await apiPost('/api/advisory', { query: 'What courses are in the BMS curriculum?', profileId: 'VU-DEMO-004' });
     check(12, 'BMS program question — INSUFFICIENT_INFORMATION',
@@ -158,7 +158,7 @@ async function runTests() {
     );
   }
 
-  // ── TEST 13: Design program question — Student 11 ──
+  // ── TEST 13: Design program question — Siddharth Joshi (Student 11) ──
   {
     const r = await apiPost('/api/advisory', { query: 'What are the B.Des Communication Design courses?', profileId: 'VU-DEMO-011' });
     check(13, 'Design program question — INSUFFICIENT_INFORMATION',
@@ -167,7 +167,7 @@ async function runTests() {
     );
   }
 
-  // ── TEST 14: Law program question — Student 12 ──
+  // ── TEST 14: Law program question — Tanvi Malhotra (Student 12) ──
   {
     const r = await apiPost('/api/advisory', { query: 'What are the LLB course prerequisites?', profileId: 'VU-DEMO-012' });
     check(14, 'Law program question — INSUFFICIENT_INFORMATION',
@@ -185,25 +185,25 @@ async function runTests() {
     );
   }
 
-  // ── Bonus: Attendance with Student 05 (fees pending, att 77.5%) ──
+  // ── Bonus: Attendance with Arjun Menon (Student 05, fees pending, att 77.5%) ──
   {
     const r = await apiPost('/api/advisory', { query: 'What is the attendance requirement?', profileId: 'VU-DEMO-005' });
     const ok = r.state === 'ANSWERABLE' && r.answer.includes('75');
-    console.log(`${ok ? '✅' : '❌'} Bonus: Attendance with Student 05 (BMS, Sem 5)`);
+    console.log(`${ok ? '✅' : '❌'} Bonus: Attendance with Arjun Menon (BMS, Sem 5)`);
   }
 
-  // ── Bonus: Student 14 (Psychology Research, Sem 7) attendance ──
+  // ── Bonus: Diya Srinivasan (Student 14, Psychology Research, Sem 7) attendance ──
   {
     const r = await apiPost('/api/advisory', { query: 'Am I meeting the attendance requirement?', profileId: 'VU-DEMO-014' });
     const ok = r.state === 'ANSWERABLE' && r.answer.includes('93.5');
-    console.log(`${ok ? '✅' : '❌'} Bonus: Attendance check — Student 14 (BA Psych Research)`);
+    console.log(`${ok ? '✅' : '❌'} Bonus: Attendance check — Diya Srinivasan (BA Psych Research)`);
   }
 
-  // ── Bonus: Pending fees — Student 05 ──
+  // ── Bonus: Pending fees — Arjun Menon (Student 05) ──
   {
     const r = await apiPost('/api/advisory', { query: 'Can I register with pending fees?', profileId: 'VU-DEMO-005' });
     const ok = r.state === 'ANSWERABLE' && r.answer.toLowerCase().includes('pending');
-    console.log(`${ok ? '✅' : '❌'} Bonus: Pending fees — Student 05`);
+    console.log(`${ok ? '✅' : '❌'} Bonus: Pending fees — Arjun Menon`);
   }
 
   console.log('\n═══════════════════════════════════════════════════════');
@@ -211,8 +211,8 @@ async function runTests() {
   console.log('═══════════════════════════════════════════════════════');
 
   // Profile count check
-  console.log(`\n📊 Synthetic students: ${profiles.length}/15`);
-  if (profiles.length === 15) {
+  console.log(`\n📊 Synthetic students: ${profiles.length}/18`);
+  if (profiles.length === 18) {
     console.log('  ✅ All 15 synthetic students present');
   } else {
     console.log(`  ❌ Expected 15, got ${profiles.length}`);

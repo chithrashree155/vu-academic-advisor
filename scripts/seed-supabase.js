@@ -184,7 +184,7 @@ async function runSeed() {
   const syntheticStudents = [
     {
       roll_number: 'VU2026BTECHDS001',
-      student_name: 'Aarav Sharma (Demo Student A - Eligible for DATA302)',
+      student_name: 'Aarav Mehta (Demo Student A - Eligible for DATA302)',
       program_code: 'BTECH_DS',
       batch: '2026',
       current_semester: 5,
@@ -196,7 +196,7 @@ async function runSeed() {
     },
     {
       roll_number: 'VU2026BTECHDS002',
-      student_name: 'Priya Nair (Demo Student B - Missing Prerequisite for DATA302)',
+      student_name: 'Ananya Rao (Demo Student B - Missing Prerequisite for DATA302)',
       program_code: 'BTECH_DS',
       batch: '2026',
       current_semester: 5,
@@ -208,7 +208,7 @@ async function runSeed() {
     },
     {
       roll_number: 'VU2024BTECHCSE042',
-      student_name: 'Rohan Verma (Demo Student C - Batch 2024 Isolation Test)',
+      student_name: 'Rohan Nair (Demo Student C - Batch 2024 Isolation Test)',
       program_code: 'BTECH_CSE',
       batch: '2024',
       current_semester: 5,
