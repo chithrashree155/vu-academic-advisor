@@ -29,12 +29,18 @@ class RagRetriever {
   loadChunks() {
     // 1. Static require allows bundlers like @vercel/ncc to trace and bundle the JSON directly
     try {
-      const bundledChunks = require('../../../data/processed/rag_document_chunks.json');
+      let bundledChunks = require('../../../data/processed/rag_document_chunks.json');
+      if (bundledChunks && bundledChunks.default) {
+        bundledChunks = bundledChunks.default;
+      }
       if (Array.isArray(bundledChunks) && bundledChunks.length > 0) {
         this.chunks = bundledChunks;
         this.chunksPath = '[bundled] data/processed/rag_document_chunks.json';
+        this.lastLoadError = null;
         console.log(`[RagRetriever] Successfully loaded ${this.chunks.length} RAG chunks via static require`);
         return;
+      } else {
+        this.lastLoadError = 'bundledChunks not an array: ' + typeof bundledChunks;
       }
     } catch (reqErr) {
       this.lastLoadError = 'Static require error: ' + reqErr.message;
@@ -45,6 +51,7 @@ class RagRetriever {
       this.chunksPath,
       path.resolve(process.cwd(), 'data/processed/rag_document_chunks.json'),
       path.resolve(process.cwd(), 'data/rag_document_chunks.json'),
+      '/var/task/data/processed/rag_document_chunks.json',
       path.resolve(__dirname, '../../../data/processed/rag_document_chunks.json'),
       path.resolve(__dirname, '../../data/processed/rag_document_chunks.json'),
       path.resolve(__dirname, '../data/processed/rag_document_chunks.json'),
@@ -55,23 +62,28 @@ class RagRetriever {
     ];
 
     for (const p of candidatePaths) {
-      if (p && fs.existsSync(p)) {
+      if (p) {
         try {
-          const raw = fs.readFileSync(p, 'utf8');
-          const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            this.chunks = parsed;
-            this.chunksPath = p;
-            console.log(`[RagRetriever] Successfully loaded ${this.chunks.length} RAG chunks from: ${p}`);
-            return;
+          if (fs.existsSync(p)) {
+            const raw = fs.readFileSync(p, 'utf8');
+            let parsed = JSON.parse(raw);
+            if (parsed && parsed.default) parsed = parsed.default;
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              this.chunks = parsed;
+              this.chunksPath = p;
+              this.lastLoadError = null;
+              console.log(`[RagRetriever] Successfully loaded ${this.chunks.length} RAG chunks from: ${p}`);
+              return;
+            }
           }
         } catch (e) {
+          this.lastLoadError = `Error loading from ${p}: ${e.message}`;
           console.error(`[RagRetriever Error] Failed to read chunks from ${p}:`, e.message);
         }
       }
     }
 
-    console.warn('[RagRetriever Warning] Could not find or parse rag_document_chunks.json in any expected directory.');
+    console.warn('[RagRetriever Warning] Could not find or parse rag_document_chunks.json in any expected directory. Error:', this.lastLoadError);
   }
 
   /**
