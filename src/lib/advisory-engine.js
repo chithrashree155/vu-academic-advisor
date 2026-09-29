@@ -24,7 +24,7 @@ const {
   getCoursePrerequisites
 } = require('./courses');
 
-const ragModule = require('./rag/retriever');
+const ragModule = require('./rag/retriever.js');
 const retriever = ragModule.retriever || (ragModule.default && ragModule.default.retriever) || ragModule;
 
 // ── INTERNAL SYNTHETIC STUDENT PROFILES (24 PROFILES FOR TESTING & DEMO) ──

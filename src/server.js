@@ -8,7 +8,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const { processAdvisorQuery, getStudentProfileById, getStudentIdList } = require('./lib/advisory-engine');
-const ragModule = require('./lib/rag/retriever');
+const ragModule = require('./lib/rag/retriever.js');
 const retriever = ragModule.retriever || (ragModule.default && ragModule.default.retriever) || ragModule;
 
 const app = express();
@@ -108,7 +108,7 @@ app.get('/api/health', (req, res) => {
       }
     }
 
-    const ragModule = require('./lib/rag/retriever');
+    const ragModule = require('./lib/rag/retriever.js');
     const ragKeys = Object.keys(ragModule || {});
     let activeRetriever = ragModule.retriever || (ragModule.default && ragModule.default.retriever);
     if (!activeRetriever && typeof ragModule.RagRetriever === 'function') {
