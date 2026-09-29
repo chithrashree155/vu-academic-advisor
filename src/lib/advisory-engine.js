@@ -1222,10 +1222,43 @@ function isOutOfScopeQuery(queryStr) {
     q.includes('bitcoin') ||
     q.includes('politics') ||
     q.includes('election') ||
-    q.includes('president of') ||
-    q.includes('prime minister of')
+    q.includes('president') ||
+    q.includes('prime minister')
   ) {
     return true;
+  }
+
+  // Math solving / calculations
+  if (
+    q.includes('math problem') ||
+    q.includes('solve this') ||
+    q.includes('random math') ||
+    q.includes('solve math')
+  ) {
+    return true;
+  }
+
+  // Greetings / conversational openers without academic subject
+  if (
+    q === 'hello' ||
+    q === 'hi' ||
+    q === 'hey' ||
+    q === 'greetings' ||
+    q === 'good morning' ||
+    q === 'good afternoon' ||
+    q === 'good evening' ||
+    q.startsWith('hello ') ||
+    q.startsWith('hi ') ||
+    q.startsWith('hey ') ||
+    q === 'how are you' ||
+    q === 'how are you?' ||
+    q === 'who are you' ||
+    q === 'who are you?'
+  ) {
+    const hasAcademicTerm = /attendance|course|credit|prereq|eligib|handbook|register|grade|cgpa|minor|holiday|policy|degree|program|semester/i.test(q);
+    if (!hasAcademicTerm) {
+      return true;
+    }
   }
 
   // Meta random queries
