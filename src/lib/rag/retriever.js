@@ -336,5 +336,9 @@ const retriever = new RagRetriever();
 
 module.exports = {
   RagRetriever,
-  retriever
+  retriever,
+  default: {
+    RagRetriever,
+    retriever
+  }
 };

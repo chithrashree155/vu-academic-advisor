@@ -8,7 +8,8 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const { processAdvisorQuery, getStudentProfileById, getStudentIdList } = require('./lib/advisory-engine');
-const { retriever } = require('./lib/rag/retriever');
+const ragModule = require('./lib/rag/retriever');
+const retriever = ragModule.retriever || (ragModule.default && ragModule.default.retriever) || ragModule;
 
 const app = express();
 const PORT = process.env.APP_PORT || 3000;

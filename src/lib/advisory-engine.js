@@ -24,7 +24,8 @@ const {
   getCoursePrerequisites
 } = require('./courses');
 
-const { retriever } = require('./rag/retriever');
+const ragModule = require('./rag/retriever');
+const retriever = ragModule.retriever || (ragModule.default && ragModule.default.retriever) || ragModule;
 
 // ── INTERNAL SYNTHETIC STUDENT PROFILES (24 PROFILES FOR TESTING & DEMO) ──
 // Kept private server-side. Never exposed in full dataset API responses.
