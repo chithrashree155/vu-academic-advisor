@@ -27,38 +27,16 @@ class RagRetriever {
   }
 
   loadChunks() {
-    // 1. Static require allows bundlers like @vercel/ncc to trace and bundle the JSON directly
-    try {
-      let bundledChunks = require('../../../data/processed/rag_document_chunks.json');
-      if (bundledChunks && bundledChunks.default) {
-        bundledChunks = bundledChunks.default;
-      }
-      if (Array.isArray(bundledChunks) && bundledChunks.length > 0) {
-        this.chunks = bundledChunks;
-        this.chunksPath = '[bundled] data/processed/rag_document_chunks.json';
-        this.lastLoadError = null;
-        console.log(`[RagRetriever] Successfully loaded ${this.chunks.length} RAG chunks via static require`);
-        return;
-      } else {
-        this.lastLoadError = 'bundledChunks not an array: ' + typeof bundledChunks;
-      }
-    } catch (reqErr) {
-      this.lastLoadError = 'Static require error: ' + reqErr.message;
-      // Fall through to filesystem candidatePaths
-    }
-
+    // 1. Direct filesystem read from runtime deployment directory (Vercel serverless / local)
     const candidatePaths = [
       this.chunksPath,
-      path.resolve(process.cwd(), 'data/processed/rag_document_chunks.json'),
-      path.resolve(process.cwd(), 'data/rag_document_chunks.json'),
+      path.join(process.cwd(), 'data', 'processed', 'rag_document_chunks.json'),
       '/var/task/data/processed/rag_document_chunks.json',
+      path.resolve(process.cwd(), 'data/processed/rag_document_chunks.json'),
       path.resolve(__dirname, '../../../data/processed/rag_document_chunks.json'),
       path.resolve(__dirname, '../../data/processed/rag_document_chunks.json'),
       path.resolve(__dirname, '../data/processed/rag_document_chunks.json'),
-      path.resolve(__dirname, './data/processed/rag_document_chunks.json'),
-      path.join(process.cwd(), 'data/processed/rag_document_chunks.json'),
-      path.join(__dirname, '../../../data/processed/rag_document_chunks.json'),
-      path.join(__dirname, '../../data/processed/rag_document_chunks.json')
+      path.resolve(__dirname, './data/processed/rag_document_chunks.json')
     ];
 
     for (const p of candidatePaths) {
@@ -81,6 +59,23 @@ class RagRetriever {
           console.error(`[RagRetriever Error] Failed to read chunks from ${p}:`, e.message);
         }
       }
+    }
+
+    // 2. Static require fallback
+    try {
+      let bundledChunks = require('../../../data/processed/rag_document_chunks.json');
+      if (bundledChunks && bundledChunks.default) {
+        bundledChunks = bundledChunks.default;
+      }
+      if (Array.isArray(bundledChunks) && bundledChunks.length > 0) {
+        this.chunks = bundledChunks;
+        this.chunksPath = '[bundled] data/processed/rag_document_chunks.json';
+        this.lastLoadError = null;
+        console.log(`[RagRetriever] Successfully loaded ${this.chunks.length} RAG chunks via static require`);
+        return;
+      }
+    } catch (reqErr) {
+      this.lastLoadError = 'Static require error: ' + reqErr.message;
     }
 
     console.warn('[RagRetriever Warning] Could not find or parse rag_document_chunks.json in any expected directory. Error:', this.lastLoadError);
