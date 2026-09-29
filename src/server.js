@@ -108,26 +108,35 @@ app.get('/api/health', (req, res) => {
       }
     }
 
-    if (retriever && (!retriever.chunks || retriever.chunks.length === 0)) {
-      retriever.loadChunks();
+    const ragModule = require('./lib/rag/retriever');
+    const ragKeys = Object.keys(ragModule || {});
+    let activeRetriever = ragModule.retriever || (ragModule.default && ragModule.default.retriever);
+    if (!activeRetriever && typeof ragModule.RagRetriever === 'function') {
+      activeRetriever = new ragModule.RagRetriever();
+    } else if (!activeRetriever && typeof ragModule === 'function') {
+      activeRetriever = new ragModule();
     }
 
-    const chunkCount = (retriever && Array.isArray(retriever.chunks)) ? retriever.chunks.length : 0;
-    const chunkPath = retriever ? retriever.chunksPath : null;
+    if (activeRetriever && (!activeRetriever.chunks || activeRetriever.chunks.length === 0) && typeof activeRetriever.loadChunks === 'function') {
+      activeRetriever.loadChunks();
+    }
+
+    const chunkCount = (activeRetriever && Array.isArray(activeRetriever.chunks)) ? activeRetriever.chunks.length : 0;
+    const chunkPath = activeRetriever ? activeRetriever.chunksPath : null;
 
     res.json({
       status: 'healthy',
       system: 'Vidyashilp University Academic Advisor',
-      version: '2.0.1',
+      version: '2.0.2',
       directPath,
       fileExists,
       fileSize,
       directFileReadCount,
-      retrieverType: typeof retriever,
-      retrieverHasChunks: retriever ? !!retriever.chunks : false,
+      ragKeys,
+      hasActiveRetriever: !!activeRetriever,
       ragChunksLoaded: chunkCount,
       ragChunksPath: chunkPath,
-      loadError: retriever ? retriever.lastLoadError : null,
+      loadError: activeRetriever ? activeRetriever.lastLoadError : null,
       cwd: process.cwd()
     });
   } catch (err) {
