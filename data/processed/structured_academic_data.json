@@ -92,6 +92,13 @@
       "hierarchyLevel": 7,
       "totalChunks": 1,
       "isNew": true
+    },
+    {
+      "documentName": "Holiday List.pdf",
+      "sourceType": "HOLIDAY_CALENDAR",
+      "hierarchyLevel": 2,
+      "totalChunks": 2,
+      "isNew": true
     }
   ],
   "programs": [

@@ -403,6 +403,63 @@ async function parseChatbotFlowchart(filePath) {
   };
 }
 
+async function parseHolidayList(filePath) {
+  return {
+    documentName: 'Holiday List.pdf',
+    sourceType: 'HOLIDAY_CALENDAR',
+    hierarchyLevel: 2,
+    totalPages: 1,
+    totalChunks: 2,
+    chunks: [
+      {
+        chunkIndex: 0,
+        documentName: 'Holiday List.pdf',
+        sourceType: 'HOLIDAY_CALENDAR',
+        hierarchyLevel: 2,
+        pageNumber: 1,
+        sectionNumber: 'Notification - List of General Holidays - 2026',
+        clauseNumber: 'No: VU/2025-26/RO-CIR/545',
+        batchScope: ['2022', '2023', '2024', '2025', '2026'],
+        content: `Vidyashilp University — Notification: List of General Holidays - 2026 (As per University Leave Policy). Reference No: VU/2025-26/RO-CIR/545, Date: 17th December, 2025.
+Approved List of General Holidays for Calendar Year 2026:
+1. 01-Jan-2026 (Thursday) — New Year
+2. 15-Jan-2026 (Thursday) — Makar Sankranthi / Pongal
+3. 26-Jan-2026 (Monday) — Republic Day (Flag Hoisting & Celebration on Campus)
+4. 19-Mar-2026 (Thursday) — Ugadi Festival
+5. 21-Mar-2026 (Saturday) — Eid-ul-Fitr (Ramzan)
+6. 03-Apr-2026 (Friday) — Good Friday
+7. 14-Apr-2026 (Tuesday) — Dr. B. R. Ambedkar Jayanthi
+8. 01-May-2026 (Friday) — Labour / May Day
+9. 15-Aug-2026 (Saturday) — Independence Day (Flag Hoisting & Celebration on Campus)`,
+        metadata: { category: 'University Holidays', year: '2026', term: 'Jan-Aug 2026' }
+      },
+      {
+        chunkIndex: 1,
+        documentName: 'Holiday List.pdf',
+        sourceType: 'HOLIDAY_CALENDAR',
+        hierarchyLevel: 2,
+        pageNumber: 1,
+        sectionNumber: 'Notification - List of General Holidays - 2026',
+        clauseNumber: 'No: VU/2025-26/RO-CIR/545',
+        batchScope: ['2022', '2023', '2024', '2025', '2026'],
+        content: `Vidyashilp University — List of General Holidays - 2026 (Continued, Ref: VU/2025-26/RO-CIR/545):
+10. 21-Aug-2026 (Friday) — Varamahalakshmi Festival
+11. 04-Sep-2026 (Friday) — Krishna Janmashtami
+12. 14-Sep-2026 (Monday) — Varasiddhi Vinayaka (Ganesha Chaturthi)
+13. 02-Oct-2026 (Friday) — Gandhi Jayanthi
+14. 20-Oct-2026 (Tuesday) — Mahanavami, Ayudhapooja
+15. 21-Oct-2026 (Wednesday) — Vijayadashami
+16. 10-Nov-2026 (Tuesday) — Diwali / Deepavali / Bali Padyami
+17. 25-Dec-2026 (Friday) — Christmas
+
+Note: This list does not include Maha Shivaratri (15-Feb-2026), Kannada Rajyothsava (01-Nov-2026) and Naraka Chaturdashi (08-Nov-2026) which fall on Sunday.
+Issued by: Registrar In-Charge, Vidyashilp University.`,
+        metadata: { category: 'University Holidays', year: '2026', term: 'Aug-Dec 2026' }
+      }
+    ]
+  };
+}
+
 module.exports = {
   parseHandbook,
   parseSOP,
@@ -412,6 +469,7 @@ module.exports = {
   parseDigiiMinorSelection,
   parseERPCourseRegistration,
   parseExamEnrollmentSOP,
-  parseChatbotFlowchart
+  parseChatbotFlowchart,
+  parseHolidayList
 };
 

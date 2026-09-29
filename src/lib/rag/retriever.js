@@ -27,8 +27,27 @@ class RagRetriever {
   }
 
   loadChunks() {
+    // 1. Static require allows bundlers like @vercel/ncc to trace and bundle the JSON directly
+    try {
+      const bundledChunks = require('../../../data/processed/rag_document_chunks.json');
+      if (Array.isArray(bundledChunks) && bundledChunks.length > 0) {
+        this.chunks = bundledChunks;
+        this.chunksPath = '[bundled] data/processed/rag_document_chunks.json';
+        console.log(`[RagRetriever] Successfully loaded ${this.chunks.length} RAG chunks via static require`);
+        return;
+      }
+    } catch (reqErr) {
+      // Fall through to filesystem candidatePaths
+    }
+
     const candidatePaths = [
       this.chunksPath,
+      path.resolve(process.cwd(), 'data/processed/rag_document_chunks.json'),
+      path.resolve(process.cwd(), 'data/rag_document_chunks.json'),
+      path.resolve(__dirname, '../../../data/processed/rag_document_chunks.json'),
+      path.resolve(__dirname, '../../data/processed/rag_document_chunks.json'),
+      path.resolve(__dirname, '../data/processed/rag_document_chunks.json'),
+      path.resolve(__dirname, './data/processed/rag_document_chunks.json'),
       path.join(process.cwd(), 'data/processed/rag_document_chunks.json'),
       path.join(__dirname, '../../../data/processed/rag_document_chunks.json'),
       path.join(__dirname, '../../data/processed/rag_document_chunks.json')
@@ -142,15 +161,31 @@ class RagRetriever {
 
       const queryTokens = rawTokens.filter(t => !STOP_WORDS.has(t));
       const isCurriculumQuery = query.toLowerCase().includes('curriculum') || query.toLowerCase().includes('courses in semester');
+      const isMinorQuery = query.toLowerCase().includes('minor');
+      const isHolidayQuery = query.toLowerCase().includes('holiday') || query.toLowerCase().includes('vacation');
+      const isHandbookQuery = query.toLowerCase().includes('handbook');
 
       const genericWords = new Set(['policy', 'policies', 'rules', 'rule', 'guideline', 'guidelines', 'information', 'detail', 'details', 'tell', 'what', 'how', 'give', 'me', 'about']);
       const substantiveTokens = queryTokens.filter(t => !genericWords.has(t));
 
+      const getStem = (t) => {
+        if (t.endsWith('ies')) return t.slice(0, -3) + 'y';
+        if (t.endsWith('es') && !t.endsWith('ses')) return t.slice(0, -2);
+        if (t.endsWith('s') && !t.endsWith('ss')) return t.slice(0, -1);
+        return t;
+      };
+
       const scored = candidateChunks.map((chunk) => {
-        const contentLower = chunk.content.toLowerCase();
+        const contentLower = chunk.content.toLowerCase().replace(/\s+/g, ' ').replace(/h andbook/g, 'handbook');
+        const docNameLower = (chunk.documentName || '').toLowerCase().replace(/\s+/g, ' ').replace(/h andbook/g, 'handbook');
+        const secLower = (chunk.sectionNumber || '').toLowerCase();
+        const searchableText = `${docNameLower} ${secLower} ${contentLower}`;
 
         if (substantiveTokens.length > 0) {
-          const hasSubstantiveMatch = substantiveTokens.some(token => contentLower.includes(token));
+          const hasSubstantiveMatch = substantiveTokens.some(token => {
+            const stem = getStem(token);
+            return searchableText.includes(token) || (stem.length > 2 && searchableText.includes(stem));
+          });
           if (!hasSubstantiveMatch) {
             return {
               chunkText: chunk.content,
@@ -170,18 +205,25 @@ class RagRetriever {
         let exactBonus = 0;
 
         for (const token of queryTokens) {
-          if (contentLower.includes(token)) {
-            if (token === 'digii' || token === 'sop' || token === 'attendance' || token === 'registration' || token === 'prerequisite' || token === 'medical') {
+          const stem = getStem(token);
+          const inContent = contentLower.includes(token) || (stem.length > 2 && contentLower.includes(stem));
+          const inDocOrSec = docNameLower.includes(token) || (stem.length > 2 && docNameLower.includes(stem)) || secLower.includes(token);
+
+          if (inContent || inDocOrSec) {
+            if (token === 'digii' || token === 'sop' || token === 'attendance' || token === 'registration' || token === 'prerequisite' || token === 'medical' || token === 'holiday' || token === 'holidays') {
               matchCount += 2.5;
             } else {
               matchCount += 1.0;
+            }
+            if (inDocOrSec) {
+              matchCount += 1.5;
             }
           }
         }
 
         if (queryTokens.length > 1) {
           const keyPhrase = queryTokens.slice(0, 3).join(' ');
-          if (contentLower.includes(keyPhrase)) {
+          if (searchableText.includes(keyPhrase)) {
             exactBonus += 2.5;
           }
         }
@@ -192,6 +234,18 @@ class RagRetriever {
         }
 
         if (isCurriculumQuery && chunk.sourceType === 'CURRICULUM_STRUCTURE') {
+          exactBonus += 3.0;
+        }
+
+        if (isMinorQuery && (chunk.documentName.includes('Minor') || (chunk.content.includes('Minor:')))) {
+          exactBonus += 3.5;
+        }
+
+        if (isHolidayQuery && chunk.documentName.includes('Holiday')) {
+          exactBonus += 4.0;
+        }
+
+        if (isHandbookQuery && chunk.documentName.includes('Handbook')) {
           exactBonus += 3.0;
         }
 

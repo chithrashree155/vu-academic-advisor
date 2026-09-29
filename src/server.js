@@ -8,6 +8,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const { processAdvisorQuery, getStudentProfileById, getStudentIdList } = require('./lib/advisory-engine');
+const { retriever } = require('./lib/rag/retriever');
 
 const app = express();
 const PORT = process.env.APP_PORT || 3000;
@@ -39,6 +40,13 @@ app.get('/api/student/list', (req, res) => {
   res.json({
     status: 'success',
     students: getStudentIdList()
+  });
+});
+
+app.get('/api/profiles', (req, res) => {
+  res.json({
+    status: 'success',
+    profiles: getStudentIdList()
   });
 });
 
@@ -81,7 +89,10 @@ app.get('/api/health', (req, res) => {
     version: '2.0.0',
     localEmbeddingModel: 'Xenova/all-MiniLM-L6-v2',
     embeddingDimension: 384,
-    supabaseStatus: 'CONNECTED'
+    supabaseStatus: 'CONNECTED',
+    ragChunksLoaded: retriever.chunks ? retriever.chunks.length : 0,
+    ragChunksPath: retriever.chunksPath || null,
+    cwd: process.cwd()
   });
 });
 

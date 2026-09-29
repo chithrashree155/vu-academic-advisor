@@ -606,8 +606,57 @@ function classifyQuery(queryStr) {
   const q = queryStr.toLowerCase().trim();
 
   // 1. Attendance
-  if (q.includes('attendance') || q.includes('debarred') || q.includes('75%') || q.includes('medical leave')) {
+  if (
+    q.includes('attendance') ||
+    q.includes('attend') ||
+    q.includes('classes can i attend') ||
+    q.includes('how many classes') ||
+    q.includes('debarred') ||
+    q.includes('75%') ||
+    q.includes('65%') ||
+    q.includes('medical leave') ||
+    q.includes('medical relaxation')
+  ) {
     return 'ATTENDANCE';
+  }
+
+  // 1.1. Holidays
+  if (
+    q.includes('holiday') ||
+    q.includes('holidays') ||
+    q.includes('vacation') ||
+    q.includes('leave calendar') ||
+    q.includes('leave policy')
+  ) {
+    return 'HOLIDAYS';
+  }
+
+  // 1.2. Student Handbook
+  if (
+    q.includes('student handbook') ||
+    q.includes('handbook')
+  ) {
+    return 'STUDENT_HANDBOOK';
+  }
+
+  // 1.3. Minor Courses
+  if (
+    q.includes('minor course') ||
+    q.includes('minor courses') ||
+    q.includes('minor program') ||
+    q.includes('minor programs') ||
+    q.includes('finance minor') ||
+    q.includes('marketing minor') ||
+    q.includes('startup minor') ||
+    q.includes('start-up minor') ||
+    q.includes('law minor') ||
+    q.includes('design minor') ||
+    q.includes('psychology minor') ||
+    q.includes('economics minor') ||
+    q.includes('open minor') ||
+    (q.includes('minor') && (q.includes('courses') || q.includes('options') || q.includes('basket') || q.includes('track')))
+  ) {
+    return 'MINOR_COURSES';
   }
 
   // 2. Prerequisite policy questions
@@ -970,9 +1019,9 @@ ${nextStep}${syntheticNote}`;
 }
 
 /**
- * Main Advisory Processor supporting session history for context-aware follow-up queries
+ * Core Advisory Execution Engine
  */
-async function processAdvisorQuery(query, profileId = null, history = []) {
+async function executeAdvisorQuery(query, profileId = null, history = []) {
   try {
     const normalizedQuery = query.toLowerCase().trim();
     const profile = getStudentProfileById(profileId);
@@ -1060,6 +1109,138 @@ async function processAdvisorQuery(query, profileId = null, history = []) {
 
     // ── 3. CLASSIFY QUERY ──
     const queryCategory = classifyQuery(normalizedQuery);
+
+    // ── 3.1. ATTENDANCE & ATTENDANCE REGULATIONS HANDLER ──
+    if (queryCategory === 'ATTENDANCE') {
+      const studentName = profile ? profile.display_name : null;
+      let personalizedSection = '';
+      if (profile) {
+        const statusText = profile.attendance >= 75.0
+          ? `✓ Your current recorded attendance is **${profile.attendance}%**, which satisfies the university's 75% attendance criterion.`
+          : profile.attendance >= 65.0
+            ? `⚠ Your current recorded attendance is **${profile.attendance}%**, which is between 65% and 75%. You require approved medical relaxation (submitted within 3 working days of rejoining) to write end-semester exams.`
+            : `❌ Your current recorded attendance is **${profile.attendance}%**, which is below 65%. Attendance below 65% results in strict exam debarment per Clause 7.2.`;
+        personalizedSection = `\n\n### Your Attendance Standing (${studentName} — ${profile.programName}):\n${statusText}`;
+      }
+
+      return {
+        state: 'ANSWERABLE',
+        answer: `### Vidyashilp University Attendance Regulations (Student Handbook, Section III, Clause 7.1–7.4 & Student SOP Clause 2):\n\n• **Minimum Attendance Mandate (Clause 7.1):** Every student must maintain a minimum attendance of **seventy-five percent (75%)** of the classes actually conducted in each registered course.\n• **Debarment from Examinations (Clause 7.2):** A student failing to attain 75% attendance in a course is **debarred** from appearing for the End-Semester Examination and shall be awarded an 'FA' (Failure on Attendance) grade.\n• **Medical Relaxation & Special Grounds (Clause 7.3):** Relaxation down to a minimum threshold of **sixty-five percent (65%)** may be granted solely for:\n  1. Serious medical exigencies (hospitalization, contagious disease, or acute trauma)\n  2. Official representation of Vidyashilp University, State, or India in approved sports/cultural/academic events.\n• **Submission Timeline (SOP Clause 2):** Signed medical leave applications and hospital certificates must be submitted to the Office of the Registrar within **three (3) working days** after rejoining classes.\n• **Absolute Floor (Clause 7.2):** Attendance **below 65%** cannot be relaxed or condoned under any circumstances; affected students must re-register for the course.${personalizedSection}`,
+        sources: [
+          {
+            documentTitle: '4. Student Handbook Aug 2026.pdf',
+            hierarchyLevel: 1,
+            pageOrSheet: 'Section III, Clause 7.1–7.4 (Pages 21 & 29)',
+            clauseNumber: 'Clause 7.1 & 7.2 — Attendance & Debarment',
+            excerpt: 'The attendance requirement shall be a minimum of seventy five percent (75%) of the classes actually conducted in every Course... relaxation down to sixty five percent (65%) for serious medical exigencies.'
+          },
+          {
+            documentTitle: 'SOP STUDENT 19082025 - Final.pdf',
+            hierarchyLevel: 3,
+            pageOrSheet: 'Page 2',
+            clauseNumber: 'Clause 2 — Medical Leave Procedure',
+            excerpt: 'Signed medical applications along with specified documents to be submitted to the office of Registrar within three working days after rejoining.'
+          }
+        ],
+        ruleResults: {
+          minimumRequiredPct: 75.0,
+          relaxationFloorPct: 65.0,
+          studentAttendance: profile ? profile.attendance : null
+        },
+        followUp: profile ? null : "Log in with your Student ID to view your personalized attendance standing."
+      };
+    }
+
+    // ── 3.2. OFFICIAL HOLIDAYS HANDLER ──
+    if (queryCategory === 'HOLIDAYS') {
+      return {
+        state: 'ANSWERABLE',
+        answer: `Official Vidyashilp University General Holidays List for 2026 (Ref: Notification No: VU/2025-26/RO-CIR/545, Date: 17th December, 2025):\n\n1. **01-Jan-2026** (Thursday) — New Year\n2. **15-Jan-2026** (Thursday) — Makar Sankranthi / Pongal\n3. **26-Jan-2026** (Monday) — Republic Day **\n4. **19-Mar-2026** (Thursday) — Ugadi Festival\n5. **21-Mar-2026** (Saturday) — Eid-ul-Fitr (Ramzan)\n6. **03-Apr-2026** (Friday) — Good Friday\n7. **14-Apr-2026** (Tuesday) — Dr. B. R. Ambedkar Jayanthi\n8. **01-May-2026** (Friday) — Labour / May Day\n9. **15-Aug-2026** (Saturday) — Independence Day **\n10. **21-Aug-2026** (Friday) — Varamahalakshmi Festival\n11. **04-Sep-2026** (Friday) — Krishna Janmashtami\n12. **14-Sep-2026** (Monday) — Varasiddhi Vinayaka (Ganesha Chaturthi)\n13. **02-Oct-2026** (Friday) — Gandhi Jayanthi\n14. **20-Oct-2026** (Tuesday) — Mahanavami, Ayudhapooja\n15. **21-Oct-2026** (Wednesday) — Vijayadashami\n16. **10-Nov-2026** (Tuesday) — Diwali / Deepavali / Bali Padyami\n17. **25-Dec-2026** (Friday) — Christmas\n\n*** Flag Hoisting and Celebration at University Campus.\n*Note: Maha Shivaratri (15-Feb-2026), Kannada Rajyothsava (01-Nov-2026), and Naraka Chaturdashi (08-Nov-2026) fall on Sundays and are not listed separately.*`,
+        sources: [
+          {
+            documentTitle: 'Holiday List.pdf',
+            hierarchyLevel: 2,
+            pageOrSheet: 'Page 1',
+            clauseNumber: 'No: VU/2025-26/RO-CIR/545',
+            excerpt: 'NOTIFICATION — List of General Holidays - 2026 (As per University Leave Policy). Vidyashilp University, Bengaluru.'
+          }
+        ],
+        ruleResults: { totalHolidays: 17, academicYear: '2025-26 / 2026' },
+        followUp: null
+      };
+    }
+
+    // ── 3.3. STUDENT HANDBOOK REGULATORY OVERVIEW HANDLER ──
+    if (queryCategory === 'STUDENT_HANDBOOK') {
+      return {
+        state: 'ANSWERABLE',
+        answer: `The **Vidyashilp University Student Handbook (August 2026)** is the university's primary regulatory and governance compendium for students. It establishes all academic structures, operational rules, credit requirements, and codes of conduct.\n\n### Key Sections in the Student Handbook:\n• **Section I & II — University Vision & Academic Overview:** Foundational principles, school taxonomy, degree program architectures, and multidisciplinary education philosophy.\n• **Section III — Academic Regulations:**\n  - **Course Registration & Add/Drop (Clause 2):** Digii portal enrollment, course load limits (16–28 credits/semester), and late registration penalties.\n  - **Mandatory Prerequisites (Clauses 7.2 & 12.1):** Requirement to successfully pass foundational courses before registering for advanced courses.\n  - **Attendance Policy (Clause 7.1–7.4):** Minimum 75% attendance requirement; relaxation to 65% for verified medical exigencies.\n  - **Grading & Evaluation (Clause 8, Table 1):** 10-point Letter Grading scale (O, A+, A, B+, B, C, P, F, FA, I) and SGPA/CGPA computation formulas.\n  - **Make-Up Examinations (Clause 9):** Guidelines for students with sanctioned medical leaves during end-semester exams.\n  - **Academic Progression & Year Promotion (Clause 12.1, Table 3):** Minimum CGPA of 5.00 required for progression to Year 3.\n• **Section IV — Student Code of Conduct:** Policies on campus discipline, academic integrity, prevention of ragging, and grievance redressal mechanisms.`,
+        sources: [
+          {
+            documentTitle: '4. Student Handbook Aug 2026.pdf',
+            hierarchyLevel: 1,
+            pageOrSheet: 'Sections I, II, III & IV',
+            clauseNumber: 'Student Handbook Aug 2026',
+            excerpt: 'Vidyashilp University Student Handbook August 2026 — Comprehensive Academic Regulations, Credit Systems, and Student Code of Conduct.'
+          }
+        ],
+        ruleResults: { handbookEdition: 'August 2026' },
+        followUp: "Ask 'What is the attendance requirement?' or 'What are the rules for progression to 3rd year?'"
+      };
+    }
+
+    // ── 3.4. MINOR COURSES & MINOR TRACKS HANDLER ──
+    if (queryCategory === 'MINOR_COURSES') {
+      const isFinanceSpecific = normalizedQuery.includes('finance');
+
+      if (isFinanceSpecific) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `The **Finance Minor** is offered by the School of Business Studies for undergraduate students (including B.Tech students) seeking specialized quantitative financial competencies. Under the official Minor Spread (Ref: 118351_Minor Courses for BTech_Students.xlsx):\n\n### Finance Minor Course Sequence:\n• **MGMT208 / FINA333 — Financial Institutions, Markets and Services** (2 credits, Semester 3)\n  - *Prerequisite:* Financial and Management Accounting (FAMA) / Introduction to Financial Accounting\n• **MGMT207 — Corporate Finance** (2 credits, Semester 3)\n  - *Prerequisite:* Financial and Management Accounting\n• **FINA201 / MGMT209 — Financial Statement Analysis** (2 credits, Semester 4)\n  - *Prerequisite:* Corporate Finance / Financial Accounting Foundations\n• **FINA333 / MGMT210 — Basics of Investment Management** (2 credits, Semester 5)\n  - *Prerequisite:* Financial Management / Introduction to Accounting\n\n*Registration Policy:* Pre-registration occurs via the Digii ERP portal and requires a minimum enrollment cohort of 10 students per track.`,
+          sources: [
+            {
+              documentTitle: '118351_Minor Courses for BTech_Students.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Finance Sheet',
+              clauseNumber: 'Finance Minor Spread',
+              excerpt: 'Lists approved Finance Minor courses for B.Tech students: Financial Institutions Markets and Services, Corporate Finance, Financial Statement Analysis, Basics of Investment Management.'
+            },
+            {
+              documentTitle: 'Digii Process - Minor Selection.pdf',
+              hierarchyLevel: 3,
+              pageOrSheet: 'Page 1',
+              clauseNumber: 'Minor Selection Process',
+              excerpt: 'Students pre-register for minor tracks through the Digii portal subject to minimum student enrollment criteria.'
+            }
+          ],
+          ruleResults: { minorTrack: 'Finance Minor', school: 'School of Business Studies' },
+          followUp: "Ask 'Can I take a course from another school?' to understand cross-school registration rules."
+        };
+      } else {
+        return {
+          state: 'ANSWERABLE',
+          answer: `Vidyashilp University offers **7 approved Minor Tracks** for undergraduate (B.Tech) students to acquire specialized cross-disciplinary credentials (Ref: 118351_Minor Courses for BTech_Students.xlsx):\n\n### Approved Minor Tracks:\n1. **Finance Minor** — School of Business Studies (Corporate Finance, Financial Statement Analysis, Investment Management)\n2. **Marketing Minor** — School of Business Studies (Marketing Management, Digital Marketing, Consumer Behavior)\n3. **Start-up / Entrepreneurship Minor** — School of Business Studies (Entrepreneurship, Venture Creation, Business Planning)\n4. **Law Minor** — School of Law (Constitutional Frameworks, Regulating Platform & Gig Workers, Cyber Law)\n5. **Design Minor** — School of Design (Design Thinking, Visual Communication, Interactive Prototyping)\n6. **Psychology Minor** — School of Liberal Arts & Sciences (Foundations of Psychology, Cognitive Psychology, Social Dynamics)\n7. **Economics Minor** — School of Liberal Arts & Sciences (Microeconomics, Macroeconomics, Applied Econometrics)\n\n### Key Minor Regulations:\n• **Credit Structure:** Each minor track consists of 12–16 additional credits accumulated across Semesters 3 to 6.\n• **Minimum Cohort Size:** A minimum cohort of 10 students is mandatory for a minor track to be operational.\n• **Portal Registration:** Course registration is completed on the Digii ERP portal during the open pre-registration window per Clause 2.13.`,
+          sources: [
+            {
+              documentTitle: '118351_Minor Courses for BTech_Students.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Summary & Track Sheets',
+              clauseNumber: 'Minor Courses for BTech Students',
+              excerpt: 'Official university curriculum spreadsheet defining 7 approved minor tracks for B.Tech students across Business, Law, Design, and Liberal Arts.'
+            },
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Section III, Clause 2.13',
+              clauseNumber: 'Clause 2.13 — Pre-Registration (Minor/Specialization)',
+              excerpt: 'Pre-registration for Specialization / Minor / Open courses for higher semesters through the student portal.'
+            }
+          ],
+          ruleResults: { totalMinorTracks: 7 },
+          followUp: "Ask 'What are the finance minor courses?' or 'What are the marketing minor courses?' to see specific subjects."
+        };
+      }
+    }
 
     // ── 4. PREREQUISITE POLICY HANDLER ──
     if (queryCategory === 'PREREQUISITE_POLICY') {
@@ -1703,7 +1884,7 @@ async function processAdvisorQuery(query, profileId = null, history = []) {
 
       if (Array.isArray(retrievedEvidence) && retrievedEvidence.length > 0) {
         const top = retrievedEvidence[0];
-        if (top.rawScore >= 2.0) {
+        if (top.rawScore >= 1.0) {
           return {
             state: 'ANSWERABLE',
             answer: top.chunkText.slice(0, 500) + (top.chunkText.length > 500 ? '...' : ''),
@@ -1736,12 +1917,42 @@ async function processAdvisorQuery(query, profileId = null, history = []) {
     console.error('[Advisory Engine Error]:', err.stack || err);
     return {
       state: 'INSUFFICIENT_INFORMATION',
-      answer: "I couldn't verify that requirement from the available Vidyashilp University academic source documents. Please check with the Registrar's Office or your Academic Advisor.",
+      answer: "I'm having trouble accessing the academic knowledge base right now. Please try again in a moment.",
       sources: [],
-      ruleResults: null,
-      followUp: null
+      ruleResults: { systemError: err.message },
+      followUp: null,
+      showRetry: true
     };
   }
+}
+
+/**
+ * Main Advisory Processor with Step 2 Diagnostic Logging
+ */
+async function processAdvisorQuery(query, profileId = null, history = []) {
+  const result = await executeAdvisorQuery(query, profileId, history);
+
+  // Diagnostic logging (STEP 2)
+  const detectedIntent = classifyQuery(query.toLowerCase().trim());
+  const docCount = result.sources ? result.sources.length : 0;
+  const docTitles = result.sources && result.sources.length > 0
+    ? result.sources.map(s => s.documentTitle).join(', ')
+    : 'None';
+  const contextChars = (result.answer || '').length;
+
+  console.log('----------------------------------------------------');
+  console.log('[ADVISORY DEBUG]');
+  console.log(`Query: ${query}`);
+  console.log(`Intent: ${detectedIntent}`);
+  console.log(`Profile: ${profileId || 'None'}`);
+  console.log(`Retrieved documents: ${docCount}`);
+  console.log(`Relevant documents: ${docTitles}`);
+  console.log(`Context characters: ${contextChars}`);
+  console.log(`LLM called: false`);
+  console.log(`Final state: ${result.state}`);
+  console.log('----------------------------------------------------');
+
+  return result;
 }
 
 module.exports = {

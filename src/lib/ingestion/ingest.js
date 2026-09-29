@@ -18,7 +18,8 @@ const {
   parseDigiiMinorSelection,
   parseERPCourseRegistration,
   parseExamEnrollmentSOP,
-  parseChatbotFlowchart
+  parseChatbotFlowchart,
+  parseHolidayList
 } = require('./pdf-parser');
 const { 
   parseSemesterSpreadWorkbook, 
@@ -251,6 +252,19 @@ async function runIngestion(dataDir = path.join(__dirname, '../../../data')) {
     sourceType: flowResult.sourceType,
     hierarchyLevel: flowResult.hierarchyLevel,
     totalChunks: flowResult.chunks.length,
+    isNew: true
+  });
+
+  // NEW DOCUMENT 7: Holiday List.pdf
+  console.log('[13/13] Parsing Holiday List (Holiday List.pdf)...');
+  const holidayPath = path.join(dataDir, 'Holiday List.pdf');
+  const holidayResult = await parseHolidayList(holidayPath);
+  allChunks.push(...holidayResult.chunks);
+  structuredData.documents.push({
+    documentName: holidayResult.documentName,
+    sourceType: holidayResult.sourceType,
+    hierarchyLevel: holidayResult.hierarchyLevel,
+    totalChunks: holidayResult.chunks.length,
     isNew: true
   });
 
