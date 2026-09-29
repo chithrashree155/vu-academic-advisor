@@ -8,9 +8,13 @@
 let activeStudentProfile = null;
 let isSubmitting = false;
 
-document.addEventListener('DOMContentLoaded', () => {
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    initApp();
+  });
+} else {
   initApp();
-});
+}
 
 function initApp() {
   setupNavigation();
@@ -256,17 +260,81 @@ function setupQuickAskButtons() {
 }
 
 // ── CHAT FORM & ADVISORY ENGINE CONNECTION ──
+function setLoading(loading) {
+  isSubmitting = loading;
+  const submitBtn = document.getElementById('submitBtn');
+  const btnIcon = document.getElementById('btnIcon');
+  const spinner = document.getElementById('spinner');
+  const input = document.getElementById('queryInput');
+  const thinking = document.getElementById('thinkingWrap');
+
+  if (submitBtn) {
+    submitBtn.disabled = loading;
+    if (loading) {
+      submitBtn.setAttribute('aria-busy', 'true');
+    } else {
+      submitBtn.removeAttribute('aria-busy');
+    }
+  }
+
+  if (input) {
+    input.disabled = loading;
+  }
+
+  if (btnIcon) {
+    if (loading) btnIcon.classList.add('hidden');
+    else btnIcon.classList.remove('hidden');
+  }
+
+  if (spinner) {
+    if (loading) spinner.classList.remove('hidden');
+    else spinner.classList.add('hidden');
+  }
+
+  if (thinking) {
+    if (loading) thinking.classList.remove('hidden');
+    else thinking.classList.add('hidden');
+  }
+
+  if (!loading && input) {
+    setTimeout(() => {
+      try { input.focus(); } catch (_) {}
+    }, 50);
+  }
+}
+
 function setupChatForm() {
   const form = document.getElementById('advisorForm');
   const input = document.getElementById('queryInput');
+  const submitBtn = document.getElementById('submitBtn');
+
+  const doSubmit = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (isSubmitting) return;
+    const text = input ? input.value.trim() : '';
+    if (text) {
+      input.value = '';
+      sendQuery(text);
+    }
+  };
 
   if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const text = input.value.trim();
-      if (text) {
-        sendQuery(text);
-        input.value = '';
+    form.addEventListener('submit', doSubmit);
+  }
+
+  if (submitBtn) {
+    submitBtn.addEventListener('click', doSubmit);
+  }
+
+  if (input) {
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        e.stopPropagation();
+        doSubmit(e);
       }
     });
   }
@@ -276,7 +344,7 @@ let chatHistoryStore = [];
 
 async function sendQuery(queryText) {
   if (isSubmitting || !queryText) return;
-  isSubmitting = true;
+  setLoading(true);
 
   // Hide welcome state
   const welcome = document.getElementById('welcomeState');
@@ -285,10 +353,6 @@ async function sendQuery(queryText) {
   // Render User Message
   renderUserMessage(queryText);
   chatHistoryStore.push({ sender: 'user', text: queryText });
-
-  // Show thinking indicator
-  const thinking = document.getElementById('thinkingWrap');
-  if (thinking) thinking.classList.remove('hidden');
 
   const history = document.getElementById('chatHistory');
   if (history) history.scrollTop = history.scrollHeight;
@@ -306,30 +370,37 @@ async function sendQuery(queryText) {
       body: JSON.stringify(payload)
     });
 
-    const data = await res.json();
+    let data = null;
+    try {
+      data = await res.json();
+    } catch (parseErr) {
+      data = null;
+    }
 
-    if (thinking) thinking.classList.add('hidden');
-
-    if (data && (data.answer || data.state)) {
+    if (res.ok && data && (data.answer || data.state)) {
+      chatHistoryStore.push({ sender: 'advisor', text: data.answer });
+      renderAdvisorMessage(data);
+    } else if (data && data.answer) {
       chatHistoryStore.push({ sender: 'advisor', text: data.answer });
       renderAdvisorMessage(data);
     } else {
+      const errorMessage = (data && (data.error || data.message))
+        || `The advisory service returned status ${res.status}. Please check your connection or try again.`;
       renderAdvisorMessage({
         state: 'INSUFFICIENT_INFORMATION',
-        answer: "I couldn't process your request. Please try asking again.",
+        answer: errorMessage,
         sources: []
       });
     }
   } catch (err) {
     console.error('Advisor query error:', err);
-    if (thinking) thinking.classList.add('hidden');
     renderAdvisorMessage({
       state: 'INSUFFICIENT_INFORMATION',
-      answer: "I'm having trouble connecting to the advisory server. Please check your connection.",
+      answer: "Unable to reach the advisory server. Please check your internet connection or try again shortly.",
       sources: []
     });
   } finally {
-    isSubmitting = false;
+    setLoading(false);
   }
 }
 

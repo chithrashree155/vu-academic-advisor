@@ -606,6 +606,39 @@ function extractCandidateCourseName(queryStr) {
 function classifyQuery(queryStr) {
   const q = queryStr.toLowerCase().trim();
 
+  // 0. Conversational / Isolated Meta queries without academic subject
+  if (
+    /^(?:please\s+)?answer\s+(?:me\s+)?(?:with\s+)?(?:a\s+)?(?:yes\s+or\s+no|yes\/no)|^(?:yes\s+or\s+no|yes\/no)\??$/i.test(q) ||
+    q === 'answer me with a yes or no' ||
+    q === 'answer with a yes or no' ||
+    q === 'answer yes or no'
+  ) {
+    return 'UNVERIFIED_YES_NO';
+  }
+
+  if (
+    q.includes('something random') ||
+    q === 'tell me something random' ||
+    q === 'tell me random' ||
+    q === 'tell me something' ||
+    q === 'say something random'
+  ) {
+    return 'OUT_OF_SCOPE';
+  }
+
+  // 0.1. Program switch / branch change / transfer
+  if (
+    q.includes('switch to btech') ||
+    q.includes('switch to b.tech') ||
+    q.includes('switch program') ||
+    q.includes('switch degree') ||
+    q.includes('transfer to btech') ||
+    q.includes('change branch') ||
+    q.includes('change program')
+  ) {
+    return 'PROGRAM_SWITCH';
+  }
+
   // 1. Attendance
   if (
     q.includes('attendance') ||
@@ -761,10 +794,14 @@ function classifyQuery(queryStr) {
 
   // 11. General course selection
   if (
-    q.includes('what courses can i take') ||
-    q.includes('which courses can i take') ||
-    q.includes('courses available to me') ||
-    q.includes('courses can i register')
+    !q.includes('summer') && (
+      q.includes('what courses can i take') ||
+      q.includes('which courses can i take') ||
+      q.includes('courses available to me') ||
+      q.includes('courses are available') ||
+      q.includes('available for my semester') ||
+      q.includes('courses can i register')
+    )
   ) {
     return 'COURSE_SELECTION';
   }
@@ -1020,12 +1057,212 @@ ${nextStep}${syntheticNote}`;
 }
 
 /**
+ * Strict Relevance & Grounding Guard
+ * Validates that retrieved chunks actually address the user's specific query.
+ * Rejects unrelated courses, irrelevant spreadsheet rows, weak single-word matches,
+ * and out-of-scope evidence.
+ */
+function filterGroundedEvidence(query, retrievedChunks) {
+  if (!Array.isArray(retrievedChunks) || retrievedChunks.length === 0) {
+    return [];
+  }
+
+  const qLower = query.toLowerCase().trim();
+  const rawTokens = qLower
+    .replace(/[^\w\s]/g, ' ')
+    .split(/\s+/)
+    .filter(t => t.length > 2);
+
+  const nonSubstantive = new Set([
+    'what', 'which', 'when', 'where', 'who', 'how', 'why',
+    'can', 'could', 'would', 'should', 'will', 'does', 'did', 'done',
+    'the', 'this', 'that', 'these', 'those', 'there', 'their',
+    'and', 'but', 'for', 'with', 'from', 'into', 'about', 'after',
+    'tell', 'give', 'show', 'know', 'say', 'answer', 'with', 'please',
+    'yes', 'no', 'something', 'anything', 'random', 'me', 'you', 'student', 'students'
+  ]);
+
+  const substantiveTokens = rawTokens.filter(t => !nonSubstantive.has(t));
+
+  if (substantiveTokens.length === 0) {
+    return [];
+  }
+
+  return retrievedChunks.filter(chunk => {
+    // 1. Minimum rawScore threshold
+    if (!chunk.rawScore || chunk.rawScore < 4.0) {
+      return false;
+    }
+
+    const chunkContent = (chunk.chunkText || chunk.content || '').toLowerCase();
+    const docName = (chunk.documentName || '').toLowerCase();
+    const searchable = `${docName} ${chunkContent}`;
+
+    // 2. Spreadsheet row safety guard:
+    // Tabular single-course rows must not answer policy questions
+    const isSpreadsheetRow = chunkContent.startsWith('program:') ||
+                             chunkContent.startsWith('minor:') ||
+                             chunkContent.startsWith('special provision') ||
+                             chunkContent.includes('| course code:') ||
+                             chunkContent.includes('| faculty incharge:') ||
+                             chunkContent.includes('| batch:');
+
+    if (isSpreadsheetRow) {
+      const codeMatch = query.match(/\b[A-Z]{3,4}\s?\d{3}\b/i);
+      const hasSpecificCode = codeMatch && chunkContent.includes(codeMatch[0].toLowerCase().replace(/\s+/, ''));
+      const hasSpecificMinor = (qLower.includes('minor') || qLower.includes('elective')) && docName.includes('minor');
+      if (!hasSpecificCode && !hasSpecificMinor) {
+        return false;
+      }
+    }
+
+    // 3. Substantive token coverage check
+    let matchedCount = 0;
+    for (const token of substantiveTokens) {
+      if (searchable.includes(token)) {
+        matchedCount++;
+      }
+    }
+
+    const matchRatio = matchedCount / substantiveTokens.length;
+    if (matchRatio < 0.6) {
+      return false;
+    }
+
+    // 4. Special policy action guard
+    const policyKeywords = ['switch', 'transfer', 'convert', 'migration', 'refund', 're-evaluation', 'makeup'];
+    for (const kw of policyKeywords) {
+      if (qLower.includes(kw) && !searchable.includes(kw)) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+}
+
+/**
+ * Strict Out-of-Scope Query Detector
+ * Runs BEFORE retrieval, similarity search, course classification, or answer generation.
+ * Rejects non-academic, trivia, sports, creative, lifestyle, and casual queries.
+ */
+function isOutOfScopeQuery(queryStr) {
+  if (!queryStr || typeof queryStr !== 'string') return true;
+  const q = queryStr.toLowerCase().trim();
+
+  // Sports, tournaments, matches, cups, scores, games
+  if (
+    q.includes('world cup') ||
+    q.includes('cricket') ||
+    q.includes('football') ||
+    q.includes('fifa') ||
+    q.includes('ipl') ||
+    q.includes('premier league') ||
+    q.includes('nba') ||
+    q.includes('tennis') ||
+    q.includes('olympics') ||
+    q.includes('match score') ||
+    q.includes('cricket score') ||
+    q.includes('latest score') ||
+    q.includes('who won') ||
+    q.includes('who will win') ||
+    q.includes('winner of') ||
+    q.includes('best player') ||
+    q.includes('football player') ||
+    q.includes('cricketer')
+  ) {
+    return true;
+  }
+
+  // Creative writing, entertainment, jokes, poems, movies
+  if (
+    q.includes('joke') ||
+    q.includes('poem') ||
+    q.includes('poetry') ||
+    q.includes('write me a') ||
+    q.includes('write a song') ||
+    q.includes('story') ||
+    q.includes('movie') ||
+    q.includes('film') ||
+    q.includes('cinema') ||
+    q.includes('actor') ||
+    q.includes('actress') ||
+    q.includes('watch tonight')
+  ) {
+    return true;
+  }
+
+  // Weather, cooking, food, lifestyle, casual
+  if (
+    q.includes('weather') ||
+    q.includes('temperature') ||
+    q.includes('recipe') ||
+    q.includes('biryani') ||
+    q.includes('cooking') ||
+    q.includes('dating') ||
+    q.includes('relationship') ||
+    q.includes('horoscope') ||
+    q.includes('astrology') ||
+    q.includes('canteen menu') ||
+    q.includes('party')
+  ) {
+    return true;
+  }
+
+  // General trivia, world trivia, non-academic science, stock market, politics
+  if (
+    q.includes('capital of') ||
+    q.includes('richest person') ||
+    q.includes('richest man') ||
+    q.includes('quantum physics') ||
+    q.includes('speed of light') ||
+    q.includes('stock market') ||
+    q.includes('stocks') ||
+    q.includes('cryptocurrency') ||
+    q.includes('bitcoin') ||
+    q.includes('politics') ||
+    q.includes('election') ||
+    q.includes('president of') ||
+    q.includes('prime minister of')
+  ) {
+    return true;
+  }
+
+  // Meta random queries
+  if (
+    q.includes('something random') ||
+    q.includes('tell me random') ||
+    q.includes('say something random') ||
+    q === 'tell me something' ||
+    q === 'say something'
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
  * Core Advisory Execution Engine
  */
 async function executeAdvisorQuery(query, profileId = null, history = []) {
   try {
-    const normalizedQuery = query.toLowerCase().trim();
+    const normalizedQuery = (query || '').toLowerCase().trim();
+
+    // ── 0. IMMEDIATE OUT-OF-SCOPE PRE-RETRIEVAL GUARDRAIL ──
+    // MUST run BEFORE retrieval, similarity search, classification, or source selection
+    if (isOutOfScopeQuery(normalizedQuery)) {
+      return {
+        state: 'INSUFFICIENT_INFORMATION',
+        answer: 'I can only provide information grounded in official Vidyashilp University academic documents. Please ask an academic question about courses, attendance, eligibility, registration, prerequisites, academic calendar, programs, fees, minors, or related university policies.',
+        sources: [],
+        ruleResults: null,
+        followUp: 'Please ask about your courses, program, or university regulations.'
+      };
+    }
+
     const profile = getStudentProfileById(profileId);
+    const queryCategory = classifyQuery(normalizedQuery);
 
     // Context resolution from history for follow-up questions
     let contextCourseCode = null;
@@ -1059,14 +1296,45 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
     }
 
     // ── 1. OUT-OF-SCOPE GUARDRAIL ──
-    const OUT_OF_SCOPE = ['weather', 'cricket', 'ipl', 'football', 'movie', 'actor', 'dating', 'relationship', 'joke', 'canteen menu', 'party', 'politics'];
+    const OUT_OF_SCOPE = ['weather', 'cricket', 'ipl', 'football', 'movie', 'actor', 'dating', 'relationship', 'joke', 'canteen menu', 'party', 'politics', 'poem', 'recipe', 'biryani', 'stock market', 'world cup', 'capital of france', 'richest person', 'quantum physics'];
     if (OUT_OF_SCOPE.some(topic => normalizedQuery.includes(topic))) {
       return {
-        state: 'OUT_OF_SCOPE',
-        answer: 'I only handle academic questions — prerequisites, attendance, course eligibility, registration, and university policies.',
+        state: 'INSUFFICIENT_INFORMATION',
+        answer: 'I can only provide information grounded in official Vidyashilp University academic source documents. This question cannot be verified from the official university sources.',
         sources: [],
         ruleResults: null,
         followUp: 'Please ask about your courses, program, or university regulations.'
+      };
+    }
+
+    // ── 1.1. UNVERIFIED META / RANDOM / YES-NO GUARDRAILS ──
+    if (queryCategory === 'OUT_OF_SCOPE') {
+      return {
+        state: 'INSUFFICIENT_INFORMATION',
+        answer: "I can only provide information grounded in official Vidyashilp University academic source documents (prerequisites, attendance regulations, course eligibility, and university policies). Please ask an academic question.",
+        sources: [],
+        ruleResults: null,
+        followUp: "Example: 'What is the attendance requirement?' or 'What are the minor courses?'"
+      };
+    }
+
+    if (queryCategory === 'UNVERIFIED_YES_NO') {
+      return {
+        state: 'INSUFFICIENT_INFORMATION',
+        answer: "I cannot provide a verified Yes or No response without a specific academic policy or course question to evaluate against Vidyashilp University official documents. Please specify the academic regulation, prerequisite, or course requirement you would like to verify.",
+        sources: [],
+        ruleResults: null,
+        followUp: "Example: 'Is 75% attendance mandatory?' or 'Can I take DATA302?'"
+      };
+    }
+
+    if (queryCategory === 'PROGRAM_SWITCH') {
+      return {
+        state: 'INSUFFICIENT_INFORMATION',
+        answer: "I couldn't verify any official regulation regarding switching programs or transferring to a B.Tech program after three years in the available Vidyashilp University academic source documents (Student Handbook and Program Regulations). Program transfer and migration policies must be verified directly with the Office of the Registrar or your Academic Advisor.",
+        sources: [],
+        ruleResults: null,
+        followUp: "Please contact the Registrar's Office for official guidelines on inter-program transfer."
       };
     }
 
@@ -1108,8 +1376,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       };
     }
 
-    // ── 3. CLASSIFY QUERY ──
-    const queryCategory = classifyQuery(normalizedQuery);
+    // ── 3. CLASSIFY QUERY (already initialized) ──
 
     // ── 3.1. ATTENDANCE & ATTENDANCE REGULATIONS HANDLER ──
     if (queryCategory === 'ATTENDANCE') {
@@ -1615,6 +1882,34 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
         const decision = evaluateEligibility(activeProfile, targetCourse);
         return formatEligibilityResponse(decision);
+      } else if (
+        normalizedQuery.includes('eligibility requirement') ||
+        normalizedQuery.includes('eligibility criteria') ||
+        normalizedQuery.includes('eligibility rules') ||
+        normalizedQuery.includes('requirements for a course')
+      ) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `### Vidyashilp University General Course Eligibility Requirements (Student Handbook, Section III):\n\nTo be eligible to register for and undertake an academic course at Vidyashilp University, a student must fulfill the following official criteria:\n\n1. **Prerequisite Clearance (Clause 7.2 & 12.1):** Students must have successfully completed and passed all specified prerequisite courses with a passing grade before registering for higher-level courses.\n2. **Credit Limit Boundaries (Clause 2.5):** Total enrolled courses must fall within the semester credit range of **16 to 28 credits** per regular semester.\n3. **Attendance Compliance (Clause 7.1):** Maintenance of a minimum of **75% attendance** in all registered courses to remain eligible for evaluation and end-semester examinations.\n4. **Academic Standing & Progression (Clause 12.1, Table 3):** Sustaining the requisite cumulative grade point average (minimum **CGPA 5.00** for progression to Year 3) without unresolved academic disqualifications.\n5. **Formal Registration (Clause 2.1 & 2.4):** Completion of mandatory semester enrollment via the Digii ERP portal and consultation with the designated Faculty Advisor [Mentor].\n6. **Cross-School Alignment:** For courses outside one's parent school, students must meet school domain guidelines or obtain Dean approval.`,
+          sources: [
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Section III, Clauses 2, 7.1 & 12.1',
+              clauseNumber: 'Course Registration, Attendance & Prerequisites',
+              excerpt: 'Course registration requires meeting prerequisites, adhering to credit bands (16-28 credits), and maintaining minimum 75% attendance.'
+            },
+            {
+              documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Curriculum Course Dependencies',
+              clauseNumber: 'Prerequisite Mappings',
+              excerpt: 'Official curriculum course prerequisite dependencies and semester spread structures across university programs.'
+            }
+          ],
+          ruleResults: { generalEligibilityPolicy: true },
+          followUp: "Ask 'What are the prerequisites for <course code>?' to check requirements for a specific course."
+        };
       }
     }
 
@@ -1684,7 +1979,15 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
     }
 
     // ── 6. "WHAT COURSES CAN I TAKE?" (SECTION 12 & TEST 4 / TEST 5 HANDLER) ──
-    if (queryCategory === 'COURSE_SELECTION' || normalizedQuery.includes('what courses can i take') || normalizedQuery.includes('which courses can i take')) {
+    if (
+      queryCategory === 'COURSE_SELECTION' ||
+      (!normalizedQuery.includes('summer') && (
+        normalizedQuery.includes('what courses can i take') ||
+        normalizedQuery.includes('which courses can i take') ||
+        normalizedQuery.includes('courses are available') ||
+        normalizedQuery.includes('available for my semester')
+      ))
+    ) {
       let activeProfile = profile;
       if (normalizedQuery.includes('bms student')) {
         activeProfile = SYNTHETIC_PROFILES.find(p => p.program === 'BMS_DB');
@@ -1901,7 +2204,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       };
     }
 
-    // ── 13. FALLBACK TO RAG SEMANTIC RETRIEVAL ──
+    // ── 13. FALLBACK TO RAG SEMANTIC RETRIEVAL WITH GROUNDING GUARD ──
     try {
       const retrievedEvidence = retriever.retrieve({
         query,
@@ -1910,12 +2213,13 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       });
 
       if (Array.isArray(retrievedEvidence) && retrievedEvidence.length > 0) {
-        const top = retrievedEvidence[0];
-        if (top.rawScore >= 1.0) {
+        const validEvidence = filterGroundedEvidence(query, retrievedEvidence);
+        if (validEvidence.length > 0) {
+          const top = validEvidence[0];
           return {
             state: 'ANSWERABLE',
             answer: top.chunkText.slice(0, 500) + (top.chunkText.length > 500 ? '...' : ''),
-            sources: retrievedEvidence.slice(0, 3).map(r => ({
+            sources: validEvidence.slice(0, 3).map(r => ({
               documentTitle: r.documentName || 'Official Document',
               hierarchyLevel: r.hierarchyLevel || 2,
               pageOrSheet: r.pageOrSheet ? `Ref: ${r.pageOrSheet}` : 'Official Record',

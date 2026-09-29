@@ -24,11 +24,9 @@
   <nav class="topnav" id="topnav">
     <div class="nav-inner">
       <a class="nav-brand" href="#hero" id="navBrand">
-        <div class="nav-logo">
-          <div class="nav-logo-inner">VU</div>
-        </div>
+        <img src="assets/vu-logo.png" alt="Vidyashilp University" class="nav-logo-img" />
+        <div class="nav-brand-divider"></div>
         <div class="nav-brand-text">
-          <span class="nav-brand-university">Vidyashilp University</span>
           <span class="nav-brand-name">Academic Advisor</span>
         </div>
       </a>
@@ -248,7 +246,7 @@
 
         <!-- Input Area -->
         <div class="chat-input-area" id="chatInputArea">
-          <form class="chat-form" id="advisorForm">
+          <form class="chat-form" id="advisorForm" onsubmit="return false;">
             <div class="chat-input-wrap">
               <input
                 type="text"
@@ -257,7 +255,7 @@
                 placeholder="Ask about prerequisites, attendance, eligibility, registration rules…"
                 autocomplete="off"
               />
-              <button type="submit" id="submitBtn" class="chat-send-btn">
+              <button type="submit" id="submitBtn" class="chat-send-btn" aria-label="Send query">
                 <svg id="btnIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                 <div class="btn-spin hidden" id="spinner"><div class="spin-ring"></div></div>
               </button>

@@ -16,7 +16,8 @@ const STOP_WORDS = new Set([
   'a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from',
   'has', 'he', 'in', 'is', 'it', 'its', 'of', 'on', 'that', 'the',
   'to', 'was', 'were', 'will', 'with', 'what', 'which', 'who', 'how',
-  'can', 'does', 'did', 'do', 'i', 'my', 'me', 'we', 'our', 'you', 'your'
+  'can', 'does', 'did', 'do', 'i', 'my', 'me', 'we', 'our', 'you', 'your',
+  'answer', 'tell', 'give', 'say', 'yes', 'no', 'something', 'anything', 'random', 'please'
 ]);
 
 class RagRetriever {
@@ -272,7 +273,7 @@ class RagRetriever {
         };
       });
 
-      const relevant = scored.filter(s => s.rawScore > 0);
+      const relevant = scored.filter(s => s.rawScore >= 3.0);
 
       relevant.sort((a, b) => {
         const aHierarchyBonus = Math.max(0, (8 - (a.hierarchyLevel || 3)) * 0.15);
