@@ -1242,6 +1242,32 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       }
     }
 
+    // ── 3.5. OFFICIAL COURSE REGISTRATION REGULATIONS HANDLER ──
+    if (queryCategory === 'REGISTRATION') {
+      return {
+        state: 'ANSWERABLE',
+        answer: `### Vidyashilp University Course Registration Regulations (Student Handbook, Section III, Clause 2.1–2.15 & ERP Registration Manual):\n\n• **Mandatory Registration (Clause 2.1):** Every student must complete the formal registration procedure for approved courses at the commencement of each semester on designated dates notified in the Academic Calendar.\n• **Faculty Mentor Consultation (Clause 2.4):** Every student is assigned a Faculty Advisor [Mentor] and must consult them to plan and finalize their course selection before registration.\n• **No Attendance / Credit Without Registration (Clause 2.5):** No student is permitted to attend classes or earn academic credit without completing registration; failure to register by the deadline results in removal from the university rolls (Clause 2.12).\n• **Credit Limits per Semester (Clause 2.5):** A student is permitted to register for a minimum of **16 credits** and a maximum of **28 credits** per regular semester.\n• **Late Registration (Clause 2.6):** Permitted strictly under documented medical exigencies (hospitalization/trauma) or approved university representation, up to a maximum of **two (02) calendar weeks** with an applicable Late Fee. No relaxation on the mandatory 75% attendance rule is granted for late registration.\n• **Pre-Registration for Higher Semesters (Clause 2.13):** Pre-registration on the Digii ERP portal is mandatory for declaring Minors, Specializations, and Open Electives for subsequent semesters.\n• **Add/Drop Period (Clause 2.15):** Course changes or elective adjustments must be submitted within the official Add/Drop window specified in the Academic Calendar.`,
+        sources: [
+          {
+            documentTitle: '4. Student Handbook Aug 2026.pdf',
+            hierarchyLevel: 1,
+            pageOrSheet: 'Section III, Clauses 2.1–2.15 (Pages 23–26)',
+            clauseNumber: 'Clause 2 — Registration & Pre-Registration Procedure',
+            excerpt: 'Every student shall complete the mandatory Registration procedure and register for approved Courses... late registration permissible only for medical exigency with late fee.'
+          },
+          {
+            documentTitle: 'ERP Course Registration Manual.pdf',
+            hierarchyLevel: 3,
+            pageOrSheet: 'Registration Workflow',
+            clauseNumber: 'Digii ERP Registration SOP',
+            excerpt: 'Student course selection, faculty mentor approval, and portal credit validation workflow.'
+          }
+        ],
+        ruleResults: { minCredits: 16, maxCredits: 28, lateRegistrationWindowWeeks: 2 },
+        followUp: "Ask 'What is the attendance requirement?' or 'What are the minor courses?'"
+      };
+    }
+
     // ── 4. PREREQUISITE POLICY HANDLER ──
     if (queryCategory === 'PREREQUISITE_POLICY') {
       return {
@@ -1931,6 +1957,16 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
  */
 async function processAdvisorQuery(query, profileId = null, history = []) {
   const result = await executeAdvisorQuery(query, profileId, history);
+
+  // Format official citations if present
+  if (!result.citations && Array.isArray(result.sources) && result.sources.length > 0) {
+    result.citations = result.sources.map(s => {
+      const doc = s.documentTitle || s.title || 'Official Document';
+      const ref = s.clauseNumber || s.pageOrSheet || '';
+      return ref ? `${doc} (${ref})` : doc;
+    });
+    result.citation = result.citations[0];
+  }
 
   // Diagnostic logging (STEP 2)
   const detectedIntent = classifyQuery(query.toLowerCase().trim());
