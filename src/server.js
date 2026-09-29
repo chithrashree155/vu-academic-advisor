@@ -96,6 +96,17 @@ app.get('/api/health', (req, res) => {
       }
     }
 
+    let directFileReadCount = -1;
+    if (fileExists) {
+      try {
+        const raw = fs.readFileSync(directPath, 'utf8');
+        const parsed = JSON.parse(raw);
+        directFileReadCount = Array.isArray(parsed) ? parsed.length : (parsed && parsed.default ? parsed.default.length : -2);
+      } catch (e) {
+        directFileReadCount = e.message;
+      }
+    }
+
     if (retriever && (!retriever.chunks || retriever.chunks.length === 0)) {
       retriever.loadChunks();
     }
@@ -106,10 +117,13 @@ app.get('/api/health', (req, res) => {
     res.json({
       status: 'healthy',
       system: 'Vidyashilp University Academic Advisor',
-      version: '2.0.0',
+      version: '2.0.1',
       directPath,
       fileExists,
       fileSize,
+      directFileReadCount,
+      retrieverType: typeof retriever,
+      retrieverHasChunks: retriever ? !!retriever.chunks : false,
       ragChunksLoaded: chunkCount,
       ragChunksPath: chunkPath,
       loadError: retriever ? retriever.lastLoadError : null,
