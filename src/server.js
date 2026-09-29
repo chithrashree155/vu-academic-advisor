@@ -83,17 +83,27 @@ app.post('/api/advisory', async (req, res) => {
 
 // 4. System Health Check
 app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'healthy',
-    system: 'Vidyashilp University Academic Advisor',
-    version: '2.0.0',
-    localEmbeddingModel: 'Xenova/all-MiniLM-L6-v2',
-    embeddingDimension: 384,
-    supabaseStatus: 'CONNECTED',
-    ragChunksLoaded: retriever.chunks ? retriever.chunks.length : 0,
-    ragChunksPath: retriever.chunksPath || null,
-    cwd: process.cwd()
-  });
+  try {
+    const chunkCount = (retriever && Array.isArray(retriever.chunks)) ? retriever.chunks.length : 0;
+    const chunkPath = retriever ? retriever.chunksPath : null;
+    res.json({
+      status: 'healthy',
+      system: 'Vidyashilp University Academic Advisor',
+      version: '2.0.0',
+      localEmbeddingModel: 'Xenova/all-MiniLM-L6-v2',
+      embeddingDimension: 384,
+      supabaseStatus: 'CONNECTED',
+      ragChunksLoaded: chunkCount,
+      ragChunksPath: chunkPath,
+      cwd: process.cwd()
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: err.message,
+      stack: err.stack
+    });
+  }
 });
 
 // Start Server
