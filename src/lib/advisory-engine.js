@@ -639,7 +639,7 @@ function classifyQuery(queryStr) {
     return 'PROGRAM_SWITCH';
   }
 
-  // 1. Attendance
+  // 1. Attendance & Student attendance phrasing (bunk, skip, miss classes)
   if (
     q.includes('attendance') ||
     q.includes('attend') ||
@@ -649,7 +649,19 @@ function classifyQuery(queryStr) {
     q.includes('75%') ||
     q.includes('65%') ||
     q.includes('medical leave') ||
-    q.includes('medical relaxation')
+    q.includes('medical relaxation') ||
+    q.includes('bunk') ||
+    q.includes('skip class') ||
+    q.includes('skip classes') ||
+    q.includes('miss class') ||
+    q.includes('miss classes') ||
+    q.includes('can i skip') ||
+    q.includes('can i miss') ||
+    q.includes('classes can i skip') ||
+    q.includes('classes can i miss') ||
+    q.includes('how much attendance') ||
+    q.includes('maintain 75%') ||
+    q.includes('below 75%')
   ) {
     return 'ATTENDANCE';
   }
@@ -1220,6 +1232,8 @@ function isOutOfScopeQuery(queryStr) {
     q.includes('stocks') ||
     q.includes('cryptocurrency') ||
     q.includes('bitcoin') ||
+    q.includes('chatgpt') ||
+    q.includes('openai') ||
     q.includes('politics') ||
     q.includes('election') ||
     q.includes('president') ||
