@@ -1,0 +1,31 @@
+========================================================================
+VU ACADEMIC ADVISOR — 200 PRODUCTION TEST CASE SUMMARY
+Timestamp: 2026-09-29T07:17:29.230Z
+Endpoint: https://vu-academic-advisor.vercel.app/api/advisory
+Input File: VU_Academic_Advisor_200_Test_Cases.xlsx
+========================================================================
+
+Total tests: 200
+Successful HTTP requests: 192
+Failed HTTP requests: 8
+Answerable responses (PASS): 191
+INSUFFICIENT_INFORMATION responses: 1
+Other unexpected responses: 0
+Average response time: 3506 ms
+Fastest response: T106 (311 ms)
+Slowest response: T027 (42219 ms)
+Percentage of answerable tests: 95.5%
+
+------------------------------------------------------------------------
+List of failed Test IDs (HTTP/Network errors, count: 8):
+T001, T005, T026, T041, T042, T045, T050, T126
+
+------------------------------------------------------------------------
+List of Test IDs returning INSUFFICIENT_INFORMATION (count: 1):
+T187
+
+------------------------------------------------------------------------
+List of Test IDs returning OTHER states (count: 0):
+None
+
+========================================================================
