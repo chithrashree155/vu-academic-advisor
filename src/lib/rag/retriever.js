@@ -37,6 +37,7 @@ class RagRetriever {
         return;
       }
     } catch (reqErr) {
+      this.lastLoadError = 'Static require error: ' + reqErr.message;
       // Fall through to filesystem candidatePaths
     }
 

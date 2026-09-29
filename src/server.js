@@ -86,6 +86,26 @@ app.get('/api/health', (req, res) => {
   try {
     const chunkCount = (retriever && Array.isArray(retriever.chunks)) ? retriever.chunks.length : 0;
     const chunkPath = retriever ? retriever.chunksPath : null;
+    const fs = require('fs');
+    let dirListing = [];
+    try {
+      dirListing = fs.readdirSync(process.cwd());
+    } catch (e) {
+      dirListing = [e.message];
+    }
+    let dataListing = [];
+    try {
+      dataListing = fs.readdirSync(path.join(process.cwd(), 'data'));
+    } catch (e) {
+      dataListing = [e.message];
+    }
+    let processedListing = [];
+    try {
+      processedListing = fs.readdirSync(path.join(process.cwd(), 'data', 'processed'));
+    } catch (e) {
+      processedListing = [e.message];
+    }
+
     res.json({
       status: 'healthy',
       system: 'Vidyashilp University Academic Advisor',
@@ -95,7 +115,11 @@ app.get('/api/health', (req, res) => {
       supabaseStatus: 'CONNECTED',
       ragChunksLoaded: chunkCount,
       ragChunksPath: chunkPath,
-      cwd: process.cwd()
+      loadError: retriever ? retriever.lastLoadError : null,
+      cwd: process.cwd(),
+      dirListing,
+      dataListing,
+      processedListing
     });
   } catch (err) {
     res.status(500).json({
