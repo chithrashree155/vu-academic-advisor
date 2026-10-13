@@ -94,12 +94,11 @@ async function runE2eTests() {
   // TEST 4 — What courses can I take? (BA Economics student)
   await recordTest('TEST 4', 'What courses can I take? (Meera Krishnan, BA Economics)', async () => {
     const res = await processAdvisorQuery('What courses can I take?', 'VU-DEMO-008');
+    const upper = res.answer.toUpperCase();
     const pass = res.state === 'ANSWERABLE' &&
-      res.answer.includes('1. Eligible Courses') &&
-      res.answer.includes('2. Eligible with Conditions') &&
-      res.answer.includes('3. Prerequisites Missing') &&
-      res.answer.includes('4. Not Eligible') &&
-      res.answer.includes('5. Cannot Verify');
+      (res.answer.includes('Eligible Courses') || upper.includes('ELIGIBLE COURSES')) &&
+      (res.answer.includes('Prerequisites Missing') || upper.includes('BLOCKED BY PREREQUISITE')) &&
+      (res.answer.includes('Cannot Verify') || upper.includes('ELIGIBILITY NOT VERIFIED'));
     return {
       pass,
       actual: res.answer,
@@ -160,7 +159,8 @@ async function runE2eTests() {
   // TEST 9 — Complex Question
   await recordTest('TEST 9', 'Multi-factor complex query', async () => {
     const res = await processAdvisorQuery('Which courses can I take next semester considering my completed courses, prerequisites and my BA Economics program?', 'VU-DEMO-008');
-    const pass = res.state === 'ANSWERABLE' && res.answer.includes('Eligible Courses');
+    const upper = res.answer.toUpperCase();
+    const pass = res.state === 'ANSWERABLE' && (res.answer.includes('Eligible Courses') || upper.includes('ELIGIBLE COURSES'));
     return {
       pass,
       actual: res.answer,

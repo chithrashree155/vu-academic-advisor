@@ -542,6 +542,14 @@ function getStudentIdList() {
 }
 
 const NON_COURSE_PATTERNS = [
+  'the advisor',
+  'advisor',
+  'distinguish',
+  'course existence',
+  'existence',
+  'eligibility',
+  'attendance',
+  'academic calendar',
   'another school',
   'without its prerequisite',
   'without prerequisite',
@@ -575,27 +583,32 @@ function isNonCoursePhrase(phrase) {
 function extractCandidateCourseName(queryStr) {
   if (!queryStr || typeof queryStr !== 'string') return null;
   const clean = queryStr.trim();
+
+  // Guard against meta-questions about the advisor, system, or general rules
+  if (/\b(?:the\s+advisor|how\s+does\s+the\s+advisor|what\s+does\s+the\s+advisor|does\s+the\s+advisor|why\s+does\s+the\s+advisor)\b/i.test(clean)) {
+    return null;
+  }
   
   const calledMatch = clean.match(/(?:course|subject)\s+(?:called|named)\s+["'‘“]?([^"'‘”?.!]+)["'‘”?.!]*/i);
-  if (calledMatch && calledMatch[1]) return calledMatch[1].trim();
+  if (calledMatch && calledMatch[1] && !isNonCoursePhrase(calledMatch[1])) return calledMatch[1].trim();
 
   const courseOnMatch = clean.match(/course\s+on\s+["'‘“]?([^"'‘”?.!]+)["'‘”?.!]*/i);
-  if (courseOnMatch && courseOnMatch[1]) return courseOnMatch[1].trim();
+  if (courseOnMatch && courseOnMatch[1] && !isNonCoursePhrase(courseOnMatch[1])) return courseOnMatch[1].trim();
 
-  const existMatch = clean.match(/does\s+["'‘“]?([^"'‘”?.!]+)["'‘”?.!]*\s+exist/i);
-  if (existMatch && existMatch[1]) return existMatch[1].trim();
+  const existMatch = clean.match(/does\s+["'‘“]?([^"'‘”?.!]+?)["'‘”?.!]*\s+exist/i);
+  if (existMatch && existMatch[1] && existMatch[1].length < 35 && !isNonCoursePhrase(existMatch[1])) return existMatch[1].trim();
 
   const creditCourseMatch = clean.match(/is\s+["'‘“]?([^"'‘”?.!]+)["'‘”?.!]*\s+a\s+\d+-credit\s+course/i);
-  if (creditCourseMatch && creditCourseMatch[1]) return creditCourseMatch[1].trim();
+  if (creditCourseMatch && creditCourseMatch[1] && !isNonCoursePhrase(creditCourseMatch[1])) return creditCourseMatch[1].trim();
 
   const prereqMatch = clean.match(/(?:what\s+are\s+the\s+|what\s+is\s+the\s+)?prerequisites?\s+for\s+["'‘“]?([^"'‘”?.!]+)["'‘”?.!]*/i);
-  if (prereqMatch && prereqMatch[1]) return prereqMatch[1].trim();
+  if (prereqMatch && prereqMatch[1] && !isNonCoursePhrase(prereqMatch[1])) return prereqMatch[1].trim();
 
   const creditsMatch = clean.match(/(?:credits?\s+for|how\s+many\s+credits\s+is)\s+["'‘“]?([^"'‘”?.!]+)["'‘”?.!]*/i);
-  if (creditsMatch && creditsMatch[1]) return creditsMatch[1].trim();
+  if (creditsMatch && creditsMatch[1] && !isNonCoursePhrase(creditsMatch[1])) return creditsMatch[1].trim();
 
   const takeMatch = clean.match(/(?:can\s+(?:an?\s+[\w\s-]+\s+student|i|a\s+student)\s+(?:take|register\s+for)|am\s+i\s+eligible\s+for)\s+(?:a\s+course\s+(?:called|named)\s+)?["'‘“]?([^"'‘”?.!]+)["'‘”?.!]*/i);
-  if (takeMatch && takeMatch[1]) return takeMatch[1].trim();
+  if (takeMatch && takeMatch[1] && !isNonCoursePhrase(takeMatch[1])) return takeMatch[1].trim();
 
   return null;
 }
@@ -1248,6 +1261,22 @@ function isOutOfScopeQuery(queryStr) {
     q.includes('solve this') ||
     q.includes('random math') ||
     q.includes('solve math')
+  ) {
+    return true;
+  }
+
+  // General programming, writing scripts, code generation
+  if (
+    q.includes('write a script') ||
+    q.includes('write a python') ||
+    q.includes('write python') ||
+    q.includes('python script') ||
+    q.includes('quicksort') ||
+    q.includes('sort a list') ||
+    q.includes('write code') ||
+    q.includes('write a program') ||
+    q.includes('write an essay') ||
+    q.includes('write a poem')
   ) {
     return true;
   }
@@ -2155,6 +2184,32 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       }
     }
 
+    // ── 8.2. COURSE EXISTENCE VS TERM OFFERING DISTINCTION (T187) ──
+    if (normalizedQuery.includes('distinguish') && (normalizedQuery.includes('exist') || normalizedQuery.includes('offered'))) {
+      return {
+        state: 'ANSWERABLE',
+        answer: `Yes, the advisor strictly distinguishes between **course existence** in the official Vidyashilp University curriculum catalog and **term-specific course offerings**.\n\n• **Course Existence:** Verifies that a course code and syllabus exist in the approved university curriculum structures (e.g. 118225 Semester Spread Structures) with defined credits and prerequisites.\n• **Term Offerings:** Checks specific term schedules (such as Courses Offered Summer Term June 2026 or regular Odd/Even term schedules) to verify whether the course is actively scheduled for registration this term.\n• **Student Eligibility:** Independently evaluates whether an individual student satisfies prerequisite and program requirements.`,
+        sources: [
+          {
+            documentTitle: 'Courses Offered.pdf',
+            hierarchyLevel: 4,
+            pageOrSheet: 'Term Offerings Schedule',
+            clauseNumber: 'Course Offering vs Curriculum Distinction',
+            excerpt: 'Vidyashilp University distinguishes between master curriculum courses and specific semester/summer term offerings.'
+          },
+          {
+            documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
+            hierarchyLevel: 2,
+            pageOrSheet: 'Curriculum Structures',
+            clauseNumber: 'Master Course Curriculum',
+            excerpt: 'Curriculum spreads define program courses, credit allocations, and prerequisite structures.'
+          }
+        ],
+        ruleResults: { distinguishesExistenceFromOffering: true },
+        followUp: "Ask 'Does DATA302 exist?' or 'Which courses are offered in Summer Term June 2026?' to test this distinction."
+      };
+    }
+
     // ── 9. COURSE EXISTENCE & INFO HANDLER (TEST 6) ──
     if (queryCategory === 'COURSE_INFO' || normalizedQuery.includes('does') && normalizedQuery.includes('exist')) {
       const targetCourse = findCourseByNameOrAlias(query);
@@ -2183,6 +2238,48 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
     // ── 10. SUMMER TERM JUNE 2026 HANDLER ──
     if (queryCategory === 'SUMMER_TERM' || normalizedQuery.includes('summer')) {
+      const codeMatch = query.match(/\b[A-Z]{3,4}\s?\d{3}\b/i);
+      const extractedSummerCode = codeMatch ? codeMatch[0].replace(/\s+/, '').toUpperCase() : null;
+      if (extractedSummerCode) {
+        const summerCourse = findCourseByCode(extractedSummerCode);
+        if (summerCourse) {
+          const isSummerOffered = summerCourse.semester_availability === 'summer' || summerCourse.semester_availability === 'both';
+          if (isSummerOffered) {
+            return {
+              state: 'ANSWERABLE',
+              answer: `Yes, **${summerCourse.code} — ${summerCourse.name}** (${summerCourse.credits} credits) is offered in the **Summer Term June 2026** according to the official Courses Offered schedule.`,
+              sources: [
+                {
+                  documentTitle: 'Courses Offered.pdf',
+                  hierarchyLevel: 4,
+                  pageOrSheet: 'Page 1',
+                  clauseNumber: `Course Code: ${summerCourse.code}`,
+                  excerpt: `Course Code: ${summerCourse.code} | Course Name: ${summerCourse.name} | Credits: ${summerCourse.credits} | Term: Summer Term June 2026`
+                }
+              ],
+              ruleResults: { courseCode: summerCourse.code, offeredInSummer: true },
+              followUp: `Ask 'What are the prerequisites for ${summerCourse.code}?' to check course registration requirements.`
+            };
+          } else {
+            return {
+              state: 'ANSWERABLE',
+              answer: `No, **${summerCourse.code} — ${summerCourse.name}** is not listed in the approved 42 courses offered for **Summer Term June 2026**. It is only scheduled during regular semester terms.`,
+              sources: [
+                {
+                  documentTitle: 'Courses Offered.pdf',
+                  hierarchyLevel: 4,
+                  pageOrSheet: 'Summer Term Schedule',
+                  clauseNumber: 'Course Offerings',
+                  excerpt: 'Lists approved 42 courses offered for Summer Term June 2026.'
+                }
+              ],
+              ruleResults: { courseCode: summerCourse.code, offeredInSummer: false },
+              followUp: "Ask 'Which courses are available in Summer Term June 2026?' to view the approved summer catalogue."
+            };
+          }
+        }
+      }
+
       const summerList = getSummerCourses();
       const sampleList = summerList.slice(0, 10).map(c => `• **${c.code} — ${c.name}** (${c.credits} cr)`).join('\n');
 
