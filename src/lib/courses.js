@@ -240,9 +240,10 @@ function findCourseByNameOrAlias(queryStr) {
     if (found) return found;
   }
 
-  // 2. Alias match
+  // 2. Alias match (with word boundary to prevent partial matches like 'ai' in 'prevails')
   for (const [alias, targetCode] of Object.entries(COURSE_ALIASES)) {
-    if (clean.includes(alias) || alias === clean) {
+    const aliasRegex = new RegExp(`(^|\\s|[^a-z0-9])${alias.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&')}($|\\s|[^a-z0-9])`, 'i');
+    if (aliasRegex.test(clean)) {
       const found = findCourseByCode(targetCode);
       if (found) return found;
     }
@@ -252,11 +253,15 @@ function findCourseByNameOrAlias(queryStr) {
   const exact = OFFICIAL_COURSE_CATALOG.find(c => c.name.toLowerCase() === clean);
   if (exact) return exact;
 
-  // 4. Substring match
-  return OFFICIAL_COURSE_CATALOG.find(c => {
-    const title = c.name.toLowerCase();
-    return title.includes(clean) || clean.includes(title);
-  }) || null;
+  // 4. Substring title match (only for queries longer than 5 chars)
+  if (clean.length > 5) {
+    return OFFICIAL_COURSE_CATALOG.find(c => {
+      const title = c.name.toLowerCase();
+      return title.includes(clean) || clean.includes(title);
+    }) || null;
+  }
+
+  return null;
 }
 
 /**

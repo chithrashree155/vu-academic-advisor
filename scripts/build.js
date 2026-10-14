@@ -53,6 +53,20 @@ try {
   assert(false, `src/lib/courses.js syntax error: ${e.message}`);
 }
 
+try {
+  execSync('node --check src/lib/multimodal/infographic.js', { stdio: 'pipe' });
+  assert(true, 'src/lib/multimodal/infographic.js syntax valid');
+} catch (e) {
+  assert(false, `src/lib/multimodal/infographic.js syntax error: ${e.message}`);
+}
+
+try {
+  execSync('node --check src/lib/agent/workflow.js', { stdio: 'pipe' });
+  assert(true, 'src/lib/agent/workflow.js syntax valid');
+} catch (e) {
+  assert(false, `src/lib/agent/workflow.js syntax error: ${e.message}`);
+}
+
 // 2. Validate course catalog and synthetic profiles
 console.log('\n2. Validating course catalog and synthetic student data...');
 const { OFFICIAL_COURSE_CATALOG, COURSE_PREREQUISITES } = require('../src/lib/courses');

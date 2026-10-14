@@ -34,6 +34,7 @@
       <div class="nav-links" id="navLinks">
         <a class="nav-link active" href="#hero" id="navAdvisor">Advisor</a>
         <a class="nav-link" href="#programs" id="navPrograms">Programs</a>
+        <a class="nav-link" href="javascript:void(0)" id="navInfographic" onclick="openInfographicModal()">Infographics</a>
         <a class="nav-link" href="#about" id="navAbout">About</a>
       </div>
 
@@ -277,6 +278,15 @@
           </div>
         </div>
         <div class="quick-list">
+          <button class="ql-btn ql-btn-highlight" onclick="openInfographicModal('BTECH_DS', '2024')">
+            <span class="ql-icon">📊</span>
+            <div class="ql-text">
+              <span class="ql-title">Course Infographic</span>
+              <span class="ql-sub">Interactive visual progression map</span>
+            </div>
+            <svg class="ql-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+
           <button class="ql-btn" data-query="What is the minimum attendance requirement?">
             <span class="ql-icon">📋</span>
             <div class="ql-text">
@@ -601,6 +611,79 @@
       <div class="drawer-footer">
         <button class="btn-drawer-ask" onclick="askAboutMyEligibility()">Check My Course Eligibility</button>
         <button class="btn-drawer-signout" onclick="signOutStudent()">Sign Out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ INFOGRAPHIC MODAL ══════════ -->
+  <div class="modal-overlay hidden" id="infographicModal" role="dialog" aria-modal="true" aria-labelledby="infoModalTitle">
+    <div class="modal-card modal-card-xl">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-icon-badge">📊</div>
+          <div>
+            <h3 class="modal-title" id="infoModalTitle">Course Structure &amp; Progression Infographic</h3>
+            <p class="modal-sub">Authoritative visual progression map grounded in official Vidyashilp University curriculum spreadsheets.</p>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeInfographicModal()" aria-label="Close modal">✕</button>
+      </div>
+
+      <!-- Controls Toolbar -->
+      <div class="info-toolbar">
+        <div class="info-ctrl-group">
+          <label for="infoProgramSelect" class="info-label">Program</label>
+          <select id="infoProgramSelect" class="info-select" onchange="loadInfographicData()">
+            <option value="BTECH_DS">B.Tech (Hons.) CSE – Data Science</option>
+            <option value="BTECH_CSE">B.Tech Computer Science and Engineering</option>
+            <option value="BMS_DB">BMS (Hons.) – Digital Business</option>
+            <option value="BA_ECO">B.A. (Hons.) Economics</option>
+            <option value="BA_PSY">B.A. (Hons.) Psychology</option>
+            <option value="BA_LLB">B.A. LL.B. (Hons.)</option>
+          </select>
+        </div>
+
+        <div class="info-ctrl-group">
+          <label for="infoBatchSelect" class="info-label">Curriculum Batch</label>
+          <select id="infoBatchSelect" class="info-select" onchange="loadInfographicData()">
+            <option value="2024">Batch 2024</option>
+            <option value="2025">Batch 2025</option>
+            <option value="2026">Batch 2026</option>
+          </select>
+        </div>
+
+        <div class="info-ctrl-group">
+          <label for="infoTermFilter" class="info-label">Term View</label>
+          <select id="infoTermFilter" class="info-select" onchange="loadInfographicData()">
+            <option value="ALL">All Curriculum Courses</option>
+            <option value="SUMMER_2026">Highlight Summer Term June 2026</option>
+          </select>
+        </div>
+
+        <div class="info-actions">
+          <button class="btn-primary-sm" onclick="downloadInfographicSvg()" id="btnDownloadSvg">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download SVG
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Bar -->
+      <div class="info-stats-bar" id="infoStatsBar">
+        <span class="is-item" id="infoTotalCourses">Courses: Loading…</span>
+        <span class="is-dot">·</span>
+        <span class="is-item" id="infoTotalCredits">Credits: Loading…</span>
+        <span class="is-dot">·</span>
+        <span class="is-item" id="infoSummerCount">Summer Offerings: Loading…</span>
+      </div>
+
+      <!-- SVG Container with Pan/Zoom scroll -->
+      <div class="info-svg-container" id="infoSvgContainer">
+        <div class="info-loading">Generating course infographic from verified curriculum structures…</div>
+      </div>
+
+      <div class="info-footer">
+        <span class="info-footer-note">📌 <strong>Curriculum Distinction:</strong> Regular curriculum courses are rendered in deep blue; courses actively scheduled for Summer Term June 2026 are highlighted in gold with credit badges. Cites: <em>118225_Semester_Spread_Structures_Sept_2026.xlsx</em> &amp; <em>Courses Offered.pdf</em>.</span>
       </div>
     </div>
   </div>

@@ -457,14 +457,22 @@ function renderAdvisorMessage(data) {
     followUpHtml = `<div class="followup-box">💡 <strong>Suggested:</strong> ${escHtml(data.followUp)}</div>`;
   }
 
+  const msgId = 'msg-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+  advisorResponses[msgId] = data.answer || '';
+
   msg.innerHTML = `
     <div class="advisor-avatar">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
     </div>
     <div class="msg-bubble msg-bubble-advisor">
       <div class="msg-header">
-        <span class="state-tag ${stateClass}">${escHtml(stateLabel)}</span>
-        <span class="msg-author">VU Advisor</span>
+        <div class="msg-header-left">
+          <span class="state-tag ${stateClass}">${escHtml(stateLabel)}</span>
+          <span class="msg-author">VU Advisor</span>
+        </div>
+        <button id="audioBtn-${msgId}" class="btn-audio-listen" onclick="toggleAudioExplanation('${msgId}')" title="Listen to browser audio explanation" aria-label="Listen to explanation">
+          <span class="audio-icon">🎧</span> Listen to explanation
+        </button>
       </div>
       <div class="msg-text">${formatMarkdown(data.answer || '')}</div>
       ${followUpHtml}
@@ -496,4 +504,154 @@ function formatMarkdown(text) {
   formatted = formatted.replace(/⚠/g, '<span style="color:#d97706;font-weight:600;">⚠</span>');
   formatted = formatted.replace(/❌/g, '<span style="color:#dc2626;font-weight:600;">❌</span>');
   return `<p>${formatted}</p>`;
+}
+
+// ════════════════════════════════════════════════════════════
+// PHASE 8: MULTIMODAL EXTENSION — AUDIO EXPLANATIONS (TTS)
+// ════════════════════════════════════════════════════════════
+const advisorResponses = {};
+let currentSpeechBtn = null;
+
+function toggleAudioExplanation(msgId) {
+  const text = advisorResponses[msgId];
+  const btn = document.getElementById(`audioBtn-${msgId}`);
+
+  // Browser Web Speech API check with graceful fallback
+  if (!('speechSynthesis' in window)) {
+    alert('Audio playback uses the browser-native Web Speech API. Speech synthesis is not supported on your current browser or device; the full verified text transcript is displayed above.');
+    return;
+  }
+
+  // If already speaking this message, stop
+  if (window.speechSynthesis.speaking && currentSpeechBtn === btn) {
+    window.speechSynthesis.cancel();
+    updateSpeechBtnState(btn, false);
+    currentSpeechBtn = null;
+    return;
+  }
+
+  // Cancel any other running speech
+  window.speechSynthesis.cancel();
+  if (currentSpeechBtn) {
+    updateSpeechBtnState(currentSpeechBtn, false);
+  }
+
+  const cleanText = cleanTextForSpeech(text);
+  if (!cleanText) return;
+
+  const utterance = new SpeechSynthesisUtterance(cleanText);
+  utterance.rate = 1.0;
+  utterance.pitch = 1.0;
+  utterance.lang = 'en-US';
+
+  utterance.onstart = () => {
+    updateSpeechBtnState(btn, true);
+    currentSpeechBtn = btn;
+  };
+
+  utterance.onend = () => {
+    updateSpeechBtnState(btn, false);
+    currentSpeechBtn = null;
+  };
+
+  utterance.onerror = (e) => {
+    console.warn('SpeechSynthesis error:', e);
+    updateSpeechBtnState(btn, false);
+    currentSpeechBtn = null;
+  };
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function updateSpeechBtnState(btn, isPlaying) {
+  if (!btn) return;
+  if (isPlaying) {
+    btn.classList.add('audio-playing');
+    btn.innerHTML = `<span class="audio-wave">🔊</span> Stop Audio`;
+    btn.setAttribute('aria-label', 'Stop reading explanation');
+  } else {
+    btn.classList.remove('audio-playing');
+    btn.innerHTML = `<span class="audio-icon">🎧</span> Listen to explanation`;
+    btn.setAttribute('aria-label', 'Listen to explanation');
+  }
+}
+
+function cleanTextForSpeech(raw) {
+  if (!raw) return '';
+  return raw
+    .replace(/[*#_`>]/g, '')
+    .replace(/✓/g, 'Status: Eligible. ')
+    .replace(/❌/g, 'Status: Not eligible. ')
+    .replace(/⚠/g, 'Warning. ')
+    .replace(/https?:\/\/\S+/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// ════════════════════════════════════════════════════════════
+// PHASE 8: MULTIMODAL EXTENSION — COURSE INFOGRAPHIC VIEWER
+// ════════════════════════════════════════════════════════════
+let currentInfographicSvg = '';
+let currentInfographicData = null;
+
+function openInfographicModal(defaultProgram = 'BTECH_DS', defaultBatch = '2024') {
+  const modal = document.getElementById('infographicModal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    const progSelect = document.getElementById('infoProgramSelect');
+    if (progSelect && defaultProgram) progSelect.value = defaultProgram;
+    const batchSelect = document.getElementById('infoBatchSelect');
+    if (batchSelect && defaultBatch) batchSelect.value = defaultBatch;
+    loadInfographicData();
+  }
+}
+
+function closeInfographicModal() {
+  const modal = document.getElementById('infographicModal');
+  if (modal) modal.classList.add('hidden');
+}
+
+async function loadInfographicData() {
+  const program = document.getElementById('infoProgramSelect')?.value || 'BTECH_DS';
+  const batch = document.getElementById('infoBatchSelect')?.value || '2024';
+  const term = document.getElementById('infoTermFilter')?.value || 'ALL';
+  const container = document.getElementById('infoSvgContainer');
+
+  if (container) {
+    container.innerHTML = '<div class="info-loading">Generating course infographic from verified curriculum structures…</div>';
+  }
+
+  try {
+    const res = await fetch(`/api/curriculum/infographic?program=${encodeURIComponent(program)}&batch=${encodeURIComponent(batch)}&term=${encodeURIComponent(term)}`);
+    const data = await res.json();
+    if (data.status === 'success' && data.svg) {
+      currentInfographicSvg = data.svg;
+      currentInfographicData = data;
+      if (container) {
+        container.innerHTML = data.svg;
+      }
+      document.getElementById('infoTotalCourses').textContent = `Courses: ${data.totalCourses}`;
+      document.getElementById('infoTotalCredits').textContent = `Credits: ${data.totalCredits}`;
+      document.getElementById('infoSummerCount').textContent = `Summer Term '26: ${data.summerOfferedCount} Courses`;
+    } else {
+      if (container) container.innerHTML = '<div class="info-error">Failed to generate infographic. Please try again.</div>';
+    }
+  } catch (err) {
+    console.error('Error loading infographic:', err);
+    if (container) container.innerHTML = '<div class="info-error">Network error loading infographic.</div>';
+  }
+}
+
+function downloadInfographicSvg() {
+  if (!currentInfographicSvg) return;
+  const program = document.getElementById('infoProgramSelect')?.value || 'CURRICULUM';
+  const blob = new Blob([currentInfographicSvg], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `VU_${program}_Course_Structure_Infographic.svg`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }

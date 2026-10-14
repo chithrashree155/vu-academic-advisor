@@ -9,6 +9,9 @@
     "dev": "node src/server.js",
     "test:phase2": "node scripts/test-phase2.js",
     "test:challenge": "node scripts/test-phase2-challenge.js",
+    "test:agentic": "node scripts/test-agentic-workflow.js",
+    "test:security": "node scripts/test-privacy-security.js",
+    "eval:phases": "node scripts/run-phase3-5-eval.js",
     "ingest": "node scripts/run-ingestion.js"
   },
   "dependencies": {
