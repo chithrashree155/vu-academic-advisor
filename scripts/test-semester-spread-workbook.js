@@ -190,6 +190,41 @@ async function runTestSuite() {
     assert(res.answer.includes('Semester_Spread_Structures_Sept_2026.xlsx'), 'Must cite workbook');
   });
 
+  await testCase(20, 'Chatbot: Curriculum Comparison Phrasing - Foundation basket differ between 2024 and 2025', async () => {
+    const res = await processAdvisorQuery('How does the Foundation basket differ between the 2024 and 2025 structures?');
+    assert(res.state === 'ANSWERABLE', 'State must be ANSWERABLE');
+    assert(res.answer.includes('34 credits') && res.answer.includes('24 credits'), 'Must compare 34 and 24 credits');
+    assert(res.answer.includes('Reallocated'), 'Must detail reallocated courses');
+    assert(res.answer.includes('Semester_Spread_Structures_Sept_2026.xlsx'), 'Must cite workbook');
+  });
+
+  await testCase(21, 'Chatbot: Course Transition - Sustainable Cities and Communities in updated curriculum', async () => {
+    const res = await processAdvisorQuery('Where does Sustainable Cities and Communities appear in the updated curriculum?');
+    assert(res.state === 'ANSWERABLE', 'State must be ANSWERABLE');
+    assert(res.answer.includes('Foundation Courses') && res.answer.includes('2022–2024'), 'Must mention original Foundation basket');
+    assert(res.answer.includes('Environmental Studies and Sustainability'), 'Must identify successor course');
+    assert(res.answer.includes('University Core') && res.answer.includes('2025'), 'Must identify updated University Core basket');
+    assert(res.answer.includes('Semester_Spread_Structures_Sept_2026.xlsx'), 'Must cite workbook');
+  });
+
+  await testCase(22, 'Chatbot: Direct Transition Relevance - Academic Writing in updated curriculum', async () => {
+    const res = await processAdvisorQuery('Where does Academic Writing appear in the updated curriculum?');
+    assert(res.state === 'ANSWERABLE', 'State must be ANSWERABLE');
+    assert(res.answer.includes('Foundation Courses') && res.answer.includes('2022–2024'), 'Must mention original 2022-2024 Foundation basket');
+    assert(res.answer.includes('Analytical Academic Writing'), 'Must identify Analytical Academic Writing');
+    assert(res.answer.includes('University Core') && res.answer.includes('2025'), 'Must identify 2025 University Core basket');
+    assert(res.answer.includes('3 credits') || res.answer.includes('3 cr'), 'Must state 3 credits for Analytical Academic Writing');
+    assert(res.answer.includes('Semester_Spread_Structures_Sept_2026.xlsx'), 'Must cite workbook');
+  });
+
+  await testCase(23, 'Chatbot: Cloud Computing 2024 Foundation Basket & Semester Placement', async () => {
+    const res = await processAdvisorQuery('Is Cloud Computing included in the 2024 Foundation basket? Which semester is it in?');
+    assert(res.state === 'ANSWERABLE', 'State must be ANSWERABLE');
+    assert(res.answer.includes('Semester 4'), 'Must identify Semester 4');
+    assert(res.answer.includes('Foundation') && res.answer.includes('2024'), 'Must confirm Foundation basket inclusion for Batch 2024');
+    assert(res.answer.includes('COMP403'), 'Must mention course code COMP403');
+  });
+
   // Summary
   console.log('\n================================================================');
   console.log(`TEST SUMMARY: ${passed} Passed, ${failed} Failed out of ${passed + failed} Tests`);
@@ -200,7 +235,7 @@ async function runTestSuite() {
     failures.forEach(f => console.error(` - Test ${f.number} (${f.title}): ${f.error}`));
     process.exit(1);
   } else {
-    console.log('\nAll 19 automated tests passed successfully against Semester_Spread_Structures_Sept_2026.xlsx!');
+    console.log(`\nAll ${passed} automated tests passed successfully against Semester_Spread_Structures_Sept_2026.xlsx!`);
     process.exit(0);
   }
 }

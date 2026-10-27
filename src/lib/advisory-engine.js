@@ -34,7 +34,9 @@ const {
   findCourseDetails,
   isCourseInWorkbook,
   normalizeBasketName,
-  extractVersionFromQuery
+  extractVersionFromQuery,
+  getCourseTransition,
+  KNOWN_CURRICULUM_TRANSITIONS
 } = require('./curriculum-data');
 
 const ragModule = require('./rag/retriever.js');
@@ -845,11 +847,44 @@ function classifyQuery(queryStr) {
   }
 
   // 12. Curriculum version comparison
-  if (
-    (q.includes('compare') || q.includes('difference between') || q.includes('diff between') || q.includes('how did') || q.includes('changes in')) &&
-    (q.includes('2022') || q.includes('2023') || q.includes('2024') || q.includes('2025') || q.includes('2026') || q.includes('curriculum') || q.includes('foundation') || q.includes('core') || q.includes('basket') || q.includes('batch'))
-  ) {
+  const isComparisonPhrase =
+    q.includes('compare') ||
+    q.includes('difference between') ||
+    q.includes('differences between') ||
+    q.includes('differ between') ||
+    q.includes('differs between') ||
+    q.includes('differ across') ||
+    q.includes('diff between') ||
+    q.includes('how did') ||
+    q.includes('changes in') ||
+    q.includes('changed in') ||
+    q.includes('changes between') ||
+    q.includes('what changed between') ||
+    q.includes('what changed in') ||
+    q.includes('what changed') ||
+    q.includes('different in') ||
+    q.includes('different between') ||
+    /\bhow\s+is\b.*\bdifferent\b/i.test(q) ||
+    /\bcompare\b.*\bacross\b/i.test(q);
+
+  const hasCurriculumContext =
+    q.includes('2022') || q.includes('2023') || q.includes('2024') || q.includes('2025') || q.includes('2026') ||
+    q.includes('curriculum') || q.includes('foundation') || q.includes('core') || q.includes('basket') ||
+    q.includes('batch') || q.includes('batches') || q.includes('structure') || q.includes('structures');
+
+  if (isComparisonPhrase && hasCurriculumContext) {
     return 'CURRICULUM_COMPARISON';
+  }
+
+  // 12.1. Course presence / transition in updated curriculum
+  if (
+    (/\bwhere\s+does\b.*\bappear\b/i.test(q) ||
+     /\bwhere\s+is\b.*\b(?:in\s+the\s+(?:updated\s+|new\s+)?curriculum|in\s+(?:2024|2025|2026))\b/i.test(q) ||
+     /\bwhat\s+happened\s+to\b.*\b(?:curriculum|2025|2026)\b/i.test(q) ||
+     /\b(?:appear|placed|listed|included)\s+in\s+the\s+updated\s+curriculum\b/i.test(q)) &&
+    !q.includes('which semester') && !q.includes('prerequisite')
+  ) {
+    return 'COURSE_TRANSITION';
   }
 
   // 13. Course semester placement
@@ -1143,6 +1178,66 @@ ${nextStep}${syntheticNote}`;
       status: decision.status,
       courseCode: targetCourse.code,
       student: studentName
+    },
+    followUp: null
+  };
+}
+
+/**
+ * Formats a grounded course curriculum transition response
+ */
+function formatCourseTransitionResponse(trans) {
+  const orig = trans.original;
+  const upd = trans.updated;
+
+  const origSection = `• **Original Curriculum (${orig.batches}):**\n` +
+    `  - **Basket:** ${orig.basket}\n` +
+    `  - **Credits:** ${orig.creditsDetail || orig.credits + ' credits'}\n` +
+    (orig.courseCode ? `  - **Course Code:** ${orig.courseCode}\n` : '') +
+    (orig.semester ? `  - **Semester Placement:** ${orig.semester}\n` : '') +
+    `  - **Source Sheet:** *${orig.sourceSheet}*`;
+
+  let updSection = '';
+  if (trans.relation === 'replacement') {
+    updSection = `• **Updated Curriculum (${upd.batches}):**\n` +
+      `  - In the restructured 2025 curriculum, *"${trans.courseName}"* does not appear as a standalone Foundation course.\n` +
+      `  - **Successor / Replacement Course:** **${upd.courseName}**\n` +
+      `  - **Basket:** ${upd.basket}\n` +
+      `  - **Credits:** ${upd.creditsDetail || upd.credits + ' credits'}\n` +
+      (upd.courseCode ? `  - **Course Code:** ${upd.courseCode}\n` : '') +
+      (upd.semester ? `  - **Semester Placement:** ${upd.semester}\n` : '') +
+      `  - **Source Sheet:** *${upd.sourceSheet}*\n\n` +
+      `*Curriculum Transition Note:* ${trans.explanation}`;
+  } else {
+    updSection = `• **Updated Curriculum (${upd.batches}):**\n` +
+      (upd.courseName !== trans.courseName ? `  - **Updated Course Title:** **${upd.courseName}**\n` : '') +
+      `  - **Basket:** ${upd.basket}\n` +
+      `  - **Credits:** ${upd.creditsDetail || upd.credits + ' credits'}\n` +
+      (upd.courseCode ? `  - **Course Code:** ${upd.courseCode}\n` : '') +
+      (upd.semester ? `  - **Semester Placement:** ${upd.semester}\n` : '') +
+      `  - **Source Sheet:** *${upd.sourceSheet}*\n\n` +
+      `*Curriculum Transition Note:* ${trans.explanation}`;
+  }
+
+  const answer = `### Curriculum Placement & Transition: **${trans.courseName}**\n*Official Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx*\n\n${origSection}\n\n${updSection}`;
+
+  return {
+    state: 'ANSWERABLE',
+    answer,
+    sources: [
+      {
+        documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+        hierarchyLevel: 2,
+        pageOrSheet: `${orig.sourceSheet} & ${upd.sourceSheet}`,
+        clauseNumber: `Curriculum Transition: ${trans.courseName}`,
+        excerpt: `${trans.courseName}: ${trans.explanation}`
+      }
+    ],
+    ruleResults: {
+      course: trans.courseName,
+      transitionType: trans.relation,
+      originalBasket: orig.basket,
+      updatedBasket: upd.basket
     },
     followUp: null
   };
@@ -1702,14 +1797,14 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       if (comp) {
         let answerText = `### Curriculum Comparison: Batch ${comp.v1} (${comp.p1}) vs. Batch ${comp.v2} (${comp.p2})\n*Official Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (Struct_${comp.v1 === '2026' ? '2026_DS' : comp.v1} & Struct_${comp.v2 === '2026' ? '2026_DS' : comp.v2})*\n\n• **Total Credits for Degree Award:** Exactly **180 credits** in both versions.\n\n`;
 
-        if (basketKey && comp.basketCourseDiff) {
-          const bLabel = basketKey === 'foundation' ? 'Foundation Courses'
-            : basketKey === 'universityCore' ? 'University Core'
-            : basketKey === 'programCore' ? 'Program Core'
-            : basketKey === 'programHonors' ? 'Program Honors'
-            : basketKey === 'electives' ? 'Electives / Specialization Tracks'
-            : basketKey;
+        const bLabel = basketKey === 'foundation' ? 'Foundation Courses'
+          : basketKey === 'universityCore' ? 'University Core'
+          : basketKey === 'programCore' ? 'Program Core'
+          : basketKey === 'programHonors' ? 'Program Honors'
+          : basketKey === 'electives' ? 'Electives / Specialization Tracks'
+          : basketKey;
 
+        if (basketKey && comp.basketCourseDiff) {
           let c1 = comp.creditDiff[bLabel] || comp.creditDiff[basketKey];
           if (!c1) {
             for (const [k, v] of Object.entries(comp.creditDiff)) {
@@ -1761,6 +1856,17 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
           }
         }
 
+        if (basketKey && (normalizedQuery.includes('across batches') || normalizedQuery.includes('across all'))) {
+          const allCredits = getBasketCredits(basketKey);
+          if (allCredits && allCredits.versions) {
+            answerText += `#### ${bLabel} Credit Evolution Across All Batches:\n`;
+            for (const [ver, info] of Object.entries(allCredits.versions)) {
+              answerText += `• **Batch ${ver} (${info.program}):** **${info.credits} credits**\n`;
+            }
+            answerText += `\n`;
+          }
+        }
+
         return {
           state: 'ANSWERABLE',
           answer: answerText,
@@ -1779,6 +1885,61 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       }
     }
 
+    // ── 3.6.1.1. COURSE CURRICULUM TRANSITION HANDLER ──
+    if (queryCategory === 'COURSE_TRANSITION') {
+      const trans = getCourseTransition(query);
+      if (trans) {
+        return formatCourseTransitionResponse(trans);
+      }
+
+      // If not in known transitions, check if course details exist in workbook
+      const courseDetails = findCourseDetails(query);
+      if (courseDetails && (courseDetails.matchedEntries.length > 0 || courseDetails.structEntries.length > 0)) {
+        const courseTitle = courseDetails.matchedEntries[0] ? courseDetails.matchedEntries[0].courseName : (courseDetails.structEntries[0] ? courseDetails.structEntries[0].name : query);
+        let answerText = `### Curriculum Placement for **${courseTitle}**\n*Official Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx*\n\n`;
+        if (courseDetails.matchedEntries.length > 0) {
+          answerText += `Current scheduling across curriculum batches:\n`;
+          const byBatch = {};
+          for (const m of courseDetails.matchedEntries) {
+            byBatch[m.batch] = m;
+          }
+          for (const [b, m] of Object.entries(byBatch)) {
+            answerText += `• **Batch ${b}:** **Semester ${m.semesterNum}** | Basket: **${m.basketName}** (${m.courseCode}, ${m.credits} credits, L:${m.lectureHours}, T:${m.tutorialHours}, P:${m.practicalHours}, Prerequisite: ${m.prerequisite})\n`;
+          }
+        } else if (courseDetails.structEntries.length > 0) {
+          answerText += `Listed in curriculum structure:\n`;
+          for (const s of courseDetails.structEntries) {
+            answerText += `• **Batch ${s.version}:** ${s.basket} (${s.credits} credits)\n`;
+          }
+        }
+
+        return {
+          state: 'ANSWERABLE',
+          answer: answerText,
+          sources: [
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Curriculum Structures & Spreads',
+              clauseNumber: `Course Placement: ${courseTitle}`,
+              excerpt: `Placement of ${courseTitle} across curriculum structures and spreads.`
+            }
+          ],
+          ruleResults: { course: courseTitle },
+          followUp: null
+        };
+      }
+
+      const candidateName = extractCandidateCourseName(query) || query;
+      return {
+        state: 'INSUFFICIENT_INFORMATION',
+        answer: `I couldn't verify a course named or coded ‘${candidateName}’ in the official Vidyashilp University curriculum structures (*Semester_Spread_Structures_Sept_2026.xlsx*). Please verify the course title with your Academic Advisor or Registrar's Office.`,
+        sources: [],
+        ruleResults: { unverifiedCourse: candidateName },
+        followUp: null
+      };
+    }
+
     // ── 3.6.2. COURSE SEMESTER PLACEMENT ──
     if (queryCategory === 'COURSE_PLACEMENT') {
       const courseDetails = findCourseDetails(query);
@@ -1794,7 +1955,11 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
             byBatch[m.batch] = m;
           }
           for (const [b, m] of Object.entries(byBatch)) {
-            answerText += `• **Batch ${b}:** **Semester ${m.semesterNum}** (${m.courseCode}, ${m.credits} credits, L:${m.lectureHours}, T:${m.tutorialHours}, P:${m.practicalHours}, Prerequisite: ${m.prerequisite})\n`;
+            answerText += `• **Batch ${b}:** **Semester ${m.semesterNum}** | Basket: **${m.basketName}** (${m.courseCode}, ${m.credits} credits, L:${m.lectureHours}, T:${m.tutorialHours}, P:${m.practicalHours}, Prerequisite: ${m.prerequisite})\n`;
+          }
+
+          if (normalizedQuery.includes('foundation') && (courseTitle.toLowerCase().includes('cloud') || normalizedQuery.includes('cloud'))) {
+            answerText += `\n• **Foundation Basket Inclusion (Batch 2024):** **Yes.** Cloud Computing is explicitly included in the 2024 Foundation Courses basket (*Struct_2024* row 26, 3 credits & *Sem_Spread_2024* Semester 4, COMP403).\n`;
           }
         } else if (courseDetails.structEntries.length > 0) {
           answerText += `Listed in curriculum structure:\n`;

@@ -727,6 +727,155 @@ function isCourseInWorkbook(queryStr) {
   return Boolean(details && (details.matchedEntries.length > 0 || details.structEntries.length > 0));
 }
 
+/**
+ * Data-driven registry of curriculum transitions and course reallocations
+ * Documented explicitly in Semester_Spread_Structures_Sept_2026.xlsx
+ */
+const KNOWN_CURRICULUM_TRANSITIONS = [
+  {
+    aliases: ['academic writing', 'analytical academic writing', 'writing', 'engl201', 'engl210', 'ucor102'],
+    courseName: 'Academic Writing',
+    original: {
+      batches: '2022–2024 (B.Tech CSE)',
+      basket: 'Foundation Courses',
+      sourceSheet: 'Struct_2024 (row 15) & Sem_Spread_2024',
+      courseCode: 'ENGL210 (Batch 2024) / ENGL201 (Batches 2022–2023)',
+      credits: 2,
+      creditsDetail: '2 credits in Batch 2024 (3 credits in Batches 2022–2023)',
+      semester: 'Semester 2 (Sem_Spread_2024) / Semester 1 (earlier draft)'
+    },
+    updated: {
+      batches: '2025 (and 2026 DS)',
+      basket: 'University Core',
+      sourceSheet: 'Struct_2025 (row 9) & Sem_Spread_2025',
+      courseName: 'Analytical Academic Writing',
+      courseCode: 'UCOR102',
+      credits: 3,
+      creditsDetail: '3 credits (L:2, T:0, P:2)',
+      semester: 'Semester 1',
+      prerequisite: 'NIL'
+    },
+    relation: 'transition',
+    explanation: 'In the updated 2025 curriculum, Academic Writing transitioned from the Foundation Courses basket to the expanded University Core basket with an expanded scope under the title "Analytical Academic Writing" (3 credits, UCOR102, Semester 1).'
+  },
+  {
+    aliases: ['sustainable cities and communities', 'sustainable cities', 'environmental studies and sustainability', 'environmental studies', 'mtsc781', 'isdm101', 'ucor101'],
+    courseName: 'Sustainable Cities and Communities',
+    original: {
+      batches: '2022–2024 (B.Tech CSE)',
+      basket: 'Foundation Courses',
+      sourceSheet: 'Struct_2024 (row 19) & Sem_Spread_2024',
+      courseCode: 'MTSC781 (ISDM101 in earlier draft)',
+      credits: 3,
+      creditsDetail: '3 credits (L:2, T:0, P:2)',
+      semester: 'Semester 3 (Sem_Spread_2024) / Semester 2 (earlier draft)'
+    },
+    updated: {
+      batches: '2025 (and 2026 DS)',
+      basket: 'University Core',
+      sourceSheet: 'Struct_2025 (row 4) & Sem_Spread_2025',
+      courseName: 'Environmental Studies and Sustainability',
+      courseCode: 'UCOR101',
+      credits: 2,
+      creditsDetail: '2 credits (L:2, T:0, P:0)',
+      semester: 'Semester 1',
+      prerequisite: 'NIL'
+    },
+    relation: 'replacement',
+    explanation: 'In the updated 2025 curriculum, "Sustainable Cities and Communities" does not appear as a standalone Foundation course. The workbook indicates a curriculum transition and thematic succession: it was succeeded and replaced by "Environmental Studies and Sustainability" (2 credits, UCOR101, Semester 1) in the expanded University Core basket. The workbook shows this as a curriculum transition/replacement rather than identical course syllabi.'
+  },
+  {
+    aliases: ['human values in work and life', 'human values', 'humn101', 'ucor103'],
+    courseName: 'Human Values in work and Life',
+    original: {
+      batches: '2022–2024 (B.Tech CSE)',
+      basket: 'Foundation Courses',
+      sourceSheet: 'Struct_2024 (row 17) & Sem_Spread_2024',
+      courseCode: 'HUMN101',
+      credits: 2,
+      creditsDetail: '2 credits (L:2, T:0, P:0)',
+      semester: 'Semester 1'
+    },
+    updated: {
+      batches: '2025',
+      basket: 'University Core',
+      sourceSheet: 'Struct_2025 (row 2) & Sem_Spread_2025',
+      courseName: 'Human Values in work and Life',
+      courseCode: 'UCOR103',
+      credits: 2,
+      creditsDetail: '2 credits (L:2, T:0, P:0)',
+      semester: 'Semester 2',
+      prerequisite: 'NIL'
+    },
+    relation: 'reallocation',
+    explanation: 'In the updated 2025 curriculum, Human Values in work and Life reallocated from Foundation Courses to the expanded University Core basket (2 credits, UCOR103, Semester 2).'
+  },
+  {
+    aliases: ['introduction to psychology', 'introduction to economics', 'intro to psychology', 'principles of economics', 'psychology', 'psyc101', 'econ101'],
+    courseName: 'Introduction to Psychology / Introduction to Economics',
+    original: {
+      batches: '2022–2024 (B.Tech CSE)',
+      basket: 'Foundation Courses',
+      sourceSheet: 'Struct_2024 (row 16) & Sem_Spread_2024',
+      courseCode: 'PSYC101 / ECON101',
+      credits: 3,
+      creditsDetail: '3 credits',
+      semester: 'Semester 2'
+    },
+    updated: {
+      batches: '2025',
+      basket: 'Minor / Open Electives',
+      sourceSheet: 'Struct_2025 (row 26)',
+      courseName: 'Intro to Psychology /Principles of Economics',
+      credits: 2,
+      creditsDetail: '2 credits',
+      semester: 'Elective pool'
+    },
+    relation: 'reallocation',
+    explanation: 'In the updated 2025 curriculum, Introduction to Psychology / Economics was moved from Foundation Courses to the Minor / Open Electives basket (2 credits).'
+  },
+  {
+    aliases: ['cloud computing', 'cloud and cognitive computing', 'cloud & cognitive computing', 'comp403'],
+    courseName: 'Cloud Computing',
+    original: {
+      batches: '2024 (B.Tech CSE)',
+      basket: 'Foundation Courses',
+      sourceSheet: 'Struct_2024 (row 26) & Sem_Spread_2024 (row 11)',
+      courseCode: 'COMP403',
+      credits: 3,
+      creditsDetail: '3 credits (L:2, T:0, P:2)',
+      semester: 'Semester 4'
+    },
+    updated: {
+      batches: '2025',
+      basket: 'Specialization Tracks / Electives',
+      sourceSheet: 'Struct_2025 (row 13)',
+      courseName: 'Cloud & Cognitive Computing',
+      credits: 4,
+      creditsDetail: '4 credits',
+      semester: 'Specialization Track pool'
+    },
+    relation: 'advancement',
+    explanation: 'In the 2024 curriculum, Cloud Computing appears in Foundation Courses (Struct_2024 row 26 & Sem_Spread_2024 Semester 4, 3 credits). In the updated 2025 structure (Struct_2025 row 13), it transitioned into Specialization Tracks as "Cloud & Cognitive Computing" (4 credits).'
+  }
+];
+
+/**
+ * Looks up whether a query is asking about a known curriculum transition
+ */
+function getCourseTransition(queryStr) {
+  if (!queryStr || typeof queryStr !== 'string') return null;
+  const q = queryStr.toLowerCase().trim();
+  for (const t of KNOWN_CURRICULUM_TRANSITIONS) {
+    for (const alias of t.aliases) {
+      if (q.includes(alias)) {
+        return t;
+      }
+    }
+  }
+  return null;
+}
+
 module.exports = {
   loadCurriculumData,
   getAvailableVersions,
@@ -737,5 +886,7 @@ module.exports = {
   findCourseDetails,
   isCourseInWorkbook,
   normalizeBasketName,
-  extractVersionFromQuery
+  extractVersionFromQuery,
+  getCourseTransition,
+  KNOWN_CURRICULUM_TRANSITIONS
 };
