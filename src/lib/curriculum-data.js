@@ -17,15 +17,31 @@ const fs = require('fs');
 const path = require('path');
 const XLSX = require('xlsx');
 
+// Locate structured processed JSON data path
+function getProcessedJsonPath() {
+  const candidates = [
+    path.join(process.cwd(), 'data/processed/structured_academic_data.json'),
+    path.join(__dirname, '../../data/processed/structured_academic_data.json'),
+    path.join(__dirname, '../data/processed/structured_academic_data.json'),
+    path.join(__dirname, '../../../data/processed/structured_academic_data.json')
+  ];
+  for (const c of candidates) {
+    if (fs.existsSync(c)) return c;
+  }
+  return null;
+}
+
 // Locate workbook path
 function getWorkbookPath() {
   const candidates = [
-    path.join(__dirname, '../../Semester_Spread_Structures_Sept_2026.xlsx'),
-    path.join(__dirname, '../../../Semester_Spread_Structures_Sept_2026.xlsx'),
     path.join(process.cwd(), 'Semester_Spread_Structures_Sept_2026.xlsx'),
+    path.join(__dirname, '../../Semester_Spread_Structures_Sept_2026.xlsx'),
+    path.join(__dirname, '../Semester_Spread_Structures_Sept_2026.xlsx'),
+    path.join(__dirname, '../../../Semester_Spread_Structures_Sept_2026.xlsx'),
+    path.join(process.cwd(), 'data/Semester_Spread_Structures_Sept_2026.xlsx'),
     path.join(__dirname, '../../data/Semester_Spread_Structures_Sept_2026.xlsx'),
-    path.join(__dirname, '../../../data/118225_Semester_Spread_Structures_Sept_2026.xlsx'),
-    path.join(process.cwd(), 'data/118225_Semester_Spread_Structures_Sept_2026.xlsx')
+    path.join(process.cwd(), 'data/118225_Semester_Spread_Structures_Sept_2026.xlsx'),
+    path.join(__dirname, '../../data/118225_Semester_Spread_Structures_Sept_2026.xlsx')
   ];
   for (const c of candidates) {
     if (fs.existsSync(c)) return c;
@@ -54,31 +70,39 @@ const SEMESTER_BLOCKS = [
 function loadCurriculumData() {
   if (cachedWorkbookData) return cachedWorkbookData;
 
-  // Try loading from processed JSON first if available
-  const processedPath = path.join(__dirname, '../../../data/processed/structured_academic_data.json');
-  if (fs.existsSync(processedPath)) {
+  // 1. Try loading from processed JSON first if available
+  const processedPath = getProcessedJsonPath();
+  if (processedPath && fs.existsSync(processedPath)) {
     try {
-      const parsed = JSON.parse(fs.readFileSync(processedPath, 'utf8'));
+      const raw = fs.readFileSync(processedPath, 'utf8');
+      const parsed = JSON.parse(raw);
       if (parsed && parsed.curriculumStructures && Object.keys(parsed.curriculumStructures).length >= 5) {
         cachedWorkbookData = {
           curriculumStructures: parsed.curriculumStructures,
           curriculumCourses: parsed.curriculumCourses || [],
           prerequisites: parsed.prerequisites || []
         };
+        console.log(`[CurriculumData] Successfully loaded structured curriculum from ${processedPath}`);
         return cachedWorkbookData;
+      } else {
+        console.warn(`[CurriculumData Diagnostic] Incomplete curriculum structure in ${processedPath}`);
       }
     } catch (e) {
+      console.warn(`[CurriculumData Diagnostic] Failed to parse processed JSON at ${processedPath}: ${e.message}`);
       // Fallback to direct workbook parsing
     }
+  } else {
+    console.warn(`[CurriculumData Diagnostic] Processed JSON not found. Checked cwd: "${process.cwd()}", dirname: "${__dirname}"`);
   }
 
-  // Parse directly from Excel
+  // 2. Parse directly from Excel
   const wbPath = getWorkbookPath();
   if (!wbPath) {
-    console.warn('[CurriculumData Warning] Could not find Semester_Spread_Structures_Sept_2026.xlsx');
+    console.error(`[CurriculumData Diagnostic] Failed to load curriculum data: neither processed JSON nor workbook Excel file found. Root: "${process.cwd()}", Dirname: "${__dirname}". Returning safe fallback state.`);
     return { curriculumStructures: {}, curriculumCourses: [], prerequisites: [] };
   }
 
+  console.log(`[CurriculumData] Parsing curriculum directly from workbook: ${wbPath}`);
   const wb = XLSX.readFile(wbPath);
   const curriculumCourses = [];
   const prerequisites = [];

@@ -6,6 +6,7 @@
       "use": "@vercel/node",
       "config": {
         "includeFiles": [
+          "Semester_Spread_Structures_Sept_2026.xlsx",
           "data/**",
           "public/**"
         ]
