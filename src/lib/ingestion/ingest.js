@@ -63,6 +63,7 @@ async function runIngestion(dataDir = path.join(__dirname, '../../../data')) {
       { minorCode: 'MINOR_MARKETING', minorName: 'Marketing Minor', school: 'School of Business Studies', minStudents: 10 },
       { minorCode: 'MINOR_STARTUP', minorName: 'Start-up Minor', school: 'School of Business Studies', minStudents: 10 }
     ],
+    curriculumStructures: {},
     courses: [],
     curriculumCourses: [],
     prerequisites: [],
@@ -135,29 +136,35 @@ async function runIngestion(dataDir = path.join(__dirname, '../../../data')) {
   warnings.push(calOdd.warning);
 
   // 5. Ingest Semester Spread Workbook
-  console.log('[5/12] Parsing Semester Spread Workbook (118225_Semester_Spread_Structures_Sept_2026.xlsx)...');
-  const spreadPath = path.join(dataDir, '118225_Semester_Spread_Structures_Sept_2026.xlsx');
+  const rootSpreadPath = path.join(__dirname, '../../../Semester_Spread_Structures_Sept_2026.xlsx');
+  const dataSpreadPath = path.join(dataDir, 'Semester_Spread_Structures_Sept_2026.xlsx');
+  const fallbackSpreadPath = path.join(dataDir, '118225_Semester_Spread_Structures_Sept_2026.xlsx');
+  const spreadPath = fs.existsSync(rootSpreadPath) ? rootSpreadPath : (fs.existsSync(dataSpreadPath) ? dataSpreadPath : fallbackSpreadPath);
+
+  console.log(`[5/12] Parsing Semester Spread Workbook (${path.basename(spreadPath)})...`);
   const spreadResult = parseSemesterSpreadWorkbook(spreadPath);
   allChunks.push(...spreadResult.chunks);
   structuredData.courses.push(...spreadResult.courses);
   structuredData.curriculumCourses.push(...spreadResult.curriculumEntries);
   structuredData.prerequisites.push(...spreadResult.prerequisites);
+  structuredData.curriculumStructures = spreadResult.curriculumStructures;
   structuredData.documents.push({
-    documentName: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
+    documentName: 'Semester_Spread_Structures_Sept_2026.xlsx',
     sourceType: 'CURRICULUM_STRUCTURE',
     hierarchyLevel: 2,
     totalCurriculumEntries: spreadResult.curriculumEntries.length,
     totalPrerequisites: spreadResult.prerequisites.length,
+    totalCurriculumVersions: Object.keys(spreadResult.curriculumStructures || {}).length,
     totalChunks: spreadResult.chunks.length,
     isRasterScan: false
   });
 
   // Check duplicate spreadsheet
   structuredData.documents.push({
-    documentName: 'Semester_Spread_Structures_Sept._2026.xlsx',
+    documentName: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
     sourceType: 'CURRICULUM_STRUCTURE',
     hierarchyLevel: 2,
-    note: 'Verified identical duplicate of 118225_Semester_Spread_Structures_Sept_2026.xlsx. Skipped duplicate re-ingestion to preserve database integrity.',
+    note: 'Canonical duplicate of Semester_Spread_Structures_Sept_2026.xlsx. Preserved for backwards compatibility.',
     isDuplicateSkipped: true
   });
 

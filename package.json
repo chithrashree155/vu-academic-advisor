@@ -12,6 +12,7 @@
     "test:agentic": "node scripts/test-agentic-workflow.js",
     "test:security": "node scripts/test-privacy-security.js",
     "eval:phases": "node scripts/run-phase3-5-eval.js",
+    "test:workbook": "node scripts/test-semester-spread-workbook.js",
     "ingest": "node scripts/run-ingestion.js"
   },
   "dependencies": {

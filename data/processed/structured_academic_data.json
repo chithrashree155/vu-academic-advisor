@@ -28,19 +28,20 @@
       "scope": "Summer Term June 2026 ONLY"
     },
     {
-      "documentName": "118225_Semester_Spread_Structures_Sept_2026.xlsx",
+      "documentName": "Semester_Spread_Structures_Sept_2026.xlsx",
       "sourceType": "CURRICULUM_STRUCTURE",
       "hierarchyLevel": 2,
       "totalCurriculumEntries": 233,
       "totalPrerequisites": 74,
-      "totalChunks": 233,
+      "totalCurriculumVersions": 5,
+      "totalChunks": 260,
       "isRasterScan": false
     },
     {
-      "documentName": "Semester_Spread_Structures_Sept._2026.xlsx",
+      "documentName": "118225_Semester_Spread_Structures_Sept_2026.xlsx",
       "sourceType": "CURRICULUM_STRUCTURE",
       "hierarchyLevel": 2,
-      "note": "Verified identical duplicate of 118225_Semester_Spread_Structures_Sept_2026.xlsx. Skipped duplicate re-ingestion to preserve database integrity.",
+      "note": "Canonical duplicate of Semester_Spread_Structures_Sept_2026.xlsx. Preserved for backwards compatibility.",
       "isDuplicateSkipped": true
     },
     {
@@ -161,6 +162,1209 @@
       "minStudents": 10
     }
   ],
+  "curriculumStructures": {
+    "2022": {
+      "version": "2022",
+      "program": "BTECH_CSE",
+      "totalCredits": 180,
+      "basketCredits": {
+        "University Core": 18,
+        "Foundation": 34,
+        "Program Core": 46,
+        "Program Honors": 20,
+        "Specialization Tracks": 20,
+        "Minor/Open": 24,
+        "Internship/Capstone Project": 18,
+        "Total Credits  (for award of the Degree)": 180
+      },
+      "baskets": {
+        "universityCore": [
+          {
+            "name": "Communication skills",
+            "credits": 2
+          },
+          {
+            "name": "Problem Solving with Design Thinking",
+            "credits": 2
+          },
+          {
+            "name": "Introduction to Writing",
+            "credits": 2
+          },
+          {
+            "name": "Socio Cultural Perspectives on Indian Life-SPIL",
+            "credits": 3
+          },
+          {
+            "name": "Leadership and Teamwork Skills",
+            "credits": 2
+          },
+          {
+            "name": "Learning to Learn",
+            "credits": 2
+          },
+          {
+            "name": "Critical Thinking",
+            "credits": 2
+          },
+          {
+            "name": "Introduction to Epistemology",
+            "credits": 2
+          },
+          {
+            "name": "Community Engagement and Service Experience",
+            "credits": 1
+          }
+        ],
+        "foundation": [
+          {
+            "name": "Academic Writing",
+            "credits": 3
+          },
+          {
+            "name": "Human Values in work and Life",
+            "credits": 2
+          },
+          {
+            "name": "Sustainable Cities and Communities",
+            "credits": 3
+          },
+          {
+            "name": "Materials for Smart devices",
+            "credits": 3
+          },
+          {
+            "name": "Sustainable Smart Materials",
+            "credits": 3
+          },
+          {
+            "name": "Introduction to Psychology/Introduction to Economics",
+            "credits": 3
+          },
+          {
+            "name": "Design Workshop",
+            "credits": 2
+          },
+          {
+            "name": "Calculus",
+            "credits": 3
+          },
+          {
+            "name": "Probability Theory",
+            "credits": 3
+          },
+          {
+            "name": "Linear Algebra",
+            "credits": 3
+          },
+          {
+            "name": "Visualizing Data for Story Telling",
+            "credits": 2
+          },
+          {
+            "name": "Language",
+            "credits": 3
+          },
+          {
+            "name": "Foundation Seminar",
+            "credits": 1
+          }
+        ],
+        "programCore": [
+          {
+            "name": "Computational Thinking",
+            "credits": 3
+          },
+          {
+            "name": "Data Structures",
+            "credits": 4
+          },
+          {
+            "name": "Theoretical Computer Science",
+            "credits": 4
+          },
+          {
+            "name": "Analysis of Algorithms",
+            "credits": 4
+          },
+          {
+            "name": "Digital Design and Computer Organization",
+            "credits": 4
+          },
+          {
+            "name": "Object Oriented Programming",
+            "credits": 3
+          },
+          {
+            "name": "Microprocessors and Computer Architecture",
+            "credits": 4
+          },
+          {
+            "name": "Operating Systems",
+            "credits": 3
+          },
+          {
+            "name": "Networks",
+            "credits": 4
+          },
+          {
+            "name": "Databases Management",
+            "credits": 4
+          },
+          {
+            "name": "Statistics with R",
+            "credits": 3
+          },
+          {
+            "name": "Artificial Intelligence",
+            "credits": 4
+          },
+          {
+            "name": "Internet of Things",
+            "credits": 2
+          }
+        ],
+        "programHonors": [
+          {
+            "name": "Foundations to Data Science",
+            "credits": 3
+          },
+          {
+            "name": "Exploratory Data Analysis",
+            "credits": 3
+          },
+          {
+            "name": "Human Centric AI",
+            "credits": 2
+          },
+          {
+            "name": "Machine Learning",
+            "credits": 4
+          },
+          {
+            "name": "Optimization Techniques for Data Science",
+            "credits": 4
+          },
+          {
+            "name": "Deep Learning",
+            "credits": 4
+          }
+        ],
+        "specializationTracks": [
+          {
+            "trackName": "Applied Deep Learning",
+            "courses": [
+              {
+                "name": "Probabilistic Graph Models",
+                "credits": 4
+              },
+              {
+                "name": "Advanced Visualization and Storytelling",
+                "credits": 4
+              },
+              {
+                "name": "Natural Language Processing",
+                "credits": 4
+              },
+              {
+                "name": "Multi Modal Learning",
+                "credits": 4
+              },
+              {
+                "name": "Reinforcement Learning",
+                "credits": 4
+              }
+            ]
+          },
+          {
+            "trackName": "Full Stack Development",
+            "courses": [
+              {
+                "name": "Web Framework",
+                "credits": 4
+              },
+              {
+                "name": "Big Data Framework",
+                "credits": 4
+              },
+              {
+                "name": "Software Architecture and Deployments",
+                "credits": 4
+              },
+              {
+                "name": "Cloud Computing",
+                "credits": 4
+              },
+              {
+                "name": "Cognitive Computing",
+                "credits": 4
+              }
+            ]
+          }
+        ],
+        "capstone": [
+          {
+            "name": "Summe Training/Internship",
+            "credits": 2
+          },
+          {
+            "name": "Interdisciplinary Project",
+            "credits": 4
+          },
+          {
+            "name": "Capstone Project/Industrial Internship",
+            "credits": 12
+          }
+        ]
+      }
+    },
+    "2023": {
+      "version": "2023",
+      "program": "BTECH_CSE",
+      "totalCredits": 180,
+      "basketCredits": {
+        "University Core": 18,
+        "Foundation": 34,
+        "Program Core": 46,
+        "Program Honors": 20,
+        "Specialization Tracks": 20,
+        "Minor/Open": 24,
+        "Internship/Capstone Project": 18,
+        "Total Credits  (for award of the Degree)": 180
+      },
+      "baskets": {
+        "universityCore": [
+          {
+            "name": "Communication skills",
+            "credits": 2
+          },
+          {
+            "name": "Problem Solving with Design Thinking",
+            "credits": 2
+          },
+          {
+            "name": "Introduction to Writing",
+            "credits": 2
+          },
+          {
+            "name": "Socio Cultural Perspectives on Indian Life-SPIL",
+            "credits": 3
+          },
+          {
+            "name": "Leadership and Teamwork Skills",
+            "credits": 2
+          },
+          {
+            "name": "Learning to Learn",
+            "credits": 2
+          },
+          {
+            "name": "Critical Thinking",
+            "credits": 2
+          },
+          {
+            "name": "Introduction to Epistemology",
+            "credits": 2
+          },
+          {
+            "name": "Community Engagement and Service Experience",
+            "credits": 1
+          }
+        ],
+        "foundation": [
+          {
+            "name": "Academic Writing",
+            "credits": 3
+          },
+          {
+            "name": "Human Values in work and Life",
+            "credits": 2
+          },
+          {
+            "name": "Sustainable Cities and Communities",
+            "credits": 3
+          },
+          {
+            "name": "Materials for Smart devices",
+            "credits": 3
+          },
+          {
+            "name": "Sustainable Smart Materials",
+            "credits": 3
+          },
+          {
+            "name": "Introduction to Psychology/Introduction to Economics",
+            "credits": 3
+          },
+          {
+            "name": "Design Workshop",
+            "credits": 2
+          },
+          {
+            "name": "Calculus",
+            "credits": 3
+          },
+          {
+            "name": "Probability Theory",
+            "credits": 3
+          },
+          {
+            "name": "Linear Algebra",
+            "credits": 3
+          },
+          {
+            "name": "Visualizing Data for Story Telling",
+            "credits": 2
+          },
+          {
+            "name": "Language",
+            "credits": 3
+          },
+          {
+            "name": "Foundation Seminar",
+            "credits": 1
+          }
+        ],
+        "programCore": [
+          {
+            "name": "Research Methodology",
+            "credits": 3
+          },
+          {
+            "name": "Data Structures",
+            "credits": 4
+          },
+          {
+            "name": "Theoretical Computer Science",
+            "credits": 4
+          },
+          {
+            "name": "Analysis of Algorithms",
+            "credits": 4
+          },
+          {
+            "name": "Digital Design and Computer Organization",
+            "credits": 4
+          },
+          {
+            "name": "Object Oriented Programming",
+            "credits": 3
+          },
+          {
+            "name": "Microprocessors and Computer Architecture",
+            "credits": 4
+          },
+          {
+            "name": "Operating Systems",
+            "credits": 3
+          },
+          {
+            "name": "Networks",
+            "credits": 4
+          },
+          {
+            "name": "Databases Management",
+            "credits": 4
+          },
+          {
+            "name": "Statistics with R",
+            "credits": 3
+          },
+          {
+            "name": "Artificial Intelligence",
+            "credits": 4
+          },
+          {
+            "name": "Internet of Things",
+            "credits": 2
+          }
+        ],
+        "programHonors": [
+          {
+            "name": "Foundations to Data Science",
+            "credits": 3
+          },
+          {
+            "name": "Exploratory Data Analysis",
+            "credits": 3
+          },
+          {
+            "name": "MLOps & Model Deployment",
+            "credits": 2
+          },
+          {
+            "name": "Machine Learning",
+            "credits": 4
+          },
+          {
+            "name": "Optimization Techniques for Data Science",
+            "credits": 4
+          },
+          {
+            "name": "Deep Learning",
+            "credits": 4
+          }
+        ],
+        "specializationTracks": [
+          {
+            "trackName": "Applied Deep Learning",
+            "courses": [
+              {
+                "name": "Probabilistic Graph Models",
+                "credits": 4
+              },
+              {
+                "name": "Advanced Topics in Deep Learning",
+                "credits": 4
+              },
+              {
+                "name": "Natural Language Processing",
+                "credits": 4
+              },
+              {
+                "name": "Multi Modal Learning",
+                "credits": 4
+              },
+              {
+                "name": "Reinforcement Learning",
+                "credits": 4
+              }
+            ]
+          },
+          {
+            "trackName": "Full Stack Development",
+            "courses": [
+              {
+                "name": "Web Framework",
+                "credits": 4
+              },
+              {
+                "name": "Big Data Framework",
+                "credits": 4
+              },
+              {
+                "name": "Software Architecture and Deployments",
+                "credits": 4
+              },
+              {
+                "name": "Cloud &Cognitive Computing",
+                "credits": 4
+              },
+              {
+                "name": "Natural Language Processing",
+                "credits": 4
+              }
+            ]
+          }
+        ],
+        "capstone": [
+          {
+            "name": "Summe Training/Internship",
+            "credits": 2
+          },
+          {
+            "name": "Interdisciplinary Project",
+            "credits": 4
+          },
+          {
+            "name": "Capstone Project/Industrial Internship",
+            "credits": 12
+          }
+        ]
+      }
+    },
+    "2024": {
+      "version": "2024",
+      "program": "BTECH_CSE",
+      "totalCredits": 180,
+      "basketCredits": {
+        "University Core": 18,
+        "Foundation": 34,
+        "Program Core": 46,
+        "Program Honors": 20,
+        "Specialization Tracks": 20,
+        "Minor/Open": 24,
+        "Internship/Capstone Project": 18,
+        "Total Credits": 180
+      },
+      "baskets": {
+        "universityCore": [
+          {
+            "name": "Communication and Leadership skills",
+            "credits": 3
+          },
+          {
+            "name": "Introduction to Writing",
+            "credits": 2
+          },
+          {
+            "name": "Learning to Learn",
+            "credits": 2
+          },
+          {
+            "name": "Fundamentals of Indian Constitution and Human Rights",
+            "credits": 2
+          },
+          {
+            "name": "Critical Thinking",
+            "credits": 3
+          },
+          {
+            "name": "Problem Solving with Design Thinking",
+            "credits": 2
+          },
+          {
+            "name": "Socio Cultural Perspectives on Indian Life-SPIL",
+            "credits": 3
+          },
+          {
+            "name": "Community Engagement and Service Experience",
+            "credits": 1
+          }
+        ],
+        "foundation": [
+          {
+            "name": "Academic Writing",
+            "credits": 2
+          },
+          {
+            "name": "Introduction to Psychology/Introduction to Economics",
+            "credits": 3
+          },
+          {
+            "name": "Human Values in work and Life",
+            "credits": 2
+          },
+          {
+            "name": "Language",
+            "credits": 3
+          },
+          {
+            "name": "Sustainable Cities and Communities",
+            "credits": 3
+          },
+          {
+            "name": "Materials for Smart devices",
+            "credits": 3
+          },
+          {
+            "name": "Sustainable Smart Materials",
+            "credits": 3
+          },
+          {
+            "name": "Design Workshop",
+            "credits": 2
+          },
+          {
+            "name": "Calculus",
+            "credits": 3
+          },
+          {
+            "name": "Probability and Statistics",
+            "credits": 4
+          },
+          {
+            "name": "Linear Algebra",
+            "credits": 3
+          },
+          {
+            "name": "Cloud Computing",
+            "credits": 3
+          }
+        ],
+        "programCore": [
+          {
+            "name": "Data Structures",
+            "credits": 4
+          },
+          {
+            "name": "Theoretical Computer Science",
+            "credits": 4
+          },
+          {
+            "name": "Analysis of Algorithms",
+            "credits": 4
+          },
+          {
+            "name": "Digital Design and Computer Organization",
+            "credits": 4
+          },
+          {
+            "name": "Object Oriented Programming",
+            "credits": 3
+          },
+          {
+            "name": "Microprocessors and Computer Architecture",
+            "credits": 4
+          },
+          {
+            "name": "Operating Systems",
+            "credits": 3
+          },
+          {
+            "name": "Networks",
+            "credits": 4
+          },
+          {
+            "name": "Databases Management",
+            "credits": 4
+          },
+          {
+            "name": "Programming in Python",
+            "credits": 3
+          },
+          {
+            "name": "Data Visuatlization and Storytelling",
+            "credits": 3
+          },
+          {
+            "name": "Artificial Intelligence",
+            "credits": 4
+          },
+          {
+            "name": "Internet of Things",
+            "credits": 2
+          }
+        ],
+        "programHonors": [
+          {
+            "name": "Advanced Statistical Analysis and Research Methods with R",
+            "credits": 2
+          },
+          {
+            "name": "Foundations to Data Science",
+            "credits": 3
+          },
+          {
+            "name": "Exploratory Data Analysis",
+            "credits": 3
+          },
+          {
+            "name": "Optimization Techniques for Data Science",
+            "credits": 4
+          },
+          {
+            "name": "Machine Learning",
+            "credits": 4
+          },
+          {
+            "name": "Deep Learning",
+            "credits": 4
+          }
+        ],
+        "specializationTracks": [
+          {
+            "trackName": "Applied Deep Learning",
+            "courses": [
+              {
+                "name": "Probabilistic Graph Models",
+                "credits": 4
+              },
+              {
+                "name": "Natural Language Processing",
+                "credits": 4
+              },
+              {
+                "name": "Multi Modal Learning",
+                "credits": 4
+              },
+              {
+                "name": "Reinforcement Learning",
+                "credits": 4
+              },
+              {
+                "name": "Advanced Topics in Deep Learning",
+                "credits": 4
+              }
+            ]
+          },
+          {
+            "trackName": "Full Stack Development",
+            "courses": [
+              {
+                "name": "Web Framework",
+                "credits": 4
+              },
+              {
+                "name": "Big Data Framework",
+                "credits": 4
+              },
+              {
+                "name": "Software Architecture and Deployments",
+                "credits": 4
+              },
+              {
+                "name": "Reinforcement Learning",
+                "credits": 4
+              },
+              {
+                "name": "Natural Language Processing",
+                "credits": 4
+              }
+            ]
+          }
+        ],
+        "capstone": [
+          {
+            "name": "Summe Training/Internship",
+            "credits": 2
+          },
+          {
+            "name": "Interdisciplinary Project",
+            "credits": 4
+          },
+          {
+            "name": "Capstone Project/Industrial Internship",
+            "credits": 12
+          }
+        ]
+      }
+    },
+    "2025": {
+      "version": "2025",
+      "program": "BTECH_CSE",
+      "totalCredits": 180,
+      "basketCredits": {
+        "University Core": 24,
+        "Foundation": 24,
+        "Program Core": 46,
+        "Program Honors": 20,
+        "Specialization Tracks": 20,
+        "Minor/Open": 32,
+        "Internship/Capstone Project": 14,
+        "Total Credits": 180
+      },
+      "baskets": {
+        "universityCore": [
+          {
+            "name": "Communication Skills",
+            "credits": 2
+          },
+          {
+            "name": "Human Values in work and Life",
+            "credits": 2
+          },
+          {
+            "name": "Learning to Learn",
+            "credits": 2
+          },
+          {
+            "name": "Environmental Studies and Sustainability",
+            "credits": 2
+          },
+          {
+            "name": "Fundamentals of Indian Constitution and Human Rights",
+            "credits": 2
+          },
+          {
+            "name": "Community Engagement and Service Experience",
+            "credits": 1
+          },
+          {
+            "name": "Socio-Cultural Perspectives on Indian Life-SPIL",
+            "credits": 3
+          },
+          {
+            "name": "Humanistic Leadership Development",
+            "credits": 2
+          },
+          {
+            "name": "Analytical Academic Writing",
+            "credits": 3
+          },
+          {
+            "name": "Critical Thinking",
+            "credits": 3
+          },
+          {
+            "name": "Problem Solving for Design Thinking",
+            "credits": 2
+          }
+        ],
+        "foundation": [
+          {
+            "name": "Language",
+            "credits": 2
+          },
+          {
+            "name": "Materials for Smart devices",
+            "credits": 3
+          },
+          {
+            "name": "Sustainable Smart Materials",
+            "credits": 3
+          },
+          {
+            "name": "Design Workshop",
+            "credits": 2
+          },
+          {
+            "name": "Multivariate Calculus",
+            "credits": 4
+          },
+          {
+            "name": "Probability and Statistics",
+            "credits": 4
+          },
+          {
+            "name": "Linear Algebra",
+            "credits": 4
+          },
+          {
+            "name": "Advanced Statistical Analysis and Research Methods with R",
+            "credits": 2
+          }
+        ],
+        "programCore": [
+          {
+            "name": "Data Structures",
+            "credits": 4
+          },
+          {
+            "name": "Theoretical Computer Science",
+            "credits": 4
+          },
+          {
+            "name": "Analysis of Algorithms",
+            "credits": 4
+          },
+          {
+            "name": "Digital Design and Computer Organization",
+            "credits": 4
+          },
+          {
+            "name": "Object Oriented Programming",
+            "credits": 3
+          },
+          {
+            "name": "Microprocessors and Computer Architecture",
+            "credits": 4
+          },
+          {
+            "name": "Operating Systems",
+            "credits": 3
+          },
+          {
+            "name": "Networks",
+            "credits": 4
+          },
+          {
+            "name": "Databases Management",
+            "credits": 4
+          },
+          {
+            "name": "Programming in Python",
+            "credits": 3
+          },
+          {
+            "name": "Data Visuatlization and Storytelling",
+            "credits": 3
+          },
+          {
+            "name": "Artificial Intelligence",
+            "credits": 4
+          },
+          {
+            "name": "Internet of Things",
+            "credits": 2
+          }
+        ],
+        "programHonors": [
+          {
+            "name": "Advanced Exploratory Data Analysis",
+            "credits": 4
+          },
+          {
+            "name": "Optimization Techniques for Data Science",
+            "credits": 4
+          },
+          {
+            "name": "Machine Learning",
+            "credits": 4
+          },
+          {
+            "name": "Deep Learning",
+            "credits": 4
+          },
+          {
+            "name": "Natural Language Processing",
+            "credits": 4
+          }
+        ],
+        "specializationTracks": [
+          {
+            "trackName": "Applied Deep Learning",
+            "courses": [
+              {
+                "name": "Probabilistic Graph Models",
+                "credits": 4
+              },
+              {
+                "name": "Advanced Topics in Deep Learning",
+                "credits": 4
+              },
+              {
+                "name": "Image Processing and Computer Vision",
+                "credits": 4
+              },
+              {
+                "name": "Multi Modal Learning",
+                "credits": 4
+              },
+              {
+                "name": "Reinforcement Learning",
+                "credits": 4
+              }
+            ]
+          },
+          {
+            "trackName": "Full Stack Development",
+            "courses": [
+              {
+                "name": "Web Framework",
+                "credits": 4
+              },
+              {
+                "name": "Big Data Framework",
+                "credits": 4
+              },
+              {
+                "name": "Software Architecture and Deployments",
+                "credits": 4
+              },
+              {
+                "name": "Cloud & Cognitive Computing",
+                "credits": 4
+              },
+              {
+                "name": "Reinforcement Learning",
+                "credits": 4
+              }
+            ]
+          }
+        ],
+        "capstone": [
+          {
+            "name": "Summe Training/Internship",
+            "credits": 2
+          },
+          {
+            "name": "Capstone Project/Industrial Internship",
+            "credits": 12
+          }
+        ]
+      }
+    },
+    "2026": {
+      "version": "2026",
+      "program": "BTECH_DS",
+      "totalCredits": 180,
+      "basketCredits": {
+        "University Core": 18,
+        "Foundation": 26,
+        "Program Core": 50,
+        "Program Honors": 20,
+        "Electives": 20,
+        "Minor/Open": 32,
+        "Internship/Capstone Project": 14,
+        "Total Credits": 180
+      },
+      "baskets": {
+        "universityCore": [
+          {
+            "name": "Communication Skills",
+            "credits": 3
+          },
+          {
+            "name": "Learning to Learn",
+            "credits": 2
+          },
+          {
+            "name": "Environmental Studies and Sustainability",
+            "credits": 2
+          },
+          {
+            "name": "Fundamentals of Indian Constitution and Human Rights",
+            "credits": 2
+          },
+          {
+            "name": "Community Engagement",
+            "credits": 1
+          },
+          {
+            "name": "Socio-Cultural Perspectives on Indian Life-SPIL",
+            "credits": 3
+          },
+          {
+            "name": "Critical Thinking",
+            "credits": 3
+          },
+          {
+            "name": "Problem Solving for Design Thinking",
+            "credits": 2
+          }
+        ],
+        "foundation": [
+          {
+            "name": "Language",
+            "credits": 2
+          },
+          {
+            "name": "Materials for Smart devices",
+            "credits": 3
+          },
+          {
+            "name": "Sustainable Smart Materials",
+            "credits": 3
+          },
+          {
+            "name": "Design Workshop",
+            "credits": 3
+          },
+          {
+            "name": "Multivariate Calculus",
+            "credits": 4
+          },
+          {
+            "name": "Probability and Statistics",
+            "credits": 4
+          },
+          {
+            "name": "Linear Algebra",
+            "credits": 4
+          },
+          {
+            "name": "Advanced Statistical Analysis and Research Methods",
+            "credits": 3
+          }
+        ],
+        "programCore": [
+          {
+            "name": "Data Structures",
+            "credits": 4
+          },
+          {
+            "name": "Theoretical Computer Science",
+            "credits": 4
+          },
+          {
+            "name": "Analysis of Algorithms",
+            "credits": 4
+          },
+          {
+            "name": "Digital Design and Computer Organization",
+            "credits": 4
+          },
+          {
+            "name": "Object Oriented Programming",
+            "credits": 3
+          },
+          {
+            "name": "Microprocessors and Computer Architecture",
+            "credits": 4
+          },
+          {
+            "name": "Operating Systems",
+            "credits": 4
+          },
+          {
+            "name": "Networks",
+            "credits": 4
+          },
+          {
+            "name": "Databases Management",
+            "credits": 4
+          },
+          {
+            "name": "Programming in Python",
+            "credits": 3
+          },
+          {
+            "name": "Data Visuatlization and Storytelling",
+            "credits": 3
+          },
+          {
+            "name": "Artificial Intelligence",
+            "credits": 4
+          },
+          {
+            "name": "Internet of Things",
+            "credits": 2
+          },
+          {
+            "name": "Compiler Design",
+            "credits": 3
+          }
+        ],
+        "programHonors": [
+          {
+            "name": "Advanced Exploratory Data Analysis",
+            "credits": 4
+          },
+          {
+            "name": "Optimization Techniques for Data Science",
+            "credits": 4
+          },
+          {
+            "name": "Machine Learning",
+            "credits": 4
+          },
+          {
+            "name": "Deep Learning",
+            "credits": 4
+          },
+          {
+            "name": "Natural Language Processing",
+            "credits": 4
+          }
+        ],
+        "electives": [
+          {
+            "name": "Probabilistic Graph Models",
+            "credits": 4
+          },
+          {
+            "name": "Advanced Topics in Deep Learning",
+            "credits": 4
+          },
+          {
+            "name": "Cloud & Cognitive Computing",
+            "credits": 4
+          },
+          {
+            "name": "Multi Modal Learning",
+            "credits": 4
+          },
+          {
+            "name": "Reinforcement Learning",
+            "credits": 4
+          },
+          {
+            "name": "Web Framework",
+            "credits": 4
+          },
+          {
+            "name": "Big Data Framework",
+            "credits": 4
+          },
+          {
+            "name": "Software Architecture and Deployments",
+            "credits": 4
+          }
+        ],
+        "capstone": [
+          {
+            "name": "Summe Training/Internship",
+            "credits": 2
+          },
+          {
+            "name": "Capstone Project/Industrial Internship",
+            "credits": 12
+          }
+        ]
+      }
+    }
+  },
   "courses": [
     {
       "courseCode": "UCOR103",
@@ -170,7 +1374,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "UCOR203",
@@ -180,7 +1385,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "UCOR205",
@@ -190,7 +1396,8 @@
       "tutorialHours": 1,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "UCOR210",
@@ -200,7 +1407,8 @@
       "tutorialHours": 0,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "UCOR104",
@@ -210,7 +1418,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "UCOR701",
@@ -220,7 +1429,8 @@
       "tutorialHours": 0,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "UCOR201",
@@ -230,7 +1440,8 @@
       "tutorialHours": 1,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "UCOR102",
@@ -240,7 +1451,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "UCOR106",
@@ -250,7 +1462,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH201",
@@ -260,7 +1473,8 @@
       "tutorialHours": 1,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH202",
@@ -270,7 +1484,8 @@
       "tutorialHours": 1,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MTSC781",
@@ -280,7 +1495,8 @@
       "tutorialHours": 0,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "SLAD206",
@@ -290,7 +1506,8 @@
       "tutorialHours": 0,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "LANG101",
@@ -300,7 +1517,8 @@
       "tutorialHours": 0,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP132",
@@ -310,7 +1528,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MTSC211",
@@ -320,7 +1539,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "SLAD207",
@@ -330,7 +1550,8 @@
       "tutorialHours": 0,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MTSC111",
@@ -340,7 +1561,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "ENGL201",
@@ -350,7 +1572,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH204",
@@ -360,7 +1583,8 @@
       "tutorialHours": 1,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA131",
@@ -370,7 +1594,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "PSYC101/ECON101",
@@ -380,7 +1605,8 @@
       "tutorialHours": 1,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA130",
@@ -390,7 +1616,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP201",
@@ -400,7 +1627,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP203",
@@ -410,7 +1638,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP205",
@@ -420,7 +1649,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP208",
@@ -430,7 +1660,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP302",
@@ -440,7 +1671,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH205",
@@ -450,7 +1682,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP202",
@@ -460,7 +1693,8 @@
       "tutorialHours": 1,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP204",
@@ -470,7 +1704,8 @@
       "tutorialHours": 1,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP207",
@@ -480,7 +1715,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP206",
@@ -490,7 +1726,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP301",
@@ -500,7 +1737,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP209",
@@ -510,7 +1748,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA201",
@@ -520,7 +1759,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA202",
@@ -530,7 +1770,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH301",
@@ -540,7 +1781,8 @@
       "tutorialHours": 1,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA 301",
@@ -550,7 +1792,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA302",
@@ -560,7 +1803,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA 207",
@@ -570,7 +1814,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH401/\r\nCOMP401",
@@ -580,7 +1825,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA402/\r\nDATA406",
@@ -590,7 +1836,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA403/\r\nCOMP402",
@@ -600,7 +1847,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP401",
@@ -610,7 +1858,8 @@
       "tutorialHours": 0,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA404",
@@ -620,7 +1869,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA405",
@@ -630,7 +1880,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA801",
@@ -640,7 +1891,8 @@
       "tutorialHours": 0,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA802",
@@ -650,7 +1902,8 @@
       "tutorialHours": 0,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA803",
@@ -660,7 +1913,8 @@
       "tutorialHours": 0,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH207",
@@ -670,7 +1924,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA 302",
@@ -680,7 +1935,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA 303",
@@ -690,7 +1946,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA405/\r\nDATA406",
@@ -700,7 +1957,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA403",
@@ -710,7 +1968,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA404/\r\nCOMP402",
@@ -720,7 +1979,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA408/\r\nCOMP405",
@@ -730,7 +1990,8 @@
       "tutorialHours": 0,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "UCOR105",
@@ -740,7 +2001,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "UCOR310",
@@ -750,7 +2012,8 @@
       "tutorialHours": 1,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "LAWS101",
@@ -760,7 +2023,8 @@
       "tutorialHours": 1,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH203",
@@ -770,7 +2034,8 @@
       "tutorialHours": 1,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "ENGL210",
@@ -780,7 +2045,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP403",
@@ -790,7 +2056,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA103",
@@ -800,7 +2067,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA132",
@@ -810,7 +2078,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH206",
@@ -820,7 +2089,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH401/COMP401",
@@ -830,7 +2100,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA404/\r\nDATA406",
@@ -840,7 +2111,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA408/COMP402",
@@ -850,7 +2122,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "UCOR111",
@@ -860,7 +2133,8 @@
       "tutorialHours": 0,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "UCOR207",
@@ -870,7 +2144,8 @@
       "tutorialHours": 1,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "UCOR215",
@@ -880,7 +2155,8 @@
       "tutorialHours": 1,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH208",
@@ -890,7 +2166,8 @@
       "tutorialHours": 1,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH209",
@@ -900,7 +2177,8 @@
       "tutorialHours": 1,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "TBA",
@@ -909,8 +2187,9 @@
       "lectureHours": 0,
       "tutorialHours": 0,
       "practicalHours": 0,
-      "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "hasUncertainCode": true,
+      "uncertaintyNote": "Uncertain code in sheet Sem_Spread_2025",
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA209",
@@ -920,7 +2199,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA301",
@@ -930,7 +2210,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "TBA/COMP405",
@@ -940,7 +2221,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA408/ COMP402",
@@ -950,7 +2232,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MGMT101",
@@ -960,7 +2243,8 @@
       "tutorialHours": 1,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "PSCY102 / ECON105",
@@ -970,7 +2254,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "UCOR107",
@@ -980,7 +2265,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH210",
@@ -990,7 +2276,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP133",
@@ -1000,7 +2287,8 @@
       "tutorialHours": 0,
       "practicalHours": 4,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP211",
@@ -1010,7 +2298,8 @@
       "tutorialHours": 0,
       "practicalHours": 2,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "PSYC105 / ECON106",
@@ -1020,7 +2309,8 @@
       "tutorialHours": 1,
       "practicalHours": 0,
       "hasUncertainCode": false,
-      "uncertaintyNote": null
+      "uncertaintyNote": null,
+      "sourceReference": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "LAWS310",
@@ -1540,7 +2830,12 @@
       "semesterNum": 1,
       "basketName": "Univ Core",
       "courseCode": "UCOR103",
+      "courseName": "Communication Skills",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1550,7 +2845,12 @@
       "semesterNum": 2,
       "basketName": "Univ Core",
       "courseCode": "UCOR203",
+      "courseName": "Leadership and Teamwork Skills",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1560,7 +2860,12 @@
       "semesterNum": 3,
       "basketName": "Univ Core",
       "courseCode": "UCOR205",
+      "courseName": "Socio Cultural Perspectives on Indian Life-SPIL",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1570,7 +2875,12 @@
       "semesterNum": 4,
       "basketName": "Univ Core",
       "courseCode": "UCOR210",
+      "courseName": "Critical Thinking",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1580,7 +2890,12 @@
       "semesterNum": 1,
       "basketName": "Univ Core",
       "courseCode": "UCOR104",
+      "courseName": "Problem Solving with Design Thinking",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1590,7 +2905,12 @@
       "semesterNum": 2,
       "basketName": "Univ Core",
       "courseCode": "UCOR701",
+      "courseName": "Community Engagement & Service Experience",
       "credits": 1,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1600,7 +2920,12 @@
       "semesterNum": 3,
       "basketName": "Univ Core",
       "courseCode": "UCOR201",
+      "courseName": "Introduction to Epistemology",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1610,7 +2935,12 @@
       "semesterNum": 1,
       "basketName": "Univ Core",
       "courseCode": "UCOR102",
+      "courseName": "Introduction to writing",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1620,7 +2950,12 @@
       "semesterNum": 2,
       "basketName": "Univ Core",
       "courseCode": "UCOR106",
+      "courseName": "Learning to Learn",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1630,7 +2965,12 @@
       "semesterNum": 1,
       "basketName": "Foundation",
       "courseCode": "MATH201",
+      "courseName": "Calculus",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1640,7 +2980,12 @@
       "semesterNum": 2,
       "basketName": "Foundation",
       "courseCode": "MATH202",
+      "courseName": "Probability Theory",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1650,7 +2995,12 @@
       "semesterNum": 3,
       "basketName": "Foundation",
       "courseCode": "MTSC781",
+      "courseName": "Sustainable Cities and Communities",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1660,7 +3010,12 @@
       "semesterNum": 4,
       "basketName": "Foundation",
       "courseCode": "SLAD206",
+      "courseName": "Human Values in Work and Life",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1670,7 +3025,12 @@
       "semesterNum": 6,
       "basketName": "Foundation",
       "courseCode": "LANG101",
+      "courseName": "Language",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1680,7 +3040,12 @@
       "semesterNum": 1,
       "basketName": "Foundation",
       "courseCode": "COMP132",
+      "courseName": "Design Workshop",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1690,7 +3055,12 @@
       "semesterNum": 2,
       "basketName": "Foundation",
       "courseCode": "MTSC211",
+      "courseName": "Sustainable Smart Materials",
       "credits": 3,
+      "prerequisite": "MTSC111",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1700,7 +3070,12 @@
       "semesterNum": 4,
       "basketName": "Foundation",
       "courseCode": "SLAD207",
+      "courseName": "Foundation Seminar",
       "credits": 1,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1710,7 +3085,12 @@
       "semesterNum": 1,
       "basketName": "Foundation",
       "courseCode": "MTSC111",
+      "courseName": "Materials for Smart Devices",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1720,7 +3100,12 @@
       "semesterNum": 2,
       "basketName": "Foundation",
       "courseCode": "ENGL201",
+      "courseName": "Academic Writing",
       "credits": 3,
+      "prerequisite": "UCOR102",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1730,7 +3115,12 @@
       "semesterNum": 3,
       "basketName": "Foundation",
       "courseCode": "MATH204",
+      "courseName": "Linear Algebra",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1740,7 +3130,12 @@
       "semesterNum": 1,
       "basketName": "Foundation",
       "courseCode": "DATA131",
+      "courseName": "Visualizing Data for Story Telling",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1750,7 +3145,12 @@
       "semesterNum": 1,
       "basketName": "Foundation",
       "courseCode": "PSYC101/ECON101",
+      "courseName": "Introduction to Psychology/Introduction to Economics",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1760,7 +3160,12 @@
       "semesterNum": 1,
       "basketName": "Program CORE",
       "courseCode": "DATA130",
+      "courseName": "Computational Thinking",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1770,7 +3175,12 @@
       "semesterNum": 2,
       "basketName": "Program CORE",
       "courseCode": "COMP201",
+      "courseName": "Data Structures",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1780,7 +3190,12 @@
       "semesterNum": 3,
       "basketName": "Program CORE",
       "courseCode": "COMP203",
+      "courseName": "Analysis of Algorithms",
       "credits": 4,
+      "prerequisite": "COMP201",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1790,7 +3205,12 @@
       "semesterNum": 4,
       "basketName": "Program CORE",
       "courseCode": "COMP205",
+      "courseName": "Object Oriented Programming",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1800,7 +3220,12 @@
       "semesterNum": 5,
       "basketName": "Program CORE",
       "courseCode": "COMP208",
+      "courseName": "Networks",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1810,7 +3235,12 @@
       "semesterNum": 7,
       "basketName": "Program CORE",
       "courseCode": "COMP302",
+      "courseName": "Internet of Things",
       "credits": 2,
+      "prerequisite": "COMP132, COMP201, COMP206, COMP208, COMP301",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1820,7 +3250,12 @@
       "semesterNum": 2,
       "basketName": "Program CORE",
       "courseCode": "MATH205",
+      "courseName": "Statistics with R",
       "credits": 3,
+      "prerequisite": "MATH202",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1830,7 +3265,12 @@
       "semesterNum": 3,
       "basketName": "Program CORE",
       "courseCode": "COMP202",
+      "courseName": "Theoretical Computer Science",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1840,7 +3280,12 @@
       "semesterNum": 4,
       "basketName": "Program CORE",
       "courseCode": "COMP204",
+      "courseName": "Digital Design and Computer  Organization",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1850,7 +3295,12 @@
       "semesterNum": 5,
       "basketName": "Program CORE",
       "courseCode": "COMP207",
+      "courseName": "Operating Systems",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1860,7 +3310,12 @@
       "semesterNum": 6,
       "basketName": "Program CORE",
       "courseCode": "COMP206",
+      "courseName": "Microprocessors and Computer Architecture",
       "credits": 4,
+      "prerequisite": "COMP204, COMP207",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1870,7 +3325,12 @@
       "semesterNum": 4,
       "basketName": "Program CORE",
       "courseCode": "COMP301",
+      "courseName": "Artificial Intelligence",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1880,7 +3340,12 @@
       "semesterNum": 4,
       "basketName": "Program CORE",
       "courseCode": "COMP209",
+      "courseName": "Databases Management",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1890,7 +3355,12 @@
       "semesterNum": 2,
       "basketName": "Program HONORS",
       "courseCode": "DATA201",
+      "courseName": "Foundations to Data Science",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1900,7 +3370,12 @@
       "semesterNum": 3,
       "basketName": "Program HONORS",
       "courseCode": "DATA202",
+      "courseName": "Exploratory Data Analysis",
       "credits": 3,
+      "prerequisite": "DATA201, MATH203",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1910,7 +3385,12 @@
       "semesterNum": 4,
       "basketName": "Program HONORS",
       "courseCode": "MATH301",
+      "courseName": "Optimization Techniques for Data Science",
       "credits": 4,
+      "prerequisite": "MATH201",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1920,7 +3400,12 @@
       "semesterNum": 5,
       "basketName": "Program HONORS",
       "courseCode": "DATA 301",
+      "courseName": "Machine Learning",
       "credits": 4,
+      "prerequisite": "DATA202, MATH301",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1930,7 +3415,12 @@
       "semesterNum": 6,
       "basketName": "Program HONORS",
       "courseCode": "DATA302",
+      "courseName": "Deep Learning",
       "credits": 4,
+      "prerequisite": "DATA301",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1940,7 +3430,12 @@
       "semesterNum": 5,
       "basketName": "Program HONORS",
       "courseCode": "DATA 207",
+      "courseName": "Human Centric AI",
       "credits": 2,
+      "prerequisite": "COMP210/COMP301",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1950,7 +3445,12 @@
       "semesterNum": 5,
       "basketName": "Specialization Tracks",
       "courseCode": "MATH401/\r\nCOMP401",
+      "courseName": "SPT-Course #1-Probabilistic Graph Models LTP: 3-0-2\r\n/Web Framework LTP: 2-0-4",
       "credits": 4,
+      "prerequisite": "NIL/NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1960,7 +3460,12 @@
       "semesterNum": 6,
       "basketName": "Specialization Tracks",
       "courseCode": "DATA402/\r\nDATA406",
+      "courseName": "SPT-Course #2 (Advanced Visualization and Storytelling/Big Data Framework)",
       "credits": 4,
+      "prerequisite": "DATA301/NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1970,7 +3475,12 @@
       "semesterNum": 7,
       "basketName": "Specialization Tracks",
       "courseCode": "DATA403/\r\nCOMP402",
+      "courseName": "SPT-Course #3 (Natural Language Processing / Software Architecture and Deployments)",
       "credits": 4,
+      "prerequisite": "DATA302/COMP205,\r\nCOMP401",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1980,7 +3490,12 @@
       "semesterNum": 5,
       "basketName": "Specialization Tracks",
       "courseCode": "COMP401",
+      "courseName": "COMP401",
       "credits": 0,
+      "prerequisite": "None",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -1990,7 +3505,12 @@
       "semesterNum": 7,
       "basketName": "Specialization Tracks",
       "courseCode": "DATA404",
+      "courseName": "SPT-Course #4 (Multi Modal Learning / Cloud Computing)",
       "credits": 4,
+      "prerequisite": "DATA302",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -2000,7 +3520,12 @@
       "semesterNum": 7,
       "basketName": "Specialization Tracks",
       "courseCode": "DATA405",
+      "courseName": "SPT-Course #5 (Reinforcement Learning/ Cognitive Computing)",
       "credits": 4,
+      "prerequisite": "MATH202,MATH204",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -2010,7 +3535,12 @@
       "semesterNum": 5,
       "basketName": "Internship/  Capstone Project",
       "courseCode": "DATA801",
+      "courseName": "Summer Training/Internship",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -2020,7 +3550,12 @@
       "semesterNum": 7,
       "basketName": "Internship/  Capstone Project",
       "courseCode": "DATA802",
+      "courseName": "Interdisciplinary Project",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -2030,7 +3565,12 @@
       "semesterNum": 8,
       "basketName": "Internship/  Capstone Project",
       "courseCode": "DATA803",
+      "courseName": "Capstone Project/Industrial Internship",
       "credits": 12,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem Spread BTECH-2022"
     },
@@ -2040,7 +3580,12 @@
       "semesterNum": 1,
       "basketName": "Univ Core",
       "courseCode": "UCOR103",
+      "courseName": "Communication Skills",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2050,7 +3595,12 @@
       "semesterNum": 2,
       "basketName": "Univ Core",
       "courseCode": "UCOR203",
+      "courseName": "Leadership and Teamwork Skills",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2060,7 +3610,12 @@
       "semesterNum": 3,
       "basketName": "Univ Core",
       "courseCode": "UCOR205",
+      "courseName": "Socio Cultural Perspectives on Indian Life-SPIL",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2070,7 +3625,12 @@
       "semesterNum": 1,
       "basketName": "Univ Core",
       "courseCode": "UCOR104",
+      "courseName": "Problem Solving with Design Thinking",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2080,7 +3640,12 @@
       "semesterNum": 2,
       "basketName": "Univ Core",
       "courseCode": "UCOR701",
+      "courseName": "Community Engagement & Service Experience",
       "credits": 1,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2090,7 +3655,12 @@
       "semesterNum": 1,
       "basketName": "Univ Core",
       "courseCode": "UCOR102",
+      "courseName": "Introduction to writing",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2100,7 +3670,12 @@
       "semesterNum": 2,
       "basketName": "Univ Core",
       "courseCode": "UCOR106",
+      "courseName": "Learning to Learn",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2110,7 +3685,12 @@
       "semesterNum": 3,
       "basketName": "Univ Core",
       "courseCode": "UCOR201",
+      "courseName": "Introduction to Epistemology",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2120,7 +3700,12 @@
       "semesterNum": 4,
       "basketName": "Univ Core",
       "courseCode": "UCOR210",
+      "courseName": "Critical Thinking",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2130,7 +3715,12 @@
       "semesterNum": 1,
       "basketName": "Foundation",
       "courseCode": "MATH202",
+      "courseName": "Probability Theory",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2140,7 +3730,12 @@
       "semesterNum": 2,
       "basketName": "Foundation",
       "courseCode": "MATH201",
+      "courseName": "Calculus",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2150,7 +3745,12 @@
       "semesterNum": 3,
       "basketName": "Foundation",
       "courseCode": "MTSC781",
+      "courseName": "Sustainable Cities and Communities",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2160,7 +3760,12 @@
       "semesterNum": 4,
       "basketName": "Foundation",
       "courseCode": "SLAD206",
+      "courseName": "Human Values in Work and Life",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2170,7 +3775,12 @@
       "semesterNum": 5,
       "basketName": "Foundation",
       "courseCode": "LANG101",
+      "courseName": "Language",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2180,7 +3790,12 @@
       "semesterNum": 1,
       "basketName": "Foundation",
       "courseCode": "COMP132",
+      "courseName": "Design Workshop",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2190,7 +3805,12 @@
       "semesterNum": 2,
       "basketName": "Foundation",
       "courseCode": "MTSC211",
+      "courseName": "Sustainable Smart Materials",
       "credits": 3,
+      "prerequisite": "MTSC111",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2200,7 +3820,12 @@
       "semesterNum": 3,
       "basketName": "Foundation",
       "courseCode": "MATH204",
+      "courseName": "Linear Algebra",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2210,7 +3835,12 @@
       "semesterNum": 4,
       "basketName": "Foundation",
       "courseCode": "SLAD207",
+      "courseName": "Foundation Seminar",
       "credits": 1,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2220,7 +3850,12 @@
       "semesterNum": 1,
       "basketName": "Foundation",
       "courseCode": "MTSC111",
+      "courseName": "Materials for Smart Devices",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2230,7 +3865,12 @@
       "semesterNum": 2,
       "basketName": "Foundation",
       "courseCode": "ENGL201",
+      "courseName": "Academic Writing",
       "credits": 3,
+      "prerequisite": "UCOR102",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2240,7 +3880,12 @@
       "semesterNum": 1,
       "basketName": "Foundation",
       "courseCode": "PSYC101/ECON101",
+      "courseName": "Introduction to Psychology/Introduction to Economics",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2250,7 +3895,12 @@
       "semesterNum": 1,
       "basketName": "Foundation",
       "courseCode": "DATA131",
+      "courseName": "Visualizing Data for Story Telling",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2260,7 +3910,12 @@
       "semesterNum": 2,
       "basketName": "Program CORE",
       "courseCode": "COMP201",
+      "courseName": "Data Structures",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2270,7 +3925,12 @@
       "semesterNum": 3,
       "basketName": "Program CORE",
       "courseCode": "COMP203",
+      "courseName": "Analysis of Algorithms",
       "credits": 4,
+      "prerequisite": "COMP201",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2280,7 +3940,12 @@
       "semesterNum": 4,
       "basketName": "Program CORE",
       "courseCode": "COMP209",
+      "courseName": "Databases Management",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2290,7 +3955,12 @@
       "semesterNum": 5,
       "basketName": "Program CORE",
       "courseCode": "COMP208",
+      "courseName": "Networks",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2300,7 +3970,12 @@
       "semesterNum": 6,
       "basketName": "Program CORE",
       "courseCode": "COMP302",
+      "courseName": "Internet of Things",
       "credits": 2,
+      "prerequisite": "COMP132, COMP201, COMP206, COMP208, COMP301",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2310,7 +3985,12 @@
       "semesterNum": 2,
       "basketName": "Program CORE",
       "courseCode": "MATH205",
+      "courseName": "Statistics with R",
       "credits": 3,
+      "prerequisite": "MATH202",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2320,7 +4000,12 @@
       "semesterNum": 3,
       "basketName": "Program CORE",
       "courseCode": "COMP202",
+      "courseName": "Theoretical Computer Science",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2330,7 +4015,12 @@
       "semesterNum": 4,
       "basketName": "Program CORE",
       "courseCode": "COMP204",
+      "courseName": "Digital Design and Computer  Organization",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2340,7 +4030,12 @@
       "semesterNum": 5,
       "basketName": "Program CORE",
       "courseCode": "COMP207",
+      "courseName": "Operating Systems",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2350,7 +4045,12 @@
       "semesterNum": 3,
       "basketName": "Program CORE",
       "courseCode": "MATH207",
+      "courseName": "Research Methodology",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2360,7 +4060,12 @@
       "semesterNum": 4,
       "basketName": "Program CORE",
       "courseCode": "COMP301",
+      "courseName": "Artificial Intelligence",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2370,7 +4075,12 @@
       "semesterNum": 5,
       "basketName": "Program CORE",
       "courseCode": "COMP206",
+      "courseName": "Microprocessors and Computer Architecture",
       "credits": 4,
+      "prerequisite": "COMP204, COMP207",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2380,7 +4090,12 @@
       "semesterNum": 4,
       "basketName": "Program CORE",
       "courseCode": "COMP205",
+      "courseName": "Object Oriented Programming",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2390,7 +4105,12 @@
       "semesterNum": 2,
       "basketName": "Program HONORS",
       "courseCode": "DATA201",
+      "courseName": "Foundations to Data Science",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2400,7 +4120,12 @@
       "semesterNum": 3,
       "basketName": "Program HONORS",
       "courseCode": "DATA202",
+      "courseName": "Exploratory Data Analysis",
       "credits": 3,
+      "prerequisite": "DATA201, MATH203",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2410,7 +4135,12 @@
       "semesterNum": 4,
       "basketName": "Program HONORS",
       "courseCode": "MATH301",
+      "courseName": "Optimization Techniques for Data Science",
       "credits": 4,
+      "prerequisite": "MATH201",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2420,7 +4150,12 @@
       "semesterNum": 5,
       "basketName": "Program HONORS",
       "courseCode": "DATA 301",
+      "courseName": "Machine Learning",
       "credits": 4,
+      "prerequisite": "DATA202, MATH301",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2430,7 +4165,12 @@
       "semesterNum": 6,
       "basketName": "Program HONORS",
       "courseCode": "DATA 302",
+      "courseName": "Deep Learning",
       "credits": 4,
+      "prerequisite": "DATA301, MATH201",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2440,7 +4180,12 @@
       "semesterNum": 6,
       "basketName": "Program HONORS",
       "courseCode": "DATA 303",
+      "courseName": "MLOps & Model Deployment",
       "credits": 2,
+      "prerequisite": "DATA301, COMP208",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2450,7 +4195,12 @@
       "semesterNum": 5,
       "basketName": "Specialization Tracks",
       "courseCode": "MATH401/\r\nCOMP401",
+      "courseName": "SPT-Course #1-Probabilistic Graph Models LTP: 3-0-2\r\n/Web Framework LTP: 2-0-4",
       "credits": 4,
+      "prerequisite": "NIL/NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2460,7 +4210,12 @@
       "semesterNum": 6,
       "basketName": "Specialization Tracks",
       "courseCode": "DATA405/\r\nDATA406",
+      "courseName": "SPT-Course #2-Reinforcement Learning/Big Data Framework",
       "credits": 4,
+      "prerequisite": "MATH202, MATH204/NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2470,7 +4225,12 @@
       "semesterNum": 7,
       "basketName": "Specialization Tracks",
       "courseCode": "DATA403",
+      "courseName": "SPT-Course #3 (Natural Language Processing / Natural Language Processing)",
       "credits": 4,
+      "prerequisite": "DATA302",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2480,7 +4240,12 @@
       "semesterNum": 7,
       "basketName": "Specialization Tracks",
       "courseCode": "DATA404/\r\nCOMP402",
+      "courseName": "SPT-Course #4 (Multi Modal Learning/ Software Architecture and Deployments)",
       "credits": 4,
+      "prerequisite": "DATA302/\r\nCOMP205,\r\nCOMP401",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2490,7 +4255,12 @@
       "semesterNum": 7,
       "basketName": "Specialization Tracks",
       "courseCode": "DATA408/\r\nCOMP405",
+      "courseName": "SPT-Course #5 Advanced Topics in Deep Learning LTP: 3-0-2/\r\nCloud &Cognitive Computing LTP: 2-0-4",
       "credits": 4,
+      "prerequisite": "DATA302",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2500,7 +4270,12 @@
       "semesterNum": 5,
       "basketName": "Internship/  Capstone Project",
       "courseCode": "DATA801",
+      "courseName": "Summer Training/Internship",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2510,7 +4285,12 @@
       "semesterNum": 7,
       "basketName": "Internship/  Capstone Project",
       "courseCode": "DATA802",
+      "courseName": "Interdisciplinary Project",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2520,7 +4300,12 @@
       "semesterNum": 8,
       "basketName": "Internship/  Capstone Project",
       "courseCode": "DATA803",
+      "courseName": "Capstone Project/Industrial Internship",
       "credits": 12,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2023"
     },
@@ -2530,7 +4315,12 @@
       "semesterNum": 1,
       "basketName": "Univ Core",
       "courseCode": "UCOR106",
+      "courseName": "Learning to Learn",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2540,7 +4330,12 @@
       "semesterNum": 2,
       "basketName": "Univ Core",
       "courseCode": "UCOR105",
+      "courseName": "Communication and Leadership Skills",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2550,7 +4345,12 @@
       "semesterNum": 3,
       "basketName": "Univ Core",
       "courseCode": "UCOR205",
+      "courseName": "Socio Cultural Perspectives on Indian Life-SPIL",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2560,7 +4360,12 @@
       "semesterNum": 4,
       "basketName": "Univ Core",
       "courseCode": "UCOR310",
+      "courseName": "Critical Thinking",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2570,7 +4375,12 @@
       "semesterNum": 1,
       "basketName": "Univ Core",
       "courseCode": "UCOR104",
+      "courseName": "Problem Solving with Design Thinking",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2580,7 +4390,12 @@
       "semesterNum": 2,
       "basketName": "Univ Core",
       "courseCode": "UCOR701",
+      "courseName": "Community Engagement & Service Experience",
       "credits": 1,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2590,7 +4405,12 @@
       "semesterNum": 3,
       "basketName": "Univ Core",
       "courseCode": "LAWS101",
+      "courseName": "Fundamentals of Indian Constitution and Human Rights",
       "credits": 2,
+      "prerequisite": "Nil",
+      "lectureHours": 1,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2600,7 +4420,12 @@
       "semesterNum": 1,
       "basketName": "Univ Core",
       "courseCode": "UCOR102",
+      "courseName": "Introduction to writing",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2610,7 +4435,12 @@
       "semesterNum": 1,
       "basketName": "Foundation",
       "courseCode": "MATH203",
+      "courseName": "Probability and Statistics",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2620,7 +4450,12 @@
       "semesterNum": 2,
       "basketName": "Foundation",
       "courseCode": "MATH201",
+      "courseName": "Calculus",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2630,7 +4465,12 @@
       "semesterNum": 3,
       "basketName": "Foundation",
       "courseCode": "MTSC781",
+      "courseName": "Sustainable Cities and Communities",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2640,7 +4480,12 @@
       "semesterNum": 4,
       "basketName": "Foundation",
       "courseCode": "SLAD206",
+      "courseName": "Human Values in Work and Life",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2650,7 +4495,12 @@
       "semesterNum": 6,
       "basketName": "Foundation",
       "courseCode": "LANG101",
+      "courseName": "Kannada/ Language",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2660,7 +4510,12 @@
       "semesterNum": 1,
       "basketName": "Foundation",
       "courseCode": "COMP132",
+      "courseName": "Design Workshop",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2670,7 +4525,12 @@
       "semesterNum": 2,
       "basketName": "Foundation",
       "courseCode": "MTSC211",
+      "courseName": "Sustainable Smart Materials",
       "credits": 3,
+      "prerequisite": "MTSC111",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2680,7 +4540,12 @@
       "semesterNum": 3,
       "basketName": "Foundation",
       "courseCode": "MATH204",
+      "courseName": "Linear Algebra",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2690,7 +4555,12 @@
       "semesterNum": 1,
       "basketName": "Foundation",
       "courseCode": "MTSC111",
+      "courseName": "Materials for Smart Devices",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2700,7 +4570,12 @@
       "semesterNum": 2,
       "basketName": "Foundation",
       "courseCode": "ENGL210",
+      "courseName": "Academic Writing",
       "credits": 2,
+      "prerequisite": "UCOR102",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2710,7 +4585,12 @@
       "semesterNum": 1,
       "basketName": "Foundation",
       "courseCode": "PSYC101/ECON101",
+      "courseName": "Introduction to Psychology/Introduction to Economics",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2720,7 +4600,12 @@
       "semesterNum": 4,
       "basketName": "Foundation",
       "courseCode": "COMP403",
+      "courseName": "Cloud Computing",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2730,7 +4615,12 @@
       "semesterNum": 1,
       "basketName": "Program CORE",
       "courseCode": "DATA103",
+      "courseName": "Programming in Python",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2740,7 +4630,12 @@
       "semesterNum": 2,
       "basketName": "Program CORE",
       "courseCode": "COMP201",
+      "courseName": "Data Structures",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2750,7 +4645,12 @@
       "semesterNum": 3,
       "basketName": "Program CORE",
       "courseCode": "COMP203",
+      "courseName": "Analysis of Algorithms",
       "credits": 4,
+      "prerequisite": "COMP201",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2760,7 +4660,12 @@
       "semesterNum": 4,
       "basketName": "Program CORE",
       "courseCode": "COMP209",
+      "courseName": "Databases Management",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2770,7 +4675,12 @@
       "semesterNum": 5,
       "basketName": "Program CORE",
       "courseCode": "COMP208",
+      "courseName": "Networks",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2780,7 +4690,12 @@
       "semesterNum": 7,
       "basketName": "Program CORE",
       "courseCode": "COMP302",
+      "courseName": "Internet of Things",
       "credits": 2,
+      "prerequisite": "COMP132, COMP201, COMP206, COMP208, COMP301",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2790,7 +4705,12 @@
       "semesterNum": 2,
       "basketName": "Program CORE",
       "courseCode": "DATA132",
+      "courseName": "Data visualization and Storytelling",
       "credits": 3,
+      "prerequisite": "DATA103",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2800,7 +4720,12 @@
       "semesterNum": 3,
       "basketName": "Program CORE",
       "courseCode": "COMP202",
+      "courseName": "Theoretical Computer Science",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2810,7 +4735,12 @@
       "semesterNum": 4,
       "basketName": "Program CORE",
       "courseCode": "COMP204",
+      "courseName": "Digital Design and Computer Organization",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2820,7 +4750,12 @@
       "semesterNum": 5,
       "basketName": "Program CORE",
       "courseCode": "COMP207",
+      "courseName": "Operating Systems",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2830,7 +4765,12 @@
       "semesterNum": 6,
       "basketName": "Program CORE",
       "courseCode": "COMP206",
+      "courseName": "Microprocessors and Computer Architecture",
       "credits": 4,
+      "prerequisite": "COMP204, COMP207",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2840,7 +4780,12 @@
       "semesterNum": 4,
       "basketName": "Program CORE",
       "courseCode": "COMP301",
+      "courseName": "Artificial Intelligence",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2850,7 +4795,12 @@
       "semesterNum": 5,
       "basketName": "Program CORE",
       "courseCode": "COMP205",
+      "courseName": "Object Oriented Programming",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2860,7 +4810,12 @@
       "semesterNum": 2,
       "basketName": "Program HONORS",
       "courseCode": "DATA201",
+      "courseName": "Foundations to Data Science",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2870,7 +4825,12 @@
       "semesterNum": 3,
       "basketName": "Program HONORS",
       "courseCode": "DATA202",
+      "courseName": "Exploratory Data Analysis",
       "credits": 3,
+      "prerequisite": "DATA201, MATH203",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2880,7 +4840,12 @@
       "semesterNum": 4,
       "basketName": "Program HONORS",
       "courseCode": "MATH301",
+      "courseName": "Optimization Techniques for Data Science",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2890,7 +4855,12 @@
       "semesterNum": 5,
       "basketName": "Program HONORS",
       "courseCode": "DATA 301",
+      "courseName": "Machine Learning",
       "credits": 4,
+      "prerequisite": "DATA202, MATH301",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2900,7 +4870,12 @@
       "semesterNum": 6,
       "basketName": "Program HONORS",
       "courseCode": "DATA 302",
+      "courseName": "Deep Learning",
       "credits": 4,
+      "prerequisite": "DATA301",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2910,7 +4885,12 @@
       "semesterNum": 3,
       "basketName": "Program HONORS",
       "courseCode": "MATH206",
+      "courseName": "Advanced Statistical Analysis and Research Methods with R",
       "credits": 2,
+      "prerequisite": "MATH203",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2920,7 +4900,12 @@
       "semesterNum": 5,
       "basketName": "Specialization Tracks",
       "courseCode": "MATH401/COMP401",
+      "courseName": "SPT-Course #1-Probabilistic Graph Models LTP: 3-0-2\r\n/Web Framework LTP: 2-0-4",
       "credits": 4,
+      "prerequisite": "NIL/NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2930,7 +4915,12 @@
       "semesterNum": 6,
       "basketName": "Specialization Tracks",
       "courseCode": "DATA404/\r\nDATA406",
+      "courseName": "SPT-Course #2-Multi Modal Learning/Big Data Framework",
       "credits": 4,
+      "prerequisite": "DATA302/NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2940,7 +4930,12 @@
       "semesterNum": 7,
       "basketName": "Specialization Tracks",
       "courseCode": "DATA403",
+      "courseName": "SPT-Course #3 (Natural Language Processing / Natural Language Processing)",
       "credits": 4,
+      "prerequisite": "DATA302",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2950,7 +4945,12 @@
       "semesterNum": 7,
       "basketName": "Specialization Tracks",
       "courseCode": "DATA408/COMP402",
+      "courseName": "SPT-Course #4 (Advanced Topics in Deep Learning LTP: 3-0-2/ Software Architecture and Deployments LTP: 2-0-4)",
       "credits": 4,
+      "prerequisite": "DATA302/\r\nCOMP205,\r\nCOMP401",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2960,7 +4960,12 @@
       "semesterNum": 7,
       "basketName": "Specialization Tracks",
       "courseCode": "DATA405",
+      "courseName": "SPT-Course #5 Reinforcement Learning/Reinforcement Learning",
       "credits": 4,
+      "prerequisite": "MATH202, MATH204",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2970,7 +4975,12 @@
       "semesterNum": 5,
       "basketName": "Internship/  Capstone Project",
       "courseCode": "DATA801",
+      "courseName": "Summer Training/Internship",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2980,7 +4990,12 @@
       "semesterNum": 7,
       "basketName": "Internship/  Capstone Project",
       "courseCode": "DATA802",
+      "courseName": "Interdisciplinary Project",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -2990,7 +5005,12 @@
       "semesterNum": 8,
       "basketName": "Internship/  Capstone Project",
       "courseCode": "DATA803",
+      "courseName": "Capstone Project/Industrial Internship",
       "credits": 12,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2024"
     },
@@ -3000,7 +5020,12 @@
       "semesterNum": 1,
       "basketName": "Univ Core",
       "courseCode": "UCOR103",
+      "courseName": "Communication Skills",
       "credits": 2,
+      "prerequisite": "Nil",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3010,7 +5035,12 @@
       "semesterNum": 2,
       "basketName": "Univ Core",
       "courseCode": "UCOR111",
+      "courseName": "Environmental Studies and Sustainability",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3020,7 +5050,12 @@
       "semesterNum": 3,
       "basketName": "Univ Core",
       "courseCode": "UCOR207",
+      "courseName": "Analytical Academic Writing",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3030,7 +5065,12 @@
       "semesterNum": 4,
       "basketName": "Univ Core",
       "courseCode": "UCOR205",
+      "courseName": "Socio-Cultural Perspectives on Indian Life",
       "credits": 3,
+      "prerequisite": "Nil",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3040,7 +5080,12 @@
       "semesterNum": 5,
       "basketName": "Univ Core",
       "courseCode": "UCOR310",
+      "courseName": "Critical Thinking",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3050,7 +5095,12 @@
       "semesterNum": 6,
       "basketName": "Univ Core",
       "courseCode": "UCOR215",
+      "courseName": "Humanistic Leadership Development",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3060,7 +5110,12 @@
       "semesterNum": 1,
       "basketName": "Univ Core",
       "courseCode": "UCOR106",
+      "courseName": "Learning to Learn",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3070,7 +5125,12 @@
       "semesterNum": 2,
       "basketName": "Univ Core",
       "courseCode": "LAWS101",
+      "courseName": "Fundamentals of Indian Constitution and Human Rights",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3080,7 +5140,12 @@
       "semesterNum": 5,
       "basketName": "Univ Core",
       "courseCode": "UCOR104",
+      "courseName": "Problem Solving with Design Thinking",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3090,7 +5155,12 @@
       "semesterNum": 2,
       "basketName": "Univ Core",
       "courseCode": "UCOR701",
+      "courseName": "Community Engagement & Service Experience",
       "credits": 1,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3100,7 +5170,12 @@
       "semesterNum": 3,
       "basketName": "Univ Core",
       "courseCode": "SLAD206",
+      "courseName": "Human Values in Work and Life",
       "credits": 2,
+      "prerequisite": "Nil",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3110,7 +5185,12 @@
       "semesterNum": 1,
       "basketName": "Foundation",
       "courseCode": "MATH208",
+      "courseName": "Multivariate Calculus",
       "credits": 4,
+      "prerequisite": "Nil",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3120,7 +5200,12 @@
       "semesterNum": 2,
       "basketName": "Foundation",
       "courseCode": "MATH203",
+      "courseName": "Probability and Statistics",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3130,7 +5215,12 @@
       "semesterNum": 3,
       "basketName": "Foundation",
       "courseCode": "MATH209",
+      "courseName": "Linear Algebra",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3140,7 +5230,12 @@
       "semesterNum": 6,
       "basketName": "Foundation",
       "courseCode": "TBA",
+      "courseName": "Language",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3150,7 +5245,12 @@
       "semesterNum": 2,
       "basketName": "Foundation",
       "courseCode": "MTSC211",
+      "courseName": "Sustainable Smart Materials",
       "credits": 3,
+      "prerequisite": "MTSC111",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3160,7 +5260,12 @@
       "semesterNum": 4,
       "basketName": "Foundation",
       "courseCode": "MATH206",
+      "courseName": "Advanced Statistical Analysis and Research Methods with R",
       "credits": 2,
+      "prerequisite": "MATH203",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3170,7 +5275,12 @@
       "semesterNum": 1,
       "basketName": "Foundation",
       "courseCode": "MTSC111",
+      "courseName": "Materials for Smart Devices",
       "credits": 3,
+      "prerequisite": "Nil",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3180,7 +5290,12 @@
       "semesterNum": 2,
       "basketName": "Foundation",
       "courseCode": "COMP132",
+      "courseName": "Design Workshop",
       "credits": 2,
+      "prerequisite": "Nil",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3190,7 +5305,12 @@
       "semesterNum": 1,
       "basketName": "Program CORE",
       "courseCode": "DATA103",
+      "courseName": "Programming in Python",
       "credits": 3,
+      "prerequisite": "Nil",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3200,7 +5320,12 @@
       "semesterNum": 2,
       "basketName": "Program CORE",
       "courseCode": "COMP201",
+      "courseName": "Data Structures",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3210,7 +5335,12 @@
       "semesterNum": 4,
       "basketName": "Program CORE",
       "courseCode": "COMP207",
+      "courseName": "Operating Systems",
       "credits": 3,
+      "prerequisite": "Nil",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3220,7 +5350,12 @@
       "semesterNum": 5,
       "basketName": "Program CORE",
       "courseCode": "COMP206",
+      "courseName": "Microprocessors and Computer Architecture",
       "credits": 4,
+      "prerequisite": "COMP204, COMP207",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3230,7 +5365,12 @@
       "semesterNum": 1,
       "basketName": "Program CORE",
       "courseCode": "COMP204",
+      "courseName": "Digital Design and Computer Organization",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3240,7 +5380,12 @@
       "semesterNum": 2,
       "basketName": "Program CORE",
       "courseCode": "DATA132",
+      "courseName": "Data Visualization and Storytelling",
       "credits": 3,
+      "prerequisite": "DATA103",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3250,7 +5395,12 @@
       "semesterNum": 3,
       "basketName": "Program CORE",
       "courseCode": "COMP202",
+      "courseName": "Theoretical Computer Science",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3260,7 +5410,12 @@
       "semesterNum": 6,
       "basketName": "Program CORE",
       "courseCode": "COMP208",
+      "courseName": "Networks",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3270,7 +5425,12 @@
       "semesterNum": 2,
       "basketName": "Program CORE",
       "courseCode": "COMP209",
+      "courseName": "Databases Management",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3280,7 +5440,12 @@
       "semesterNum": 4,
       "basketName": "Program CORE",
       "courseCode": "COMP301",
+      "courseName": "Artificial Intelligence",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3290,7 +5455,12 @@
       "semesterNum": 6,
       "basketName": "Program CORE",
       "courseCode": "COMP302",
+      "courseName": "Internet of Things",
       "credits": 2,
+      "prerequisite": "COMP132, COMP201, COMP206, COMP208, COMP301",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3300,7 +5470,12 @@
       "semesterNum": 3,
       "basketName": "Program CORE",
       "courseCode": "COMP203",
+      "courseName": "Analysis of Algorithms",
       "credits": 4,
+      "prerequisite": "COMP201",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3310,7 +5485,12 @@
       "semesterNum": 4,
       "basketName": "Program CORE",
       "courseCode": "COMP205",
+      "courseName": "Object Oriented Programming",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3320,7 +5500,12 @@
       "semesterNum": 3,
       "basketName": "Program HONORS",
       "courseCode": "DATA209",
+      "courseName": "Advanced Exploratory Data Analysis",
       "credits": 4,
+      "prerequisite": "DATA132, MATH203",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3330,7 +5515,12 @@
       "semesterNum": 4,
       "basketName": "Program HONORS",
       "courseCode": "MATH301",
+      "courseName": "Optimization Techniques for Data Science",
       "credits": 4,
+      "prerequisite": "MATH201",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3340,7 +5530,12 @@
       "semesterNum": 5,
       "basketName": "Program HONORS",
       "courseCode": "DATA301",
+      "courseName": "Machine Learning",
       "credits": 4,
+      "prerequisite": "DATA206, MATH301",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3350,7 +5545,12 @@
       "semesterNum": 6,
       "basketName": "Program HONORS",
       "courseCode": "DATA302",
+      "courseName": "Deep Learning",
       "credits": 4,
+      "prerequisite": "DATA301",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3360,7 +5560,12 @@
       "semesterNum": 7,
       "basketName": "Program HONORS",
       "courseCode": "DATA403",
+      "courseName": "Natural Language Processing",
       "credits": 4,
+      "prerequisite": "DATA302",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3370,7 +5575,12 @@
       "semesterNum": 5,
       "basketName": "Specialization Tracks",
       "courseCode": "MATH401/\r\nCOMP401",
+      "courseName": "SPT-Course #1-Probabilistic Graph Models LTP: 3-0-2/Web Framework LTP: 2-0-4",
       "credits": 4,
+      "prerequisite": "NIL/NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3380,7 +5590,12 @@
       "semesterNum": 6,
       "basketName": "Specialization Tracks",
       "courseCode": "DATA404/\r\nDATA406",
+      "courseName": "SPT-Course #2-Multi Modal Learning/Big Data Framework",
       "credits": 4,
+      "prerequisite": "DATA302/NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3390,7 +5605,12 @@
       "semesterNum": 7,
       "basketName": "Specialization Tracks",
       "courseCode": "TBA/COMP405",
+      "courseName": "SPT-Course #3 (Image Processing and Computer Vision/Cloud & Cognitive Computing)",
       "credits": 4,
+      "prerequisite": "TBA/NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3400,7 +5620,12 @@
       "semesterNum": 7,
       "basketName": "Specialization Tracks",
       "courseCode": "DATA408/ COMP402",
+      "courseName": "SPT-Course #4 (Advanced Topics in Deep Learning LTP: 3-0-2/ Software Architecture and Deployments LTP: 2-0-4)",
       "credits": 4,
+      "prerequisite": "DATA302/\r\nCOMP205,\r\nCOMP401",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3410,7 +5635,12 @@
       "semesterNum": 7,
       "basketName": "Specialization Tracks",
       "courseCode": "DATA405",
+      "courseName": "SPT-Course #5 Reinforcement Learning/Reinforcement Learning",
       "credits": 4,
+      "prerequisite": "MATH202, MATH204",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3420,7 +5650,12 @@
       "semesterNum": 1,
       "basketName": "Open/Minor",
       "courseCode": "MGMT101",
+      "courseName": "Essentials of Business Management",
       "credits": 2,
+      "prerequisite": "Nil",
+      "lectureHours": 1,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3430,7 +5665,12 @@
       "semesterNum": 7,
       "basketName": "Open/Minor",
       "courseCode": "DATA802",
+      "courseName": "Inter-Desciplinary Project",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3440,7 +5680,12 @@
       "semesterNum": 1,
       "basketName": "Open/Minor",
       "courseCode": "PSCY102 / ECON105",
+      "courseName": "Introduction to Psychology/Principles of Economics",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3450,7 +5695,12 @@
       "semesterNum": 5,
       "basketName": "Internship/  Capstone Project",
       "courseCode": "DATA801",
+      "courseName": "Summer Training/Internship",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3460,7 +5710,12 @@
       "semesterNum": 8,
       "basketName": "Internship/  Capstone Project",
       "courseCode": "DATA803",
+      "courseName": "Capstone Project/\r\nIndustrial Internship",
       "credits": 12,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_2025"
     },
@@ -3470,7 +5725,12 @@
       "semesterNum": 1,
       "basketName": "Univ Core",
       "courseCode": "UCOR107",
+      "courseName": "Communication Skills",
       "credits": 3,
+      "prerequisite": "Nil",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3480,7 +5740,12 @@
       "semesterNum": 2,
       "basketName": "Univ Core",
       "courseCode": "UCOR111",
+      "courseName": "Environmental Studies and Sustainability",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3490,7 +5755,12 @@
       "semesterNum": 4,
       "basketName": "Univ Core",
       "courseCode": "UCOR205",
+      "courseName": "Socio-Cultural Perspectives on Indian Life",
       "credits": 3,
+      "prerequisite": "Nil",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3500,7 +5770,12 @@
       "semesterNum": 5,
       "basketName": "Univ Core",
       "courseCode": "UCOR310",
+      "courseName": "Critical Thinking",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3510,7 +5785,12 @@
       "semesterNum": 1,
       "basketName": "Univ Core",
       "courseCode": "UCOR106",
+      "courseName": "Learning to Learn",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3520,7 +5800,12 @@
       "semesterNum": 2,
       "basketName": "Univ Core",
       "courseCode": "LAWS101",
+      "courseName": "Fundamentals of Indian Constitution and Human Rights",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3530,7 +5815,12 @@
       "semesterNum": 5,
       "basketName": "Univ Core",
       "courseCode": "UCOR104",
+      "courseName": "Problem Solving with Design Thinking",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3540,7 +5830,12 @@
       "semesterNum": 2,
       "basketName": "Univ Core",
       "courseCode": "UCOR701",
+      "courseName": "Community Engagement & Service Experience",
       "credits": 1,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3550,7 +5845,12 @@
       "semesterNum": 1,
       "basketName": "Foundation",
       "courseCode": "MATH208",
+      "courseName": "Multivariate Calculus",
       "credits": 4,
+      "prerequisite": "Nil",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3560,7 +5860,12 @@
       "semesterNum": 2,
       "basketName": "Foundation",
       "courseCode": "MATH203",
+      "courseName": "Probability and Statistics",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3570,7 +5875,12 @@
       "semesterNum": 3,
       "basketName": "Foundation",
       "courseCode": "MATH209",
+      "courseName": "Linear Algebra",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3580,7 +5890,12 @@
       "semesterNum": 6,
       "basketName": "Foundation",
       "courseCode": "TBA",
+      "courseName": "Language",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3590,7 +5905,12 @@
       "semesterNum": 2,
       "basketName": "Foundation",
       "courseCode": "MTSC211",
+      "courseName": "Sustainable Smart Materials",
       "credits": 3,
+      "prerequisite": "MTSC111",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3600,7 +5920,12 @@
       "semesterNum": 4,
       "basketName": "Foundation",
       "courseCode": "MATH210",
+      "courseName": "Advanced Statistical Analysis and Research Methods",
       "credits": 3,
+      "prerequisite": "MATH203",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3610,7 +5935,12 @@
       "semesterNum": 1,
       "basketName": "Foundation",
       "courseCode": "MTSC111",
+      "courseName": "Materials for Smart Devices",
       "credits": 3,
+      "prerequisite": "Nil",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3620,7 +5950,12 @@
       "semesterNum": 2,
       "basketName": "Foundation",
       "courseCode": "COMP133",
+      "courseName": "Design Workshop",
       "credits": 3,
+      "prerequisite": "Nil",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3630,7 +5965,12 @@
       "semesterNum": 1,
       "basketName": "Program CORE",
       "courseCode": "DATA103",
+      "courseName": "Programming in Python",
       "credits": 3,
+      "prerequisite": "Nil",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3640,7 +5980,12 @@
       "semesterNum": 2,
       "basketName": "Program CORE",
       "courseCode": "COMP201",
+      "courseName": "Data Structures",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3650,7 +5995,12 @@
       "semesterNum": 3,
       "basketName": "Program CORE",
       "courseCode": "COMP202",
+      "courseName": "Theoretical Computer Science",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3660,7 +6010,12 @@
       "semesterNum": 4,
       "basketName": "Program CORE",
       "courseCode": "COMP211",
+      "courseName": "Operating Systems",
       "credits": 4,
+      "prerequisite": "Nil",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3670,7 +6025,12 @@
       "semesterNum": 5,
       "basketName": "Program CORE",
       "courseCode": "COMP206",
+      "courseName": "Microprocessors and Computer Architecture",
       "credits": 4,
+      "prerequisite": "COMP204, COMP207",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3680,7 +6040,12 @@
       "semesterNum": 1,
       "basketName": "Program CORE",
       "courseCode": "COMP204",
+      "courseName": "Digital Design and Computer Organization",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3690,7 +6055,12 @@
       "semesterNum": 2,
       "basketName": "Program CORE",
       "courseCode": "DATA132",
+      "courseName": "Data Visualization and Storytelling",
       "credits": 3,
+      "prerequisite": "DATA103",
+      "lectureHours": 1,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3700,7 +6070,12 @@
       "semesterNum": 3,
       "basketName": "Program CORE",
       "courseCode": "COMP203",
+      "courseName": "Analysis of Algorithms",
       "credits": 4,
+      "prerequisite": "COMP201",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3710,7 +6085,12 @@
       "semesterNum": 6,
       "basketName": "Program CORE",
       "courseCode": "COMP208",
+      "courseName": "Networks",
       "credits": 4,
+      "prerequisite": "Nil",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3720,7 +6100,12 @@
       "semesterNum": 2,
       "basketName": "Program CORE",
       "courseCode": "COMP209",
+      "courseName": "Databases Management",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3730,7 +6115,12 @@
       "semesterNum": 4,
       "basketName": "Program CORE",
       "courseCode": "COMP301",
+      "courseName": "Artificial Intelligence",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3740,7 +6130,12 @@
       "semesterNum": 6,
       "basketName": "Program CORE",
       "courseCode": "COMP302",
+      "courseName": "Internet of Things",
       "credits": 2,
+      "prerequisite": "COMP132, COMP201, COMP206, COMP208, COMP301",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3750,7 +6145,12 @@
       "semesterNum": 7,
       "basketName": "Program CORE",
       "courseCode": "TBA",
+      "courseName": "Compiler Design",
       "credits": 3,
+      "prerequisite": "Nil",
+      "lectureHours": 3,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3760,7 +6160,12 @@
       "semesterNum": 4,
       "basketName": "Program CORE",
       "courseCode": "COMP205",
+      "courseName": "Object Oriented Programming",
       "credits": 3,
+      "prerequisite": "NIL",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 2,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3770,7 +6175,12 @@
       "semesterNum": 3,
       "basketName": "Program HONORS",
       "courseCode": "DATA209",
+      "courseName": "Advanced Exploratory Data Analysis",
       "credits": 4,
+      "prerequisite": "DATA132, MATH203",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3780,7 +6190,12 @@
       "semesterNum": 4,
       "basketName": "Program HONORS",
       "courseCode": "MATH301",
+      "courseName": "Optimization Techniques for Data Science",
       "credits": 4,
+      "prerequisite": "MATH201",
+      "lectureHours": 3,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3790,7 +6205,12 @@
       "semesterNum": 5,
       "basketName": "Program HONORS",
       "courseCode": "DATA301",
+      "courseName": "Machine Learning",
       "credits": 4,
+      "prerequisite": "DATA206, MATH301",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3800,7 +6220,12 @@
       "semesterNum": 6,
       "basketName": "Program HONORS",
       "courseCode": "DATA302",
+      "courseName": "Deep Learning",
       "credits": 4,
+      "prerequisite": "DATA301",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3810,7 +6235,12 @@
       "semesterNum": 7,
       "basketName": "Program HONORS",
       "courseCode": "DATA403",
+      "courseName": "Natural Language Processing",
       "credits": 4,
+      "prerequisite": "DATA302",
+      "lectureHours": 2,
+      "tutorialHours": 0,
+      "practicalHours": 4,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3820,7 +6250,12 @@
       "semesterNum": 1,
       "basketName": "Open/Minor",
       "courseCode": "MGMT101",
+      "courseName": "Essentials of Business Management",
       "credits": 2,
+      "prerequisite": "Nil",
+      "lectureHours": 1,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3830,7 +6265,12 @@
       "semesterNum": 7,
       "basketName": "Open/Minor",
       "courseCode": "DATA802",
+      "courseName": "Inter-Desciplinary Project",
       "credits": 4,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3840,7 +6280,12 @@
       "semesterNum": 1,
       "basketName": "Open/Minor",
       "courseCode": "PSYC105 / ECON106",
+      "courseName": "Introduction to Psychology/Principles of Economics",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 1,
+      "tutorialHours": 1,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3850,7 +6295,12 @@
       "semesterNum": 5,
       "basketName": "Internship/  Capstone Project",
       "courseCode": "DATA801",
+      "courseName": "Summer Training/Internship",
       "credits": 2,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     },
@@ -3860,7 +6310,12 @@
       "semesterNum": 8,
       "basketName": "Internship/  Capstone Project",
       "courseCode": "DATA803",
+      "courseName": "Capstone Project/\r\nIndustrial Internship",
       "credits": 12,
+      "prerequisite": "NIL",
+      "lectureHours": 0,
+      "tutorialHours": 0,
+      "practicalHours": 0,
       "isMandatory": true,
       "sourceSheetName": "Sem_Spread_DS_2026"
     }
@@ -3868,595 +6323,669 @@
   "prerequisites": [
     {
       "courseCode": "MTSC211",
+      "courseName": "Sustainable Smart Materials",
       "rawPrerequisiteText": "MTSC111",
       "batch": "2022",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "ENGL201",
+      "courseName": "Academic Writing",
       "rawPrerequisiteText": "UCOR102",
       "batch": "2022",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP203",
+      "courseName": "Analysis of Algorithms",
       "rawPrerequisiteText": "COMP201",
       "batch": "2022",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP302",
+      "courseName": "Internet of Things",
       "rawPrerequisiteText": "COMP132, COMP201, COMP206, COMP208, COMP301",
       "batch": "2022",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH205",
+      "courseName": "Statistics with R",
       "rawPrerequisiteText": "MATH202",
       "batch": "2022",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP206",
+      "courseName": "Microprocessors and Computer Architecture",
       "rawPrerequisiteText": "COMP204, COMP207",
       "batch": "2022",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA202",
+      "courseName": "Exploratory Data Analysis",
       "rawPrerequisiteText": "DATA201, MATH203",
       "batch": "2022",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH301",
+      "courseName": "Optimization Techniques for Data Science",
       "rawPrerequisiteText": "MATH201",
       "batch": "2022",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA 301",
+      "courseName": "Machine Learning",
       "rawPrerequisiteText": "DATA202, MATH301",
       "batch": "2022",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA302",
+      "courseName": "Deep Learning",
       "rawPrerequisiteText": "DATA301",
       "batch": "2022",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA 207",
+      "courseName": "Human Centric AI",
       "rawPrerequisiteText": "COMP210/COMP301",
       "batch": "2022",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH401/\r\nCOMP401",
+      "courseName": "SPT-Course #1-Probabilistic Graph Models LTP: 3-0-2\r\n/Web Framework LTP: 2-0-4",
       "rawPrerequisiteText": "NIL/NIL",
       "batch": "2022",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA402/\r\nDATA406",
+      "courseName": "SPT-Course #2 (Advanced Visualization and Storytelling/Big Data Framework)",
       "rawPrerequisiteText": "DATA301/NIL",
       "batch": "2022",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA403/\r\nCOMP402",
+      "courseName": "SPT-Course #3 (Natural Language Processing / Software Architecture and Deployments)",
       "rawPrerequisiteText": "DATA302/COMP205,\r\nCOMP401",
       "batch": "2022",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA404",
+      "courseName": "SPT-Course #4 (Multi Modal Learning / Cloud Computing)",
       "rawPrerequisiteText": "DATA302",
       "batch": "2022",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA405",
+      "courseName": "SPT-Course #5 (Reinforcement Learning/ Cognitive Computing)",
       "rawPrerequisiteText": "MATH202,MATH204",
       "batch": "2022",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MTSC211",
+      "courseName": "Sustainable Smart Materials",
       "rawPrerequisiteText": "MTSC111",
       "batch": "2023",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "ENGL201",
+      "courseName": "Academic Writing",
       "rawPrerequisiteText": "UCOR102",
       "batch": "2023",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP203",
+      "courseName": "Analysis of Algorithms",
       "rawPrerequisiteText": "COMP201",
       "batch": "2023",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP302",
+      "courseName": "Internet of Things",
       "rawPrerequisiteText": "COMP132, COMP201, COMP206, COMP208, COMP301",
       "batch": "2023",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH205",
+      "courseName": "Statistics with R",
       "rawPrerequisiteText": "MATH202",
       "batch": "2023",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP206",
+      "courseName": "Microprocessors and Computer Architecture",
       "rawPrerequisiteText": "COMP204, COMP207",
       "batch": "2023",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA202",
+      "courseName": "Exploratory Data Analysis",
       "rawPrerequisiteText": "DATA201, MATH203",
       "batch": "2023",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH301",
+      "courseName": "Optimization Techniques for Data Science",
       "rawPrerequisiteText": "MATH201",
       "batch": "2023",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA 301",
+      "courseName": "Machine Learning",
       "rawPrerequisiteText": "DATA202, MATH301",
       "batch": "2023",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA 302",
+      "courseName": "Deep Learning",
       "rawPrerequisiteText": "DATA301, MATH201",
       "batch": "2023",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA 303",
+      "courseName": "MLOps & Model Deployment",
       "rawPrerequisiteText": "DATA301, COMP208",
       "batch": "2023",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH401/\r\nCOMP401",
+      "courseName": "SPT-Course #1-Probabilistic Graph Models LTP: 3-0-2\r\n/Web Framework LTP: 2-0-4",
       "rawPrerequisiteText": "NIL/NIL",
       "batch": "2023",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA405/\r\nDATA406",
+      "courseName": "SPT-Course #2-Reinforcement Learning/Big Data Framework",
       "rawPrerequisiteText": "MATH202, MATH204/NIL",
       "batch": "2023",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA403",
+      "courseName": "SPT-Course #3 (Natural Language Processing / Natural Language Processing)",
       "rawPrerequisiteText": "DATA302",
       "batch": "2023",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA404/\r\nCOMP402",
+      "courseName": "SPT-Course #4 (Multi Modal Learning/ Software Architecture and Deployments)",
       "rawPrerequisiteText": "DATA302/\r\nCOMP205,\r\nCOMP401",
       "batch": "2023",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA408/\r\nCOMP405",
+      "courseName": "SPT-Course #5 Advanced Topics in Deep Learning LTP: 3-0-2/\r\nCloud &Cognitive Computing LTP: 2-0-4",
       "rawPrerequisiteText": "DATA302",
       "batch": "2023",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MTSC211",
+      "courseName": "Sustainable Smart Materials",
       "rawPrerequisiteText": "MTSC111",
       "batch": "2024",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "ENGL210",
+      "courseName": "Academic Writing",
       "rawPrerequisiteText": "UCOR102",
       "batch": "2024",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP203",
+      "courseName": "Analysis of Algorithms",
       "rawPrerequisiteText": "COMP201",
       "batch": "2024",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP302",
+      "courseName": "Internet of Things",
       "rawPrerequisiteText": "COMP132, COMP201, COMP206, COMP208, COMP301",
       "batch": "2024",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA132",
+      "courseName": "Data visualization and Storytelling",
       "rawPrerequisiteText": "DATA103",
       "batch": "2024",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP206",
+      "courseName": "Microprocessors and Computer Architecture",
       "rawPrerequisiteText": "COMP204, COMP207",
       "batch": "2024",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA202",
+      "courseName": "Exploratory Data Analysis",
       "rawPrerequisiteText": "DATA201, MATH203",
       "batch": "2024",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA 301",
+      "courseName": "Machine Learning",
       "rawPrerequisiteText": "DATA202, MATH301",
       "batch": "2024",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA 302",
+      "courseName": "Deep Learning",
       "rawPrerequisiteText": "DATA301",
       "batch": "2024",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH206",
+      "courseName": "Advanced Statistical Analysis and Research Methods with R",
       "rawPrerequisiteText": "MATH203",
       "batch": "2024",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH401/COMP401",
+      "courseName": "SPT-Course #1-Probabilistic Graph Models LTP: 3-0-2\r\n/Web Framework LTP: 2-0-4",
       "rawPrerequisiteText": "NIL/NIL",
       "batch": "2024",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA404/\r\nDATA406",
+      "courseName": "SPT-Course #2-Multi Modal Learning/Big Data Framework",
       "rawPrerequisiteText": "DATA302/NIL",
       "batch": "2024",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA403",
+      "courseName": "SPT-Course #3 (Natural Language Processing / Natural Language Processing)",
       "rawPrerequisiteText": "DATA302",
       "batch": "2024",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA408/COMP402",
+      "courseName": "SPT-Course #4 (Advanced Topics in Deep Learning LTP: 3-0-2/ Software Architecture and Deployments LTP: 2-0-4)",
       "rawPrerequisiteText": "DATA302/\r\nCOMP205,\r\nCOMP401",
       "batch": "2024",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA405",
+      "courseName": "SPT-Course #5 Reinforcement Learning/Reinforcement Learning",
       "rawPrerequisiteText": "MATH202, MATH204",
       "batch": "2024",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MTSC211",
+      "courseName": "Sustainable Smart Materials",
       "rawPrerequisiteText": "MTSC111",
       "batch": "2025",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH206",
+      "courseName": "Advanced Statistical Analysis and Research Methods with R",
       "rawPrerequisiteText": "MATH203",
       "batch": "2025",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP206",
+      "courseName": "Microprocessors and Computer Architecture",
       "rawPrerequisiteText": "COMP204, COMP207",
       "batch": "2025",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA132",
+      "courseName": "Data Visualization and Storytelling",
       "rawPrerequisiteText": "DATA103",
       "batch": "2025",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP302",
+      "courseName": "Internet of Things",
       "rawPrerequisiteText": "COMP132, COMP201, COMP206, COMP208, COMP301",
       "batch": "2025",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP203",
+      "courseName": "Analysis of Algorithms",
       "rawPrerequisiteText": "COMP201",
       "batch": "2025",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA209",
+      "courseName": "Advanced Exploratory Data Analysis",
       "rawPrerequisiteText": "DATA132, MATH203",
       "batch": "2025",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH301",
+      "courseName": "Optimization Techniques for Data Science",
       "rawPrerequisiteText": "MATH201",
       "batch": "2025",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA301",
+      "courseName": "Machine Learning",
       "rawPrerequisiteText": "DATA206, MATH301",
       "batch": "2025",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA302",
+      "courseName": "Deep Learning",
       "rawPrerequisiteText": "DATA301",
       "batch": "2025",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA403",
+      "courseName": "Natural Language Processing",
       "rawPrerequisiteText": "DATA302",
       "batch": "2025",
       "programCode": "BTECH_CSE",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH401/\r\nCOMP401",
+      "courseName": "SPT-Course #1-Probabilistic Graph Models LTP: 3-0-2/Web Framework LTP: 2-0-4",
       "rawPrerequisiteText": "NIL/NIL",
       "batch": "2025",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA404/\r\nDATA406",
+      "courseName": "SPT-Course #2-Multi Modal Learning/Big Data Framework",
       "rawPrerequisiteText": "DATA302/NIL",
       "batch": "2025",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "TBA/COMP405",
+      "courseName": "SPT-Course #3 (Image Processing and Computer Vision/Cloud & Cognitive Computing)",
       "rawPrerequisiteText": "TBA/NIL",
       "batch": "2025",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA408/ COMP402",
+      "courseName": "SPT-Course #4 (Advanced Topics in Deep Learning LTP: 3-0-2/ Software Architecture and Deployments LTP: 2-0-4)",
       "rawPrerequisiteText": "DATA302/\r\nCOMP205,\r\nCOMP401",
       "batch": "2025",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA405",
+      "courseName": "SPT-Course #5 Reinforcement Learning/Reinforcement Learning",
       "rawPrerequisiteText": "MATH202, MATH204",
       "batch": "2025",
       "programCode": "BTECH_CSE",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MTSC211",
+      "courseName": "Sustainable Smart Materials",
       "rawPrerequisiteText": "MTSC111",
       "batch": "2026",
       "programCode": "BTECH_DS",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH210",
+      "courseName": "Advanced Statistical Analysis and Research Methods",
       "rawPrerequisiteText": "MATH203",
       "batch": "2026",
       "programCode": "BTECH_DS",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP206",
+      "courseName": "Microprocessors and Computer Architecture",
       "rawPrerequisiteText": "COMP204, COMP207",
       "batch": "2026",
       "programCode": "BTECH_DS",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA132",
+      "courseName": "Data Visualization and Storytelling",
       "rawPrerequisiteText": "DATA103",
       "batch": "2026",
       "programCode": "BTECH_DS",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP203",
+      "courseName": "Analysis of Algorithms",
       "rawPrerequisiteText": "COMP201",
       "batch": "2026",
       "programCode": "BTECH_DS",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "COMP302",
+      "courseName": "Internet of Things",
       "rawPrerequisiteText": "COMP132, COMP201, COMP206, COMP208, COMP301",
       "batch": "2026",
       "programCode": "BTECH_DS",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA209",
+      "courseName": "Advanced Exploratory Data Analysis",
       "rawPrerequisiteText": "DATA132, MATH203",
       "batch": "2026",
       "programCode": "BTECH_DS",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "MATH301",
+      "courseName": "Optimization Techniques for Data Science",
       "rawPrerequisiteText": "MATH201",
       "batch": "2026",
       "programCode": "BTECH_DS",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA301",
+      "courseName": "Machine Learning",
       "rawPrerequisiteText": "DATA206, MATH301",
       "batch": "2026",
       "programCode": "BTECH_DS",
       "isUncertain": true,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA302",
+      "courseName": "Deep Learning",
       "rawPrerequisiteText": "DATA301",
       "batch": "2026",
       "programCode": "BTECH_DS",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     },
     {
       "courseCode": "DATA403",
+      "courseName": "Natural Language Processing",
       "rawPrerequisiteText": "DATA302",
       "batch": "2026",
       "programCode": "BTECH_DS",
       "isUncertain": false,
-      "sourceDocument": "118225_Semester_Spread_Structures_Sept_2026.xlsx"
+      "sourceDocument": "Semester_Spread_Structures_Sept_2026.xlsx"
     }
   ],
   "minorCourses": [

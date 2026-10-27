@@ -223,7 +223,33 @@ const COURSE_ALIASES = {
 function findCourseByCode(code) {
   if (!code || typeof code !== 'string') return null;
   const clean = code.replace(/\s+/, '').toUpperCase();
-  return OFFICIAL_COURSE_CATALOG.find(c => c.code.replace(/\s+/, '').toUpperCase() === clean) || null;
+  const staticMatch = OFFICIAL_COURSE_CATALOG.find(c => c.code.replace(/\s+/, '').toUpperCase() === clean);
+  if (staticMatch) return staticMatch;
+
+  // Dynamic fallback to parsed workbook courses
+  try {
+    const { loadCurriculumData } = require('./curriculum-data');
+    const { curriculumCourses } = loadCurriculumData();
+    const wbMatch = curriculumCourses.find(c => c.courseCode && c.courseCode.replace(/\s+/, '').toUpperCase() === clean);
+    if (wbMatch) {
+      return {
+        code: wbMatch.courseCode,
+        name: wbMatch.courseName,
+        credits: wbMatch.credits,
+        school: (wbMatch.programCode === 'BTECH_DS' || wbMatch.programCode === 'BTECH_CSE') ? SCHOOL_TAXONOMY.CS_DATA_AI : SCHOOL_TAXONOMY.UNIVERSITY_CORE,
+        domain: wbMatch.basketName || 'Curriculum',
+        level: 200,
+        semester_availability: 'regular',
+        prerequisites: wbMatch.prerequisite && !['NIL', 'Nil', 'None', 'N/A', '-'].includes(wbMatch.prerequisite) ? [wbMatch.prerequisite] : [],
+        allowed_programs: [wbMatch.programCode],
+        cross_school_allowed: true,
+        source_type: 'OFFICIAL_EXCEL',
+        source_reference: 'Semester_Spread_Structures_Sept_2026.xlsx'
+      };
+    }
+  } catch (e) {}
+
+  return null;
 }
 
 /**
@@ -249,17 +275,59 @@ function findCourseByNameOrAlias(queryStr) {
     }
   }
 
-  // 3. Exact title match
+  // 3. Exact title match in static catalog
   const exact = OFFICIAL_COURSE_CATALOG.find(c => c.name.toLowerCase() === clean);
   if (exact) return exact;
 
-  // 4. Substring title match (only for queries longer than 5 chars)
+  // 4. Substring title match in static catalog
   if (clean.length > 5) {
-    return OFFICIAL_COURSE_CATALOG.find(c => {
+    const sub = OFFICIAL_COURSE_CATALOG.find(c => {
       const title = c.name.toLowerCase();
       return title.includes(clean) || clean.includes(title);
-    }) || null;
+    });
+    if (sub) return sub;
   }
+
+  // 5. Dynamic fallback to parsed workbook courses and structure sheets
+  try {
+    const { findCourseDetails } = require('./curriculum-data');
+    const details = findCourseDetails(clean);
+    if (details) {
+      if (details.matchedEntries && details.matchedEntries.length > 0) {
+        const top = details.matchedEntries[0];
+        return {
+          code: top.courseCode,
+          name: top.courseName,
+          credits: top.credits,
+          school: (top.programCode === 'BTECH_DS' || top.programCode === 'BTECH_CSE') ? SCHOOL_TAXONOMY.CS_DATA_AI : SCHOOL_TAXONOMY.UNIVERSITY_CORE,
+          domain: top.basketName || 'Curriculum',
+          level: 200,
+          semester_availability: 'regular',
+          prerequisites: top.prerequisite && !['NIL', 'Nil', 'None', 'N/A', '-'].includes(top.prerequisite) ? [top.prerequisite] : [],
+          allowed_programs: [top.programCode],
+          cross_school_allowed: true,
+          source_type: 'OFFICIAL_EXCEL',
+          source_reference: 'Semester_Spread_Structures_Sept_2026.xlsx'
+        };
+      } else if (details.structEntries && details.structEntries.length > 0) {
+        const top = details.structEntries[0];
+        return {
+          code: top.name,
+          name: top.name,
+          credits: top.credits,
+          school: top.basket === 'universityCore' ? SCHOOL_TAXONOMY.UNIVERSITY_CORE : SCHOOL_TAXONOMY.CS_DATA_AI,
+          domain: top.basket,
+          level: 200,
+          semester_availability: 'regular',
+          prerequisites: [],
+          allowed_programs: ['BTECH_CSE', 'BTECH_DS'],
+          cross_school_allowed: true,
+          source_type: 'OFFICIAL_EXCEL',
+          source_reference: 'Semester_Spread_Structures_Sept_2026.xlsx'
+        };
+      }
+    }
+  } catch (e) {}
 
   return null;
 }
@@ -296,7 +364,19 @@ function getCoursePrerequisites(courseCode) {
   const clean = courseCode ? courseCode.replace(/\s+/, '').toUpperCase() : '';
   if (COURSE_PREREQUISITES[clean]) return COURSE_PREREQUISITES[clean];
   const c = findCourseByCode(clean);
-  return c && Array.isArray(c.prerequisites) ? c.prerequisites : [];
+  if (c && Array.isArray(c.prerequisites) && c.prerequisites.length > 0) return c.prerequisites;
+
+  // Check workbook prerequisites
+  try {
+    const { loadCurriculumData } = require('./curriculum-data');
+    const { prerequisites } = loadCurriculumData();
+    const prereq = prerequisites.find(p => p.courseCode.toUpperCase() === clean);
+    if (prereq && prereq.rawPrerequisiteText && !['NIL', 'Nil', 'None', 'N/A', '-'].includes(prereq.rawPrerequisiteText)) {
+      return [prereq.rawPrerequisiteText];
+    }
+  } catch (e) {}
+
+  return [];
 }
 
 module.exports = {
