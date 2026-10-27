@@ -2056,6 +2056,24 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       const basketResult = getBasketCourses(normalizedQuery, version, semester);
 
       if (basketResult) {
+        // CASE 0: UNSUPPORTED BATCH / VERSION REQUESTED (e.g. Batch 2035)
+        if (basketResult.hasUnsupportedVersion) {
+          return {
+            state: 'INSUFFICIENT_INFORMATION',
+            answer: `I could not verify curriculum requirements for Batch ${basketResult.requestedVersion}. ${basketResult.error}`,
+            sources: [
+              {
+                documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+                hierarchyLevel: 2,
+                pageOrSheet: 'Curriculum Structures (2022–2026)',
+                clauseNumber: 'Supported Batches',
+                excerpt: 'Curriculum structures are established for Batches 2022, 2023, 2024, 2025, and 2026 (Data Science).'
+              }
+            ],
+            ruleResults: { unsupportedBatch: basketResult.requestedVersion }
+          };
+        }
+
         // CASE A: INVALID SEMESTER REQUESTED (e.g. Semester 9 or 0)
         if (basketResult.hasSemesterFilter && basketResult.semesterValid === false) {
           return {

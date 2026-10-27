@@ -150,20 +150,35 @@ function loadCurriculumData() {
         const t = typeof rawT === 'number' ? rawT : parseInt(rawT, 10) || 0;
         const p = typeof rawP === 'number' ? rawP : parseInt(rawP, 10) || 0;
 
+        const cellStart = XLSX.utils.encode_cell({ r, c: block.startCol });
+        const cellEnd = XLSX.utils.encode_cell({ r, c: block.startCol + 6 });
+        const cellRange = `${cellStart}:${cellEnd}`;
+        const stableCourseId = `${config.program}_${config.batch}_S${block.semesterNum}_${rawCode.toUpperCase()}`;
+
         curriculumCourses.push({
+          stableCourseId,
+          program: config.program,
           programCode: config.program,
           batch: config.batch,
+          curriculumVersion: config.batch,
+          semester: block.semesterNum,
           semesterNum: block.semesterNum,
+          basket: currentBasket,
           basketName: currentBasket,
           courseCode: rawCode.toUpperCase(),
+          courseTitle: rawName || rawCode,
           courseName: rawName || rawCode,
           credits: credits,
           prerequisite: rawPrereq || 'None',
+          prerequisites: rawPrereq || 'None',
           lectureHours: l,
           tutorialHours: t,
           practicalHours: p,
           isUncertain: isUncertain,
-          sourceSheetName: sheetName
+          sourceWorkbook: 'Semester_Spread_Structures_Sept_2026.xlsx',
+          sourceWorksheet: sheetName,
+          sourceSheetName: sheetName,
+          sourceCellRange: cellRange
         });
 
         if (rawPrereq && !['NIL', 'NONE', 'N/A', '-'].includes(rawPrereq.toUpperCase())) {
@@ -184,7 +199,7 @@ function loadCurriculumData() {
   // Parse Struct_* sheets
   const curriculumStructures = {};
 
-  function parseStruct2022_2023(sheet, version, prog) {
+  function parseStruct2022_2023(sheet, version, prog, sheetName) {
     const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
     const basketCredits = {};
     for (let r = 2; r <= 9; r++) {
@@ -201,7 +216,16 @@ function loadCurriculumData() {
         const name = cleanStr(row[nameCol]);
         const cr = parseFloat(row[crCol]);
         if (name && !name.toLowerCase().includes('total credits') && !isNaN(cr)) {
-          list.push({ name, credits: cr });
+          const nameCell = XLSX.utils.encode_cell({ r, c: nameCol });
+          const crCell = XLSX.utils.encode_cell({ r, c: crCol });
+          list.push({
+            name,
+            courseTitle: name,
+            credits: cr,
+            sourceWorkbook: 'Semester_Spread_Structures_Sept_2026.xlsx',
+            sourceWorksheet: sheetName,
+            sourceCellRange: `${nameCell}:${crCell}`
+          });
         }
       }
       return list;
@@ -226,7 +250,7 @@ function loadCurriculumData() {
     };
   }
 
-  function parseStruct2024(sheet) {
+  function parseStruct2024(sheet, sheetName = 'Struct_2024') {
     const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
     const basketCredits = {};
     for (let r = 2; r <= 9; r++) {
@@ -243,7 +267,16 @@ function loadCurriculumData() {
         const name = cleanStr(row[nameCol]);
         const cr = parseFloat(row[crCol]);
         if (name && !name.toLowerCase().includes('total credits') && !isNaN(cr)) {
-          list.push({ name, credits: cr });
+          const nameCell = XLSX.utils.encode_cell({ r, c: nameCol });
+          const crCell = XLSX.utils.encode_cell({ r, c: crCol });
+          list.push({
+            name,
+            courseTitle: name,
+            credits: cr,
+            sourceWorkbook: 'Semester_Spread_Structures_Sept_2026.xlsx',
+            sourceWorksheet: sheetName,
+            sourceCellRange: `${nameCell}:${crCell}`
+          });
         }
       }
       return list;
@@ -268,7 +301,7 @@ function loadCurriculumData() {
     };
   }
 
-  function parseStruct2025(sheet) {
+  function parseStruct2025(sheet, sheetName = 'Struct_2025') {
     const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
     const basketCredits = {};
     for (let r = 2; r <= 9; r++) {
@@ -285,7 +318,16 @@ function loadCurriculumData() {
         const name = cleanStr(row[nameCol]);
         const cr = parseFloat(row[crCol]);
         if (name && !name.toLowerCase().includes('total credits') && !isNaN(cr)) {
-          list.push({ name, credits: cr });
+          const nameCell = XLSX.utils.encode_cell({ r, c: nameCol });
+          const crCell = XLSX.utils.encode_cell({ r, c: crCol });
+          list.push({
+            name,
+            courseTitle: name,
+            credits: cr,
+            sourceWorkbook: 'Semester_Spread_Structures_Sept_2026.xlsx',
+            sourceWorksheet: sheetName,
+            sourceCellRange: `${nameCell}:${crCell}`
+          });
         }
       }
       return list;
@@ -310,7 +352,7 @@ function loadCurriculumData() {
     };
   }
 
-  function parseStruct2026(sheet) {
+  function parseStruct2026(sheet, sheetName = 'Struct_2026_DS') {
     const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
     const basketCredits = {};
     for (let r = 2; r <= 9; r++) {
@@ -327,7 +369,16 @@ function loadCurriculumData() {
         const name = cleanStr(row[nameCol]);
         const cr = parseFloat(row[crCol]);
         if (name && !name.toLowerCase().includes('total credits') && !isNaN(cr)) {
-          list.push({ name, credits: cr });
+          const nameCell = XLSX.utils.encode_cell({ r, c: nameCol });
+          const crCell = XLSX.utils.encode_cell({ r, c: crCol });
+          list.push({
+            name,
+            courseTitle: name,
+            credits: cr,
+            sourceWorkbook: 'Semester_Spread_Structures_Sept_2026.xlsx',
+            sourceWorksheet: sheetName,
+            sourceCellRange: `${nameCell}:${crCell}`
+          });
         }
       }
       return list;
@@ -349,11 +400,11 @@ function loadCurriculumData() {
     };
   }
 
-  if (wb.Sheets['Struct_2022']) curriculumStructures['2022'] = parseStruct2022_2023(wb.Sheets['Struct_2022'], '2022', 'BTECH_CSE');
-  if (wb.Sheets['Struct_2023']) curriculumStructures['2023'] = parseStruct2022_2023(wb.Sheets['Struct_2023'], '2023', 'BTECH_CSE');
-  if (wb.Sheets['Struct_2024']) curriculumStructures['2024'] = parseStruct2024(wb.Sheets['Struct_2024']);
-  if (wb.Sheets['Struct_2025']) curriculumStructures['2025'] = parseStruct2025(wb.Sheets['Struct_2025']);
-  if (wb.Sheets['Struct_2026_DS']) curriculumStructures['2026'] = parseStruct2026(wb.Sheets['Struct_2026_DS']);
+  if (wb.Sheets['Struct_2022']) curriculumStructures['2022'] = parseStruct2022_2023(wb.Sheets['Struct_2022'], '2022', 'BTECH_CSE', 'Struct_2022');
+  if (wb.Sheets['Struct_2023']) curriculumStructures['2023'] = parseStruct2022_2023(wb.Sheets['Struct_2023'], '2023', 'BTECH_CSE', 'Struct_2023');
+  if (wb.Sheets['Struct_2024']) curriculumStructures['2024'] = parseStruct2024(wb.Sheets['Struct_2024'], 'Struct_2024');
+  if (wb.Sheets['Struct_2025']) curriculumStructures['2025'] = parseStruct2025(wb.Sheets['Struct_2025'], 'Struct_2025');
+  if (wb.Sheets['Struct_2026_DS']) curriculumStructures['2026'] = parseStruct2026(wb.Sheets['Struct_2026_DS'], 'Struct_2026_DS');
 
   cachedWorkbookData = {
     curriculumStructures,
@@ -371,6 +422,21 @@ function extractVersionFromQuery(queryStr) {
   if (!queryStr || typeof queryStr !== 'string') return null;
   const match = queryStr.match(/\b(2022|2023|2024|2025|2026)\b/);
   if (match) return match[1];
+  return null;
+}
+
+/**
+ * Detects if query mentions a year/batch that is outside supported curriculum versions
+ */
+function detectUnsupportedVersion(queryStr) {
+  if (!queryStr || typeof queryStr !== 'string') return null;
+  const match = queryStr.match(/\b(19\d{2}|20\d{2})\b/);
+  if (match) {
+    const yr = match[1];
+    if (!['2022', '2023', '2024', '2025', '2026'].includes(yr)) {
+      return yr;
+    }
+  }
   return null;
 }
 
@@ -441,6 +507,118 @@ function getAvailableVersions() {
 }
 
 /**
+ * Validates a basket's course records against stated credit allocation and integrity constraints.
+ */
+function validateBasketRecords(basketName, batch, records, statedAllocation) {
+  if (!records || !Array.isArray(records)) {
+    return { isValid: false, errors: ['Records must be an array'] };
+  }
+  let sum = 0;
+  const errors = [];
+  const seen = new Set();
+
+  for (const r of records) {
+    const title = r.name || r.courseTitle;
+    if (!title) {
+      errors.push('Missing course title');
+    }
+    if (typeof r.credits !== 'number' || isNaN(r.credits) || r.credits <= 0) {
+      errors.push(`Invalid credit value for ${title}: ${r.credits}`);
+    } else {
+      sum += r.credits;
+    }
+    const id = (r.stableCourseId || r.courseCode || title).toLowerCase();
+    if (seen.has(id)) {
+      errors.push(`Duplicate course record detected: ${id}`);
+    }
+    seen.add(id);
+  }
+
+  const discrepancy = typeof statedAllocation === 'number' && sum !== statedAllocation;
+  return {
+    isValid: errors.length === 0 && !discrepancy,
+    hasDiscrepancy: discrepancy,
+    calculatedSum: sum,
+    statedAllocation: statedAllocation || sum,
+    difference: typeof statedAllocation === 'number' ? sum - statedAllocation : 0,
+    courseCount: records.length,
+    errors
+  };
+}
+
+/**
+ * Validates semester course records for consistency and bounds.
+ */
+function validateSemesterRecords(batch, semesterNum, records) {
+  if (typeof semesterNum !== 'number' || semesterNum < 1 || semesterNum > 8) {
+    return { isValid: false, errors: [`Semester ${semesterNum} is out of the 1-8 bounds.`] };
+  }
+  if (!records || !Array.isArray(records)) {
+    return { isValid: false, errors: ['Records must be an array'] };
+  }
+  const errors = [];
+  const seenCodes = new Set();
+  let sum = 0;
+
+  for (const c of records) {
+    if (!c.courseCode || c.courseCode.length < 2) {
+      errors.push(`Invalid course code in semester ${semesterNum}`);
+    }
+    if (c.semesterNum !== semesterNum && c.semester !== semesterNum) {
+      errors.push(`Course ${c.courseCode} has mismatched semester ${c.semesterNum}`);
+    }
+    if (typeof c.credits !== 'number' || isNaN(c.credits) || c.credits <= 0) {
+      errors.push(`Invalid credits for ${c.courseCode}: ${c.credits}`);
+    } else {
+      sum += c.credits;
+    }
+    if (c.courseCode && seenCodes.has(c.courseCode.toUpperCase())) {
+      errors.push(`Duplicate course ${c.courseCode} in semester ${semesterNum}`);
+    }
+    if (c.courseCode) seenCodes.add(c.courseCode.toUpperCase());
+  }
+
+  return {
+    isValid: errors.length === 0,
+    semesterNum,
+    courseCount: records.length,
+    calculatedSum: sum,
+    errors
+  };
+}
+
+/**
+ * Detects curriculum conflicts across records.
+ */
+function detectCurriculumConflicts(records) {
+  if (!Array.isArray(records)) return { hasConflict: false, conflicts: [] };
+  const map = new Map();
+  const conflicts = [];
+
+  for (const r of records) {
+    const key = `${r.batch || r.curriculumVersion}_${r.program || r.programCode}_${(r.courseCode || r.name).toUpperCase()}`;
+    if (map.has(key)) {
+      const existing = map.get(key);
+      if (existing.credits !== r.credits) {
+        conflicts.push({
+          key,
+          reason: `Conflicting credit definitions: ${existing.credits} cr vs ${r.credits} cr`,
+          recordA: existing,
+          recordB: r
+        });
+      }
+    } else {
+      map.set(key, r);
+    }
+  }
+
+  return {
+    hasConflict: conflicts.length > 0,
+    conflicts
+  };
+}
+
+/**
  * Returns basket courses for a specified version or for all versions if unspecified.
  * If a semester is specified, filters courses strictly to that semester using semester-spread data.
  */
@@ -449,18 +627,29 @@ function getBasketCourses(basketQuery, versionQuery = null, semesterQuery = null
   const basketKey = normalizeBasketName(basketQuery);
   if (!basketKey) return null;
 
-  const version = versionQuery ? extractVersionFromQuery(versionQuery) : (extractVersionFromQuery(basketQuery) || null);
-  const semNum = typeof semesterQuery === 'number'
-    ? semesterQuery
-    : (extractSemesterFromQuery(semesterQuery) || extractSemesterFromQuery(basketQuery));
-
   const basketNameLabel = basketKey === 'foundation' ? 'Foundation Courses'
     : basketKey === 'universityCore' ? 'University Core Courses'
     : basketKey === 'programCore' ? 'Program Core Courses'
     : basketKey === 'programHonors' ? 'Program Honors Courses'
-    : basketKey === 'electives' ? (version === '2026' ? 'Electives' : 'Specialization Tracks')
+    : basketKey === 'electives' ? 'Electives'
     : basketKey === 'capstone' ? 'Internship & Capstone Project'
     : 'Minor / Open Courses';
+
+  // Check for unsupported batch/version query (e.g. 2035, 2019)
+  const unsupportedVersion = detectUnsupportedVersion(versionQuery) || detectUnsupportedVersion(basketQuery);
+  if (unsupportedVersion) {
+    return {
+      hasUnsupportedVersion: true,
+      requestedVersion: unsupportedVersion,
+      basketName: basketNameLabel,
+      error: `Vidyashilp University curriculum structures in Semester_Spread_Structures_Sept_2026.xlsx are defined for Batches 2022, 2023, 2024, 2025, and 2026 (Data Science). Batch ${unsupportedVersion} is not a recognized curriculum version in official university records.`
+    };
+  }
+
+  const version = versionQuery ? extractVersionFromQuery(versionQuery) : (extractVersionFromQuery(basketQuery) || null);
+  const semNum = typeof semesterQuery === 'number'
+    ? semesterQuery
+    : (extractSemesterFromQuery(semesterQuery) || extractSemesterFromQuery(basketQuery));
 
   // CASE A: SEMESTER CONSTRAINT SPECIFIED
   if (semNum !== null) {
@@ -1066,6 +1255,10 @@ module.exports = {
   normalizeBasketName,
   extractVersionFromQuery,
   extractSemesterFromQuery,
+  detectUnsupportedVersion,
+  validateBasketRecords,
+  validateSemesterRecords,
+  detectCurriculumConflicts,
   getCourseTransition,
   KNOWN_CURRICULUM_TRANSITIONS
 };

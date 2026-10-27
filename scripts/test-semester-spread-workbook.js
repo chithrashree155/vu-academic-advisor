@@ -8,7 +8,10 @@ const {
   loadCurriculumData,
   compareCurriculumVersions,
   getBasketCourses,
-  findCourseDetails
+  findCourseDetails,
+  validateBasketRecords,
+  validateSemesterRecords,
+  detectCurriculumConflicts
 } = require('../src/lib/curriculum-data');
 
 async function runTestSuite() {
@@ -335,6 +338,113 @@ async function runTestSuite() {
     assert(resOutRange.state === 'INSUFFICIENT_INFORMATION', 'State must be INSUFFICIENT_INFORMATION');
     assert(resOutRange.ruleResults.invalidSemester === 9, 'Must report invalid semester 9');
     assert(resOutRange.answer.includes('8 semesters'), 'Must explain B.Tech consists of 8 semesters');
+  });
+
+  await testCase(30, 'Unknown Batch Fallback: Batch 2035 Fails Safely with Insufficient Information', async () => {
+    const res = await processAdvisorQuery('What are the Foundation courses for Batch 2035?');
+    assert(res.state === 'INSUFFICIENT_INFORMATION', `State must be INSUFFICIENT_INFORMATION (got ${res.state})`);
+    assert(res.answer.includes('Batch 2035') || res.answer.includes('2035'), 'Answer must reference requested batch 2035');
+    assert(res.answer.includes('2022') && res.answer.includes('2026'), 'Answer must list supported batches 2022-2026');
+    assert(res.ruleResults && res.ruleResults.unsupportedBatch === '2035', 'ruleResults must record unsupportedBatch');
+  });
+
+  await testCase(31, 'Out-of-Scope Guardrail: Non-Academic Programming Request Blocked', async () => {
+    const res = await processAdvisorQuery('Write a python script to sort a list using quicksort');
+    assert(res.state === 'OUT_OF_SCOPE' || res.state === 'INSUFFICIENT_INFORMATION' || res.answer.toLowerCase().includes('academic advisor') || res.answer.toLowerCase().includes('university'), 'Must block out of scope request');
+  });
+
+  await testCase(32, 'Ambiguous Course Disambiguation: Underspecified "AI" Query Prompts for Clarification', async () => {
+    const res = await processAdvisorQuery('Can I take AI?');
+    assert(res.state === 'NEEDS_CLARIFICATION', `State must be NEEDS_CLARIFICATION (got ${res.state})`);
+    assert(res.answer.includes('COMP301') && res.answer.includes('DATA206'), 'Must list ambiguous course options for disambiguation');
+  });
+
+  await testCase(33, 'Mutation Test 1: Corrupted Course Credit Value Caught by Validation', () => {
+    const validCourses = [
+      { name: 'Multivariate Calculus', credits: 4 },
+      { name: 'Linear Algebra', credits: 4 },
+      { name: 'Probability and Statistics', credits: 4 }
+    ];
+    // Baseline valid check
+    const baseAudit = validateBasketRecords('Math Basket', '2025', validCourses, 12);
+    assert(baseAudit.isValid === true, 'Baseline audit must be valid');
+
+    // Mutate credit: 4 -> 99
+    const corruptedCourses = [
+      { name: 'Multivariate Calculus', credits: 4 },
+      { name: 'Linear Algebra', credits: 99 },
+      { name: 'Probability and Statistics', credits: 4 }
+    ];
+    const corruptedAudit = validateBasketRecords('Math Basket', '2025', corruptedCourses, 12);
+    assert(corruptedAudit.isValid === false, 'Corrupted audit must NOT be valid');
+    assert(corruptedAudit.hasDiscrepancy === true, 'Must flag discrepancy');
+    assert(corruptedAudit.calculatedSum === 107, 'Must report exact corrupted sum (107)');
+    assert(corruptedAudit.difference === 95, 'Must report exact discrepancy delta (+95)');
+  });
+
+  await testCase(34, 'Mutation Test 2: Mismatched / Corrupted Semester Record Caught by Validation', () => {
+    const corruptedSemesterCourses = [
+      { courseCode: 'MATH201', courseName: 'Calculus', semesterNum: 1, credits: 3 },
+      { courseCode: 'COMP201', courseName: 'Data Structures', semesterNum: 2, credits: 4 } // Corrupted semester placement!
+    ];
+    const semAudit = validateSemesterRecords('2022', 1, corruptedSemesterCourses);
+    assert(semAudit.isValid === false, 'Mismatched semester must fail validation');
+    assert(semAudit.errors.some(e => e.includes('mismatched semester')), 'Must explicitly flag mismatched semester error');
+  });
+
+  await testCase(35, 'Mutation Test 3: Conflicting Course Definitions Across Records Caught by Conflict Detector', () => {
+    const recordsWithConflict = [
+      { batch: '2024', program: 'BTECH_CSE', courseCode: 'COMP202', name: 'Theoretical Computer Science', credits: 4 },
+      { batch: '2024', program: 'BTECH_CSE', courseCode: 'COMP202', name: 'Theoretical Computer Science', credits: 2 } // Conflicting 2 cr!
+    ];
+    const conflictResult = detectCurriculumConflicts(recordsWithConflict);
+    assert(conflictResult.hasConflict === true, 'Must detect conflict');
+    assert(conflictResult.conflicts.length === 1, 'Must detect exactly 1 conflict');
+    assert(conflictResult.conflicts[0].reason.includes('4 cr vs 2 cr'), 'Must report conflicting credit values');
+  });
+
+  await testCase(36, 'API Handler End-to-End Execution & Output Verification', async () => {
+    const query = 'What are the Foundation courses for 2024 batch?';
+    const startTime = Date.now();
+    const res = await processAdvisorQuery(query);
+    const latencyMs = Date.now() - startTime;
+
+    assert(res.state === 'ANSWERABLE', 'State must be ANSWERABLE');
+    assert(Array.isArray(res.sources) && res.sources.length > 0, 'Must attach source documents');
+    assert(res.sources[0].documentTitle === 'Semester_Spread_Structures_Sept_2026.xlsx', 'Must cite workbook');
+    assert(res.sources[0].pageOrSheet.includes('Struct_2024'), 'Must cite Struct_2024 worksheet');
+    assert(res.ruleResults && res.ruleResults.credits === 34, 'Must return ruleResults with 34 credits');
+    assert(latencyMs < 500, `E2E Latency must be fast (got ${latencyMs}ms)`);
+  });
+
+  await testCase(37, 'Regression: Exact Batch Isolation for MATH201 (Calculus) vs MATH202 (Probability Theory)', () => {
+    // 2022 S1 vs S2 Foundation
+    const s1_2022 = getBasketCourses('foundation', '2022', 1);
+    const s2_2022 = getBasketCourses('foundation', '2022', 2);
+    const s1_2022_codes = s1_2022.courses.map(c => c.courseCode);
+    const s2_2022_codes = s2_2022.courses.map(c => c.courseCode);
+
+    assert(s1_2022_codes.includes('MATH201'), '2022 S1 must contain MATH201 (Calculus)');
+    assert(!s1_2022_codes.includes('MATH202'), '2022 S1 must NOT contain MATH202');
+    assert(s2_2022_codes.includes('MATH202'), '2022 S2 must contain MATH202 (Probability Theory)');
+    assert(!s2_2022_codes.includes('MATH201'), '2022 S2 must NOT contain MATH201');
+
+    // 2023 S1 vs S2 Foundation
+    const s1_2023 = getBasketCourses('foundation', '2023', 1);
+    const s2_2023 = getBasketCourses('foundation', '2023', 2);
+    const s1_2023_codes = s1_2023.courses.map(c => c.courseCode);
+    const s2_2023_codes = s2_2023.courses.map(c => c.courseCode);
+
+    assert(s1_2023_codes.includes('MATH202'), '2023 S1 must contain MATH202 (Probability Theory)');
+    assert(!s1_2023_codes.includes('MATH201'), '2023 S1 must NOT contain MATH201');
+    assert(s2_2023_codes.includes('MATH201'), '2023 S2 must contain MATH201 (Calculus)');
+    assert(!s2_2023_codes.includes('MATH202'), '2023 S2 must NOT contain MATH202');
+
+    // Verify exact credits (3 cr each)
+    const math201_2022 = s1_2022.courses.find(c => c.courseCode === 'MATH201');
+    const math202_2023 = s1_2023.courses.find(c => c.courseCode === 'MATH202');
+    assert(math201_2022.credits === 3, 'MATH201 in 2022 S1 must be 3 credits');
+    assert(math202_2023.credits === 3, 'MATH202 in 2023 S1 must be 3 credits');
   });
 
   // Summary
