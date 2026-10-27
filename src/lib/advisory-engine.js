@@ -35,6 +35,7 @@ const {
   isCourseInWorkbook,
   normalizeBasketName,
   extractVersionFromQuery,
+  extractSemesterFromQuery,
   getCourseTransition,
   KNOWN_CURRICULUM_TRANSITIONS
 } = require('./curriculum-data');
@@ -899,19 +900,23 @@ function classifyQuery(queryStr) {
     return 'COURSE_PLACEMENT';
   }
 
-  // 14. Semester courses
+  // 14. Semester courses (general semester course list without a specific basket)
   if (
-    (q.includes('semester') && /\b(?:courses?|subjects?)\b/i.test(q) && /\bsemester\s+\d\b/i.test(q)) ||
-    /courses?\s+(?:are\s+in|in|for|of)\s+semester\s+\d/i.test(q) ||
-    /what\s+courses\s+(?:are\s+taken|do\s+i\s+take)\s+in\s+semester\s+\d/i.test(q)
+    !normalizeBasketName(q) && (
+      (q.includes('semester') && /\b(?:courses?|subjects?)\b/i.test(q) && (/\bsemester\s+\d\b/i.test(q) || extractSemesterFromQuery(q))) ||
+      /courses?\s+(?:are\s+in|in|for|of)\s+semester\s+\d/i.test(q) ||
+      /what\s+courses\s+(?:are\s+taken|do\s+i\s+take)\s+in\s+semester\s+\d/i.test(q)
+    )
   ) {
     return 'SEMESTER_COURSES';
   }
 
-  // 15. Curriculum basket courses (e.g. "List Foundation courses and credits for 2026 DS", "What are the Foundation courses?")
+  // 15. Curriculum basket courses (e.g. "List Foundation courses and credits for 2026 DS", "Tell me foundation courses for batch 2023 first semester only")
   if (
     normalizeBasketName(q) && (
       q.includes('list') ||
+      q.includes('tell me') ||
+      q.includes('show') ||
       q.includes('what are') ||
       q.includes('what were') ||
       q.includes('which courses') ||
@@ -1988,53 +1993,58 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
     // ── 3.6.3. SEMESTER COURSES ──
     if (queryCategory === 'SEMESTER_COURSES') {
-      const semMatch = normalizedQuery.match(/semester\s+(\d)/i);
-      const semNum = semMatch ? parseInt(semMatch[1], 10) : 1;
+      const semNum = extractSemesterFromQuery(normalizedQuery) || (normalizedQuery.match(/semester\s+(\d)/i) ? parseInt(normalizedQuery.match(/semester\s+(\d)/i)[1], 10) : 1);
       const version = extractVersionFromQuery(normalizedQuery);
-      const semResult = getSemesterCourses(semNum, version);
+      const basketKey = normalizeBasketName(normalizedQuery);
 
-      if (semResult) {
-        if (semResult.hasSpecificVersion) {
-          const cList = semResult.courses.map((c, idx) =>
-            `${idx + 1}. **${c.courseCode} — ${c.courseName}**\n   Credits: ${c.credits} (L:${c.lectureHours}, T:${c.tutorialHours}, P:${c.practicalHours}) | Basket: ${c.basketName} | Prereq: ${c.prerequisite}`
-          ).join('\n\n');
+      if (basketKey) {
+        queryCategory = 'CURRICULUM_BASKET';
+      } else {
+        const semResult = getSemesterCourses(semNum, version);
 
-          return {
-            state: 'ANSWERABLE',
-            answer: `### Courses in Semester ${semResult.semesterNum} — Batch ${semResult.version}\n*Official Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (Sem_Spread_${semResult.version === '2026' ? 'DS_2026' : semResult.version})*\n\n**Total Semester Credits:** **${semResult.totalCredits} credits**\n\n${cList}`,
-            sources: [
-              {
-                documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
-                hierarchyLevel: 2,
-                pageOrSheet: `Sem_Spread_${semResult.version === '2026' ? 'DS_2026' : semResult.version}`,
-                clauseNumber: `Semester ${semResult.semesterNum} Courses`,
-                excerpt: `Semester ${semResult.semesterNum} course schedule and prerequisites for Batch ${semResult.version}.`
-              }
-            ],
-            ruleResults: { semester: semResult.semesterNum, batch: semResult.version, count: semResult.courses.length, totalCredits: semResult.totalCredits },
-            followUp: null
-          };
-        } else {
-          let answerText = `Semester ${semNum} course offerings across curriculum batches (*Semester_Spread_Structures_Sept_2026.xlsx*):\n\n`;
-          for (const [b, data] of Object.entries(semResult.batches)) {
-            answerText += `### Batch ${b} (${data.totalCredits} credits total):\n`;
-            answerText += data.courses.map(c => `• **${c.courseCode} — ${c.courseName}** (${c.credits} cr, ${c.basketName}, Prereq: ${c.prerequisite})`).join('\n') + '\n\n';
+        if (semResult) {
+          if (semResult.hasSpecificVersion) {
+            const cList = semResult.courses.map((c, idx) =>
+              `${idx + 1}. **${c.courseCode} — ${c.courseName}**\n   Credits: ${c.credits} (L:${c.lectureHours}, T:${c.tutorialHours}, P:${c.practicalHours}) | Basket: ${c.basketName} | Prereq: ${c.prerequisite}`
+            ).join('\n\n');
+
+            return {
+              state: 'ANSWERABLE',
+              answer: `### Courses in Semester ${semResult.semesterNum} — Batch ${semResult.version}\n*Official Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (Sem_Spread_${semResult.version === '2026' ? 'DS_2026' : semResult.version})*\n\n**Total Semester Credits:** **${semResult.totalCredits} credits**\n\n${cList}`,
+              sources: [
+                {
+                  documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+                  hierarchyLevel: 2,
+                  pageOrSheet: `Sem_Spread_${semResult.version === '2026' ? 'DS_2026' : semResult.version}`,
+                  clauseNumber: `Semester ${semResult.semesterNum} Courses`,
+                  excerpt: `Semester ${semResult.semesterNum} course schedule and prerequisites for Batch ${semResult.version}.`
+                }
+              ],
+              ruleResults: { semester: semResult.semesterNum, batch: semResult.version, count: semResult.courses.length, totalCredits: semResult.totalCredits },
+              followUp: null
+            };
+          } else {
+            let answerText = `Semester ${semNum} course offerings across curriculum batches (*Semester_Spread_Structures_Sept_2026.xlsx*):\n\n`;
+            for (const [b, data] of Object.entries(semResult.batches)) {
+              answerText += `### Batch ${b} (${data.totalCredits} credits total):\n`;
+              answerText += data.courses.map(c => `• **${c.courseCode} — ${c.courseName}** (${c.credits} cr, ${c.basketName}, Prereq: ${c.prerequisite})`).join('\n') + '\n\n';
+            }
+            return {
+              state: 'ANSWERABLE',
+              answer: answerText,
+              sources: [
+                {
+                  documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+                  hierarchyLevel: 2,
+                  pageOrSheet: 'Semester Spread Sheets',
+                  clauseNumber: `Semester ${semNum} Schedule`,
+                  excerpt: `Semester ${semNum} schedule across curriculum batches.`
+                }
+              ],
+              ruleResults: { semester: semNum, multiBatch: true },
+              followUp: `Specify your batch (e.g. 2024, 2025, or 2026) for exact term registration details.`
+            };
           }
-          return {
-            state: 'ANSWERABLE',
-            answer: answerText,
-            sources: [
-              {
-                documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
-                hierarchyLevel: 2,
-                pageOrSheet: 'Semester Spread Sheets',
-                clauseNumber: `Semester ${semNum} Schedule`,
-                excerpt: `Semester ${semNum} schedule across curriculum batches.`
-              }
-            ],
-            ruleResults: { semester: semNum, multiBatch: true },
-            followUp: `Specify your batch (e.g. 2024, 2025, or 2026) for exact term registration details.`
-          };
         }
       }
     }
@@ -2042,9 +2052,127 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
     // ── 3.6.4. CURRICULUM BASKET COURSES ──
     if (queryCategory === 'CURRICULUM_BASKET') {
       const version = extractVersionFromQuery(normalizedQuery);
-      const basketResult = getBasketCourses(normalizedQuery, version);
+      const semester = extractSemesterFromQuery(normalizedQuery);
+      const basketResult = getBasketCourses(normalizedQuery, version, semester);
 
       if (basketResult) {
+        // CASE A: INVALID SEMESTER REQUESTED (e.g. Semester 9 or 0)
+        if (basketResult.hasSemesterFilter && basketResult.semesterValid === false) {
+          return {
+            state: 'INSUFFICIENT_INFORMATION',
+            answer: `I could not verify course offerings for Semester ${basketResult.semesterNum}. Vidyashilp University B.Tech programs consist of 8 semesters (Semesters 1 through 8). Semester ${basketResult.semesterNum} is outside the valid curriculum range per official university records (*Semester_Spread_Structures_Sept_2026.xlsx*).`,
+            sources: [
+              {
+                documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+                hierarchyLevel: 2,
+                pageOrSheet: 'General Structure',
+                clauseNumber: 'Curriculum Semesters',
+                excerpt: 'B.Tech degree curriculum is structured across 8 semesters.'
+              }
+            ],
+            ruleResults: { invalidSemester: basketResult.semesterNum }
+          };
+        }
+
+        // CASE B: SEMESTER FILTER APPLIED FOR SPECIFIC BATCH
+        if (basketResult.hasSemesterFilter && basketResult.hasSpecificVersion) {
+          const sheetName = basketResult.sourceSheet;
+          if (basketResult.noCoursesInSemester) {
+            let explanation = `According to the official curriculum semester spread (*Semester_Spread_Structures_Sept_2026.xlsx*, sheet *${sheetName}*), there are no **${basketResult.basketName}** scheduled in **Semester ${basketResult.semesterNum}** for Batch ${basketResult.version} (${basketResult.program}).`;
+            if (basketResult.availableSemesters && basketResult.availableSemesters.length > 0) {
+              explanation += `\n\nFor Batch ${basketResult.version}, ${basketResult.basketName} are scheduled in: **Semester${basketResult.availableSemesters.length > 1 ? 's' : ''} ${basketResult.availableSemesters.join(', ')}**.`;
+            }
+
+            return {
+              state: 'ANSWERABLE',
+              answer: `### Vidyashilp University ${basketResult.basketName} — Semester ${basketResult.semesterNum} (Batch ${basketResult.version})\n*Official Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${sheetName})*\n\n${explanation}`,
+              sources: [
+                {
+                  documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+                  hierarchyLevel: 2,
+                  pageOrSheet: sheetName,
+                  clauseNumber: `${basketResult.basketName} — Semester ${basketResult.semesterNum} Placement`,
+                  excerpt: `No ${basketResult.basketName} courses scheduled in Semester ${basketResult.semesterNum} for Batch ${basketResult.version}.`
+                }
+              ],
+              ruleResults: {
+                basket: basketResult.basketName,
+                version: basketResult.version,
+                semester: basketResult.semesterNum,
+                count: 0
+              },
+              followUp: basketResult.availableSemesters && basketResult.availableSemesters.length > 0
+                ? `Ask 'What are the ${basketResult.basketName} in Semester ${basketResult.availableSemesters[0]} for Batch ${basketResult.version}?'`
+                : null
+            };
+          }
+
+          const courseList = basketResult.courses.map((c, idx) => {
+            const codePrefix = c.courseCode && c.courseCode !== c.name ? `**${c.courseCode} — ${c.name}**` : `**${c.name}**`;
+            let details = `${c.credits} credit${c.credits > 1 ? 's' : ''}`;
+            if (c.lectureHours !== undefined && c.tutorialHours !== undefined && c.practicalHours !== undefined) {
+              details += ` (L:${c.lectureHours}, T:${c.tutorialHours}, P:${c.practicalHours})`;
+            }
+            if (c.prerequisite && !['NONE', 'NIL', 'N/A', '-'].includes(c.prerequisite.toUpperCase())) {
+              details += ` | Prerequisite: ${c.prerequisite}`;
+            }
+            return `${idx + 1}. ${codePrefix} — ${details}`;
+          }).join('\n');
+
+          return {
+            state: 'ANSWERABLE',
+            answer: `### Vidyashilp University ${basketResult.basketName} — Semester ${basketResult.semesterNum} (Batch ${basketResult.version})\n*Official Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${sheetName})*\n\n**Program:** ${basketResult.program} | **Batch:** ${basketResult.version} | **Semester:** ${basketResult.semesterNum}\n**Semester Basket Total:** **${basketResult.totalCredits} credits** (${basketResult.courses.length} course${basketResult.courses.length > 1 ? 's' : ''})\n\n**Courses Scheduled in Semester ${basketResult.semesterNum}:**\n${courseList}`,
+            sources: [
+              {
+                documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+                hierarchyLevel: 2,
+                pageOrSheet: sheetName,
+                clauseNumber: `${basketResult.basketName} (Semester ${basketResult.semesterNum})`,
+                excerpt: `Official ${basketResult.basketName} placement in Semester ${basketResult.semesterNum} for Batch ${basketResult.version}.`
+              }
+            ],
+            ruleResults: {
+              basket: basketResult.basketName,
+              version: basketResult.version,
+              semester: basketResult.semesterNum,
+              credits: basketResult.totalCredits,
+              count: basketResult.courses.length
+            },
+            followUp: `Ask 'List Foundation courses in Semester ${basketResult.semesterNum === 1 ? 2 : 1} for Batch ${basketResult.version}' or 'Tell me all Foundation courses for Batch ${basketResult.version}'.`
+          };
+        }
+
+        // CASE C: SEMESTER FILTER SPECIFIED WITHOUT BATCH
+        if (basketResult.hasSemesterFilter && !basketResult.hasSpecificVersion) {
+          let answerText = `Semester ${basketResult.semesterNum} **${basketResult.basketName}** across curriculum batches (*Semester_Spread_Structures_Sept_2026.xlsx*):\n\n`;
+          for (const [b, bData] of Object.entries(basketResult.versions)) {
+            answerText += `### Batch ${b} (${bData.program} — ${bData.totalCredits} credits in Semester ${basketResult.semesterNum}):\n`;
+            if (bData.courses.length > 0) {
+              answerText += bData.courses.map(c => `• **${c.courseCode} — ${c.name}** (${c.credits} cr)`).join('\n') + '\n\n';
+            } else {
+              answerText += `• *No ${basketResult.basketName} scheduled in Semester ${basketResult.semesterNum}*\n\n`;
+            }
+          }
+          answerText += `*(Note: Specify a batch, e.g. 'for Batch 2023', for batch-specific details).*`;
+
+          return {
+            state: 'ANSWERABLE',
+            answer: answerText,
+            sources: [
+              {
+                documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+                hierarchyLevel: 2,
+                pageOrSheet: 'Semester Spread Sheets (2022–2026)',
+                clauseNumber: `${basketResult.basketName} (Semester ${basketResult.semesterNum})`,
+                excerpt: `Multi-version schedule of ${basketResult.basketName} in Semester ${basketResult.semesterNum}.`
+              }
+            ],
+            ruleResults: { basket: basketResult.basketName, semester: basketResult.semesterNum, multiBatch: true },
+            followUp: `Specify your batch (e.g. 2023 or 2024) for exact registration details.`
+          };
+        }
+
+        // CASE D: WHOLE BASKET (NO SEMESTER FILTER)
         if (basketResult.hasSpecificVersion) {
           const courseList = basketResult.courses.map((c, idx) => `${idx + 1}. **${c.name}** — ${c.credits} credit${c.credits > 1 ? 's' : ''}`).join('\n');
           let allocExplanation = `**Total Basket Allocation:** **${basketResult.allocatedCredits} credits** (Total Degree Requirement: 180 credits)\n*Sum of listed course credits: ${basketResult.totalCourseCredits} credits*`;

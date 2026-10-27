@@ -225,6 +225,118 @@ async function runTestSuite() {
     assert(res.answer.includes('COMP403'), 'Must mention course code COMP403');
   });
 
+  await testCase(24, 'Semester Filter: Batch 2023 Foundation courses, Semester 1 only', async () => {
+    const structRes = getBasketCourses('Tell me foundation courses for batch 2023 first semester only');
+    assert(structRes && structRes.hasSemesterFilter === true, 'Must activate semester filter');
+    assert(structRes.semesterNum === 1, 'Must extract semester 1');
+    assert(structRes.version === '2023', 'Must extract batch 2023');
+    assert(structRes.courses.length === 5, `Expected 5 courses, got ${structRes.courses.length}`);
+    assert(structRes.totalCredits === 13, `Expected 13 credits, got ${structRes.totalCredits}`);
+
+    const expectedCodes = ['MATH202', 'COMP132', 'MTSC111', 'PSYC101/ECON101', 'DATA131'];
+    const actualCodes = structRes.courses.map(c => c.courseCode);
+    assert(expectedCodes.every(code => actualCodes.includes(code)), `Missing codes: expected ${expectedCodes}, got ${actualCodes}`);
+
+    const res = await processAdvisorQuery('Tell me foundation courses for batch 2023 first semester only');
+    assert(res.state === 'ANSWERABLE', 'State must be ANSWERABLE');
+    assert(res.ruleResults.semester === 1, 'RuleResults must report semester 1');
+    assert(res.ruleResults.count === 5, 'RuleResults must report 5 courses');
+    assert(res.ruleResults.credits === 13, 'RuleResults must report 13 credits');
+    assert(res.answer.includes('MATH202') && res.answer.includes('Probability Theory'), 'Must include MATH202');
+    assert(res.answer.includes('COMP132') && res.answer.includes('Design Workshop'), 'Must include COMP132');
+    assert(res.answer.includes('MTSC111') && res.answer.includes('Materials for Smart Devices'), 'Must include MTSC111');
+    assert(res.answer.includes('DATA131') && res.answer.includes('Visualizing Data for Story Telling'), 'Must include DATA131');
+    assert(!res.answer.includes('Calculus') && !res.answer.includes('Sustainable Cities and Communities'), 'Must NOT include courses from other semesters');
+  });
+
+  await testCase(25, 'Semester Filter: Batch 2023 Foundation courses, Whole Basket (No Semester Constraint)', async () => {
+    const structRes = getBasketCourses('foundation', '2023');
+    assert(structRes && structRes.hasSemesterFilter === false, 'Must not activate semester filter');
+    assert(structRes.allocatedCredits === 34, 'Expected 34 allocated credits');
+    assert(structRes.courses.length === 13, `Expected 13 courses, got ${structRes.courses.length}`);
+
+    const res = await processAdvisorQuery('What are the Foundation courses for 2023 batch?');
+    assert(res.state === 'ANSWERABLE', 'State must be ANSWERABLE');
+    assert(res.ruleResults.count === 13, 'RuleResults must report 13 courses');
+    assert(res.ruleResults.credits === 34, 'RuleResults must report 34 credits');
+    assert(res.answer.includes('Probability Theory') && res.answer.includes('Calculus'), 'Must include all approved Foundation courses');
+    assert(res.answer.includes('34 credits'), 'Must state 34-credit basket allocation');
+  });
+
+  await testCase(26, 'Semester Filter: Batch 2022 Foundation courses, Semester 1 only', async () => {
+    const structRes = getBasketCourses('foundation', '2022', 1);
+    assert(structRes && structRes.hasSemesterFilter === true, 'Must activate semester filter');
+    assert(structRes.semesterNum === 1, 'Must extract semester 1');
+    assert(structRes.courses.length === 5, `Expected 5 courses, got ${structRes.courses.length}`);
+    assert(structRes.totalCredits === 13, `Expected 13 credits, got ${structRes.totalCredits}`);
+
+    const actualCodes = structRes.courses.map(c => c.courseCode);
+    assert(actualCodes.includes('MATH201'), 'Batch 2022 S1 must include MATH201 (Calculus)');
+    assert(!actualCodes.includes('MATH202'), 'Batch 2022 S1 must NOT include MATH202 (Probability Theory is S2 for 2022)');
+
+    const res = await processAdvisorQuery('Tell me foundation courses for batch 2022 semester 1 only');
+    assert(res.state === 'ANSWERABLE', 'State must be ANSWERABLE');
+    assert(res.ruleResults.semester === 1, 'RuleResults must report semester 1');
+    assert(res.ruleResults.count === 5, 'RuleResults must report 5 courses');
+    assert(res.answer.includes('MATH201') && res.answer.includes('Calculus'), 'Must include MATH201 Calculus');
+    assert(!res.answer.includes('Probability Theory'), 'Must NOT include Probability Theory (S2 in 2022)');
+  });
+
+  await testCase(27, 'Semester Filter: Batch 2025 University Core courses, Semester 2 only', async () => {
+    const structRes = getBasketCourses('University Core', '2025', 2);
+    assert(structRes && structRes.hasSemesterFilter === true, 'Must activate semester filter');
+    assert(structRes.semesterNum === 2, 'Must extract semester 2');
+    assert(structRes.courses.length === 3, `Expected 3 courses, got ${structRes.courses.length}`);
+    assert(structRes.totalCredits === 5, `Expected 5 credits, got ${structRes.totalCredits}`);
+
+    const res = await processAdvisorQuery('Show University Core courses for batch 2025 semester 2 only');
+    assert(res.state === 'ANSWERABLE', 'State must be ANSWERABLE');
+    assert(res.ruleResults.semester === 2, 'RuleResults must report semester 2');
+    assert(res.ruleResults.count === 3, 'RuleResults must report 3 courses');
+    assert(res.ruleResults.credits === 5, 'RuleResults must report 5 credits');
+    assert(res.answer.includes('UCOR111') && res.answer.includes('Environmental Studies and Sustainability'), 'Must include UCOR111');
+    assert(res.answer.includes('LAWS101') && res.answer.includes('Fundamentals of Indian Constitution'), 'Must include LAWS101');
+    assert(res.answer.includes('UCOR701') && res.answer.includes('Community Engagement'), 'Must include UCOR701');
+  });
+
+  await testCase(28, 'Semester Filter: Batch 2026 DS Program Core courses, Semester 3 only', async () => {
+    const structRes = getBasketCourses('Program Core', '2026', 3);
+    assert(structRes && structRes.hasSemesterFilter === true, 'Must activate semester filter');
+    assert(structRes.semesterNum === 3, 'Must extract semester 3');
+    assert(structRes.courses.length === 2, `Expected 2 courses, got ${structRes.courses.length}`);
+    assert(structRes.totalCredits === 8, `Expected 8 credits, got ${structRes.totalCredits}`);
+
+    const res = await processAdvisorQuery('What Program Core courses does batch 2026 DS take in Semester 3?');
+    assert(res.state === 'ANSWERABLE', 'State must be ANSWERABLE');
+    assert(res.ruleResults.semester === 3, 'RuleResults must report semester 3');
+    assert(res.ruleResults.count === 2, 'RuleResults must report 2 courses');
+    assert(res.ruleResults.credits === 8, 'RuleResults must report 8 credits');
+    assert(res.answer.includes('COMP202') && res.answer.includes('Theoretical Computer Science'), 'Must include COMP202');
+    assert(res.answer.includes('COMP203') && res.answer.includes('Analysis of Algorithms'), 'Must include COMP203');
+  });
+
+  await testCase(29, 'Semester Filter: Unavailable Semester Handling (No Courses & Out of Range)', async () => {
+    // 1. Semester with no placement data (Semester 8 has no Foundation courses in 2023)
+    const emptyRes = getBasketCourses('foundation', '2023', 8);
+    assert(emptyRes && emptyRes.noCoursesInSemester === true, 'Must mark noCoursesInSemester');
+    assert(emptyRes.courses.length === 0, 'Courses must be empty array');
+
+    const resEmpty = await processAdvisorQuery('Foundation courses for batch 2023 semester 8 only');
+    assert(resEmpty.state === 'ANSWERABLE', 'State must be ANSWERABLE');
+    assert(resEmpty.ruleResults.count === 0, 'Count must be 0');
+    assert(resEmpty.answer.includes('no **Foundation Courses** scheduled in **Semester 8**'), 'Must explain no courses scheduled');
+    assert(!resEmpty.answer.includes('34 credits'), 'Must NOT return full basket credits');
+
+    // 2. Out-of-range semester (Semester 9 does not exist in 8-semester B.Tech)
+    const outRangeRes = getBasketCourses('foundation', '2023', 9);
+    assert(outRangeRes && outRangeRes.semesterValid === false, 'Must flag invalid semester');
+
+    const resOutRange = await processAdvisorQuery('Foundation courses for batch 2023 semester 9 only');
+    assert(resOutRange.state === 'INSUFFICIENT_INFORMATION', 'State must be INSUFFICIENT_INFORMATION');
+    assert(resOutRange.ruleResults.invalidSemester === 9, 'Must report invalid semester 9');
+    assert(resOutRange.answer.includes('8 semesters'), 'Must explain B.Tech consists of 8 semesters');
+  });
+
   // Summary
   console.log('\n================================================================');
   console.log(`TEST SUMMARY: ${passed} Passed, ${failed} Failed out of ${passed + failed} Tests`);

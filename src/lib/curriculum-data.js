@@ -375,6 +375,49 @@ function extractVersionFromQuery(queryStr) {
 }
 
 /**
+ * Extracts semester number from query text if specified
+ * Supports:
+ * - Ordinals: "first", "1st", "second", "2nd", etc.
+ * - Numerals: "1", "2", "3", etc.
+ * - Words: "one", "two", "three", etc.
+ * - Phrasings: "first semester only", "in semester 1", "sem 2", "s3", etc.
+ */
+function extractSemesterFromQuery(queryStr) {
+  if (!queryStr || typeof queryStr !== 'string') return null;
+  const q = queryStr.toLowerCase().trim();
+
+  const ordinalMap = {
+    '1st': 1, 'first': 1, 'one': 1, '1': 1,
+    '2nd': 2, 'second': 2, 'two': 2, '2': 2,
+    '3rd': 3, 'third': 3, 'three': 3, '3': 3,
+    '4th': 4, 'fourth': 4, 'four': 4, '4': 4,
+    '5th': 5, 'fifth': 5, 'five': 5, '5': 5,
+    '6th': 6, 'sixth': 6, 'six': 6, '6': 6,
+    '7th': 7, 'seventh': 7, 'seven': 7, '7': 7,
+    '8th': 8, 'eighth': 8, 'eight': 8, '8': 8
+  };
+
+  // 1. "first semester", "1st sem", "second semester only", "1st term"
+  const ordBefore = q.match(/\b(1st|2nd|3rd|4th|5th|6th|7th|8th|first|second|third|fourth|fifth|sixth|seventh|eighth|one|two|three|four|five|six|seven|eight)\s+(?:semester|sem|term)\b/);
+  if (ordBefore && ordinalMap[ordBefore[1]]) return ordinalMap[ordBefore[1]];
+
+  // 2. "semester 1", "sem 2", "semester first", "semester one", "sem-3", "semester: 4", "semester 9"
+  const semAfter = q.match(/\b(?:semester|sem|term)\s*[-:]?\s*([1-9]\d*|1st|2nd|3rd|4th|5th|6th|7th|8th|first|second|third|fourth|fifth|sixth|seventh|eighth|one|two|three|four|five|six|seven|eight)\b/);
+  if (semAfter) {
+    const val = semAfter[1];
+    if (ordinalMap[val]) return ordinalMap[val];
+    const n = parseInt(val, 10);
+    if (!isNaN(n)) return n;
+  }
+
+  // 3. Short codes: "in s1", "take in s2", "for s3"
+  const sNum = q.match(/\b(?:in|for|take|taken|of)\s+s([1-8])\b/);
+  if (sNum) return parseInt(sNum[1], 10);
+
+  return null;
+}
+
+/**
  * Maps query text to normalized basket key
  */
 function normalizeBasketName(queryStr) {
@@ -398,15 +441,121 @@ function getAvailableVersions() {
 }
 
 /**
- * Returns basket courses for a specified version or for all versions if unspecified
+ * Returns basket courses for a specified version or for all versions if unspecified.
+ * If a semester is specified, filters courses strictly to that semester using semester-spread data.
  */
-function getBasketCourses(basketQuery, versionQuery = null) {
+function getBasketCourses(basketQuery, versionQuery = null, semesterQuery = null) {
   const data = loadCurriculumData();
   const basketKey = normalizeBasketName(basketQuery);
   if (!basketKey) return null;
 
-  const version = versionQuery ? extractVersionFromQuery(versionQuery) : null;
+  const version = versionQuery ? extractVersionFromQuery(versionQuery) : (extractVersionFromQuery(basketQuery) || null);
+  const semNum = typeof semesterQuery === 'number'
+    ? semesterQuery
+    : (extractSemesterFromQuery(semesterQuery) || extractSemesterFromQuery(basketQuery));
 
+  const basketNameLabel = basketKey === 'foundation' ? 'Foundation Courses'
+    : basketKey === 'universityCore' ? 'University Core Courses'
+    : basketKey === 'programCore' ? 'Program Core Courses'
+    : basketKey === 'programHonors' ? 'Program Honors Courses'
+    : basketKey === 'electives' ? (version === '2026' ? 'Electives' : 'Specialization Tracks')
+    : basketKey === 'capstone' ? 'Internship & Capstone Project'
+    : 'Minor / Open Courses';
+
+  // CASE A: SEMESTER CONSTRAINT SPECIFIED
+  if (semNum !== null) {
+    if (semNum < 1 || semNum > 8) {
+      return {
+        hasSpecificVersion: !!version,
+        hasSemesterFilter: true,
+        semesterValid: false,
+        semesterNum: semNum,
+        version: version || 'All',
+        basketName: basketNameLabel,
+        error: `Vidyashilp University B.Tech programs consist of 8 semesters (Semesters 1 through 8). Semester ${semNum} is outside the valid curriculum range.`
+      };
+    }
+
+    if (version) {
+      const struct = data.curriculumStructures[version];
+      const program = struct ? struct.program : (version === '2026' ? 'BTECH_DS' : 'BTECH_CSE');
+      const sheetName = version === '2022' ? 'Sem Spread BTECH-2022'
+        : version === '2026' ? 'Sem_Spread_DS_2026'
+        : `Sem_Spread_${version}`;
+
+      const matching = (data.curriculumCourses || []).filter(c =>
+        c.batch === version &&
+        c.semesterNum === semNum &&
+        normalizeBasketName(c.basketName) === basketKey
+      );
+
+      const availableSemesters = [...new Set(
+        (data.curriculumCourses || [])
+          .filter(c => c.batch === version && normalizeBasketName(c.basketName) === basketKey)
+          .map(c => c.semesterNum)
+      )].sort((a, b) => a - b);
+
+      return {
+        hasSpecificVersion: true,
+        hasSemesterFilter: true,
+        semesterValid: true,
+        semesterNum: semNum,
+        version,
+        program,
+        basketName: basketNameLabel,
+        sourceSheet: sheetName,
+        courses: matching.map(c => ({
+          courseCode: c.courseCode,
+          name: c.courseName,
+          credits: c.credits,
+          lectureHours: c.lectureHours,
+          tutorialHours: c.tutorialHours,
+          practicalHours: c.practicalHours,
+          prerequisite: c.prerequisite,
+          basketName: c.basketName
+        })),
+        totalCredits: matching.reduce((a, b) => a + (b.credits || 0), 0),
+        noCoursesInSemester: matching.length === 0,
+        availableSemesters
+      };
+    }
+
+    // Semester specified, but version not specified -> multi-batch breakdown for that semester
+    const versionBreakdown = {};
+    for (const b of ['2022', '2023', '2024', '2025', '2026']) {
+      const struct = data.curriculumStructures[b];
+      const prog = struct ? struct.program : (b === '2026' ? 'BTECH_DS' : 'BTECH_CSE');
+      const matching = (data.curriculumCourses || []).filter(c =>
+        c.batch === b &&
+        c.semesterNum === semNum &&
+        normalizeBasketName(c.basketName) === basketKey
+      );
+      versionBreakdown[b] = {
+        program: prog,
+        totalCredits: matching.reduce((acc, curr) => acc + (curr.credits || 0), 0),
+        courses: matching.map(c => ({
+          courseCode: c.courseCode,
+          name: c.courseName,
+          credits: c.credits,
+          lectureHours: c.lectureHours,
+          tutorialHours: c.tutorialHours,
+          practicalHours: c.practicalHours,
+          prerequisite: c.prerequisite
+        }))
+      };
+    }
+
+    return {
+      hasSpecificVersion: false,
+      hasSemesterFilter: true,
+      semesterValid: true,
+      semesterNum: semNum,
+      basketName: basketNameLabel,
+      versions: versionBreakdown
+    };
+  }
+
+  // CASE B: NO SEMESTER CONSTRAINT (EXISTING WHOLE-BASKET BEHAVIOR PRESERVED)
   if (version && data.curriculumStructures[version]) {
     const struct = data.curriculumStructures[version];
     let courses = [];
@@ -415,18 +564,11 @@ function getBasketCourses(basketQuery, versionQuery = null) {
     } else {
       courses = struct.baskets[basketKey] || [];
     }
-    const basketNameLabel = basketKey === 'foundation' ? 'Foundation Courses'
-      : basketKey === 'universityCore' ? 'University Core Courses'
-      : basketKey === 'programCore' ? 'Program Core Courses'
-      : basketKey === 'programHonors' ? 'Program Honors Courses'
-      : basketKey === 'electives' ? (version === '2026' ? 'Electives' : 'Specialization Tracks')
-      : basketKey === 'capstone' ? 'Internship & Capstone Project'
-      : 'Minor / Open Courses';
-
     const creditAlloc = struct.basketCredits[basketKey === 'universityCore' ? 'University Core' : basketKey === 'foundation' ? 'Foundation' : basketKey === 'programCore' ? 'Program Core' : basketKey === 'programHonors' ? 'Program Honors' : 'Electives'] || courses.reduce((a, b) => a + b.credits, 0);
 
     return {
       hasSpecificVersion: true,
+      hasSemesterFilter: false,
       version,
       program: struct.program,
       basketName: basketNameLabel,
@@ -455,7 +597,7 @@ function getBasketCourses(basketQuery, versionQuery = null) {
     };
   }
 
-  const basketNameLabel = basketKey === 'foundation' ? 'Foundation Courses'
+  const basketNameLabelDefault = basketKey === 'foundation' ? 'Foundation Courses'
     : basketKey === 'universityCore' ? 'University Core Courses'
     : basketKey === 'programCore' ? 'Program Core Courses'
     : basketKey === 'programHonors' ? 'Program Honors Courses'
@@ -464,7 +606,8 @@ function getBasketCourses(basketQuery, versionQuery = null) {
 
   return {
     hasSpecificVersion: false,
-    basketName: basketNameLabel,
+    hasSemesterFilter: false,
+    basketName: basketNameLabelDefault,
     versions: versionBreakdown
   };
 }
@@ -644,21 +787,31 @@ function compareCurriculumVersions(v1, v2, basketQuery = null) {
 }
 
 /**
- * Returns courses placed in a specific semester for a batch
+ * Returns courses placed in a specific semester for a batch (optionally filtered by basket)
  */
-function getSemesterCourses(semesterNum, versionQuery = null) {
+function getSemesterCourses(semesterNum, versionQuery = null, basketQuery = null) {
   const data = loadCurriculumData();
   const version = versionQuery ? extractVersionFromQuery(versionQuery) : null;
+  const basketKey = basketQuery ? normalizeBasketName(basketQuery) : null;
 
-  const semNum = parseInt(semesterNum, 10);
+  const semNum = typeof semesterNum === 'number'
+    ? semesterNum
+    : (extractSemesterFromQuery(semesterNum) || parseInt(semesterNum, 10));
   if (isNaN(semNum) || semNum < 1 || semNum > 8) return null;
 
+  const filterCourse = (c, b) => {
+    if (c.batch !== b || c.semesterNum !== semNum) return false;
+    if (basketKey && normalizeBasketName(c.basketName) !== basketKey) return false;
+    return true;
+  };
+
   if (version) {
-    const list = data.curriculumCourses.filter(c => c.batch === version && c.semesterNum === semNum);
+    const list = data.curriculumCourses.filter(c => filterCourse(c, version));
     return {
       hasSpecificVersion: true,
       version,
       semesterNum: semNum,
+      basketKey: basketKey || null,
       courses: list,
       totalCredits: list.reduce((a, b) => a + (b.credits || 0), 0)
     };
@@ -667,7 +820,7 @@ function getSemesterCourses(semesterNum, versionQuery = null) {
   // Return by batch
   const byBatch = {};
   for (const b of ['2022', '2023', '2024', '2025', '2026']) {
-    const list = data.curriculumCourses.filter(c => c.batch === b && c.semesterNum === semNum);
+    const list = data.curriculumCourses.filter(c => filterCourse(c, b));
     if (list.length > 0) {
       byBatch[b] = {
         courses: list,
@@ -679,6 +832,7 @@ function getSemesterCourses(semesterNum, versionQuery = null) {
   return {
     hasSpecificVersion: false,
     semesterNum: semNum,
+    basketKey: basketKey || null,
     batches: byBatch
   };
 }
@@ -911,6 +1065,7 @@ module.exports = {
   isCourseInWorkbook,
   normalizeBasketName,
   extractVersionFromQuery,
+  extractSemesterFromQuery,
   getCourseTransition,
   KNOWN_CURRICULUM_TRANSITIONS
 };
