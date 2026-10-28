@@ -492,9 +492,9 @@ function normalizeBasketName(queryStr) {
   if (q.includes('university core') || q.includes('univ core') || q.includes('u core') || (q.includes('core') && !q.includes('program core'))) return 'universityCore';
   if (q.includes('program core') || q.includes('cse core') || q.includes('ds core')) return 'programCore';
   if (q.includes('program honor') || q.includes('program hons') || q.includes('honors') || q.includes('hons')) return 'programHonors';
-  if (q.includes('elective') || q.includes('specialization track') || q.includes('specialization')) return 'electives';
-  if (q.includes('capstone') || q.includes('internship') || q.includes('summer training')) return 'capstone';
   if (q.includes('minor') || q.includes('open')) return 'minor';
+  if (q.includes('capstone') || q.includes('internship') || q.includes('summer training')) return 'capstone';
+  if (q.includes('elective') || q.includes('specialization track') || q.includes('specialization')) return 'electives';
   return null;
 }
 
@@ -1101,6 +1101,31 @@ function findCourseDetails(queryStr, versionQuery = null) {
       }
     }
   }
+
+  // Sort matches by match quality (exact match first, then longer/more specific names)
+  matches.sort((a, b) => {
+    const aName = a.courseName.toLowerCase();
+    const bName = b.courseName.toLowerCase();
+    const aExact = aName === cleanQ;
+    const bExact = bName === cleanQ;
+    if (aExact && !bExact) return -1;
+    if (!aExact && bExact) return 1;
+    const aStarts = aName.startsWith(cleanQ);
+    const bStarts = bName.startsWith(cleanQ);
+    if (aStarts && !bStarts) return -1;
+    if (!aStarts && bStarts) return 1;
+    return bName.length - aName.length;
+  });
+
+  structMatches.sort((a, b) => {
+    const aName = a.name.toLowerCase();
+    const bName = b.name.toLowerCase();
+    const aExact = aName === cleanQ;
+    const bExact = bName === cleanQ;
+    if (aExact && !bExact) return -1;
+    if (!aExact && bExact) return 1;
+    return bName.length - aName.length;
+  });
 
   if (matches.length === 0 && structMatches.length === 0) {
     return null;
