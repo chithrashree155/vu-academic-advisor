@@ -447,6 +447,43 @@ async function runTestSuite() {
     assert(math202_2023.credits === 3, 'MATH202 in 2023 S1 must be 3 credits');
   });
 
+  await testCase(38, 'Regression: Full Suite of 7 Criteria (2022 S1, 2023 S1, S1 diffs, 2025 S2 UC, 2026 S3 PC, Out-of-bounds, Full Basket)', async () => {
+    // 1. Batch 2022 Foundation Semester 1
+    const r22 = await processAdvisorQuery('What are the Foundation courses for Batch 2022 Semester 1?');
+    assert(r22.state === 'ANSWERABLE', '2022 S1 must be ANSWERABLE');
+    assert(r22.ruleResults.credits === 13, '2022 S1 must total 13 credits');
+    assert(r22.answer.includes('MATH201') && !r22.answer.includes('MATH202'), '2022 S1 must have MATH201 and not MATH202');
+    assert(r22.sources[0].pageOrSheet === 'Sem Spread BTECH-2022', '2022 S1 must cite Sem Spread BTECH-2022');
+
+    // 2. Batch 2023 Foundation Semester 1
+    const r23 = await processAdvisorQuery('What are the Foundation courses for Batch 2023 Semester 1?');
+    assert(r23.state === 'ANSWERABLE', '2023 S1 must be ANSWERABLE');
+    assert(r23.ruleResults.credits === 13, '2023 S1 must total 13 credits');
+    assert(r23.answer.includes('MATH202') && !r23.answer.includes('MATH201'), '2023 S1 must have MATH202 and not MATH201');
+    assert(r23.sources[0].pageOrSheet === 'Sem_Spread_2023', '2023 S1 must cite Sem_Spread_2023');
+
+    // 3. Batch 2025 University Core Semester 2
+    const r25 = await processAdvisorQuery('Show University Core courses for batch 2025 semester 2 only');
+    assert(r25.state === 'ANSWERABLE' && r25.ruleResults.credits === 5, '2025 S2 UC must be 5 credits');
+
+    // 4. Batch 2026 DS Program Core Semester 3
+    const r26 = await processAdvisorQuery('What Program Core courses does batch 2026 DS take in Semester 3?');
+    assert(r26.state === 'ANSWERABLE' && r26.ruleResults.credits === 8, '2026 S3 PC must be 8 credits');
+
+    // 5. Unknown batch request
+    const rUnknown = await processAdvisorQuery('What are the Foundation courses for Batch 2035?');
+    assert(rUnknown.state === 'INSUFFICIENT_INFORMATION', 'Unknown batch must return INSUFFICIENT_INFORMATION');
+
+    // 6. Unknown/invalid semester request
+    const rOut = await processAdvisorQuery('Foundation courses for batch 2023 semester 9 only');
+    assert(rOut.state === 'INSUFFICIENT_INFORMATION', 'Out of range semester must return INSUFFICIENT_INFORMATION');
+
+    // 7. Complete Foundation basket
+    const rBasket = await processAdvisorQuery('What are the Foundation courses for 2023 batch?');
+    assert(rBasket.state === 'ANSWERABLE' && rBasket.ruleResults.credits === 34, 'Full basket must report 34 credits');
+    assert(rBasket.answer.includes('MATH201') && rBasket.answer.includes('MATH202'), 'Full basket lists both with semester placements');
+  });
+
   // Summary
   console.log('\n================================================================');
   console.log(`TEST SUMMARY: ${passed} Passed, ${failed} Failed out of ${passed + failed} Tests`);

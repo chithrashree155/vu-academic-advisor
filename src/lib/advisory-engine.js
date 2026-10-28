@@ -919,9 +919,13 @@ function classifyQuery(queryStr) {
       q.includes('show') ||
       q.includes('what are') ||
       q.includes('what were') ||
-      q.includes('which courses') ||
+      q.includes('which') ||
+      q.includes('basket') ||
+      q.includes('foundation') ||
+      q.includes('university core') ||
+      q.includes('program core') ||
       (q.includes('courses') && !q.includes('how many credits') && !q.includes('how many total credits'))
-    ) && !q.includes('how many credits') && !q.includes('how many credit')
+    ) && !q.includes('how many credits') && !q.includes('how many credit') && !q.includes('how many total credits')
   ) {
     return 'CURRICULUM_BASKET';
   }
@@ -1852,6 +1856,13 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
               return `• ${c.name}${crNote}`;
             }).join('\n') + '\n';
           }
+
+          if (basketKey === 'foundation' && ((comp.v1 === '2022' && comp.v2 === '2023') || (comp.v1 === '2023' && comp.v2 === '2022'))) {
+            answerText += `\n**Key Semester Spread Distinction (Term Placement):**\n` +
+              `• **Semester 1:** Batch 2022 takes **MATH201 (Calculus, 3 cr)**, whereas Batch 2023 takes **MATH202 (Probability Theory, 3 cr)**.\n` +
+              `• **Semester 2:** Batch 2022 takes **MATH202 (Probability Theory, 3 cr)**, whereas Batch 2023 takes **MATH201 (Calculus, 3 cr)**.\n` +
+              `• **Language (LANG101, 3 cr):** Scheduled in **Semester 6** for Batch 2022, but scheduled in **Semester 5** for Batch 2023.\n`;
+          }
         } else {
           answerText += `#### Credit Allocation Across Baskets:\n`;
           for (const [b, diffObj] of Object.entries(comp.creditDiff)) {
@@ -2192,14 +2203,28 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
         // CASE D: WHOLE BASKET (NO SEMESTER FILTER)
         if (basketResult.hasSpecificVersion) {
-          const courseList = basketResult.courses.map((c, idx) => `${idx + 1}. **${c.name}** — ${c.credits} credit${c.credits > 1 ? 's' : ''}`).join('\n');
-          let allocExplanation = `**Total Basket Allocation:** **${basketResult.allocatedCredits} credits** (Total Degree Requirement: 180 credits)\n*Sum of listed course credits: ${basketResult.totalCourseCredits} credits*`;
+          const courseList = basketResult.courses.map((c, idx) => {
+            const semInfo = c.semesterNum ? ` (Scheduled: Semester ${c.semesterNum})` : '';
+            const codePrefix = c.courseCode && c.courseCode !== c.name ? `**${c.courseCode} — ${c.name}**` : `**${c.name}**`;
+            return `${idx + 1}. ${codePrefix} — ${c.credits} credit${c.credits > 1 ? 's' : ''}${semInfo}`;
+          }).join('\n');
+          let allocExplanation = `**Total Degree Basket Allocation:** **${basketResult.allocatedCredits} credits** (Total Degree Requirement: 180 credits)\n*Sum of listed course credits: ${basketResult.totalCourseCredits} credits*`;
+
+          if (basketResult.basketName.includes('Foundation')) {
+            if (basketResult.version === '2023') {
+              allocExplanation += `\n\n*(Note on Semester Distribution: In Batch 2023, the 34-credit Foundation basket is distributed across Semesters 1 through 5. Semester 1 includes **Probability Theory** (3 credits), while **Calculus** (3 credits) is scheduled in Semester 2; they are scheduled in separate semesters, not taken concurrently).*`;
+            } else if (basketResult.version === '2022') {
+              allocExplanation += `\n\n*(Note on Semester Distribution: In Batch 2022, the 34-credit Foundation basket is distributed across Semesters 1 through 6. Semester 1 includes **Calculus** (3 credits), while **Probability Theory** (3 credits) is scheduled in Semester 2; they are scheduled in separate semesters, not taken concurrently).*`;
+            }
+          }
 
           if (basketResult.totalCourseCredits !== basketResult.allocatedCredits) {
             allocExplanation += `\n*(Note: The approved course pool offers ${basketResult.totalCourseCredits} total credits across ${basketResult.courses.length} options; students complete exactly ${basketResult.allocatedCredits} credits towards degree award).*`;
           } else if (basketResult.version === '2024' && basketResult.basketName.includes('Foundation')) {
             allocExplanation += `\n*(Credit Reconciliation: Courses 1–11 total 31 credits of basic sciences/humanities; Course 12 'Cloud Computing' at 3 credits brings the total to exactly 34 credits per Struct_2024 row 26 & Sem_Spread_2024 Semester 4).*`;
           }
+
+          allocExplanation += `\n\n**Clarification Note:** If you need the courses for a specific enrollment semester only, please specify the semester (e.g., *'Tell me foundation courses for batch ${basketResult.version} semester 1 only'*).`;
 
           return {
             state: 'ANSWERABLE',
@@ -2214,19 +2239,19 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
               }
             ],
             ruleResults: { basket: basketResult.basketName, version: basketResult.version, credits: basketResult.allocatedCredits, count: basketResult.courses.length },
-            followUp: `Ask 'How many credits are required for ${basketResult.basketName}?' or 'Compare with 2024 batch'.`
+            followUp: `Ask 'Tell me foundation courses for batch ${basketResult.version} semester 1 only' to see single-semester offerings.`
           };
         } else {
           let answerText = `The **${basketResult.basketName}** curriculum varies by batch in the official Vidyashilp University curriculum workbook (*Semester_Spread_Structures_Sept_2026.xlsx*):\n\n`;
 
           if (basketResult.versions['2022'] && basketResult.versions['2022'].allocatedCredits) {
             answerText += `### 1. Batches 2022 & 2023 (${basketResult.versions['2022'].allocatedCredits} Credits Total — Struct_2022 / Struct_2023)\n`;
-            answerText += basketResult.versions['2022'].courses.map(c => `• **${c.name}** (${c.credits} cr)`).join('\n') + '\n\n';
+            answerText += basketResult.versions['2022'].courses.map(c => `• ${c.courseCode && c.courseCode !== c.name ? `**${c.courseCode} — ${c.name}**` : `**${c.name}**`} (${c.credits} cr)${c.semesterNum ? ` — Semester ${c.semesterNum}` : ''}`).join('\n') + '\n\n';
           }
 
           if (basketResult.versions['2024']) {
             answerText += `### 2. Batch 2024 (${basketResult.versions['2024'].allocatedCredits} Credits Total — Struct_2024)\n`;
-            answerText += basketResult.versions['2024'].courses.map(c => `• **${c.name}** (${c.credits} cr)`).join('\n');
+            answerText += basketResult.versions['2024'].courses.map(c => `• ${c.courseCode && c.courseCode !== c.name ? `**${c.courseCode} — ${c.name}**` : `**${c.name}**`} (${c.credits} cr)${c.semesterNum ? ` — Semester ${c.semesterNum}` : ''}`).join('\n');
             if (basketResult.basketName.includes('Foundation')) {
               answerText += `\n*(Note: Courses 1–11 total 31 credits of basic sciences/humanities; Course 12 'Cloud Computing' at 3 credits completes the 34-credit basket allocation per Struct_2024 row 26).*`;
             }
@@ -2235,15 +2260,15 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
           if (basketResult.versions['2025']) {
             answerText += `### 3. Batch 2025 (${basketResult.versions['2025'].allocatedCredits} Credits Total — Struct_2025)\n`;
-            answerText += basketResult.versions['2025'].courses.map(c => `• **${c.name}** (${c.credits} cr)`).join('\n') + '\n\n';
+            answerText += basketResult.versions['2025'].courses.map(c => `• ${c.courseCode && c.courseCode !== c.name ? `**${c.courseCode} — ${c.name}**` : `**${c.name}**`} (${c.credits} cr)${c.semesterNum ? ` — Semester ${c.semesterNum}` : ''}`).join('\n') + '\n\n';
           }
 
           if (basketResult.versions['2026']) {
             answerText += `### 4. Batch 2026 (Data Science — ${basketResult.versions['2026'].allocatedCredits} Credits Total — Struct_2026_DS)\n`;
-            answerText += basketResult.versions['2026'].courses.map(c => `• **${c.name}** (${c.credits} cr)`).join('\n') + '\n\n';
+            answerText += basketResult.versions['2026'].courses.map(c => `• ${c.courseCode && c.courseCode !== c.name ? `**${c.courseCode} — ${c.name}**` : `**${c.name}**`} (${c.credits} cr)${c.semesterNum ? ` — Semester ${c.semesterNum}` : ''}`).join('\n') + '\n\n';
           }
 
-          answerText += `*(Note: If you are inquiring about a specific admission year, please specify the batch, e.g., 'What are the Foundation courses for 2025 batch?')*`;
+          answerText += `*(Note: Foundation courses vary by batch and are distributed across multiple semesters. Please specify whether you want the complete degree basket or a specific semester, e.g., 'What are the Foundation courses for 2023 batch?' or 'Tell me foundation courses for batch 2023 semester 1 only').*`;
 
           return {
             state: 'ANSWERABLE',
@@ -2261,6 +2286,22 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
             followUp: `Please specify your batch (e.g. 2024, 2025, or 2026) for precise curriculum details.`
           };
         }
+      } else {
+        return {
+          state: 'INSUFFICIENT_INFORMATION',
+          answer: 'I could not verify curriculum requirements for the requested basket in the official Vidyashilp University curriculum workbook (Semester_Spread_Structures_Sept_2026.xlsx). Please specify a recognized basket (Foundation, University Core, Program Core, or Electives) and batch (e.g. Batch 2022, 2023, 2024, 2025, or 2026).',
+          sources: [
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Curriculum Structures (2022–2026)',
+              clauseNumber: 'Curriculum Verification Guard',
+              excerpt: 'Only verified structured records from the official curriculum workbook are answered for batch-specific curriculum queries.'
+            }
+          ],
+          ruleResults: null,
+          followUp: null
+        };
       }
     }
 
@@ -3188,13 +3229,13 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
           const top = validEvidence[0];
           return {
             state: 'ANSWERABLE',
-            answer: top.chunkText.slice(0, 500) + (top.chunkText.length > 500 ? '...' : ''),
+            answer: top.chunkText || top.content || '',
             sources: validEvidence.slice(0, 3).map(r => ({
               documentTitle: r.documentName || 'Official Document',
               hierarchyLevel: r.hierarchyLevel || 2,
               pageOrSheet: r.pageOrSheet ? `Ref: ${r.pageOrSheet}` : 'Official Record',
               clauseNumber: r.clauseNumber || 'N/A',
-              excerpt: r.chunkText.slice(0, 200) + '...'
+              excerpt: (r.chunkText || r.content || '').slice(0, 250)
             })),
             ruleResults: null,
             followUp: null

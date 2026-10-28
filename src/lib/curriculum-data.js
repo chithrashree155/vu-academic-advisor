@@ -755,6 +755,23 @@ function getBasketCourses(basketQuery, versionQuery = null, semesterQuery = null
     }
     const creditAlloc = struct.basketCredits[basketKey === 'universityCore' ? 'University Core' : basketKey === 'foundation' ? 'Foundation' : basketKey === 'programCore' ? 'Program Core' : basketKey === 'programHonors' ? 'Program Honors' : 'Electives'] || courses.reduce((a, b) => a + b.credits, 0);
 
+    const enrichedCourses = courses.map(c => {
+      const cNameClean = (c.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      const match = (data.curriculumCourses || []).find(cc => {
+        if (cc.batch !== version) return false;
+        const ccNameClean = (cc.courseName || cc.courseTitle || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        return ccNameClean === cNameClean ||
+          (cNameClean.length >= 6 && ccNameClean.includes(cNameClean)) ||
+          (ccNameClean.length >= 6 && cNameClean.includes(ccNameClean));
+      });
+      return {
+        ...c,
+        courseCode: match ? match.courseCode : c.courseCode,
+        semesterNum: match ? match.semesterNum : c.semesterNum,
+        prerequisite: match ? match.prerequisite : c.prerequisite
+      };
+    });
+
     return {
       hasSpecificVersion: true,
       hasSemesterFilter: false,
@@ -763,7 +780,7 @@ function getBasketCourses(basketQuery, versionQuery = null, semesterQuery = null
       basketName: basketNameLabel,
       allocatedCredits: creditAlloc,
       totalCourseCredits: courses.reduce((a, b) => a + b.credits, 0),
-      courses
+      courses: enrichedCourses
     };
   }
 
@@ -778,11 +795,28 @@ function getBasketCourses(basketQuery, versionQuery = null, semesterQuery = null
     }
     const creditAlloc = struct.basketCredits[basketKey === 'universityCore' ? 'University Core' : basketKey === 'foundation' ? 'Foundation' : basketKey === 'programCore' ? 'Program Core' : basketKey === 'programHonors' ? 'Program Honors' : 'Electives'] || courses.reduce((a, b) => a + b.credits, 0);
 
+    const enrichedCourses = courses.map(c => {
+      const cNameClean = (c.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      const match = (data.curriculumCourses || []).find(cc => {
+        if (cc.batch !== ver) return false;
+        const ccNameClean = (cc.courseName || cc.courseTitle || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        return ccNameClean === cNameClean ||
+          (cNameClean.length >= 6 && ccNameClean.includes(cNameClean)) ||
+          (ccNameClean.length >= 6 && cNameClean.includes(ccNameClean));
+      });
+      return {
+        ...c,
+        courseCode: match ? match.courseCode : c.courseCode,
+        semesterNum: match ? match.semesterNum : c.semesterNum,
+        prerequisite: match ? match.prerequisite : c.prerequisite
+      };
+    });
+
     versionBreakdown[ver] = {
       program: struct.program,
       allocatedCredits: creditAlloc,
       totalCourseCredits: courses.reduce((a, b) => a + b.credits, 0),
-      courses
+      courses: enrichedCourses
     };
   }
 
