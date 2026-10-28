@@ -11,27 +11,27 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 1655,
+        "latencyMs": 726,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 888,
+        "latencyMs": 292,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
-        "latencyMs": 19,
+        "latencyMs": 21,
         "classification": "CORRECT",
         "explanation": "Response matches expected system state, verified academic documents, and citations.",
         "answerExcerpt": "Per Student Handbook Clause 7.1–7.2 (Hierarchy Level 1), the standard attendance threshold is 75%. However, under certified medical hospitalization or universit",
@@ -45,10 +45,10 @@
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 4,
+        "latencyMs": 7,
         "classification": "CORRECT",
         "explanation": "Response matches expected system state, verified academic documents, and citations.",
-        "answerExcerpt": "### Vidyashilp University Attendance Regulations (Student Handbook, Section III, Clause 7.1–7.4 & Student SOP Clause 2): • **Minimum Attendance Mandate (Clause",
+        "answerExcerpt": "**Vidyashilp University Attendance Regulations (Student Handbook, Section III, Clause 7.1–7.4 & Student SOP Clause 2)** Official Knowledge Source: 4. Student Ha",
         "citations": [
           "4. Student Handbook Aug 2026.pdf (Clause 7.1 & 7.2 — Attendance & Debarment)",
           "SOP STUDENT 19082025 - Final.pdf (Clause 2 — Medical Leave Procedure)"
@@ -70,27 +70,27 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 625,
+        "latencyMs": 324,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 336,
+        "latencyMs": 322,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
-        "latencyMs": 13,
+        "latencyMs": 14,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [4.0]",
         "answerExcerpt": "12.1. \u0003 To facilitate academic progression towards timely completion of the Program of study and fulfilling the requirements for the award ",
@@ -104,7 +104,7 @@
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 11,
+        "latencyMs": 15,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [4.0]",
         "answerExcerpt": "12.1. \u0003 To facilitate academic progression towards timely completion of the Program of study and fulfilling the requirements for the award ",
@@ -129,27 +129,27 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 656,
+        "latencyMs": 282,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 327,
+        "latencyMs": 341,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
-        "latencyMs": 11,
+        "latencyMs": 10,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [5.0]",
         "answerExcerpt": "12.1. \u0003 To facilitate academic progression towards timely completion of the Program of study and fulfilling the requirements for the award ",
@@ -163,7 +163,7 @@
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 11,
+        "latencyMs": 17,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [5.0]",
         "answerExcerpt": "12.1. \u0003 To facilitate academic progression towards timely completion of the Program of study and fulfilling the requirements for the award ",
@@ -189,27 +189,27 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 369,
+        "latencyMs": 289,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 333,
+        "latencyMs": 298,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
-        "latencyMs": 17,
+        "latencyMs": 13,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [mandatory]",
         "answerExcerpt": "ERP COURSE REGISTRATION MANUAL (CollPoll / DigiiCampus Portal): Step 1: Login to CollPoll at https://vidyashilp.digiicampus.com/ Step 2: Click on \"Course Regist",
@@ -223,10 +223,10 @@
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 1,
+        "latencyMs": 4,
         "classification": "CORRECT",
         "explanation": "Response matches expected system state, verified academic documents, and citations.",
-        "answerExcerpt": "### Vidyashilp University Course Registration Regulations (Student Handbook, Section III, Clause 2.1–2.15 & ERP Registration Manual): • **Mandatory Registratio",
+        "answerExcerpt": "**Vidyashilp University Course Registration Regulations (Student Handbook, Section III, Clause 2.1–2.15 & ERP Registration Manual)** Official Knowledge Source: ",
         "citations": [
           "4. Student Handbook Aug 2026.pdf (Clause 2 — Registration & Pre-Registration Procedure)",
           "ERP Course Registration Manual.pdf (Digii ERP Registration SOP)"
@@ -248,23 +248,23 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 338,
+        "latencyMs": 272,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 338,
+        "latencyMs": 285,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
@@ -274,8 +274,8 @@
         "answerExcerpt": "1.2. \u0003 An academic year in the University shall normally be divided into two semesters consisting of ninety (90) University working days each, kno",
         "citations": [
           "4. Student Handbook Aug 2026.pdf (2.5. \u0003)",
-          "Holiday List.pdf (No: VU/2025-26/RO-CIR/545)",
-          "Holiday List.pdf (No: VU/2025-26/RO-CIR/545)"
+          "Semester_Spread_Structures_Sept_2026.xlsx (University Core Basket (Batch 2022))",
+          "Semester_Spread_Structures_Sept_2026.xlsx (University Core Basket (Batch 2023))"
         ],
         "isBlocked": false,
         "blockReason": null
@@ -306,41 +306,41 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 317,
+        "latencyMs": 308,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 376,
+        "latencyMs": 302,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
-        "latencyMs": 9,
+        "latencyMs": 12,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [NOT ELIGIBLE]",
         "answerExcerpt": "Program: BTECH_CSE | Batch: 2022 | Semester: 6 | Basket: Program HONORS | Course Code: DATA302 | Course Name: Deep Learning | Credits: 4 (L:2, T:0, P:4) | Prere",
         "citations": [
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Semester 6 - Program HONORS)",
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Semester 7 - Specialization Tracks)",
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Semester 7 - Specialization Tracks)"
+          "Semester_Spread_Structures_Sept_2026.xlsx (Semester 6 - Program HONORS)",
+          "Semester_Spread_Structures_Sept_2026.xlsx (Semester 7 - Specialization Tracks)",
+          "Semester_Spread_Structures_Sept_2026.xlsx (Semester 7 - Specialization Tracks)"
         ],
         "isBlocked": false,
         "blockReason": null
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 4,
+        "latencyMs": 3,
         "classification": "CORRECT",
         "explanation": "Response matches expected system state, verified academic documents, and citations.",
         "answerExcerpt": "STATUS: NOT ELIGIBLE (PREREQUISITE NOT MET) Course: DATA302 — Deep Learning Credits: 4 Student: Ananya Rao Program: B.Tech (Hons.) CSE – AI/ML Current seme",
@@ -365,41 +365,41 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 619,
+        "latencyMs": 273,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 388,
+        "latencyMs": 323,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
-        "latencyMs": 8,
+        "latencyMs": 9,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [ELIGIBLE]",
         "answerExcerpt": "Program: BTECH_CSE | Batch: 2022 | Semester: 6 | Basket: Program HONORS | Course Code: DATA302 | Course Name: Deep Learning | Credits: 4 (L:2, T:0, P:4) | Prere",
         "citations": [
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Semester 6 - Program HONORS)",
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Semester 7 - Specialization Tracks)",
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Semester 7 - Specialization Tracks)"
+          "Semester_Spread_Structures_Sept_2026.xlsx (Semester 6 - Program HONORS)",
+          "Semester_Spread_Structures_Sept_2026.xlsx (Semester 7 - Specialization Tracks)",
+          "Semester_Spread_Structures_Sept_2026.xlsx (Semester 7 - Specialization Tracks)"
         ],
         "isBlocked": false,
         "blockReason": null
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 3,
+        "latencyMs": 2,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [DATA301]",
         "answerExcerpt": "STATUS: ELIGIBLE Course: DATA302 — Deep Learning Credits: 4 Student: Aarav Mehta Program: B.Tech (Hons.) CSE – Data Science Current semester: Semester 5 A",
@@ -424,46 +424,46 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 347,
+        "latencyMs": 283,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 350,
+        "latencyMs": 284,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
-        "latencyMs": 11,
+        "latencyMs": 10,
         "classification": "CORRECT",
         "explanation": "Response matches expected system state, verified academic documents, and citations.",
         "answerExcerpt": "Program: BTECH_CSE | Batch: 2022 | Semester: 6 | Basket: Program HONORS | Course Code: DATA302 | Course Name: Deep Learning | Credits: 4 (L:2, T:0, P:4) | Prere",
         "citations": [
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Semester 6 - Program HONORS)",
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Semester 7 - Specialization Tracks)",
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Semester 7 - Specialization Tracks)"
+          "Semester_Spread_Structures_Sept_2026.xlsx (Semester 6 - Program HONORS)",
+          "Semester_Spread_Structures_Sept_2026.xlsx (Semester 7 - Specialization Tracks)",
+          "Semester_Spread_Structures_Sept_2026.xlsx (Semester 7 - Specialization Tracks)"
         ],
         "isBlocked": false,
         "blockReason": null
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 1,
+        "latencyMs": 9,
         "classification": "CORRECT",
         "explanation": "Response matches expected system state, verified academic documents, and citations.",
-        "answerExcerpt": "Prerequisite details for **DATA302 — Deep Learning** (4 credits): • **DATA301 — Machine Learning** (4 cr)",
+        "answerExcerpt": "Prerequisite details for **DATA302 — Deep Learning** (4 credits): • **DATA301 — Machine Learning** (4 cr) *(Source: Official Vidyashilp University Curriculum ",
         "citations": [
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Course Code: DATA302)"
+          "Semester_Spread_Structures_Sept_2026.xlsx (Prerequisites for Deep Learning)"
         ],
         "isBlocked": false,
         "blockReason": null
@@ -482,27 +482,27 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 332,
+        "latencyMs": 293,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 631,
+        "latencyMs": 304,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
-        "latencyMs": 9,
+        "latencyMs": 10,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [ELIGIBLE]",
         "answerExcerpt": "Minor: Finance Minor | Batch: 2023 | Semester: 3 | Course Code: MGMT208 | Course Title: Introduction to Financial Accounting | Credits: 1 | Prerequisite: Nil | ",
@@ -516,7 +516,7 @@
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 1,
+        "latencyMs": 3,
         "classification": "CORRECT",
         "explanation": "Response matches expected system state, verified academic documents, and citations.",
         "answerExcerpt": "STATUS: ELIGIBLE Course: MGMT208 — Introduction to Financial Accounting Credits: 3 Student: Ishita Kapoor Program: BMS (Hons.) – Digital Business Current s",
@@ -541,41 +541,41 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 362,
+        "latencyMs": 296,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 352,
+        "latencyMs": 288,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
-        "latencyMs": 13,
+        "latencyMs": 10,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [NOT ELIGIBLE]",
         "answerExcerpt": "Program: BTECH_CSE | Batch: 2022 | Semester: 7 | Basket: Specialization Tracks | Course Code: DATA405 | Course Name: SPT-Course #5 (Reinforcement Learning/ Cogn",
         "citations": [
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Semester 7 - Specialization Tracks)",
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Semester 6 - Specialization Tracks)",
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Semester 7 - Specialization Tracks)"
+          "Semester_Spread_Structures_Sept_2026.xlsx (Semester 7 - Specialization Tracks)",
+          "Semester_Spread_Structures_Sept_2026.xlsx (Semester 6 - Specialization Tracks)",
+          "Semester_Spread_Structures_Sept_2026.xlsx (Semester 7 - Specialization Tracks)"
         ],
         "isBlocked": false,
         "blockReason": null
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 2,
+        "latencyMs": 3,
         "classification": "CORRECT",
         "explanation": "Response matches expected system state, verified academic documents, and citations.",
         "answerExcerpt": "STATUS: NOT ELIGIBLE (PREREQUISITE NOT MET) Course: DATA405 — Reinforcement Learning Credits: 4 Student: Ananya Rao Program: B.Tech (Hons.) CSE – AI/ML Cur",
@@ -600,27 +600,27 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 415,
+        "latencyMs": 278,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 345,
+        "latencyMs": 313,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
-        "latencyMs": 9,
+        "latencyMs": 10,
         "classification": "CORRECT",
         "explanation": "Response matches expected system state, verified academic documents, and citations.",
         "answerExcerpt": "Course Code: LAWS310 | Course Name: Administrative Law | Credits: 4 | Term: Summer Term June 2026 (Vidyashilp University). This course is offered specifically f",
@@ -634,12 +634,12 @@
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 3,
+        "latencyMs": 13,
         "classification": "CORRECT",
         "explanation": "Response matches expected system state, verified academic documents, and citations.",
-        "answerExcerpt": "Yes, **LAWS310 — Administrative Law** exists as an official course in the Vidyashilp University curriculum catalog. **Course Details:** • **Course Code:** LAWS",
+        "answerExcerpt": "Course Code: LAWS310 | Course Name: Administrative Law | Credits: 4 | Term: Summer Term June 2026 (Vidyashilp University). This course is offered specifically f",
         "citations": [
-          "Courses Offered.pdf (Course Code: LAWS310)"
+          "Courses Offered.pdf (LAWS310)"
         ],
         "isBlocked": false,
         "blockReason": null
@@ -658,27 +658,27 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 374,
+        "latencyMs": 296,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 329,
+        "latencyMs": 266,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
-        "latencyMs": 11,
+        "latencyMs": 12,
         "classification": "CORRECT",
         "explanation": "Response matches expected system state, verified academic documents, and citations.",
         "answerExcerpt": "Course Code: LAWS310 | Course Name: Administrative Law | Credits: 4 | Term: Summer Term June 2026 (Vidyashilp University). This course is offered specifically f",
@@ -692,10 +692,10 @@
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 1,
+        "latencyMs": 4,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [LAWS310]",
-        "answerExcerpt": "Summer Term June 2026 offerings compatible with **Meera Krishnan** (BA (Hons.) – Economics): ### Approved Summer Courses for Your Program: • **DATA103 — Progra",
+        "answerExcerpt": "Summer Term June 2026 offerings compatible with **Meera Krishnan** (BA (Hons.) – Economics): **Approved Summer Courses for Your Program:** • **DATA103 — Progra",
         "citations": [
           "Courses Offered.pdf (Approved Summer Offerings)"
         ],
@@ -716,23 +716,23 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 347,
+        "latencyMs": 507,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 947,
+        "latencyMs": 292,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
@@ -750,12 +750,12 @@
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 2,
-        "classification": "CORRECT",
-        "explanation": "Response matches expected system state, verified academic documents, and citations.",
-        "answerExcerpt": "Yes, **MGMT210 — Basics of Investment Management** exists as an official course in the Vidyashilp University curriculum catalog. **Course Details:** • **Course",
+        "latencyMs": 12,
+        "classification": "PARTIALLY_CORRECT",
+        "explanation": "Partially matches: missing keyword(s) [4 credits]",
+        "answerExcerpt": "According to the official Vidyashilp University curriculum (*Semester_Spread_Structures_Sept_2026.xlsx*), **MGMT210 — Basics of Investment Management** is a **4",
         "citations": [
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Course Code: MGMT210)"
+          "Semester_Spread_Structures_Sept_2026.xlsx (Course Credits: Basics of Investment Management)"
         ],
         "isBlocked": false,
         "blockReason": null
@@ -774,23 +774,23 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 378,
+        "latencyMs": 317,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 372,
+        "latencyMs": 279,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
@@ -833,41 +833,41 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 338,
+        "latencyMs": 302,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 321,
+        "latencyMs": 271,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
-        "latencyMs": 14,
+        "latencyMs": 11,
         "classification": "PARTIALLY_CORRECT",
-        "explanation": "Partially matches: missing keyword(s) [profile]",
-        "answerExcerpt": "Program: BTECH_CSE | Batch: 2022 | Semester: 1 | Basket: Univ Core | Course Code: UCOR103 | Course Name: Communication Skills | Credits: 2 (L:1, T:0, P:2) | Pre",
+        "explanation": "Partially matches: missing keyword(s) [program, profile]",
+        "answerExcerpt": "Foundation Courses for Batch 2022 (BTECH_CSE) — Total Credits: 34 (Basket Allocation: 34 cr): 1. Academic Writing (3 cr); 2. Human Values in work and Life (2 cr",
         "citations": [
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Semester 1 - Univ Core)",
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Semester 2 - Univ Core)",
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Semester 3 - Univ Core)"
+          "Semester_Spread_Structures_Sept_2026.xlsx (Foundation Basket (Batch 2022))",
+          "Semester_Spread_Structures_Sept_2026.xlsx (University Core Basket (Batch 2022))",
+          "Semester_Spread_Structures_Sept_2026.xlsx (Program Core Basket (Batch 2022))"
         ],
         "isBlocked": false,
         "blockReason": null
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 8,
+        "latencyMs": 12,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [profile]",
         "answerExcerpt": "Course Eligibility for Meera Krishnan (BA (Hons.) – Economics, Semester 5): ELIGIBLE COURSES • MATH203 — Probability and Statistics — 4 cr Reason: Core/elec",
@@ -892,23 +892,23 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 318,
+        "latencyMs": 278,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 343,
+        "latencyMs": 293,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
@@ -918,8 +918,8 @@
         "answerExcerpt": "Special Provision Examination for F Grade (May Exam 2026): Course Code: COMP203 | Course Name: Analysis of Algorithms | Faculty Incharge: DR. MEHALA N.",
         "citations": [
           "Faculty Assigned - F Cases - May Exam 2026 - Final.xlsx (COMP203)",
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Semester 3 - Program CORE)",
-          "118225_Semester_Spread_Structures_Sept_2026.xlsx (Semester 3 - Program CORE)"
+          "Semester_Spread_Structures_Sept_2026.xlsx (Semester 3 - Program CORE)",
+          "Semester_Spread_Structures_Sept_2026.xlsx (Semester 3 - Program CORE)"
         ],
         "isBlocked": false,
         "blockReason": null
@@ -952,27 +952,27 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 309,
+        "latencyMs": 272,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 331,
+        "latencyMs": 296,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
-        "latencyMs": 13,
+        "latencyMs": 20,
         "classification": "INCORRECT",
         "explanation": "State mismatch (got ANSWERABLE, expected NEEDS_STUDENT_INFORMATION) or failed factual assertions.",
         "answerExcerpt": "Minor: Law Minor | Batch: 2023 | Semester: 3 | Course Code: LAWM305 | Course Title: 2023 Batch | Credits: 2 | Prerequisite: Regulating platform and Gig workers ",
@@ -986,10 +986,10 @@
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 1,
+        "latencyMs": 2,
         "classification": "INCORRECT",
         "explanation": "State mismatch (got ANSWERABLE, expected NEEDS_STUDENT_INFORMATION) or failed factual assertions.",
-        "answerExcerpt": "Vidyashilp University offers **7 approved Minor Tracks** for undergraduate (B.Tech) students to acquire specialized cross-disciplinary credentials (Ref: 118351_",
+        "answerExcerpt": "**Vidyashilp University Approved Minor Tracks** Official Knowledge Source: 118351_Minor Courses for BTech_Students.xlsx (Summary & Track Sheets) Vidyashilp Uni",
         "citations": [
           "118351_Minor Courses for BTech_Students.xlsx (Minor Courses for BTech Students)",
           "4. Student Handbook Aug 2026.pdf (Clause 2.13 — Pre-Registration (Minor/Specialization))"
@@ -1011,23 +1011,23 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 318,
+        "latencyMs": 307,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 332,
+        "latencyMs": 291,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "INSUFFICIENT_INFORMATION",
@@ -1041,7 +1041,7 @@
       },
       "V4": {
         "state": "NEEDS_CLARIFICATION",
-        "latencyMs": 1,
+        "latencyMs": 2,
         "classification": "CORRECT",
         "explanation": "Response matches expected system state, verified academic documents, and citations.",
         "answerExcerpt": "The term **'AI'** matches multiple courses in the Vidyashilp University catalog: 1. **COMP301 — Artificial Intelligence** (4 cr, Computer Science) 2. **DATA206",
@@ -1065,27 +1065,27 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 307,
+        "latencyMs": 279,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 305,
+        "latencyMs": 279,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
-        "latencyMs": 17,
+        "latencyMs": 19,
         "classification": "INCORRECT",
         "explanation": "State mismatch (got ANSWERABLE, expected NEEDS_CLARIFICATION) or failed factual assertions.",
         "answerExcerpt": "Minor: Law Minor | Batch: 2023 | Semester: 3 | Course Code: LAWM305 | Course Title: 2023 Batch | Credits: 2 | Prerequisite: Regulating platform and Gig workers ",
@@ -1102,7 +1102,7 @@
         "latencyMs": 1,
         "classification": "INCORRECT",
         "explanation": "State mismatch (got ANSWERABLE, expected NEEDS_CLARIFICATION) or failed factual assertions.",
-        "answerExcerpt": "Vidyashilp University offers **7 approved Minor Tracks** for undergraduate (B.Tech) students to acquire specialized cross-disciplinary credentials (Ref: 118351_",
+        "answerExcerpt": "**Vidyashilp University Approved Minor Tracks** Official Knowledge Source: 118351_Minor Courses for BTech_Students.xlsx (Summary & Track Sheets) Vidyashilp Uni",
         "citations": [
           "118351_Minor Courses for BTech_Students.xlsx (Minor Courses for BTech Students)",
           "4. Student Handbook Aug 2026.pdf (Clause 2.13 — Pre-Registration (Minor/Specialization))"
@@ -1124,27 +1124,27 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 320,
+        "latencyMs": 270,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 324,
+        "latencyMs": 271,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "INSUFFICIENT_INFORMATION",
-        "latencyMs": 7,
+        "latencyMs": 11,
         "classification": "INCORRECT",
         "explanation": "State mismatch (got INSUFFICIENT_INFORMATION, expected NEEDS_CLARIFICATION) or failed factual assertions.",
         "answerExcerpt": "I couldn't verify that requirement from the available Vidyashilp University academic source documents. Please check with the Registrar's Office.",
@@ -1154,7 +1154,7 @@
       },
       "V4": {
         "state": "INSUFFICIENT_INFORMATION",
-        "latencyMs": 24,
+        "latencyMs": 10,
         "classification": "INCORRECT",
         "explanation": "State mismatch (got INSUFFICIENT_INFORMATION, expected NEEDS_CLARIFICATION) or failed factual assertions.",
         "answerExcerpt": "I couldn't verify that requirement from the available Vidyashilp University academic source documents. Please check with the Registrar's Office or your Academic",
@@ -1176,27 +1176,27 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 333,
+        "latencyMs": 268,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 333,
+        "latencyMs": 269,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
-        "latencyMs": 21,
+        "latencyMs": 16,
         "classification": "CORRECT",
         "explanation": "Response matches expected system state, verified academic documents, and citations.",
         "answerExcerpt": "Per Student Handbook Clause 7.1–7.2 (Hierarchy Level 1), the standard attendance threshold is 75%. However, under certified medical hospitalization or universit",
@@ -1210,10 +1210,10 @@
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 0,
+        "latencyMs": 2,
         "classification": "CORRECT",
         "explanation": "Response matches expected system state, verified academic documents, and citations.",
-        "answerExcerpt": "### Vidyashilp University Attendance Regulations (Student Handbook, Section III, Clause 7.1–7.4 & Student SOP Clause 2): • **Minimum Attendance Mandate (Clause",
+        "answerExcerpt": "**Vidyashilp University Attendance Regulations (Student Handbook, Section III, Clause 7.1–7.4 & Student SOP Clause 2)** Official Knowledge Source: 4. Student Ha",
         "citations": [
           "4. Student Handbook Aug 2026.pdf (Clause 7.1 & 7.2 — Attendance & Debarment)",
           "SOP STUDENT 19082025 - Final.pdf (Clause 2 — Medical Leave Procedure)"
@@ -1235,27 +1235,27 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 359,
+        "latencyMs": 279,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 347,
+        "latencyMs": 277,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "INSUFFICIENT_INFORMATION",
-        "latencyMs": 21,
+        "latencyMs": 20,
         "classification": "INCORRECT",
         "explanation": "State mismatch (got INSUFFICIENT_INFORMATION, expected ANSWERABLE) or failed factual assertions.",
         "answerExcerpt": "I could not find verified official records for course code(s) ATCH202, ATCH202 in Vidyashilp University source documents.",
@@ -1264,12 +1264,14 @@
         "blockReason": null
       },
       "V4": {
-        "state": "INSUFFICIENT_INFORMATION",
-        "latencyMs": 20,
-        "classification": "INCORRECT",
-        "explanation": "State mismatch (got INSUFFICIENT_INFORMATION, expected ANSWERABLE) or failed factual assertions.",
-        "answerExcerpt": "I couldn't verify that requirement from the available Vidyashilp University academic source documents. Please check with the Registrar's Office or your Academic",
-        "citations": [],
+        "state": "ANSWERABLE",
+        "latencyMs": 4,
+        "classification": "PARTIALLY_CORRECT",
+        "explanation": "Partially matches: missing keyword(s) [32]",
+        "answerExcerpt": "**Vidyashilp University Minor / Open Courses — Batch 2024 (BTECH_CSE)** Official Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (Struct_2024) **To",
+        "citations": [
+          "Semester_Spread_Structures_Sept_2026.xlsx (Minor / Open Courses (Batch 2024))"
+        ],
         "isBlocked": false,
         "blockReason": null
       }
@@ -1287,27 +1289,27 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 329,
+        "latencyMs": 304,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 358,
+        "latencyMs": 287,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
-        "latencyMs": 12,
+        "latencyMs": 9,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [Academic Council]",
         "answerExcerpt": "The Academic Calendar document is an unverified raster scan. Official examination and registration dates must be confirmed through official Registrar circulars ",
@@ -1321,7 +1323,7 @@
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 8,
+        "latencyMs": 11,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [Academic Council]",
         "answerExcerpt": "Document [Academic Calendar Even Semester 2025-26 (1).pdf] for Academic Year 2025-26 (EVEN Semester) is currently pending OCR / manual verification. Official ex",
@@ -1346,27 +1348,27 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 376,
+        "latencyMs": 276,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 352,
+        "latencyMs": 282,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
-        "latencyMs": 22,
+        "latencyMs": 18,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [Handbook, Hierarchy]",
         "answerExcerpt": "III ACADEMIC REGULATIONS 1. Academic Calendar ......................................................................1 5 2. Registration ................",
@@ -1380,10 +1382,10 @@
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 2,
+        "latencyMs": 3,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [Hierarchy]",
-        "answerExcerpt": "### Vidyashilp University Attendance Regulations (Student Handbook, Section III, Clause 7.1–7.4 & Student SOP Clause 2): • **Minimum Attendance Mandate (Clause",
+        "answerExcerpt": "**Vidyashilp University Attendance Regulations (Student Handbook, Section III, Clause 7.1–7.4 & Student SOP Clause 2)** Official Knowledge Source: 4. Student Ha",
         "citations": [
           "4. Student Handbook Aug 2026.pdf (Clause 7.1 & 7.2 — Attendance & Debarment)",
           "SOP STUDENT 19082025 - Final.pdf (Clause 2 — Medical Leave Procedure)"
@@ -1405,27 +1407,27 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 356,
+        "latencyMs": 293,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 380,
+        "latencyMs": 287,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "INSUFFICIENT_INFORMATION",
-        "latencyMs": 9,
+        "latencyMs": 12,
         "classification": "CORRECT",
         "explanation": "Response matches expected system state, verified academic documents, and citations.",
         "answerExcerpt": "I could not find verified official records for course code(s) COMP999 in Vidyashilp University source documents.",
@@ -1457,27 +1459,27 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 338,
+        "latencyMs": 288,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 343,
+        "latencyMs": 276,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "INSUFFICIENT_INFORMATION",
-        "latencyMs": 17,
+        "latencyMs": 11,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [COURSE NOT FOUND, Quantum Computing]",
         "answerExcerpt": "I couldn't verify that requirement from the available Vidyashilp University academic source documents.",
@@ -1487,7 +1489,7 @@
       },
       "V4": {
         "state": "INSUFFICIENT_INFORMATION",
-        "latencyMs": 9,
+        "latencyMs": 10,
         "classification": "CORRECT",
         "explanation": "Response matches expected system state, verified academic documents, and citations.",
         "answerExcerpt": "COURSE NOT FOUND / UNVERIFIED I couldn't find a course named ‘Advanced Quantum Computing’ in the available Vidyashilp University course catalogue. I won't ass",
@@ -1509,27 +1511,27 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 504,
+        "latencyMs": 275,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 360,
+        "latencyMs": 281,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "OUT_OF_SCOPE",
-        "latencyMs": 0,
+        "latencyMs": 1,
         "classification": "CORRECT",
         "explanation": "Response matches expected system state, verified academic documents, and citations.",
         "answerExcerpt": "I can only answer academic questions relating to Vidyashilp University policies, curriculum, and courses.",
@@ -1539,7 +1541,7 @@
       },
       "V4": {
         "state": "INSUFFICIENT_INFORMATION",
-        "latencyMs": 1,
+        "latencyMs": 0,
         "classification": "INCORRECT",
         "explanation": "State mismatch (got INSUFFICIENT_INFORMATION, expected OUT_OF_SCOPE) or failed factual assertions.",
         "answerExcerpt": "I can only provide information grounded in official Vidyashilp University academic documents. Please ask an academic question about courses, attendance, eligibi",
@@ -1561,23 +1563,23 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 347,
+        "latencyMs": 266,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 688,
+        "latencyMs": 305,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
@@ -1593,7 +1595,7 @@
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 1,
+        "latencyMs": 2,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [restricted]",
         "answerExcerpt": "I can only provide information associated with your own student profile. I cannot expose other students' private academic records.",
@@ -1615,23 +1617,23 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 340,
+        "latencyMs": 275,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 329,
+        "latencyMs": 294,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
@@ -1671,27 +1673,27 @@
     "variants": {
       "V1": {
         "state": "BLOCKED",
-        "latencyMs": 435,
+        "latencyMs": 268,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V2": {
         "state": "BLOCKED",
-        "latencyMs": 344,
+        "latencyMs": 287,
         "classification": "BLOCKED",
-        "explanation": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
-        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/s",
+        "explanation": "BLOCKED: OpenAI API HTTP error 401",
+        "answerExcerpt": "[BLOCKED] BLOCKED: OpenAI API HTTP error 401",
         "citations": [],
         "isBlocked": true,
-        "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+        "blockReason": "BLOCKED: OpenAI API HTTP error 401"
       },
       "V3": {
         "state": "ANSWERABLE",
-        "latencyMs": 38,
+        "latencyMs": 32,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [75%, mandatory, attendance]",
         "answerExcerpt": "for any form of evaluation or any other co -curricular or extra -curricular activit ies . 4.3 \u0003 Students are expected to be trustworthy in ",
@@ -1705,10 +1707,10 @@
       },
       "V4": {
         "state": "ANSWERABLE",
-        "latencyMs": 2,
+        "latencyMs": 0,
         "classification": "PARTIALLY_CORRECT",
         "explanation": "Partially matches: missing keyword(s) [mandatory]",
-        "answerExcerpt": "### Vidyashilp University Attendance Regulations (Student Handbook, Section III, Clause 7.1–7.4 & Student SOP Clause 2): • **Minimum Attendance Mandate (Clause",
+        "answerExcerpt": "**Vidyashilp University Attendance Regulations (Student Handbook, Section III, Clause 7.1–7.4 & Student SOP Clause 2)** Official Knowledge Source: 4. Student Ha",
         "citations": [
           "4. Student Handbook Aug 2026.pdf (Clause 7.1 & 7.2 — Attendance & Debarment)",
           "SOP STUDENT 19082025 - Final.pdf (Clause 2 — Medical Leave Procedure)"

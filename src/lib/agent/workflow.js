@@ -271,7 +271,7 @@ function stage4_formulateRecommendation(query, stage1Data, stage2Data, stage3Dat
   // 2. Document Hierarchy & Conflicting Rules Check
   if (q.includes('contradicts') || q.includes('conflict') || q.includes('which rule prevails') || q.includes('sop contradicts')) {
     stageOutput.proposedState = 'ANSWERABLE';
-    stageOutput.recommendationText = "### Document Hierarchy & Rule Precedence\n\nUnder Vidyashilp University governance hierarchy, the **Student Handbook (Hierarchy Level 1)** is the supreme governing regulation and prevails over operational documents such as the **Student SOP (Hierarchy Level 5)**.\n\n- **Attendance Precedence:** The standard requirement is **75%** attendance (Handbook Clause 7.1). The SOP's condonation threshold of **65%** is applicable strictly upon submission of certified medical proof within **3 working days** or official university representation.";
+    stageOutput.recommendationText = "**Document Hierarchy & Rule Precedence**\n\nUnder Vidyashilp University governance hierarchy, the **Student Handbook (Hierarchy Level 1)** is the supreme governing regulation and prevails over operational documents such as the **Student SOP (Hierarchy Level 5)**.\n\n- **Attendance Precedence:** The standard requirement is **75%** attendance (Handbook Clause 7.1). The SOP's condonation threshold of **65%** is applicable strictly upon submission of certified medical proof within **3 working days** or official university representation.";
     return stageOutput;
   }
 
@@ -342,7 +342,7 @@ function stage4_formulateRecommendation(query, stage1Data, stage2Data, stage3Dat
   // 6. Attendance Query
   if (stage2Data.attendanceCheck) {
     stageOutput.proposedState = 'ANSWERABLE';
-    stageOutput.recommendationText = "### Vidyashilp University Attendance Policy\n\n- **Standard Requirement:** Minimum **75%** attendance is mandatory in each course to appear for the End Semester Examination (Student Handbook Section III, Clause 7.1).\n- **Condonation / Medical Grounds:** In cases of certified medical exigency or approved university event representation, attendance may be condoned down to **65%**, provided medical proof is submitted to the Dean/Registrar within **3 working days** (Student SOP Clause 2).\n- **Below 65%:** Strictly ineligible for exam appearance; assigned an 'FA' (Failure due to Attendance) grade and must re-register for the course.";
+    stageOutput.recommendationText = "**Vidyashilp University Attendance Policy**\n\n- **Standard Requirement:** Minimum **75%** attendance is mandatory in each course to appear for the End Semester Examination (Student Handbook Section III, Clause 7.1).\n- **Condonation / Medical Grounds:** In cases of certified medical exigency or approved university event representation, attendance may be condoned down to **65%**, provided medical proof is submitted to the Dean/Registrar within **3 working days** (Student SOP Clause 2).\n- **Below 65%:** Strictly ineligible for exam appearance; assigned an 'FA' (Failure due to Attendance) grade and must re-register for the course.";
     return stageOutput;
   }
 

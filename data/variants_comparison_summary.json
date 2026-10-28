@@ -15,7 +15,7 @@
     "conflictSuccess": "N/A",
     "incorrectRecommendationCount": 0,
     "avgResponseTimeMs": "N/A",
-    "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+    "blockReason": "BLOCKED: OpenAI API HTTP error 401"
   },
   {
     "variant": "V2",
@@ -33,7 +33,7 @@
     "conflictSuccess": "N/A",
     "incorrectRecommendationCount": 0,
     "avgResponseTimeMs": "N/A",
-    "blockReason": "BLOCKED: OpenAI API returned 429 Quota Exceeded: You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/."
+    "blockReason": "BLOCKED: OpenAI API HTTP error 401"
   },
   {
     "variant": "V3",
@@ -50,7 +50,7 @@
     "missingInfoSuccess": "33.3%",
     "conflictSuccess": "25.0%",
     "incorrectRecommendationCount": 0,
-    "avgResponseTimeMs": 14,
+    "avgResponseTimeMs": 13,
     "blockReason": "None (Completed successfully)"
   },
   {
@@ -60,15 +60,15 @@
     "totalCases": 30,
     "evaluatedResponses": 30,
     "blockedResponses": 0,
-    "accuracy": "50.0%",
-    "acceptableAdvisoryRate": "80.0%",
+    "accuracy": "46.7%",
+    "acceptableAdvisoryRate": "83.3%",
     "hallucinationRate": "0.0%",
     "eligibilityAccuracy": "100.0%",
-    "sourceCorrectness": "95.2%",
+    "sourceCorrectness": "100.0%",
     "missingInfoSuccess": "66.7%",
-    "conflictSuccess": "50.0%",
+    "conflictSuccess": "75.0%",
     "incorrectRecommendationCount": 0,
-    "avgResponseTimeMs": 5,
+    "avgResponseTimeMs": 6,
     "blockReason": "None (Completed successfully)"
   }
 ]

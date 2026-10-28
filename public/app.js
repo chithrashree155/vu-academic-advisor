@@ -496,14 +496,39 @@ function escHtml(str) {
 
 function formatMarkdown(text) {
   if (!text) return '';
-  let formatted = escHtml(text);
-  formatted = formatted.replace(/\n\n/g, '</p><p>');
-  formatted = formatted.replace(/\n/g, '<br>');
-  formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  formatted = formatted.replace(/✓/g, '<span style="color:#059669;font-weight:600;">✓</span>');
-  formatted = formatted.replace(/⚠/g, '<span style="color:#d97706;font-weight:600;">⚠</span>');
-  formatted = formatted.replace(/❌/g, '<span style="color:#dc2626;font-weight:600;">❌</span>');
-  return `<p>${formatted}</p>`;
+
+  // 1. Convert markdown heading hashes at the start of any line into bold text without hashes
+  let str = String(text).replace(/^[ \t]*#{1,6}[ \t]+(.*)$/gm, '**$1**');
+
+  // 2. Clean leading and trailing asterisks from Official Knowledge Source lines
+  str = str.replace(/^\*Official Knowledge Source:\s*(.*?)\*$/gmi, 'Official Knowledge Source: $1');
+  str = str.replace(/\*Official Knowledge Source:\s*([^*]+)\*/gi, 'Official Knowledge Source: $1');
+
+  // 3. Escape HTML for XSS prevention
+  let escaped = escHtml(str);
+
+  // 4. Convert bold **text** to <strong>text</strong>
+  escaped = escaped.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+  // 5. Convert single asterisks *text* to <em>text</em>
+  escaped = escaped.replace(/(^|[^*])\*([^*]+)\*([^*]|$)/g, '$1<em>$2</em>$3');
+
+  // 6. Style "Official Knowledge Source: ..." as clean source line
+  escaped = escaped.replace(
+    /(Official Knowledge Source:[^\n<]+)/gi,
+    '<span class="official-source-line">$1</span>'
+  );
+
+  // 7. Status indicators
+  escaped = escaped.replace(/✓/g, '<span style="color:#059669;font-weight:600;">✓</span>');
+  escaped = escaped.replace(/⚠/g, '<span style="color:#d97706;font-weight:600;">⚠</span>');
+  escaped = escaped.replace(/❌/g, '<span style="color:#dc2626;font-weight:600;">❌</span>');
+
+  // 8. Paragraphs & line breaks
+  escaped = escaped.replace(/\n\n/g, '</p><p>');
+  escaped = escaped.replace(/\n/g, '<br>');
+
+  return `<p>${escaped}</p>`;
 }
 
 // ════════════════════════════════════════════════════════════

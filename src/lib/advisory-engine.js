@@ -630,6 +630,134 @@ function extractCandidateCourseName(queryStr) {
 }
 
 /**
+ * Detects whether a query is requesting a specific course category or academic subject
+ * (e.g. "mathematics course", "physics course", "chemistry course", "materials course", etc.)
+ */
+function detectSubjectFilter(queryStr) {
+  if (!queryStr || typeof queryStr !== 'string') return null;
+  const q = queryStr.toLowerCase();
+
+  // Mathematics / Math / Probability / Calculus / Statistics / Linear Algebra
+  if (/\b(?:mathematics|maths?|calculus|probability|statistics|algebra)\b/i.test(q)) {
+    return {
+      category: 'MATHEMATICS',
+      label: 'Mathematics',
+      matches: (c) => {
+        const code = (c.courseCode || c.code || '').toUpperCase();
+        const name = (c.courseName || c.name || '').toLowerCase();
+        return code.startsWith('MATH') || name.includes('math') || name.includes('calculus') || name.includes('probability') || name.includes('statistics') || name.includes('algebra');
+      }
+    };
+  }
+
+  // Physics
+  if (/\b(?:physics)\b/i.test(q)) {
+    return {
+      category: 'PHYSICS',
+      label: 'Physics',
+      matches: (c) => {
+        const code = (c.courseCode || c.code || '').toUpperCase();
+        const name = (c.courseName || c.name || '').toLowerCase();
+        return code.startsWith('PHYS') || name.includes('physics');
+      }
+    };
+  }
+
+  // Chemistry
+  if (/\b(?:chemistry)\b/i.test(q)) {
+    return {
+      category: 'CHEMISTRY',
+      label: 'Chemistry',
+      matches: (c) => {
+        const code = (c.courseCode || c.code || '').toUpperCase();
+        const name = (c.courseName || c.name || '').toLowerCase();
+        return code.startsWith('CHEM') || name.includes('chemistry');
+      }
+    };
+  }
+
+  // Materials / Material Science
+  if (/\b(?:materials?|material\s+science)\b/i.test(q)) {
+    return {
+      category: 'MATERIALS',
+      label: 'Materials Science',
+      matches: (c) => {
+        const code = (c.courseCode || c.code || '').toUpperCase();
+        const name = (c.courseName || c.name || '').toLowerCase();
+        return code.startsWith('MTSC') || (code.startsWith('ENGG') && name.includes('material')) || name.includes('material');
+      }
+    };
+  }
+
+  // Design / Drawing / Graphics
+  if (/\b(?:design\s+thinking|engineering\s+graphics|engineering\s+drawing|drawing|cad)\b/i.test(q)) {
+    return {
+      category: 'DESIGN_DRAWING',
+      label: 'Design / Drawing',
+      matches: (c) => {
+        const code = (c.courseCode || c.code || '').toUpperCase();
+        const name = (c.courseName || c.name || '').toLowerCase();
+        return code.startsWith('DSGN') || code.startsWith('ENGR') || name.includes('drawing') || name.includes('graphics') || name.includes('design thinking');
+      }
+    };
+  }
+
+  // Electrical / Electronics
+  if (/\b(?:electrical|electronics|circuits?)\b/i.test(q)) {
+    return {
+      category: 'ELECTRICAL',
+      label: 'Electrical Engineering',
+      matches: (c) => {
+        const code = (c.courseCode || c.code || '').toUpperCase();
+        const name = (c.courseName || c.name || '').toLowerCase();
+        return (code.startsWith('ENGG') && name.includes('electrical')) || name.includes('electrical');
+      }
+    };
+  }
+
+  // Computing / Computer Science / Programming / Data Science
+  if (/\b(?:computer\s+science|computing|programming|data\s+structures|data\s+science|machine\s+learning|ai|artificial\s+intelligence)\b/i.test(q)) {
+    return {
+      category: 'COMPUTING',
+      label: 'Computer Science / Data',
+      matches: (c) => {
+        const code = (c.courseCode || c.code || '').toUpperCase();
+        const name = (c.courseName || c.name || '').toLowerCase();
+        return code.startsWith('COMP') || code.startsWith('DATA') || name.includes('computer') || name.includes('programming') || name.includes('data');
+      }
+    };
+  }
+
+  // Economics / Psychology / Social Sciences / Humanities
+  if (/\b(?:economics|psychology|social\s+sciences?|humanities)\b/i.test(q)) {
+    return {
+      category: 'SOCIAL_SCIENCES',
+      label: 'Social Sciences & Humanities',
+      matches: (c) => {
+        const code = (c.courseCode || c.code || '').toUpperCase();
+        const name = (c.courseName || c.name || '').toLowerCase();
+        return code.startsWith('ECON') || code.startsWith('PSYC') || name.includes('economics') || name.includes('psychology');
+      }
+    };
+  }
+
+  // English / Communication / Writing
+  if (/\b(?:english|communication|writing)\b/i.test(q)) {
+    return {
+      category: 'COMMUNICATION',
+      label: 'Communication & Writing',
+      matches: (c) => {
+        const code = (c.courseCode || c.code || '').toUpperCase();
+        const name = (c.courseName || c.name || '').toLowerCase();
+        return name.includes('communication') || name.includes('writing');
+      }
+    };
+  }
+
+  return null;
+}
+
+/**
  * Query Classification Engine
  */
 function classifyQuery(queryStr) {
@@ -930,6 +1058,17 @@ function classifyQuery(queryStr) {
     return 'CURRICULUM_BASKET';
   }
 
+  // 15.1 Specific course credits or info (e.g., "How many credits is Compiler Design?", "How many credits is Operating Systems?")
+  if (
+    !normalizeBasketName(q) && (
+      (q.includes('how many credits') || q.includes('how many credit') || q.includes('credits is') || q.includes('credit is')) ||
+      (q.includes('credits for') && !q.includes('btech') && !q.includes('degree') && !q.includes('batch')) ||
+      (q.includes('does') && q.includes('exist'))
+    )
+  ) {
+    return 'COURSE_INFO';
+  }
+
   // 16. Curriculum credits
   if (
     q.includes('total credits for btech') ||
@@ -954,12 +1093,13 @@ function classifyQuery(queryStr) {
   if (q.includes('program') || q.includes('degrees') || q.includes('offered')) {
     return 'PROGRAM_INFO';
   }
-  if (q.includes('does') && q.includes('exist')) {
-    return 'COURSE_INFO';
+  if (
+    (q.includes('student profile') || (q.includes('profile') && !q.includes('course'))) &&
+    (q.includes('does not contain') || q.includes('missing') || q.includes('not found') || q.includes('required information') || q.includes('what should i do') || q.includes('incomplete'))
+  ) {
+    return 'STUDENT_PROFILE_HELP';
   }
-  if (q.includes('what is') || q.includes('tell me about') || q.includes('credits for') || q.includes('how many credits')) {
-    return 'COURSE_INFO';
-  }
+
   return 'GENERAL_POLICY';
 }
 
@@ -1228,7 +1368,7 @@ function formatCourseTransitionResponse(trans) {
       `*Curriculum Transition Note:* ${trans.explanation}`;
   }
 
-  const answer = `### Curriculum Placement & Transition: **${trans.courseName}**\n*Official Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx*\n\n${origSection}\n\n${updSection}`;
+  const answer = `**Curriculum Placement & Transition: ${trans.courseName}**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx\n\n${origSection}\n\n${updSection}`;
 
   return {
     state: 'ANSWERABLE',
@@ -1625,6 +1765,25 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
     // ── 3. CLASSIFY QUERY (already initialized) ──
 
+    // ── 3.0. STUDENT PROFILE HELP ──
+    if (queryCategory === 'STUDENT_PROFILE_HELP') {
+      return {
+        state: 'ANSWERABLE',
+        answer: `**Student Profile and Academic Records Guidance**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 2.4)\n\nIf your student profile does not contain the required academic information or exhibits discrepancies, follow these official procedures:\n\n1. **Consult Your Faculty Mentor (Student Handbook, Section III, Clause 2.4):** Every student is assigned an official Faculty Advisor [Mentor]. Consult your mentor to verify your registered courses, academic standing, and degree pathway.\n2. **Contact the Office of the Registrar:** For formal updates to your student profile, personal particulars, or degree program registration, submit an official verification request to the Registrar's Office.\n3. **Synchronize via Digii ERP:** Ensure your semester registration and fee clearance records are updated in the Digii ERP portal.\n4. **Advisor Portal Demo Profiles:** If exploring scenarios in this advisory system, use the profile selector in the top bar to switch between the 24 pre-configured synthetic student profiles covering Batches 2022–2026.`,
+        sources: [
+          {
+            documentTitle: '4. Student Handbook Aug 2026.pdf',
+            hierarchyLevel: 1,
+            pageOrSheet: 'Section III, Clause 2.4',
+            clauseNumber: 'Clause 2.4 — Faculty Advisor Consultation',
+            excerpt: 'Every student is assigned a Faculty Advisor [Mentor] and must consult them to plan and finalize course selection and resolve profile discrepancies.'
+          }
+        ],
+        ruleResults: { category: 'STUDENT_PROFILE_HELP' },
+        followUp: 'You can select a demo student profile from the top bar to test personalized course eligibility and attendance checks.'
+      };
+    }
+
     // ── 3.1. ATTENDANCE & ATTENDANCE REGULATIONS HANDLER ──
     if (queryCategory === 'ATTENDANCE') {
       const studentName = profile ? profile.display_name : null;
@@ -1635,12 +1794,12 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
           : profile.attendance >= 65.0
             ? `⚠ Your current recorded attendance is **${profile.attendance}%**, which is between 65% and 75%. You require approved medical relaxation (submitted within 3 working days of rejoining) to write end-semester exams.`
             : `❌ Your current recorded attendance is **${profile.attendance}%**, which is below 65%. Attendance below 65% results in strict exam debarment per Clause 7.2.`;
-        personalizedSection = `\n\n### Your Attendance Standing (${studentName} — ${profile.programName}):\n${statusText}`;
+        personalizedSection = `\n\n**Your Attendance Standing (${studentName} — ${profile.programName}):**\n${statusText}`;
       }
 
       return {
         state: 'ANSWERABLE',
-        answer: `### Vidyashilp University Attendance Regulations (Student Handbook, Section III, Clause 7.1–7.4 & Student SOP Clause 2):\n\n• **Minimum Attendance Mandate (Clause 7.1):** Every student must maintain a minimum attendance of **seventy-five percent (75%)** of the classes actually conducted in each registered course.\n• **Debarment from Examinations (Clause 7.2):** A student failing to attain 75% attendance in a course is **debarred** from appearing for the End-Semester Examination and shall be awarded an 'FA' (Failure on Attendance) grade.\n• **Medical Relaxation & Special Grounds (Clause 7.3):** Relaxation down to a minimum threshold of **sixty-five percent (65%)** may be granted solely for:\n  1. Serious medical exigencies (hospitalization, contagious disease, or acute trauma)\n  2. Official representation of Vidyashilp University, State, or India in approved sports/cultural/academic events.\n• **Submission Timeline (SOP Clause 2):** Signed medical leave applications and hospital certificates must be submitted to the Office of the Registrar within **three (3) working days** after rejoining classes.\n• **Absolute Floor (Clause 7.2):** Attendance **below 65%** cannot be relaxed or condoned under any circumstances; affected students must re-register for the course.${personalizedSection}`,
+        answer: `**Vidyashilp University Attendance Regulations (Student Handbook, Section III, Clause 7.1–7.4 & Student SOP Clause 2)**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 7.1–7.4)\n\n• **Minimum Attendance Mandate (Clause 7.1):** Every student must maintain a minimum attendance of **seventy-five percent (75%)** of the classes actually conducted in each registered course.\n• **Debarment from Examinations (Clause 7.2):** A student failing to attain 75% attendance in a course is **debarred** from appearing for the End-Semester Examination and shall be awarded an 'FA' (Failure on Attendance) grade.\n• **Medical Relaxation & Special Grounds (Clause 7.3):** Relaxation down to a minimum threshold of **sixty-five percent (65%)** may be granted solely for:\n  1. Serious medical exigencies (hospitalization, contagious disease, or acute trauma)\n  2. Official representation of Vidyashilp University, State, or India in approved sports/cultural/academic events.\n• **Submission Timeline (SOP Clause 2):** Signed medical leave applications and hospital certificates must be submitted to the Office of the Registrar within **three (3) working days** after rejoining classes.\n• **Absolute Floor (Clause 7.2):** Attendance **below 65%** cannot be relaxed or condoned under any circumstances; affected students must re-register for the course.${personalizedSection}`,
         sources: [
           {
             documentTitle: '4. Student Handbook Aug 2026.pdf',
@@ -1689,7 +1848,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
     if (queryCategory === 'STUDENT_HANDBOOK') {
       return {
         state: 'ANSWERABLE',
-        answer: `The **Vidyashilp University Student Handbook (August 2026)** is the university's primary regulatory and governance compendium for students. It establishes all academic structures, operational rules, credit requirements, and codes of conduct.\n\n### Key Sections in the Student Handbook:\n• **Section I & II — University Vision & Academic Overview:** Foundational principles, school taxonomy, degree program architectures, and multidisciplinary education philosophy.\n• **Section III — Academic Regulations:**\n  - **Course Registration & Add/Drop (Clause 2):** Digii portal enrollment, course load limits (16–28 credits/semester), and late registration penalties.\n  - **Mandatory Prerequisites (Clauses 7.2 & 12.1):** Requirement to successfully pass foundational courses before registering for advanced courses.\n  - **Attendance Policy (Clause 7.1–7.4):** Minimum 75% attendance requirement; relaxation to 65% for verified medical exigencies.\n  - **Grading & Evaluation (Clause 8, Table 1):** 10-point Letter Grading scale (O, A+, A, B+, B, C, P, F, FA, I) and SGPA/CGPA computation formulas.\n  - **Make-Up Examinations (Clause 9):** Guidelines for students with sanctioned medical leaves during end-semester exams.\n  - **Academic Progression & Year Promotion (Clause 12.1, Table 3):** Minimum CGPA of 5.00 required for progression to Year 3.\n• **Section IV — Student Code of Conduct:** Policies on campus discipline, academic integrity, prevention of ragging, and grievance redressal mechanisms.`,
+        answer: `**Vidyashilp University Student Handbook (August 2026)**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf\n\nThe Student Handbook is the university's primary regulatory and governance compendium for students. It establishes all academic structures, operational rules, credit requirements, and codes of conduct.\n\n**Key Sections in the Student Handbook:**\n• **Section I & II — University Vision & Academic Overview:** Foundational principles, school taxonomy, degree program architectures, and multidisciplinary education philosophy.\n• **Section III — Academic Regulations:**\n  - **Course Registration & Add/Drop (Clause 2):** Digii portal enrollment, course load limits (16–28 credits/semester), and late registration penalties.\n  - **Mandatory Prerequisites (Clauses 7.2 & 12.1):** Requirement to successfully pass foundational courses before registering for advanced courses.\n  - **Attendance Policy (Clause 7.1–7.4):** Minimum 75% attendance requirement; relaxation to 65% for verified medical exigencies.\n  - **Grading & Evaluation (Clause 8, Table 1):** 10-point Letter Grading scale (O, A+, A, B+, B, C, P, F, FA, I) and SGPA/CGPA computation formulas.\n  - **Make-Up Examinations (Clause 9):** Guidelines for students with sanctioned medical leaves during end-semester exams.\n  - **Academic Progression & Year Promotion (Clause 12.1, Table 3):** Minimum CGPA of 5.00 required for progression to Year 3.\n• **Section IV — Student Code of Conduct:** Policies on campus discipline, academic integrity, prevention of ragging, and grievance redressal mechanisms.`,
         sources: [
           {
             documentTitle: '4. Student Handbook Aug 2026.pdf',
@@ -1711,7 +1870,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       if (isFinanceSpecific) {
         return {
           state: 'ANSWERABLE',
-          answer: `The **Finance Minor** is offered by the School of Business Studies for undergraduate students (including B.Tech students) seeking specialized quantitative financial competencies. Under the official Minor Spread (Ref: 118351_Minor Courses for BTech_Students.xlsx):\n\n### Finance Minor Course Sequence:\n• **MGMT208 / FINA333 — Financial Institutions, Markets and Services** (2 credits, Semester 3)\n  - *Prerequisite:* Financial and Management Accounting (FAMA) / Introduction to Financial Accounting\n• **MGMT207 — Corporate Finance** (2 credits, Semester 3)\n  - *Prerequisite:* Financial and Management Accounting\n• **FINA201 / MGMT209 — Financial Statement Analysis** (2 credits, Semester 4)\n  - *Prerequisite:* Corporate Finance / Financial Accounting Foundations\n• **FINA333 / MGMT210 — Basics of Investment Management** (2 credits, Semester 5)\n  - *Prerequisite:* Financial Management / Introduction to Accounting\n\n*Registration Policy:* Pre-registration occurs via the Digii ERP portal and requires a minimum enrollment cohort of 10 students per track.`,
+          answer: `**Finance Minor**\nOfficial Knowledge Source: 118351_Minor Courses for BTech_Students.xlsx (Finance Sheet)\n\nThe Finance Minor is offered by the School of Business Studies for undergraduate students (including B.Tech students) seeking specialized quantitative financial competencies.\n\n**Finance Minor Course Sequence:**\n• **MGMT208 / FINA333 — Financial Institutions, Markets and Services** (2 credits, Semester 3)\n  - *Prerequisite:* Financial and Management Accounting (FAMA) / Introduction to Financial Accounting\n• **MGMT207 — Corporate Finance** (2 credits, Semester 3)\n  - *Prerequisite:* Financial and Management Accounting\n• **FINA201 / MGMT209 — Financial Statement Analysis** (2 credits, Semester 4)\n  - *Prerequisite:* Corporate Finance / Financial Accounting Foundations\n• **FINA333 / MGMT210 — Basics of Investment Management** (2 credits, Semester 5)\n  - *Prerequisite:* Financial Management / Introduction to Accounting\n\n*Registration Policy:* Pre-registration occurs via the Digii ERP portal and requires a minimum enrollment cohort of 10 students per track.`,
           sources: [
             {
               documentTitle: '118351_Minor Courses for BTech_Students.xlsx',
@@ -1734,7 +1893,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       } else {
         return {
           state: 'ANSWERABLE',
-          answer: `Vidyashilp University offers **7 approved Minor Tracks** for undergraduate (B.Tech) students to acquire specialized cross-disciplinary credentials (Ref: 118351_Minor Courses for BTech_Students.xlsx):\n\n### Approved Minor Tracks:\n1. **Finance Minor** — School of Business Studies (Corporate Finance, Financial Statement Analysis, Investment Management)\n2. **Marketing Minor** — School of Business Studies (Marketing Management, Digital Marketing, Consumer Behavior)\n3. **Start-up / Entrepreneurship Minor** — School of Business Studies (Entrepreneurship, Venture Creation, Business Planning)\n4. **Law Minor** — School of Law (Constitutional Frameworks, Regulating Platform & Gig Workers, Cyber Law)\n5. **Design Minor** — School of Design (Design Thinking, Visual Communication, Interactive Prototyping)\n6. **Psychology Minor** — School of Liberal Arts & Sciences (Foundations of Psychology, Cognitive Psychology, Social Dynamics)\n7. **Economics Minor** — School of Liberal Arts & Sciences (Microeconomics, Macroeconomics, Applied Econometrics)\n\n### Key Minor Regulations:\n• **Credit Structure:** Each minor track consists of 12–16 additional credits accumulated across Semesters 3 to 6.\n• **Minimum Cohort Size:** A minimum cohort of 10 students is mandatory for a minor track to be operational.\n• **Portal Registration:** Course registration is completed on the Digii ERP portal during the open pre-registration window per Clause 2.13.`,
+          answer: `**Vidyashilp University Approved Minor Tracks**\nOfficial Knowledge Source: 118351_Minor Courses for BTech_Students.xlsx (Summary & Track Sheets)\n\nVidyashilp University offers 7 approved Minor Tracks for undergraduate (B.Tech) students to acquire specialized cross-disciplinary credentials:\n\n**Approved Minor Tracks:**\n1. **Finance Minor** — School of Business Studies (Corporate Finance, Financial Statement Analysis, Investment Management)\n2. **Marketing Minor** — School of Business Studies (Marketing Management, Digital Marketing, Consumer Behavior)\n3. **Start-up / Entrepreneurship Minor** — School of Business Studies (Entrepreneurship, Venture Creation, Business Planning)\n4. **Law Minor** — School of Law (Constitutional Frameworks, Regulating Platform & Gig Workers, Cyber Law)\n5. **Design Minor** — School of Design (Design Thinking, Visual Communication, Interactive Prototyping)\n6. **Psychology Minor** — School of Liberal Arts & Sciences (Foundations of Psychology, Cognitive Psychology, Social Dynamics)\n7. **Economics Minor** — School of Liberal Arts & Sciences (Microeconomics, Macroeconomics, Applied Econometrics)\n\n**Key Minor Regulations:**\n• **Credit Structure:** Each minor track consists of 12–16 additional credits accumulated across Semesters 3 to 6.\n• **Minimum Cohort Size:** A minimum cohort of 10 students is mandatory for a minor track to be operational.\n• **Portal Registration:** Course registration is completed on the Digii ERP portal during the open pre-registration window per Clause 2.13.`,
           sources: [
             {
               documentTitle: '118351_Minor Courses for BTech_Students.xlsx',
@@ -1761,7 +1920,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
     if (queryCategory === 'REGISTRATION') {
       return {
         state: 'ANSWERABLE',
-        answer: `### Vidyashilp University Course Registration Regulations (Student Handbook, Section III, Clause 2.1–2.15 & ERP Registration Manual):\n\n• **Mandatory Registration (Clause 2.1):** Every student must complete the formal registration procedure for approved courses at the commencement of each semester on designated dates notified in the Academic Calendar.\n• **Faculty Mentor Consultation (Clause 2.4):** Every student is assigned a Faculty Advisor [Mentor] and must consult them to plan and finalize their course selection before registration.\n• **No Attendance / Credit Without Registration (Clause 2.5):** No student is permitted to attend classes or earn academic credit without completing registration; failure to register by the deadline results in removal from the university rolls (Clause 2.12).\n• **Credit Limits per Semester (Clause 2.5):** A student is permitted to register for a minimum of **16 credits** and a maximum of **28 credits** per regular semester.\n• **Late Registration (Clause 2.6):** Permitted strictly under documented medical exigencies (hospitalization/trauma) or approved university representation, up to a maximum of **two (02) calendar weeks** with an applicable Late Fee. No relaxation on the mandatory 75% attendance rule is granted for late registration.\n• **Pre-Registration for Higher Semesters (Clause 2.13):** Pre-registration on the Digii ERP portal is mandatory for declaring Minors, Specializations, and Open Electives for subsequent semesters.\n• **Add/Drop Period (Clause 2.15):** Course changes or elective adjustments must be submitted within the official Add/Drop window specified in the Academic Calendar.`,
+        answer: `**Vidyashilp University Course Registration Regulations (Student Handbook, Section III, Clause 2.1–2.15 & ERP Registration Manual)**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 2.1–2.15)\n\n• **Mandatory Registration (Clause 2.1):** Every student must complete the formal registration procedure for approved courses at the commencement of each semester on designated dates notified in the Academic Calendar.\n• **Faculty Mentor Consultation (Clause 2.4):** Every student is assigned a Faculty Advisor [Mentor] and must consult them to plan and finalize their course selection before registration.\n• **No Attendance / Credit Without Registration (Clause 2.5):** No student is permitted to attend classes or earn academic credit without completing registration; failure to register by the deadline results in removal from the university rolls (Clause 2.12).\n• **Credit Limits per Semester (Clause 2.5):** A student is permitted to register for a minimum of **16 credits** and a maximum of **28 credits** per regular semester.\n• **Late Registration (Clause 2.6):** Permitted strictly under documented medical exigencies (hospitalization/trauma) or approved university representation, up to a maximum of **two (02) calendar weeks** with an applicable Late Fee. No relaxation on the mandatory 75% attendance rule is granted for late registration.\n• **Pre-Registration for Higher Semesters (Clause 2.13):** Pre-registration on the Digii ERP portal is mandatory for declaring Minors, Specializations, and Open Electives for subsequent semesters.\n• **Add/Drop Period (Clause 2.15):** Course changes or elective adjustments must be submitted within the official Add/Drop window specified in the Academic Calendar.`,
         sources: [
           {
             documentTitle: '4. Student Handbook Aug 2026.pdf',
@@ -1804,7 +1963,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       const comp = compareCurriculumVersions(v1, v2, basketKey);
 
       if (comp) {
-        let answerText = `### Curriculum Comparison: Batch ${comp.v1} (${comp.p1}) vs. Batch ${comp.v2} (${comp.p2})\n*Official Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (Struct_${comp.v1 === '2026' ? '2026_DS' : comp.v1} & Struct_${comp.v2 === '2026' ? '2026_DS' : comp.v2})*\n\n• **Total Credits for Degree Award:** Exactly **180 credits** in both versions.\n\n`;
+        let answerText = `**Curriculum Comparison: Batch ${comp.v1} (${comp.p1}) vs. Batch ${comp.v2} (${comp.p2})**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (Struct_${comp.v1 === '2026' ? '2026_DS' : comp.v1} & Struct_${comp.v2 === '2026' ? '2026_DS' : comp.v2})\n\n• **Total Credits for Degree Award:** Exactly **180 credits** in both versions.\n\n`;
 
         const bLabel = basketKey === 'foundation' ? 'Foundation Courses'
           : basketKey === 'universityCore' ? 'University Core'
@@ -1830,7 +1989,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
           const c2Total = c1[`Batch_${comp.v2}`] !== undefined ? c1[`Batch_${comp.v2}`] : (comp.basketCourseDiff[`courses_${comp.v2}`] ? comp.basketCourseDiff[`courses_${comp.v2}`].reduce((a, b) => a + (b.credits || 0), 0) : 0);
           const diffVal = c1.diff !== undefined ? c1.diff : (c2Total - c1Total);
           const sign = diffVal > 0 ? `+${diffVal}` : `${diffVal}`;
-          answerText += `#### ${bLabel} Credit Evolution:\n`;
+          answerText += `**${bLabel} Credit Evolution:**\n`;
           answerText += `• **Batch ${comp.v1}:** ${c1Total} credits\n`;
           answerText += `• **Batch ${comp.v2}:** ${c2Total} credits (Change: ${sign} credits)\n\n`;
 
@@ -1864,7 +2023,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
               `• **Language (LANG101, 3 cr):** Scheduled in **Semester 6** for Batch 2022, but scheduled in **Semester 5** for Batch 2023.\n`;
           }
         } else {
-          answerText += `#### Credit Allocation Across Baskets:\n`;
+          answerText += `**Credit Allocation Across Baskets:**\n`;
           for (const [b, diffObj] of Object.entries(comp.creditDiff)) {
             const sign = diffObj.diff > 0 ? `+${diffObj.diff}` : `${diffObj.diff}`;
             const note = diffObj.diff !== 0 ? ` (*${sign} cr*)` : '';
@@ -1875,7 +2034,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
         if (basketKey && (normalizedQuery.includes('across batches') || normalizedQuery.includes('across all'))) {
           const allCredits = getBasketCredits(basketKey);
           if (allCredits && allCredits.versions) {
-            answerText += `#### ${bLabel} Credit Evolution Across All Batches:\n`;
+            answerText += `**${bLabel} Credit Evolution Across All Batches:**\n`;
             for (const [ver, info] of Object.entries(allCredits.versions)) {
               answerText += `• **Batch ${ver} (${info.program}):** **${info.credits} credits**\n`;
             }
@@ -1912,7 +2071,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       const courseDetails = findCourseDetails(query);
       if (courseDetails && (courseDetails.matchedEntries.length > 0 || courseDetails.structEntries.length > 0)) {
         const courseTitle = courseDetails.matchedEntries[0] ? courseDetails.matchedEntries[0].courseName : (courseDetails.structEntries[0] ? courseDetails.structEntries[0].name : query);
-        let answerText = `### Curriculum Placement for **${courseTitle}**\n*Official Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx*\n\n`;
+        let answerText = `**Curriculum Placement for ${courseTitle}**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx\n\n`;
         if (courseDetails.matchedEntries.length > 0) {
           answerText += `Current scheduling across curriculum batches:\n`;
           const byBatch = {};
@@ -1962,7 +2121,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       if (courseDetails && (courseDetails.matchedEntries.length > 0 || courseDetails.structEntries.length > 0)) {
         const courseTitle = courseDetails.matchedEntries[0] ? courseDetails.matchedEntries[0].courseName : (courseDetails.structEntries[0] ? courseDetails.structEntries[0].name : query);
 
-        let answerText = `### Semester Placement for **${courseTitle}**\n*Official Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx*\n\n`;
+        let answerText = `**Semester Placement for ${courseTitle}**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx\n\n`;
 
         if (courseDetails.matchedEntries.length > 0) {
           answerText += `Semester scheduling across curriculum batches:\n`;
@@ -2015,18 +2174,67 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
         if (semResult) {
           if (semResult.hasSpecificVersion) {
+            const subjectFilter = detectSubjectFilter(normalizedQuery);
+            const sheetName = semResult.courses[0]?.sourceSheetName || (semResult.version === '2026' ? 'Sem_Spread_DS_2026' : (semResult.version === '2022' ? 'Sem Spread BTECH-2022' : `Sem_Spread_${semResult.version}`));
+
+            if (subjectFilter) {
+              const matched = semResult.courses.filter(c => subjectFilter.matches(c));
+              if (matched.length === 0) {
+                return {
+                  state: 'ANSWERABLE',
+                  answer: `**${subjectFilter.label} Courses in Semester ${semResult.semesterNum} — Batch ${semResult.version}**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${sheetName})\n\nThere are no ${subjectFilter.label.toLowerCase()} courses offered in **Semester ${semResult.semesterNum}** for **Batch ${semResult.version}**.`,
+                  sources: [{
+                    documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+                    hierarchyLevel: 2,
+                    pageOrSheet: sheetName,
+                    clauseNumber: `Semester ${semResult.semesterNum} Schedule`,
+                    excerpt: `Official course offerings for Batch ${semResult.version} Semester ${semResult.semesterNum}.`
+                  }],
+                  ruleResults: { semester: semResult.semesterNum, batch: semResult.version, subject: subjectFilter.category, count: 0, totalCredits: 0 },
+                  followUp: null
+                };
+              }
+
+              const targetCredits = matched.reduce((s, c) => s + (Number(c.credits) || 0), 0);
+              const headingText = matched.length === 1
+                ? `**${matched[0].courseCode} — ${matched[0].courseName}**`
+                : `**${subjectFilter.label} Courses in Semester ${semResult.semesterNum} — Batch ${semResult.version}**`;
+
+              const cList = matched.map((c, idx) =>
+                matched.length > 1
+                  ? `${idx + 1}. **${c.courseCode} — ${c.courseName}**\n   Credits: ${c.credits} (L:${c.lectureHours}, T:${c.tutorialHours}, P:${c.practicalHours}) | Basket: ${c.basketName} | Prereq: ${c.prerequisite}`
+                  : `• **Course:** **${c.courseCode} — ${c.courseName}**\n• **Batch:** ${semResult.version}\n• **Semester:** Semester ${semResult.semesterNum}\n• **Credits:** **${c.credits} credit${c.credits > 1 ? 's' : ''}** (L:${c.lectureHours}, T:${c.tutorialHours}, P:${c.practicalHours})\n• **Basket:** ${c.basketName}\n• **Prerequisite:** ${c.prerequisite}`
+              ).join('\n\n');
+
+              return {
+                state: 'ANSWERABLE',
+                answer: `${headingText}\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${sheetName})\n\n${cList}\n\n**Total Credits:** **${targetCredits} credit${targetCredits > 1 ? 's' : ''}**`,
+                sources: [
+                  {
+                    documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+                    hierarchyLevel: 2,
+                    pageOrSheet: sheetName,
+                    clauseNumber: `${matched.map(m => m.courseCode).join(', ')} — Semester ${semResult.semesterNum}`,
+                    excerpt: `Official ${subjectFilter.label.toLowerCase()} course allocation for Batch ${semResult.version} Semester ${semResult.semesterNum}: ${matched.map(m => `${m.courseCode} (${m.courseName}, ${m.credits} cr)`).join('; ')}.`
+                  }
+                ],
+                ruleResults: { semester: semResult.semesterNum, batch: semResult.version, subject: subjectFilter.category, count: matched.length, totalCredits: targetCredits },
+                followUp: null
+              };
+            }
+
             const cList = semResult.courses.map((c, idx) =>
               `${idx + 1}. **${c.courseCode} — ${c.courseName}**\n   Credits: ${c.credits} (L:${c.lectureHours}, T:${c.tutorialHours}, P:${c.practicalHours}) | Basket: ${c.basketName} | Prereq: ${c.prerequisite}`
             ).join('\n\n');
 
             return {
               state: 'ANSWERABLE',
-              answer: `### Courses in Semester ${semResult.semesterNum} — Batch ${semResult.version}\n*Official Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (Sem_Spread_${semResult.version === '2026' ? 'DS_2026' : semResult.version})*\n\n**Total Semester Credits:** **${semResult.totalCredits} credits**\n\n${cList}`,
+              answer: `**Courses in Semester ${semResult.semesterNum} — Batch ${semResult.version}**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${sheetName})\n\n**Total Semester Credits:** **${semResult.totalCredits} credits**\n\n${cList}`,
               sources: [
                 {
                   documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
                   hierarchyLevel: 2,
-                  pageOrSheet: `Sem_Spread_${semResult.version === '2026' ? 'DS_2026' : semResult.version}`,
+                  pageOrSheet: sheetName,
                   clauseNumber: `Semester ${semResult.semesterNum} Courses`,
                   excerpt: `Semester ${semResult.semesterNum} course schedule and prerequisites for Batch ${semResult.version}.`
                 }
@@ -2035,9 +2243,9 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
               followUp: null
             };
           } else {
-            let answerText = `Semester ${semNum} course offerings across curriculum batches (*Semester_Spread_Structures_Sept_2026.xlsx*):\n\n`;
+            let answerText = `Semester ${semNum} course offerings across curriculum batches (Semester_Spread_Structures_Sept_2026.xlsx):\n\n`;
             for (const [b, data] of Object.entries(semResult.batches)) {
-              answerText += `### Batch ${b} (${data.totalCredits} credits total):\n`;
+              answerText += `**Batch ${b} (${data.totalCredits} credits total):**\n`;
               answerText += data.courses.map(c => `• **${c.courseCode} — ${c.courseName}** (${c.credits} cr, ${c.basketName}, Prereq: ${c.prerequisite})`).join('\n') + '\n\n';
             }
             return {
@@ -2114,7 +2322,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
             return {
               state: 'ANSWERABLE',
-              answer: `### Vidyashilp University ${basketResult.basketName} — Semester ${basketResult.semesterNum} (Batch ${basketResult.version})\n*Official Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${sheetName})*\n\n${explanation}`,
+              answer: `**Vidyashilp University ${basketResult.basketName} — Semester ${basketResult.semesterNum} (Batch ${basketResult.version})**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${sheetName})\n\n${explanation}`,
               sources: [
                 {
                   documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
@@ -2150,7 +2358,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
           return {
             state: 'ANSWERABLE',
-            answer: `### Vidyashilp University ${basketResult.basketName} — Semester ${basketResult.semesterNum} (Batch ${basketResult.version})\n*Official Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${sheetName})*\n\n**Program:** ${basketResult.program} | **Batch:** ${basketResult.version} | **Semester:** ${basketResult.semesterNum}\n**Semester Basket Total:** **${basketResult.totalCredits} credits** (${basketResult.courses.length} course${basketResult.courses.length > 1 ? 's' : ''})\n\n**Courses Scheduled in Semester ${basketResult.semesterNum}:**\n${courseList}`,
+            answer: `**Vidyashilp University ${basketResult.basketName} — Semester ${basketResult.semesterNum} (Batch ${basketResult.version})**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${sheetName})\n\n**Program:** ${basketResult.program} | **Batch:** ${basketResult.version} | **Semester:** ${basketResult.semesterNum}\n**Semester Basket Total:** **${basketResult.totalCredits} credits** (${basketResult.courses.length} course${basketResult.courses.length > 1 ? 's' : ''})\n\n**Courses Scheduled in Semester ${basketResult.semesterNum}:**\n${courseList}`,
             sources: [
               {
                 documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
@@ -2173,9 +2381,9 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
         // CASE C: SEMESTER FILTER SPECIFIED WITHOUT BATCH
         if (basketResult.hasSemesterFilter && !basketResult.hasSpecificVersion) {
-          let answerText = `Semester ${basketResult.semesterNum} **${basketResult.basketName}** across curriculum batches (*Semester_Spread_Structures_Sept_2026.xlsx*):\n\n`;
+          let answerText = `Semester ${basketResult.semesterNum} **${basketResult.basketName}** across curriculum batches (Semester_Spread_Structures_Sept_2026.xlsx):\n\n`;
           for (const [b, bData] of Object.entries(basketResult.versions)) {
-            answerText += `### Batch ${b} (${bData.program} — ${bData.totalCredits} credits in Semester ${basketResult.semesterNum}):\n`;
+            answerText += `**Batch ${b} (${bData.program} — ${bData.totalCredits} credits in Semester ${basketResult.semesterNum}):**\n`;
             if (bData.courses.length > 0) {
               answerText += bData.courses.map(c => `• **${c.courseCode} — ${c.name}** (${c.credits} cr)`).join('\n') + '\n\n';
             } else {
@@ -2228,7 +2436,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
           return {
             state: 'ANSWERABLE',
-            answer: `### Vidyashilp University ${basketResult.basketName} — Batch ${basketResult.version} (${basketResult.program})\n*Official Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (Struct_${basketResult.version === '2026' ? '2026_DS' : basketResult.version})*\n\n${allocExplanation}\n\n**Approved Courses:**\n${courseList}`,
+            answer: `**Vidyashilp University ${basketResult.basketName} — Batch ${basketResult.version} (${basketResult.program})**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (Struct_${basketResult.version === '2026' ? '2026_DS' : basketResult.version})\n\n${allocExplanation}\n\n**Approved Courses:**\n${courseList}`,
             sources: [
               {
                 documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
@@ -2245,12 +2453,12 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
           let answerText = `The **${basketResult.basketName}** curriculum varies by batch in the official Vidyashilp University curriculum workbook (*Semester_Spread_Structures_Sept_2026.xlsx*):\n\n`;
 
           if (basketResult.versions['2022'] && basketResult.versions['2022'].allocatedCredits) {
-            answerText += `### 1. Batches 2022 & 2023 (${basketResult.versions['2022'].allocatedCredits} Credits Total — Struct_2022 / Struct_2023)\n`;
+            answerText += `**1. Batches 2022 & 2023 (${basketResult.versions['2022'].allocatedCredits} Credits Total — Struct_2022 / Struct_2023):**\n`;
             answerText += basketResult.versions['2022'].courses.map(c => `• ${c.courseCode && c.courseCode !== c.name ? `**${c.courseCode} — ${c.name}**` : `**${c.name}**`} (${c.credits} cr)${c.semesterNum ? ` — Semester ${c.semesterNum}` : ''}`).join('\n') + '\n\n';
           }
 
           if (basketResult.versions['2024']) {
-            answerText += `### 2. Batch 2024 (${basketResult.versions['2024'].allocatedCredits} Credits Total — Struct_2024)\n`;
+            answerText += `**2. Batch 2024 (${basketResult.versions['2024'].allocatedCredits} Credits Total — Struct_2024):**\n`;
             answerText += basketResult.versions['2024'].courses.map(c => `• ${c.courseCode && c.courseCode !== c.name ? `**${c.courseCode} — ${c.name}**` : `**${c.name}**`} (${c.credits} cr)${c.semesterNum ? ` — Semester ${c.semesterNum}` : ''}`).join('\n');
             if (basketResult.basketName.includes('Foundation')) {
               answerText += `\n*(Note: Courses 1–11 total 31 credits of basic sciences/humanities; Course 12 'Cloud Computing' at 3 credits completes the 34-credit basket allocation per Struct_2024 row 26).*`;
@@ -2259,12 +2467,12 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
           }
 
           if (basketResult.versions['2025']) {
-            answerText += `### 3. Batch 2025 (${basketResult.versions['2025'].allocatedCredits} Credits Total — Struct_2025)\n`;
+            answerText += `**3. Batch 2025 (${basketResult.versions['2025'].allocatedCredits} Credits Total — Struct_2025):**\n`;
             answerText += basketResult.versions['2025'].courses.map(c => `• ${c.courseCode && c.courseCode !== c.name ? `**${c.courseCode} — ${c.name}**` : `**${c.name}**`} (${c.credits} cr)${c.semesterNum ? ` — Semester ${c.semesterNum}` : ''}`).join('\n') + '\n\n';
           }
 
           if (basketResult.versions['2026']) {
-            answerText += `### 4. Batch 2026 (Data Science — ${basketResult.versions['2026'].allocatedCredits} Credits Total — Struct_2026_DS)\n`;
+            answerText += `**4. Batch 2026 (Data Science — ${basketResult.versions['2026'].allocatedCredits} Credits Total — Struct_2026_DS):**\n`;
             answerText += basketResult.versions['2026'].courses.map(c => `• ${c.courseCode && c.courseCode !== c.name ? `**${c.courseCode} — ${c.name}**` : `**${c.name}**`} (${c.credits} cr)${c.semesterNum ? ` — Semester ${c.semesterNum}` : ''}`).join('\n') + '\n\n';
           }
 
@@ -2320,10 +2528,10 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
         let structText = '';
         if (version && data.curriculumStructures[version]) {
           const s = data.curriculumStructures[version];
-          structText = `\n\n### Credit Structure for Batch ${version} (${s.program}):\n` +
+          structText = `\n\n**Credit Structure for Batch ${version} (${s.program}):**\n` +
             Object.entries(s.basketCredits).map(([b, c]) => `• **${b}:** ${c} credits`).join('\n');
         } else {
-          structText = `\n\n### Overall Degree Architecture (All Batches 2022–2026):\n` +
+          structText = `\n\n**Overall Degree Architecture (All Batches 2022–2026):**\n` +
             `• **Total Credits for Award of Degree:** **180 credits**\n` +
             `• **University Core:** 18 credits (Batches 2022–2024, 2026 DS) / 24 credits (Batch 2025)\n` +
             `• **Foundation:** 34 credits (Batches 2022–2024) / 24 credits (Batch 2025) / 26 credits (Batch 2026 DS)\n` +
@@ -2500,7 +2708,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       } else {
         return {
           state: 'ANSWERABLE',
-          answer: `As a **${activeProfile.programName}** student (${activeProfile.school}), core Computer Science (COMP courses) belong to the School of Computer Science & Data and are **not automatically open** for direct registration.\n\n### Available Computing / Quantitative Options for Your Program:\n• **COMP132 — Design Workshop** (2 cr) — Cross-school permitted introductory course.\n• **UCOR104 — Problem Solving with Design Thinking** (2 cr) — University Core open course.\n• **MATH203 — Probability and Statistics** (4 cr) — Quantitative foundation.\n\nTo enroll in specialized technical courses (such as COMP201 Data Structures or COMP301 AI), you must apply for a cross-school elective waiver and satisfy all underlying prerequisites.`,
+          answer: `As a **${activeProfile.programName}** student (${activeProfile.school}), core Computer Science (COMP courses) belong to the School of Computer Science & Data and are **not automatically open** for direct registration.\n\n**Available Computing / Quantitative Options for Your Program:**\n• **COMP132 — Design Workshop** (2 cr) — Cross-school permitted introductory course.\n• **UCOR104 — Problem Solving with Design Thinking** (2 cr) — University Core open course.\n• **MATH203 — Probability and Statistics** (4 cr) — Quantitative foundation.\n\nTo enroll in specialized technical courses (such as COMP201 Data Structures or COMP301 AI), you must apply for a cross-school elective waiver and satisfy all underlying prerequisites.`,
           sources: [
             {
               documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
@@ -2524,7 +2732,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
       return {
         state: 'ANSWERABLE',
-        answer: `In **Year 3 (Semesters 5 & 6)**, students register for 300-level core discipline electives and research methodology courses according to their parent program:\n\n### 3rd-Year (Level 300) Course Offerings:\n${listStr}\n\n*Registration depends on passing all 100-level and 200-level prerequisite courses and maintaining a minimum CGPA of 5.00 per Clause 12.1.*`,
+        answer: `In **Year 3 (Semesters 5 & 6)**, students register for 300-level core discipline electives and research methodology courses according to their parent program:\n\n**3rd-Year (Level 300) Course Offerings:**\n${listStr}\n\n*Registration depends on passing all 100-level and 200-level prerequisite courses and maintaining a minimum CGPA of 5.00 per Clause 12.1.*`,
         sources: [
           {
             documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
@@ -2562,7 +2770,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
       return {
         state: 'ANSWERABLE',
-        answer: `Summer Term June 2026 offerings compatible with **${activeProfile.display_name}** (${activeProfile.programName}):\n\n### Approved Summer Courses for Your Program:\n${listStr}\n\n*(Total 42 approved courses offered across Vidyashilp University for Summer Term June 2026 re-registration)*`,
+        answer: `Summer Term June 2026 offerings compatible with **${activeProfile.display_name}** (${activeProfile.programName}):\n\n**Approved Summer Courses for Your Program:**\n${listStr}\n\n*(Total 42 approved courses offered across Vidyashilp University for Summer Term June 2026 re-registration)*`,
         sources: [
           {
             documentTitle: 'Courses Offered.pdf',
@@ -2583,7 +2791,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
     if (hasNotData301 && (normalizedQuery.includes('ai') || normalizedQuery.includes('ml') || normalizedQuery.includes('courses can i take') || normalizedQuery.includes('which courses'))) {
       return {
         state: 'ANSWERABLE',
-        answer: `Academic Assessment for B.Tech Data Science (Year 3 / Semester 5):\nCompleted: DATA201, DATA202 | Pending Prerequisite: DATA301 (Machine Learning)\n\n### 1. ELIGIBLE AI/DATA COURSES YOU CAN REGISTER FOR NOW:\n• **DATA301 — Machine Learning** (4 cr) — ✓ ELIGIBLE (Prerequisite DATA201 Foundations to Data Science is completed! You should prioritize enrolling in this course).\n• **DATA206 — Artificial Intelligence for Decision Making** (3 cr) — ✓ ELIGIBLE (Prerequisite DATA103/Foundations satisfied).\n• **COMP301 — Artificial Intelligence** (4 cr) — ✓ ELIGIBLE (Core computing elective).\n• **COMP201 — Data Structures** (4 cr) — ✓ ELIGIBLE.\n\n### 2. BLOCKED COURSES (PREREQUISITE DATA301 MISSING):\n• **DATA302 — Deep Learning** (4 cr) — ❌ BLOCKED (Mandatory prerequisite: DATA301 Machine Learning)\n• **DATA306 — Deep Learning & NLP** (4 cr) — ❌ BLOCKED (Mandatory prerequisite: DATA301 Machine Learning)\n• **DATA405 — Reinforcement Learning** (4 cr) — ❌ BLOCKED (Mandatory prerequisite: DATA301 Machine Learning)\n• **DATA303 — MLOps & Model Deployment** (2 cr) — ❌ BLOCKED (Mandatory prerequisite: DATA301 Machine Learning)\n\n**Advising Guidance:** Under Vidyashilp University curriculum structure, DATA301 is the gateway prerequisite for advanced deep learning electives. Enroll in and complete DATA301 in Semester 5 to unlock DATA302 and DATA306 for Semester 6.`,
+        answer: `Academic Assessment for B.Tech Data Science (Year 3 / Semester 5):\nCompleted: DATA201, DATA202 | Pending Prerequisite: DATA301 (Machine Learning)\n\n**1. ELIGIBLE AI/DATA COURSES YOU CAN REGISTER FOR NOW:**\n• **DATA301 — Machine Learning** (4 cr) — ✓ ELIGIBLE (Prerequisite DATA201 Foundations to Data Science is completed! You should prioritize enrolling in this course).\n• **DATA206 — Artificial Intelligence for Decision Making** (3 cr) — ✓ ELIGIBLE (Prerequisite DATA103/Foundations satisfied).\n• **COMP301 — Artificial Intelligence** (4 cr) — ✓ ELIGIBLE (Core computing elective).\n• **COMP201 — Data Structures** (4 cr) — ✓ ELIGIBLE.\n\n**2. BLOCKED COURSES (PREREQUISITE DATA301 MISSING):**\n• **DATA302 — Deep Learning** (4 cr) — ❌ BLOCKED (Mandatory prerequisite: DATA301 Machine Learning)\n• **DATA306 — Deep Learning & NLP** (4 cr) — ❌ BLOCKED (Mandatory prerequisite: DATA301 Machine Learning)\n• **DATA405 — Reinforcement Learning** (4 cr) — ❌ BLOCKED (Mandatory prerequisite: DATA301 Machine Learning)\n• **DATA303 — MLOps & Model Deployment** (2 cr) — ❌ BLOCKED (Mandatory prerequisite: DATA301 Machine Learning)\n\n**Advising Guidance:** Under Vidyashilp University curriculum structure, DATA301 is the gateway prerequisite for advanced deep learning electives. Enroll in and complete DATA301 in Semester 5 to unlock DATA302 and DATA306 for Semester 6.`,
         sources: [
           {
             documentTitle: '118225_Semester_Spread_Structures_Sept_2026.xlsx',
@@ -2754,7 +2962,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       ) {
         return {
           state: 'ANSWERABLE',
-          answer: `### Vidyashilp University General Course Eligibility Requirements (Student Handbook, Section III):\n\nTo be eligible to register for and undertake an academic course at Vidyashilp University, a student must fulfill the following official criteria:\n\n1. **Prerequisite Clearance (Clause 7.2 & 12.1):** Students must have successfully completed and passed all specified prerequisite courses with a passing grade before registering for higher-level courses.\n2. **Credit Limit Boundaries (Clause 2.5):** Total enrolled courses must fall within the semester credit range of **16 to 28 credits** per regular semester.\n3. **Attendance Compliance (Clause 7.1):** Maintenance of a minimum of **75% attendance** in all registered courses to remain eligible for evaluation and end-semester examinations.\n4. **Academic Standing & Progression (Clause 12.1, Table 3):** Sustaining the requisite cumulative grade point average (minimum **CGPA 5.00** for progression to Year 3) without unresolved academic disqualifications.\n5. **Formal Registration (Clause 2.1 & 2.4):** Completion of mandatory semester enrollment via the Digii ERP portal and consultation with the designated Faculty Advisor [Mentor].\n6. **Cross-School Alignment:** For courses outside one's parent school, students must meet school domain guidelines or obtain Dean approval.`,
+          answer: `**Vidyashilp University General Course Eligibility Requirements (Student Handbook, Section III)**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III)\n\nTo be eligible to register for and undertake an academic course at Vidyashilp University, a student must fulfill the following official criteria:\n\n1. **Prerequisite Clearance (Clause 7.2 & 12.1):** Students must have successfully completed and passed all specified prerequisite courses with a passing grade before registering for higher-level courses.\n2. **Credit Limit Boundaries (Clause 2.5):** Total enrolled courses must fall within the semester credit range of **16 to 28 credits** per regular semester.\n3. **Attendance Compliance (Clause 7.1):** Maintenance of a minimum of **75% attendance** in all registered courses to remain eligible for evaluation and end-semester examinations.\n4. **Academic Standing & Progression (Clause 12.1, Table 3):** Sustaining the requisite cumulative grade point average (minimum **CGPA 5.00** for progression to Year 3) without unresolved academic disqualifications.\n5. **Formal Registration (Clause 2.1 & 2.4):** Completion of mandatory semester enrollment via the Digii ERP portal and consultation with the designated Faculty Advisor [Mentor].\n6. **Cross-School Alignment:** For courses outside one's parent school, students must meet school domain guidelines or obtain Dean approval.`,
           sources: [
             {
               documentTitle: '4. Student Handbook Aug 2026.pdf',
