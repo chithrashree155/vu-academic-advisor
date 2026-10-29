@@ -509,6 +509,9 @@ function isDegreeCreditQuery(queryStr) {
   if (!queryStr || typeof queryStr !== 'string') return false;
   const s = queryStr.toLowerCase().trim();
 
+  // 0. Curriculum structure queries: "curriculum structure", "degree structure", "credit structure", "complete curriculum structure", "complete curriculum"
+  if (/\b(?:curriculum|degree)\s+structures?\b/i.test(s) || /\bcredit\s+structures?\b/i.test(s) || /\bcomplete\s+curriculum\b/i.test(s)) return true;
+
   // Must mention credits or credit
   if (!/\bcredits?\b/i.test(s)) return false;
 
@@ -850,6 +853,19 @@ function getBasketCourses(basketQuery, versionQuery = null, semesterQuery = null
     };
   }
 
+function getBasketAllocatedCredits(struct, basketKey) {
+  if (!struct || !struct.basketCredits) return 0;
+  const bc = struct.basketCredits;
+  if (basketKey === 'universityCore') return bc['University Core'] || 0;
+  if (basketKey === 'foundation') return bc['Foundation'] || 0;
+  if (basketKey === 'programCore') return bc['Program Core'] || 0;
+  if (basketKey === 'programHonors') return bc['Program Honors'] || 0;
+  if (basketKey === 'electives') return bc['Specialization Tracks'] || bc['Electives'] || 0;
+  if (basketKey === 'minor') return bc['Minor/Open'] || bc['Minor / Open'] || 0;
+  if (basketKey === 'capstone') return bc['Internship/Capstone Project'] || bc['Internship / Capstone Project'] || 0;
+  return 0;
+}
+
   // CASE B: NO SEMESTER CONSTRAINT (EXISTING WHOLE-BASKET BEHAVIOR PRESERVED)
   if (version && data.curriculumStructures[version]) {
     const struct = data.curriculumStructures[version];
@@ -859,7 +875,18 @@ function getBasketCourses(basketQuery, versionQuery = null, semesterQuery = null
     } else {
       courses = struct.baskets[basketKey] || [];
     }
-    const creditAlloc = struct.basketCredits[basketKey === 'universityCore' ? 'University Core' : basketKey === 'foundation' ? 'Foundation' : basketKey === 'programCore' ? 'Program Core' : basketKey === 'programHonors' ? 'Program Honors' : 'Electives'] || courses.reduce((a, b) => a + b.credits, 0);
+    const creditAlloc = getBasketAllocatedCredits(struct, basketKey) || courses.reduce((a, b) => a + b.credits, 0);
+    if (basketKey === 'minor' && courses.length === 0) {
+      courses = [
+        {
+          name: 'University Open Minors / Multidisciplinary Electives',
+          courseCode: 'MINOR/OPEN',
+          credits: creditAlloc,
+          semesterNum: null,
+          prerequisite: 'NONE'
+        }
+      ];
+    }
 
     const enrichedCourses = courses.map(c => {
       const cNameClean = (c.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -899,7 +926,18 @@ function getBasketCourses(basketQuery, versionQuery = null, semesterQuery = null
     } else {
       courses = struct.baskets[basketKey] || [];
     }
-    const creditAlloc = struct.basketCredits[basketKey === 'universityCore' ? 'University Core' : basketKey === 'foundation' ? 'Foundation' : basketKey === 'programCore' ? 'Program Core' : basketKey === 'programHonors' ? 'Program Honors' : 'Electives'] || courses.reduce((a, b) => a + b.credits, 0);
+    const creditAlloc = getBasketAllocatedCredits(struct, basketKey) || courses.reduce((a, b) => a + b.credits, 0);
+    if (basketKey === 'minor' && courses.length === 0) {
+      courses = [
+        {
+          name: 'University Open Minors / Multidisciplinary Electives',
+          courseCode: 'MINOR/OPEN',
+          credits: creditAlloc,
+          semesterNum: null,
+          prerequisite: 'NONE'
+        }
+      ];
+    }
 
     const enrichedCourses = courses.map(c => {
       const cNameClean = (c.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');

@@ -881,9 +881,9 @@ function classifyQuery(queryStr) {
     return 'STUDENT_HANDBOOK';
   }
 
-  // 1.3. Minor Courses (do not intercept if asking about credit calculations or requirements)
+  // 1.3. Minor Courses (do not intercept if asking about credit calculations, batches, baskets, or requirements)
   if (
-    !q.includes('credit') && !q.includes('credits') && (
+    !q.includes('credit') && !q.includes('credits') && !q.includes('batch') && !q.includes('curriculum') && !q.includes('complete') && !q.includes('basket') && (
       q.includes('minor course') ||
       q.includes('minor courses') ||
       q.includes('minor program') ||
@@ -1032,6 +1032,9 @@ function classifyQuery(queryStr) {
     q.includes('what changed between') ||
     q.includes('what changed in') ||
     q.includes('what changed') ||
+    q.includes('changed semesters') ||
+    q.includes('changed semester') ||
+    /\bbetween\s+batch\b/i.test(q) ||
     q.includes('different in') ||
     q.includes('different between') ||
     q.includes('versus') ||
@@ -1074,15 +1077,21 @@ function classifyQuery(queryStr) {
 
   // 13.1 Explicit Course Info (takes precedence over basket names in course titles like "Foundation Seminar")
   const isExplicitCourseInfo =
-    q.includes('how many credits is') ||
-    q.includes('how many credit is') ||
-    q.includes('credits is ') ||
-    q.includes('credit is ') ||
-    q.includes('course code for') ||
-    q.includes('l-t-p') ||
-    q.includes('lecture-tutorial-practical') ||
-    (q.includes('basket does') && q.includes('belong')) ||
-    (q.includes('does') && q.includes('exist'));
+    (
+      q.includes('how many credits is') ||
+      q.includes('how many credit is') ||
+      q.includes('credits is ') ||
+      q.includes('credit is ') ||
+      q.includes('how many credits does') ||
+      q.includes('how many credit does') ||
+      q.includes('credits does') ||
+      q.includes('credit does') ||
+      q.includes('course code for') ||
+      q.includes('l-t-p') ||
+      q.includes('lecture-tutorial-practical') ||
+      (q.includes('basket does') && q.includes('belong')) ||
+      (q.includes('does') && q.includes('exist'))
+    ) && !isDegreeCreditQuery(q);
 
   if (isExplicitCourseInfo) {
     return 'COURSE_INFO';
@@ -1109,12 +1118,15 @@ function classifyQuery(queryStr) {
     return 'SEMESTER_CREDITS';
   }
 
-  // 15. Curriculum basket courses (e.g. "List Foundation courses and credits for 2026 DS", "Tell me foundation courses for batch 2023 first semester only")
+  // 15. Curriculum basket courses (e.g. "List Foundation courses and credits for 2026 DS", "Tell me foundation courses for batch 2023 first semester only", "What is the Internship/Capstone Project requirement for Batch 2023?")
   if (
     normalizeBasketName(q) && (
+      q.includes('requirement') ||
+      q.includes('requirements') ||
       q.includes('list') ||
       q.includes('tell me') ||
       q.includes('show') ||
+      q.includes('what is') ||
       q.includes('what are') ||
       q.includes('what were') ||
       q.includes('which') ||
@@ -2363,7 +2375,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
           answerText += `Semester scheduling across curriculum batches:\n`;
           const byBatch = {};
           for (const m of courseDetails.matchedEntries) {
-            byBatch[m.batch] = m;
+            if (!byBatch[m.batch]) byBatch[m.batch] = m;
           }
           for (const [b, m] of Object.entries(byBatch)) {
             answerText += `• **Batch ${b}:** **Semester ${m.semesterNum}** | Basket: **${m.basketName}** (${m.courseCode}, ${m.credits} credits, L:${m.lectureHours}, T:${m.tutorialHours}, P:${m.practicalHours}, Prerequisite: ${m.prerequisite})\n`;
@@ -2393,6 +2405,21 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
           ],
           ruleResults: { course: courseTitle },
           followUp: `Ask 'What are the prerequisites for ${courseTitle}?' or 'How many credits is ${courseTitle}?'`
+        };
+      } else {
+        const cand = extractCandidateCourseName(query);
+        return {
+          state: 'INSUFFICIENT_INFORMATION',
+          answer: `A course named ‘${cand || 'the requested course'}’ does not exist in official Vidyashilp University curriculum structures (*Semester_Spread_Structures_Sept_2026.xlsx*) or the course catalog.`,
+          sources: [{
+            documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+            hierarchyLevel: 2,
+            pageOrSheet: 'Master Course Catalog',
+            clauseNumber: 'Course Placement Verification',
+            excerpt: `Course not found in official curriculum records.`
+          }],
+          ruleResults: { unverifiedCourse: cand },
+          followUp: "Please verify the course title with your Academic Advisor or the Registrar's Office."
         };
       }
     }
@@ -2872,7 +2899,9 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
           : basketCred.basketKey === 'universityCore' ? 'University Core'
           : basketCred.basketKey === 'programCore' ? 'Program Core'
           : basketCred.basketKey === 'programHonors' ? 'Program Honors'
-          : basketCred.basketKey === 'electives' ? 'Electives'
+          : basketCred.basketKey === 'electives' ? 'Specialization Tracks / Electives'
+          : basketCred.basketKey === 'minor' ? 'Minor / Open Electives'
+          : basketCred.basketKey === 'capstone' ? 'Internship / Capstone Project'
           : basketCred.basketKey;
 
         if (basketCred.hasSpecificVersion) {
@@ -3674,7 +3703,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
           const resolvedCode = courseCode ? `${courseCode} — ` : '';
           return {
             state: 'ANSWERABLE',
-            answer: `**${resolvedCode}${courseName}**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${resolvedSheet})\n\nAccording to the official Vidyashilp University curriculum, **${resolvedCode}${courseName}** is a **${resolvedCredits}-credit** course${version ? ' in Batch ' + version : ''}.`,
+            answer: `**${resolvedCode}${courseName}**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${resolvedSheet})\n\nAccording to the official Vidyashilp University curriculum, **${resolvedCode}${courseName}** carries **${resolvedCredits} credits** (${resolvedCredits}-credit course${version ? ' in Batch ' + version : ''}).`,
             sources: [
               {
                 documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
