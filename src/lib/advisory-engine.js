@@ -37,6 +37,8 @@ const {
   extractVersionFromQuery,
   extractSemesterFromQuery,
   detectUnsupportedVersion,
+  detectUnsupportedProgram,
+  isDegreeCreditQuery,
   getCourseTransition,
   KNOWN_CURRICULUM_TRANSITIONS
 } = require('./curriculum-data');
@@ -1128,7 +1130,8 @@ function classifyQuery(queryStr) {
 
   // 15.1 Specific course credits or info
   if (
-    !normalizeBasketName(q) && (
+    !normalizeBasketName(q) &&
+    !isDegreeCreditQuery(q) && (
       (q.includes('how many credits') || q.includes('how many credit') || q.includes('credits is') || q.includes('credit is')) ||
       (q.includes('credits for') && !q.includes('btech') && !q.includes('degree') && !q.includes('batch')) ||
       (q.includes('does') && q.includes('exist')) ||
@@ -1141,8 +1144,9 @@ function classifyQuery(queryStr) {
     return 'COURSE_INFO';
   }
 
-  // 16. Curriculum credits
+  // 16. Curriculum credits & Degree credit requirements
   if (
+    isDegreeCreditQuery(q) ||
     q.includes('total credits for btech') ||
     q.includes('total credit requirement') ||
     q.includes('total credits for degree') ||
@@ -1793,7 +1797,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
     }
 
     // ── 0.4. NON-EXISTENT COURSE EXISTENCE CHECK (e.g. "Does Quantum Machine Learning 901 exist") ──
-    const existMatch = query.match(/does\s+["'‘“]?([^"'‘”?.!]+?)["'‘”?.!]*\s+exist/i);
+    const existMatch = !normalizedQuery.includes('distinguish') ? query.match(/does\s+["'‘“]?([^"'‘”?.!]+?)["'‘”?.!]*\s+exist/i) : null;
     if (existMatch && existMatch[1]) {
       const testName = existMatch[1].trim();
       const currData = loadCurriculumData();
@@ -2528,6 +2532,24 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
     if (queryCategory === 'CURRICULUM_BASKET') {
       const version = extractVersionFromQuery(normalizedQuery);
       const semester = extractSemesterFromQuery(normalizedQuery);
+      const unsupportedProgramInBasket = detectUnsupportedProgram(normalizedQuery);
+      if (unsupportedProgramInBasket) {
+        return {
+          state: 'INSUFFICIENT_INFORMATION',
+          answer: `I could not verify curriculum requirements for **${unsupportedProgramInBasket}** in the official Vidyashilp University curriculum workbook (*Semester_Spread_Structures_Sept_2026.xlsx*). Official curriculum structures in this workbook are defined exclusively for B.Tech (Honours) programs (Batches 2022, 2023, 2024, 2025, and 2026 Data Science). For ${unsupportedProgramInBasket} curriculum details, please consult the respective School Dean or the Office of the Registrar.`,
+          sources: [
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Curriculum Structures & Spreads',
+              clauseNumber: 'Supported Programs',
+              excerpt: 'Curriculum structures and credit allocations in this workbook are defined exclusively for B.Tech programs (Batches 2022 to 2026 DS).'
+            }
+          ],
+          ruleResults: { unsupportedProgram: unsupportedProgramInBasket, supportedPrograms: ['B.Tech (Honours)'] }
+        };
+      }
+
       const basketResult = getBasketCourses(normalizedQuery, version, semester);
 
       if (basketResult) {
@@ -2771,7 +2793,36 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
     // ── 3.6.5. CURRICULUM CREDITS ──
     if (queryCategory === 'CURRICULUM_CREDITS') {
+      // Guard against unsupported programs requested in degree-credit queries
+      const unsupportedProgramInQuery = detectUnsupportedProgram(normalizedQuery);
+      const isExplicitBTech = /\bb\.?tech\b|\bbtech\b|\bbachelor\s+of\s+technology\b/i.test(normalizedQuery);
+      const isNonBTechProfile = profile && profile.program_type && !/b\.?tech/i.test(profile.program_type) && !/btech/i.test(profile.program || '');
+      
+      let effectiveUnsupportedProgram = unsupportedProgramInQuery;
+      if (!effectiveUnsupportedProgram && isNonBTechProfile && !isExplicitBTech) {
+        effectiveUnsupportedProgram = profile.programName || profile.program || 'your enrolled degree program';
+      }
+
+      if (effectiveUnsupportedProgram) {
+        return {
+          state: 'INSUFFICIENT_INFORMATION',
+          answer: `I could not verify curriculum requirements for **${effectiveUnsupportedProgram}** in the official Vidyashilp University curriculum workbook (*Semester_Spread_Structures_Sept_2026.xlsx*). Official curriculum structures in this workbook are defined exclusively for B.Tech (Honours) programs (Batches 2022, 2023, 2024, 2025, and 2026 Data Science). For ${effectiveUnsupportedProgram} degree credit requirements, please consult the respective School Dean or the Office of the Registrar.`,
+          sources: [
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Curriculum Structures & Spreads',
+              clauseNumber: 'Supported Programs',
+              excerpt: 'Curriculum structures and credit allocations in this workbook are defined exclusively for B.Tech programs (Batches 2022 to 2026 DS).'
+            }
+          ],
+          ruleResults: { unsupportedProgram: effectiveUnsupportedProgram, supportedPrograms: ['B.Tech (Honours)'] },
+          followUp: 'Degree credit requirements in the official workbook are available for B.Tech (Honours) across Batches 2022–2026.'
+        };
+      }
+
       if (
+        isDegreeCreditQuery(normalizedQuery) ||
         normalizedQuery.includes('total credit') ||
         normalizedQuery.includes('credits for btech') ||
         normalizedQuery.includes('credits for degree') ||

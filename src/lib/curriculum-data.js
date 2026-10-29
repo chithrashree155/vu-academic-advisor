@@ -441,6 +441,112 @@ function detectUnsupportedVersion(queryStr) {
 }
 
 /**
+ * Detects if query mentions a degree program outside the official B.Tech curriculum workbook
+ */
+function detectUnsupportedProgram(queryStr) {
+  if (!queryStr || typeof queryStr !== 'string') return null;
+  const q = queryStr.toLowerCase();
+
+  // Guard against B.Tech / CSE / Data Science / AIML
+  if (/\bb\.?tech\b|\bbtech\b|\bbachelor\s+of\s+technology\b/i.test(q)) {
+    return null;
+  }
+
+  // 1. Law degree / program (BA LLB / BBA LLB / LLB)
+  if (
+    /\b(?:ba\s*llb|bba\s*llb|llb|school\s+of\s+law)\b/i.test(q) ||
+    (/\blaw\b/i.test(q) && !/\blaws\s?\d{3}\b/i.test(q) && !/\bintergalactic\b/i.test(q) && /\b(?:program|degree|curriculum|credits?|graduation|graduate)\b/i.test(q))
+  ) {
+    return 'School of Law (BA LLB / BBA LLB)';
+  }
+
+  // 2. Design degree / program (B.Des / BDes / Bachelor of Design)
+  if (
+    /\b(?:b\.?des\b|bdes\b|bachelor\s+of\s+design\b)/i.test(q) ||
+    (/\bdesign\b/i.test(q) && /\b(?:degree|program)\b/i.test(q) && !/\bdesign\s+thinking\b|\bdesign\s+workshop\b|\bdigital\s+design\b/i.test(q))
+  ) {
+    return 'School of Design (B.Des)';
+  }
+
+  // 3. Architecture degree / program (B.Arch / BArch / Bachelor of Architecture)
+  if (
+    /\b(?:b\.?arch\b|barch\b|bachelor\s+of\s+architecture\b)/i.test(q) ||
+    (/\barchitecture\b/i.test(q) && /\b(?:degree|program)\b/i.test(q) && !/\bcomputer\s+architecture\b|\bsoftware\s+architecture\b/i.test(q))
+  ) {
+    return 'School of Architecture (B.Arch)';
+  }
+
+  // 4. Management / Business (BMS / BBA / MBA / Bachelor of Management Studies)
+  if (
+    /\b(?:bms\b|bba\b|mba\b|bachelor\s+of\s+management\s+studies\b)/i.test(q) ||
+    (/\b(?:business\s+management|business\s+school)\b/i.test(q) && /\b(?:degree|program)\b/i.test(q))
+  ) {
+    return 'School of Business (BMS / MBA)';
+  }
+
+  // 5. Arts / Social Sciences (BA / BA Economics / BA Psychology / Bachelor of Arts)
+  if (
+    /\b(?:ba\s+(?:hons|honours|economics|eco|psychology)|bachelor\s+of\s+arts)\b/i.test(q) ||
+    (/\bba\b/i.test(q) && /\b(?:degree|program)\b/i.test(q)) ||
+    (/\b(?:economics|psychology)\b/i.test(q) && /\b(?:degree|program)\b/i.test(q) && !/\bintroduction\s+to\s+economics\b|\bintroduction\s+to\s+psychology\b/i.test(q))
+  ) {
+    return 'School of Arts & Humanities (BA Honours)';
+  }
+
+  // 6. Postgraduate / Doctoral (M.Tech / M.Sc / PhD)
+  if (/\b(?:m\.?tech\b|mtech\b|m\.?sc\b|msc\b|ph\.?d\b|phd\b|doctoral\b|masters?\s+degree\b)/i.test(q)) {
+    return 'Postgraduate / Doctoral Programs (M.Tech / M.Sc / PhD)';
+  }
+
+  return null;
+}
+
+/**
+ * Identifies natural language queries asking about total degree / graduation credit requirements
+ * Does not require explicit "B.Tech" if the context supports the default B.Tech degree structure.
+ */
+function isDegreeCreditQuery(queryStr) {
+  if (!queryStr || typeof queryStr !== 'string') return false;
+  const s = queryStr.toLowerCase().trim();
+
+  // Must mention credits or credit
+  if (!/\bcredits?\b/i.test(s)) return false;
+
+  // Single course credits (e.g. "how many credits is COMP201") -> false
+  if (/\b[a-z]{3,4}\s?\d{3}\b/i.test(s) && !/\bb\.?tech\b|\bdegree\b/i.test(s)) return false;
+
+  // Basket course credits (e.g. "Foundation basket credits", "how many credits for Foundation") -> handled by basket credits
+  if (normalizeBasketName(s) && !/\b(?:total\s+degree\s+credits?|degree\s+credit\s+requirement|credits?\s+for\s+(?:the\s+)?degree)\b/i.test(s)) {
+    return false;
+  }
+
+  // Semester credit placement without degree keywords -> false
+  if (/\b(?:semester|sem)\s*\d\b/i.test(s) && !/\bdegree\b|\bgraduat|\baward\s+of/i.test(s)) return false;
+
+  // 1. Mentions degree: "total degree credits", "degree credit requirement", "credits for degree", "credits to complete degree", "degree total credits", "overall degree credits"
+  if (/\bdegree\b/i.test(s)) return true;
+
+  // 2. Mentions graduate / graduation: "credits to graduate", "credits required to graduate", "graduation credit requirement", "credits needed for graduation"
+  if (/\bgraduat(?:e|ion)\b/i.test(s)) return true;
+
+  // 3. Mentions award of degree: "award of the degree", "degree award"
+  if (/\baward\s+of\s+(?:the\s+)?degree\b/i.test(s)) return true;
+
+  // 4. Mentions total credits for btech / program: "total credits for btech", "btech total credits", "credits for btech"
+  if (/\bb\.?tech\b/i.test(s) && /\bcredits?\b/i.test(s)) return true;
+
+  // 5. Total credit requirement / overall credits required / total credits needed (without basket)
+  if (/\b(?:total|overall)\s+credits?\b/i.test(s) && !normalizeBasketName(s)) return true;
+  if (/\bcredits?\s+(?:requirement|required|needed)\b/i.test(s) && /\b(?:total|overall|program|curriculum)\b/i.test(s) && !normalizeBasketName(s)) return true;
+
+  // 6. "credit structure"
+  if (/\bcredit\s+structure\b/i.test(s)) return true;
+
+  return false;
+}
+
+
+/**
  * Extracts semester number from query text if specified
  * Supports:
  * - Ordinals: "first", "1st", "second", "2nd", etc.
@@ -1315,6 +1421,8 @@ module.exports = {
   extractVersionFromQuery,
   extractSemesterFromQuery,
   detectUnsupportedVersion,
+  detectUnsupportedProgram,
+  isDegreeCreditQuery,
   validateBasketRecords,
   validateSemesterRecords,
   detectCurriculumConflicts,
