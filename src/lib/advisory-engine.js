@@ -93,6 +93,8 @@ function getOfficialDocumentUrl(docName, pageOrLocation = null) {
     canonicalFile = 'Academic Calendar Even Semester 2025-26 (1).pdf';
   } else if (lower.includes('odd semester') && lower.includes('calendar')) {
     canonicalFile = 'Academic_Calendar_ODD Semester_2026_27.pdf';
+  } else if (lower.includes('all the info') || lower.includes('gai') || lower.includes('glossary') || lower.includes('reading guide') || lower.includes('academic explanation')) {
+    canonicalFile = 'all the info for gai assignment.pdf';
   } else if (name.endsWith('.pdf') || name.endsWith('.xlsx')) {
     canonicalFile = name;
   }
@@ -1010,7 +1012,7 @@ function classifyQuery(queryStr) {
 
   // 1.3. Minor Courses (do not intercept if asking about credit calculations, batches, baskets, or requirements)
   if (
-    !q.includes('credit') && !q.includes('credits') && !q.includes('batch') && !q.includes('curriculum') && !q.includes('complete') && !q.includes('basket') && (
+    !q.includes('difference between') && !q.includes('elective') && !q.includes('credit') && !q.includes('credits') && !q.includes('batch') && !q.includes('curriculum') && !q.includes('complete') && !q.includes('basket') && (
       q.includes('minor course') ||
       q.includes('minor courses') ||
       q.includes('minor program') ||
@@ -1156,6 +1158,8 @@ function classifyQuery(queryStr) {
     q.includes('explain ltp') ||
     q === 'l-t-p' ||
     q === 'ltp' ||
+    q.includes('l-t-p-c') ||
+    q.includes('ltpc') ||
     q.includes('difference between lecture') ||
     q.includes('difference between l-t-p') ||
     q.includes('difference between ltp') ||
@@ -1164,6 +1168,8 @@ function classifyQuery(queryStr) {
     q.includes('hours and credits') ||
     q.includes('l-t-p and credits') ||
     q.includes('ltp and credits') ||
+    (/\bexplain\s+(?:l-t-p\s+)?\d+[-–—]\d+[-–—]\d+\b/i.test(q)) ||
+    (/\bwhat\s+does\s+\d+[-–—]\d+[-–—]\d+\s+mean\b/i.test(q)) ||
     (/\bdoes\s+\d+[-–—]\d+[-–—]\d+\s+mean\b/i.test(q)) ||
     (q.includes('does') && /\b\d+[-–—]\d+[-–—]\d+\b/.test(q) && q.includes('credit')) ||
     q.includes('explain the course structure in simple terms') ||
@@ -1172,6 +1178,50 @@ function classifyQuery(queryStr) {
 
   if (!hasSpecificCourseForLTP && isLTPConceptual) {
     return 'LTP_EXPLANATION';
+  }
+
+  // 12.05 Academic Glossary & Workbook Concept Inquiries
+  const isAcademicGlossary =
+    // Semester spread vs credit structure
+    (((q.includes('semester spread') || q.includes('semester plan')) && q.includes('credit structure')) ||
+     q.includes('spread and structure') ||
+     q.includes('difference between the credit structure and semester plan') ||
+     q.includes('difference between semester spread and credit structure')) ||
+
+    // NIL
+    (q.includes('what does nil mean') || q.includes('what is nil') || q === 'nil' || q === 'what is nil?') ||
+
+    // TBA
+    (q.includes('what does tba mean') || q.includes('what is tba') || q === 'tba' || q === 'what is tba?') ||
+
+    // Prerequisite general concept
+    ((q.includes('what does a prerequisite mean') || q.includes('what does prerequisite mean') || q.includes('what is a prerequisite') || q.includes('what is prerequisite') || q.includes('meaning of prerequisite')) && !hasSpecificCourseForLTP && !q.includes('for') && !q.includes('of')) ||
+
+    // Basket general concept
+    (q.includes('what is a basket') || q.includes('what is basket') || q.includes('what does basket mean') || q.includes('meaning of basket') || q === 'what is a basket?') ||
+
+    // Specific baskets concepts
+    ((q.includes('what is foundation') || q.includes('what does foundation mean') || q.includes('meaning of foundation')) && !q.includes('courses') && !q.includes('batch') && !/\b202[2-6]\b/.test(q)) ||
+    ((q.includes('what is program core') || q.includes('what does program core mean') || q.includes('meaning of program core')) && !q.includes('courses') && !q.includes('batch') && !/\b202[2-6]\b/.test(q)) ||
+    ((q.includes('what is program honors') || q.includes('what are program honors') || q.includes('what does program honors mean') || q.includes('meaning of program honors')) && !q.includes('courses') && !q.includes('batch') && !/\b202[2-6]\b/.test(q)) ||
+    (q.includes('what is a specialization track') || q.includes('what is specialization track') || q.includes('what does specialization track mean') || q.includes('what are specialization tracks') || q.includes('explain specialization track') || q.includes('explain specialization tracks')) ||
+    (q.includes('what is open/minor') || q.includes('what is open minor') || q.includes('what does open/minor mean') || q.includes('difference between an elective and an open/minor') || q.includes('difference between elective and open/minor') || q.includes('difference between elective and minor') || q.includes('difference between elective and open minor')) ||
+
+    // Zero contact hour courses with credits
+    (q.includes('why does a course have credits but no weekly contact hours') || q.includes('why do some courses have credits but no contact hours') || q.includes('credits but no weekly contact hours') || q.includes('credits but no contact hours') || (q.includes('0-0-0') && q.includes('credit')) || (q.includes('zero contact') && q.includes('credit'))) ||
+
+    // Batch course shifting
+    (q.includes('why does a course appear in one semester for one batch and another semester for a different batch') || q.includes('why do courses appear in different semesters for different batches') || q.includes('why are courses in different semesters across batches') || q.includes('appear in one semester for one batch')) ||
+
+    // Total semesters in B.Tech
+    (q.includes('how many semesters are in the curriculum') || q.includes('how many semesters in the curriculum') || q.includes('how many semesters are in b.tech') || q.includes('how many semesters are there in the b.tech') || (q.includes('how many semesters') && q.includes('curriculum'))) ||
+
+    // Credits definition and calculation
+    (q.includes('what are credits') || q.includes('what is a credit') || q.includes('how are credits calculated') || q.includes('how are course credits calculated') || q.includes('credit calculation rule') || q.includes('formula for credits') || q.includes('credit rule')) ||
+    (q.includes('difference between weekly contact hours') && (q.includes('course credits') || q.includes('semester total')));
+
+  if (isAcademicGlossary) {
+    return 'ACADEMIC_GLOSSARY';
   }
 
   // 12.1 Explicit Course Info (takes precedence over general comparison or basket keywords)
@@ -1238,7 +1288,7 @@ function classifyQuery(queryStr) {
     q.includes('batch') || q.includes('batches') || q.includes('structure') || q.includes('structures') ||
     q.includes('operating systems') || q.includes('credits');
 
-  if (isComparisonPhrase && hasCurriculumContext && !isLTPConceptual) {
+  if (isComparisonPhrase && hasCurriculumContext && !isLTPConceptual && !isAcademicGlossary) {
     return 'CURRICULUM_COMPARISON';
   }
 
@@ -1976,6 +2026,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
   try {
     const resolvedQuery = resolveFollowUpQuery(query, history);
     const normalizedQuery = canonicalizeQueryText(resolvedQuery);
+    const hasSpecificCourseForLTP = /\b[A-Z]{3,4}\s?\d{3}\b/i.test(normalizedQuery) || extractCandidateCourseName(normalizedQuery);
 
     // ── 0. IMMEDIATE OUT-OF-SCOPE PRE-RETRIEVAL GUARDRAIL ──
     // MUST run BEFORE retrieval, similarity search, classification, or source selection
@@ -2166,7 +2217,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       if (isDiffLtpAndCredits) {
         return {
           state: 'ANSWERABLE',
-          answer: `**Difference Between L-T-P (Contact Hours) and Academic Credits**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section 3, Clause 3.1 & 3.2, Table 1) & Semester_Spread_Structures_Sept_2026.xlsx\n\nAt Vidyashilp University, **L-T-P** and **Credits** represent two distinct aspects of a course structure:\n\n### 1. L-T-P: The Weekly Learning & Contact-Hour Structure\n• **L-T-P** defines the scheduled weekly instructional contact hours between students and faculty:\n  - **L = Lecture:** Scheduled classroom hours per week for theoretical instruction.\n  - **T = Tutorial:** Scheduled classroom hours per week for guided analytical problem-solving and discussions.\n  - **P = Practical:** Scheduled laboratory/studio/workshop hours per week for hands-on programming or experiments.\n• **Total Weekly Contact Hours ($L + T + P$):** The physical number of hours a student spends in scheduled classes and labs each week.\n\n### 2. Academic Credits: The Value Toward Degree Graduation\n• **Credits** quantify the academic weight earned toward degree completion (a standard B.Tech degree requires exactly **180 credits**).\n• Under **Student Handbook Clause 3.1**, course credits are calculated using the official university formula:\n$$\\text{Course Credits} = L + T + \\frac{P}{2}$$\n• **Why L-T-P values do not directly equal credits:**\n  - **Lecture (L):** 1 contact hour/week = **1 credit** (1:1 ratio).\n  - **Tutorial (T):** 1 contact hour/week = **1 credit** (1:1 ratio).\n  - **Practical (P):** 2 contact hours/week = **1 credit** (2:1 ratio; 1 practical hour = 0.5 credit).\n\n### Concrete Example: DATA103 (Programming in Python)\nIn the official curriculum (*Semester_Spread_Structures_Sept_2026.xlsx*, sheet *Sem_Spread_2024*):\n• **Course Code & Title:** DATA103 — Programming in Python\n• **Official L-T-P:** **1-0-4**\n  - **Lecture (L):** 1 hour per week $\\to$ **1 credit**\n  - **Tutorial (T):** 0 hours per week $\\to$ **0 credits**\n  - **Practical (P):** 4 hours per week $\\to$ **2 credits** ($4 / 2 = 2$)\n• **Total Weekly Contact Hours:** $1 + 0 + 4 = $ **5 hours per week**\n• **Official Course Credits:** $1 + 0 + \\frac{4}{2} = $ **3 credits**\n\n*(Note on \"Does 1-0-4 mean 4 credits?\": **No.** The \"4\" in 1-0-4 denotes 4 practical laboratory hours per week. Because 2 practical hours equal 1 credit, those 4 hours yield 2 practical credits, which together with the 1 lecture hour total **3 credits**, not 4 or 5).*`,
+          answer: `**Difference Between L-T-P (Contact Hours) and Academic Credits**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section 3, Clause 3.1 & 3.2, Table 1) & Semester_Spread_Structures_Sept_2026.xlsx & all the info for gai assignment.pdf (Section 2, Page 1)\n\nAt Vidyashilp University, **L-T-P** and **Credits** represent two distinct aspects of a course structure:\n\n### 1. L-T-P: The Weekly Learning & Contact-Hour Structure\n• **L-T-P** defines the scheduled weekly instructional contact hours between students and faculty:\n  - **L = Lecture:** Scheduled classroom hours per week for theoretical instruction.\n  - **T = Tutorial:** Scheduled classroom hours per week for guided analytical problem-solving and discussions.\n  - **P = Practical:** Scheduled laboratory/studio/workshop hours per week for hands-on programming or experiments.\n• **Total Weekly Contact Hours ($L + T + P$):** The physical number of hours a student spends in scheduled classes and labs each week.\n\n### 2. Academic Credits: The Value Toward Degree Graduation\n• **Credits** quantify the academic weight earned toward degree completion (a standard B.Tech degree requires exactly **180 credits**).\n• Under **Student Handbook Clause 3.1**, course credits are calculated using the official university formula:\n$$\\text{Course Credits} = L + T + \\frac{P}{2}$$\n• **Why L-T-P values do not directly equal credits:**\n  - **Lecture (L):** 1 contact hour/week = **1 credit** (1:1 ratio).\n  - **Tutorial (T):** 1 contact hour/week = **1 credit** (1:1 ratio).\n  - **Practical (P):** 2 contact hours/week = **1 credit** (2:1 ratio; 1 practical hour = 0.5 credit).\n\n### Concrete Example: DATA103 (Programming in Python)\nIn the official curriculum (*Semester_Spread_Structures_Sept_2026.xlsx*, sheet *Sem_Spread_2024*):\n• **Course Code & Title:** DATA103 — Programming in Python\n• **Official L-T-P:** **1-0-4**\n  - **Lecture (L):** 1 hour per week $\\to$ **1 credit**\n  - **Tutorial (T):** 0 hours per week $\\to$ **0 credits**\n  - **Practical (P):** 4 hours per week $\\to$ **2 credits** ($4 / 2 = 2$)\n• **Total Weekly Contact Hours:** $1 + 0 + 4 = $ **5 hours per week**\n• **Official Course Credits:** $1 + 0 + \\frac{4}{2} = $ **3 credits**\n\n*(Note on \"Does 1-0-4 mean 4 credits?\": **No.** The \"4\" in 1-0-4 denotes 4 practical laboratory hours per week. Because 2 practical hours equal 1 credit, those 4 hours yield 2 practical credits, which together with the 1 lecture hour total **3 credits**, not 4 or 5).*`,
           sources: [
             {
               documentTitle: '4. Student Handbook Aug 2026.pdf',
@@ -2174,6 +2225,15 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
               pageOrSheet: 'Section 3, Clause 3.1',
               clauseNumber: 'Academic Credits - Course Credit Structure (L-T-P)',
               excerpt: 'The Credit Structure for defining and categorizing Courses is the L – T – P framework. Lecture/Tutorial: 1 contact hour/week = 1 Credit. Practical: 2 hours/week = 1 Credit.'
+            },
+            {
+              documentTitle: 'all the info for gai assignment.pdf',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Section 2, Page 1',
+              clauseNumber: 'Column Headers and Abbreviations',
+              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=1',
+              isClickable: true,
+              excerpt: 'Credit rule (holds for almost every course): C = L + T + (P ÷ 2). Example: 3-0-2 → 4 credits; 2-0-4 → 4 credits; 1-0-2 → 2 credits.'
             },
             {
               documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
@@ -2185,6 +2245,162 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
           ],
           ruleResults: { ltpDefined: true, creditFormula: 'L + T + P/2', exampleCourse: 'DATA103', exampleLTP: '1-0-4', exampleCredits: 3 },
           followUp: "Ask 'What does 1-0-4 mean in DATA103?' or 'Explain the course structure of MATH201 in simple terms.'"
+        };
+      }
+
+      // Check for specific numeric L-T-P pattern (e.g. "Explain L-T-P 3-0-2" or "What does 3-0-2 mean?")
+      const ltpNumericPattern = normalizedQuery.match(/\b(\d+)[-–—](\d+)[-–—](\d+)\b/);
+      if (ltpNumericPattern && !hasSpecificCourseForLTP) {
+        const l = parseInt(ltpNumericPattern[1], 10);
+        const t = parseInt(ltpNumericPattern[2], 10);
+        const p = parseInt(ltpNumericPattern[3], 10);
+        const totalContact = l + t + p;
+        const calcCredits = l + t + (p / 2);
+
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Understanding L-T-P Structure: ${l}-${t}-${p}**\n` +
+            `Official Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section 3, Clause 3.1 & 3.2, Table 1) & all the info for gai assignment.pdf (Section 2, Page 1)\n\n` +
+            `In the official Vidyashilp University curriculum, the **L-T-P** instructional notation represents scheduled weekly learning hours in the strict order of **Lecture – Tutorial – Practical**:\n\n` +
+            `• **Lecture (L = ${l}):** **${l}** lecture contact hour${l === 1 ? '' : 's'} per week (${l} lecture credit${l === 1 ? '' : 's'} at a 1:1 ratio).\n` +
+            `• **Tutorial (T = ${t}):** **${t}** tutorial contact hour${t === 1 ? '' : 's'} per week (${t} tutorial credit${t === 1 ? '' : 's'} at a 1:1 ratio).\n` +
+            `• **Practical / Lab (P = ${p}):** **${p}** practical/laboratory contact hour${p === 1 ? '' : 's'} per week (${p / 2} practical credit${(p / 2) === 1 ? '' : 's'} at a 2:1 ratio; 2 practical hours equal 1 credit).\n` +
+            `• **Total Weekly Contact Hours:** **${totalContact} hours per week** ($L + T + P = ${l} + ${t} + ${p} = ${totalContact}$ hours/week).\n` +
+            `• **Calculated Course Credits:** **${calcCredits} credit${calcCredits === 1 ? '' : 's'}** ($L + T + \\frac{P}{2} = ${l} + ${t} + \\frac{${p}}{2} = ${calcCredits}$ credits).\n\n` +
+            `### Understanding Key Academic Metrics\n` +
+            `1. **Weekly Contact Hours (${totalContact} hours/week):** The scheduled physical time a student attends classroom and laboratory sessions each week for this course.\n` +
+            `2. **Course Credits (${calcCredits} credits):** The academic value earned toward graduation requirements upon successfully completing the course.\n` +
+            `3. **Semester Total Contact Hours:** Over a standard 15-week instructional semester, this course represents ${totalContact * 15} total instructional contact hours ($ ${totalContact} \\times 15 $). Across a full semester schedule, students typically take 25 to 30 contact hours per week.\n` +
+            `4. **Semester Total Credits:** The sum of credits across all courses taken in that semester (typically 19 to 28 credits per semester, totaling exactly 180 credits across 8 semesters for graduation).\n\n` +
+            `### Concrete Course Examples from Official Curriculum:\n` +
+            `• **MATH401 — Probabilistic Graph Models (3-0-2, 4 Credits):** 3 lecture hours + 0 tutorial hours + 2 lab hours = 5 weekly contact hours, 4 credits (*Sem_Spread_2024, S5*).\n` +
+            `• **COMP209 — Databases Management (3-0-2, 4 Credits):** 3 lecture hours + 0 tutorial hours + 2 lab hours = 5 weekly contact hours, 4 credits (*Sem_Spread_2024, S3*).\n` +
+            `• **DATA103 — Programming in Python (1-0-4, 3 Credits):** 1 lecture hour + 0 tutorial hours + 4 lab hours = 5 weekly contact hours, 3 credits (*Sem_Spread_2024, S1*).\n\n` +
+            `*(Credit Calculation Rule Note: In the Academic Reading Guide, the formula $C = L + T + P/2$ holds for regular taught courses with instructional hours, but is marked for university confirmation because non-taught courses with L-T-P 0-0-0 do not follow it; always verify against official workbook records).*`,
+          sources: [
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Section 3, Clause 3.1 & 3.2',
+              clauseNumber: 'Course Credit Structure (L-T-P)',
+              excerpt: 'The Credit Structure for defining and categorizing Courses is the L – T – P framework. Lecture/Tutorial: 1 contact hour/week = 1 Credit. Practical: 2 hours/week = 1 Credit.'
+            },
+            {
+              documentTitle: 'all the info for gai assignment.pdf',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Section 2, Page 1',
+              clauseNumber: 'Column Headers and Abbreviations',
+              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=1',
+              isClickable: true,
+              excerpt: 'L-T-P / "LTP: 3-0-2" = Lecture-Tutorial-Practical hours per week, written in that order. "LTP: 3-0-2" means 3 lecture hours, 0 tutorial hours and 2 lab hours per week. Credit rule: C = L + T + (P ÷ 2).'
+            },
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Semester Spread Sheets',
+              clauseNumber: 'L-T-P Columns',
+              excerpt: 'Official curriculum records specifying L, T, P, and C per semester course.'
+            }
+          ],
+          ruleResults: { ltp: `${l}-${t}-${p}`, lectureHours: l, tutorialHours: t, practicalHours: p, contactHours: totalContact, credits: calcCredits },
+          followUp: "Ask 'What is the difference between lecture and practical hours?' or 'How are credits calculated?'"
+        };
+      }
+
+      // Check for Difference Between Lecture and Practical Hours
+      const isDiffLecturePractical =
+        normalizedQuery.includes('difference between lecture and practical') ||
+        normalizedQuery.includes('difference between practical and lecture') ||
+        normalizedQuery.includes('lecture vs practical') ||
+        normalizedQuery.includes('practical vs lecture');
+
+      if (isDiffLecturePractical) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Difference Between Lecture and Practical Hours at Vidyashilp University**\n` +
+            `Official Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section 3, Clause 3.1 & Table 1) & all the info for gai assignment.pdf (Section 2, Page 1)\n\n` +
+            `At Vidyashilp University, **Lecture (L)** and **Practical (P)** represent two fundamentally different learning modes with distinct contact hour to credit conversion ratios and evaluation weightages:\n\n` +
+            `### 1. Lecture Hours (L)\n` +
+            `• **Purpose:** Primary classroom instructional sessions devoted to theoretical principles, conceptual foundations, and formal discourse.\n` +
+            `• **Credit Equivalence (Clause 3.1):** **1 lecture contact hour per week = 1 academic credit** (a **1:1 ratio**).\n` +
+            `• **Evaluation Weightage (Table 1):** In lecture-based courses where L predominates, continuous assessment (CA) accounts for **60%–70%** and the End-Semester Examination accounts for **30%–40%**.\n\n` +
+            `### 2. Practical / Laboratory Hours (P)\n` +
+            `• **Purpose:** Hands-on laboratory experiments, programming/coding studios, workshop practice, or applied technical implementations.\n` +
+            `• **Credit Equivalence (Clause 3.1):** **2 practical contact hours per week = 1 academic credit** (a **2:1 ratio**; 1 practical hour = 0.5 credit).\n` +
+            `• **Evaluation Weightage (Table 1):** In practice-based courses where P predominates, continuous assessment (CA) accounts for **70%–100%** with a maximum of **30%** allocated to an end-semester practical jury or viva voce.\n\n` +
+            `### Official Course Example: DATA103 (Programming in Python)\n` +
+            `• **Official L-T-P:** **1-0-4**\n` +
+            `• **Lecture:** 1 hour/week $\\to$ **1 credit**\n` +
+            `• **Tutorial:** 0 hours/week $\\to$ **0 credits**\n` +
+            `• **Practical:** 4 hours/week $\\to$ **2 credits** ($4 \\div 2 = 2$ credits)\n` +
+            `• **Total Weekly Contact Hours:** 5 hours/week\n` +
+            `• **Total Course Credits:** **3 credits** ($1 + 0 + 2 = 3$). This demonstrates that 4 practical hours yield only 2 credits, not 4.`,
+          sources: [
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Section 3, Clause 3.1 & Table 1',
+              clauseNumber: 'Course Credit Structure (L-T-P) and Evaluation Components',
+              excerpt: 'Lecture: 1 hour/week = 1 Credit (60-70% CA, 30-40% End Term). Practical: 2 hours/week = 1 Credit (70-100% CA, max 30% End Term).'
+            },
+            {
+              documentTitle: 'all the info for gai assignment.pdf',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Section 2, Page 1',
+              clauseNumber: 'L-T-P Definitions',
+              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=1',
+              isClickable: true,
+              excerpt: 'L = Lecture hours per week. P = Practical / Lab hours per week. Credit rule: C = L + T + (P ÷ 2).'
+            },
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Sem_Spread_2024',
+              clauseNumber: 'DATA103 Course Record',
+              excerpt: 'DATA103 Programming in Python: L:1, T:0, P:4, Credits:3.'
+            }
+          ],
+          ruleResults: { lectureRatio: '1:1', practicalRatio: '2:1', example: 'DATA103', exampleLTP: '1-0-4', exampleCredits: 3 },
+          followUp: "Ask 'What does 1-0-4 mean in DATA103?' or 'What is the difference between L-T-P and credits?'"
+        };
+      }
+
+      // Check for L-T-P-C Explanation
+      const isLTPC = normalizedQuery.includes('l-t-p-c') || normalizedQuery.includes('ltpc');
+      if (isLTPC) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Understanding L-T-P-C Course Structure at Vidyashilp University**\n` +
+            `Official Knowledge Source: 4. Student Handbook Aug 2026.pdf (Clause 3.1) & all the info for gai assignment.pdf (Section 2, Page 1)\n\n` +
+            `In official curriculum planning sheets, courses are indexed using the **L-T-P-C** format, which represents the following components in strict order:\n\n` +
+            `• **L = Lecture hours per week:** Classroom time devoted to theoretical foundations (1 contact hr/week = 1 credit).\n` +
+            `• **T = Tutorial hours per week:** Small-group participatory sessions for analytical problem solving (1 contact hr/week = 1 credit).\n` +
+            `• **P = Practical / Lab hours per week:** Hands-on laboratory, coding, or studio sessions (2 contact hrs/week = 1 credit).\n` +
+            `• **C = Course Credits:** The academic credit value assigned to the course toward degree completion ($C = L + T + P/2$ for taught courses).\n\n` +
+            `### Official Examples from Curriculum Workbook:\n` +
+            `• **DATA103 — Programming in Python:** L-T-P-C is **1-0-4-3** (1 lecture hr + 0 tutorial hrs + 4 practical hrs = 5 weekly contact hours, 3 credits).\n` +
+            `• **COMP209 — Databases Management:** L-T-P-C is **3-0-2-4** (3 lecture hrs + 0 tutorial hrs + 2 practical hrs = 5 weekly contact hours, 4 credits).\n` +
+            `• **MATH201 — Calculus:** L-T-P-C is **2-1-0-3** (2 lecture hrs + 1 tutorial hr + 0 practical hrs = 3 weekly contact hours, 3 credits).`,
+          sources: [
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Section 3, Clause 3.1',
+              clauseNumber: 'Course Credit Structure (L-T-P)',
+              excerpt: 'The Credit Structure for defining and categorizing Courses is the L – T – P framework. Lecture/Tutorial: 1 contact hour/week = 1 Credit. Practical: 2 hours/week = 1 Credit.'
+            },
+            {
+              documentTitle: 'all the info for gai assignment.pdf',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Section 2, Page 1',
+              clauseNumber: 'Column Headers and Abbreviations',
+              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=1',
+              isClickable: true,
+              excerpt: 'L = Lecture hours per week. T = Tutorial hours per week. P = Practical / Lab hours per week. C = Credits for the course.'
+            }
+          ],
+          ruleResults: { l: 'Lecture', t: 'Tutorial', p: 'Practical', c: 'Credits', formula: 'C = L + T + P/2' },
+          followUp: "Ask 'What does 1-0-4 mean in DATA103?' or 'What is the difference between L-T-P and credits?'"
         };
       }
 
@@ -2217,6 +2433,687 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
         ruleResults: { ltpDefined: true, creditFormula: 'L + T + P/2' },
         followUp: "Ask 'Explain the L-T-P structure of DATA103' or 'How many credits does MATH201 have?'"
       };
+    }
+
+    // ── ACADEMIC GLOSSARY & READING GUIDE EXPLANATIONS ──
+    if (queryCategory === 'ACADEMIC_GLOSSARY') {
+      // 1. Difference Between Semester Spread and Credit Structure
+      const isSpreadVsStructure =
+        ((normalizedQuery.includes('semester spread') || normalizedQuery.includes('semester plan')) && normalizedQuery.includes('credit structure')) ||
+        normalizedQuery.includes('spread and structure') ||
+        normalizedQuery.includes('difference between the credit structure and semester plan') ||
+        normalizedQuery.includes('difference between semester spread and credit structure');
+
+      if (isSpreadVsStructure) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Difference Between Semester Spread and Credit Structure**\n` +
+            `Official Knowledge Source: all the info for gai assignment.pdf (Section 1 & 3, Page 1-3) & Semester_Spread_Structures_Sept_2026.xlsx\n\n` +
+            `In the official Vidyashilp University academic curriculum workbook (*Semester_Spread_Structures_Sept_2026.xlsx*), the curriculum is documented using two distinct types of sheets with separate purposes:\n\n` +
+            `### 1. Semester Spread (Sheets: "Sem Spread" / "Sem_Spread_<year>")\n` +
+            `• **Purpose:** Represents the **chronological course schedule** semester-by-semester (Semester 1 through Semester 8).\n` +
+            `• **What It Shows:**\n` +
+            `  - Which specific courses belong to which semester (S1 to S8)\n` +
+            `  - Course codes (e.g. DATA103, COMP201) and full course titles\n` +
+            `  - Prerequisites required before enrolling in each course\n` +
+            `  - L-T-P-C breakdown (Lecture, Tutorial, Practical weekly contact hours and Credits)\n` +
+            `  - Basket category assigned to each course\n` +
+            `  - Semester total contact hours per week and semester total credits\n\n` +
+            `### 2. Credit Structure (Sheets: "Struct_<year>")\n` +
+            `• **Purpose:** Represents the **graduation degree requirements** categorized by academic baskets.\n` +
+            `• **What It Shows:**\n` +
+            `  - The 7 curriculum basket categories (B1 University Core, B2 Foundation, B3 Program Core, B4 Program Honors, B5 Specialization Tracks/Electives, B6 Open/Minor, B7 Internship/Capstone)\n` +
+            `  - The full list of courses grouped within each basket\n` +
+            `  - Minimum required credits per basket needed for the degree\n` +
+            `  - Total degree credit requirement (always exactly **180 credits** for B.Tech)\n` +
+            `  - It does **not** indicate which semester a course is scheduled in.\n\n` +
+            `### Crucial Distinction for Students\n` +
+            `• **Baskets Span Multiple Semesters:** A single basket (such as Foundation or Program Core) is distributed across multiple semesters throughout the 4 years. For example, Foundation courses are taken in Semesters 1, 2, 3, 4, and 6.\n` +
+            `• **Querying Semester vs Basket:**\n` +
+            `  - If you ask for **Semester 1**, you receive only the courses scheduled in Semester 1.\n` +
+            `  - If you ask for the complete **Foundation Basket**, you receive the full graduation requirement spanning multiple semesters.`,
+          sources: [
+            {
+              documentTitle: 'all the info for gai assignment.pdf',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Section 1, Page 1',
+              clauseNumber: 'What the workbook contains',
+              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=1',
+              isClickable: true,
+              excerpt: 'Two kinds of sheets: "Sem Spread" = which course is taken in which semester (S1–S8), with code, prerequisite, L-T-P-C and basket. "Struct_<year>" = the list of courses and credits inside each basket, and the minimum credits per basket needed for the degree. It does not say which semester a course is in.'
+            },
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'All Spread & Struct Sheets',
+              clauseNumber: 'Workbook Structure',
+              excerpt: 'Authoritative curriculum sheets detailing semester-by-semester spreads and graduation basket credit structures.'
+            }
+          ],
+          ruleResults: { concept: 'Spread vs Structure', spreadSheetType: 'Chronological S1-S8', structSheetType: 'Basket Graduation Requirements', totalCredits: 180 },
+          followUp: "Ask 'What is a basket?' or 'What are the Foundation courses for Batch 2024?'"
+        };
+      }
+
+      // 2. Meaning of NIL
+      const isGlossaryNIL =
+        normalizedQuery.includes('what does nil mean') ||
+        normalizedQuery.includes('what is nil') ||
+        normalizedQuery === 'nil' ||
+        normalizedQuery === 'what is nil?';
+
+      if (isGlossaryNIL) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Meaning of "NIL" in the Vidyashilp University Curriculum**\n` +
+            `Official Knowledge Source: all the info for gai assignment.pdf (Section 2, Page 1) & Semester_Spread_Structures_Sept_2026.xlsx\n\n` +
+            `In official curriculum spreadsheets and course spread documents:\n\n` +
+            `• **NIL (or Nil):** Means that the course has **no prerequisite**.\n` +
+            `• A student may enroll in a course marked NIL without needing to complete or pass any prior university course.\n\n` +
+            `### Official Examples from Curriculum:\n` +
+            `• **DATA103 — Programming in Python (Batch 2024, Semester 1):** Pre-Req: **NIL**\n` +
+            `• **MATH201 — Calculus (Batch 2022, Semester 1):** Pre-Req: **NIL**\n` +
+            `• **COMP201 — Data Structures (Batch 2024, Semester 2):** Pre-Req: **NIL**\n` +
+            `• **UCOR103 — Communication Skills (All Batches, Semester 1):** Pre-Req: **NIL**`,
+          sources: [
+            {
+              documentTitle: 'all the info for gai assignment.pdf',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Section 2, Page 1',
+              clauseNumber: 'Column Headers and Abbreviations',
+              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=1',
+              isClickable: true,
+              excerpt: 'Pre-Req = prerequisite: a course that must be completed before this course can be taken. NIL / Nil = no prerequisite.'
+            },
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Pre-Req Column',
+              clauseNumber: 'Prerequisite Specifications',
+              excerpt: 'Course prerequisite column specifying NIL for entry-level courses.'
+            }
+          ],
+          ruleResults: { term: 'NIL', meaning: 'No prerequisite required' },
+          followUp: "Ask 'What does TBA mean?' or 'What does a prerequisite mean?'"
+        };
+      }
+
+      // 3. Meaning of TBA
+      const isGlossaryTBA =
+        normalizedQuery.includes('what does tba mean') ||
+        normalizedQuery.includes('what is tba') ||
+        normalizedQuery === 'tba' ||
+        normalizedQuery === 'what is tba?';
+
+      if (isGlossaryTBA) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Meaning of "TBA" in the Vidyashilp University Curriculum**\n` +
+            `Official Knowledge Source: all the info for gai assignment.pdf (Section 2, Page 2 & Section 8, Page 37) & Semester_Spread_Structures_Sept_2026.xlsx\n\n` +
+            `In official curriculum planning sheets:\n\n` +
+            `• **TBA:** Stands for **"To Be Announced"**.\n` +
+            `• It serves as an official placeholder denoting that the specific course code, course title, or syllabus details have not yet been finalized by the Academic Council.\n\n` +
+            `### Official Examples from Curriculum Workbook:\n` +
+            `• **Language (Batches 2025 & 2026, Semester 6):** Course code listed as **TBA**\n` +
+            `• **Compiler Design (Batch 2026, Semester 7):** Course code listed as **TBA**\n` +
+            `• **Image Processing and Computer Vision (Batch 2025 Track 1, Semester 7):** Listed as **TBA**`,
+          sources: [
+            {
+              documentTitle: 'all the info for gai assignment.pdf',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Section 2, Page 2 & Section 8, Page 37',
+              clauseNumber: 'Abbreviations & TBA Placeholders',
+              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=2',
+              isClickable: true,
+              excerpt: 'TBA = To Be Announced (course code or details not yet decided). Codes still "TBA": Language (2025, 2026), Compiler Design (2026) and Image Processing & Computer Vision (2025 Track 1).'
+            },
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Spread Sheets 2025 & 2026',
+              clauseNumber: 'TBA Placeholders',
+              excerpt: 'Placeholders for course codes pending formal administrative finalization.'
+            }
+          ],
+          ruleResults: { term: 'TBA', meaning: 'To Be Announced (pending curriculum finalization)' },
+          followUp: "Ask 'What does NIL mean?' or 'What does a prerequisite mean?'"
+        };
+      }
+
+      // 4. Meaning of Prerequisite & Multiple Prerequisites
+      const isGlossaryPrereq =
+        (normalizedQuery.includes('what does a prerequisite mean') ||
+         normalizedQuery.includes('what does prerequisite mean') ||
+         normalizedQuery.includes('what is a prerequisite') ||
+         normalizedQuery.includes('what is prerequisite') ||
+         normalizedQuery.includes('meaning of prerequisite')) &&
+        !hasSpecificCourseForLTP;
+
+      if (isGlossaryPrereq) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Understanding Course Prerequisites at Vidyashilp University**\n` +
+            `Official Knowledge Source: all the info for gai assignment.pdf (Section 2, Page 1; Part B, Pages 11-17) & 4. Student Handbook Aug 2026.pdf (Clause 7.2 & 12.1)\n\n` +
+            `A **Prerequisite (Pre-Req)** is a mandatory foundational course that a student must successfully complete and pass before being permitted to enroll in a subsequent, higher-level course.\n\n` +
+            `### 1. Multiple Prerequisites: "AND" vs "OR"\n` +
+            `• **Comma or "AND" (e.g. \`COMP204, COMP207\`):** **ALL** listed courses must be completed first.\n` +
+            `  - *Example:* **COMP206 (Microprocessors and Computer Architecture)** requires completing **both** COMP204 (Digital Design and Computer Organization) AND COMP207 (Operating Systems).\n` +
+            `• **"OR" (e.g. \`COMP210 OR COMP301\`):** Completing **either one** of the courses satisfies the prerequisite.\n\n` +
+            `### 2. Slash "/" Notation in Specialization Tracks\n` +
+            `• When a Specialization Track cell contains a slash (e.g. \`MATH401/COMP401\` with pre-req \`DATA301/NIL\`):\n` +
+            `  - The **left option** applies to **Track 1 (Applied Deep Learning)** (requiring DATA301).\n` +
+            `  - The **right option** applies to **Track 2 (Full Stack Development)** (requiring NIL / no prerequisite).\n\n` +
+            `### 3. Known Prerequisite Anomalies in the Curriculum Workbook\n` +
+            `The official Academic Reading Guide notes a few typographical anomalies in the workbook:\n` +
+            `• **DATA206:** Listed as a prerequisite for DATA301 Machine Learning in 2025–26, but DATA206 does not exist; it refers to **DATA209 (Advanced Exploratory Data Analysis)**.\n` +
+            `• **COMP210:** Listed in 2022 for DATA207, but COMP210 does not exist anywhere; the intended alternative is **COMP301 (Artificial Intelligence)**.`,
+          sources: [
+            {
+              documentTitle: 'all the info for gai assignment.pdf',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Section 2, Page 1 & Part B, Pages 11-17',
+              clauseNumber: 'Prerequisite Definitions & Unlock Chains',
+              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=1',
+              isClickable: true,
+              excerpt: 'Pre-Req = prerequisite: a course that must be completed before this course can be taken. Several codes separated by commas (e.g. "COMP204, COMP207") means ALL of them are required. NIL / Nil = no prerequisite.'
+            },
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Clause 7.2 & 12.1',
+              clauseNumber: 'Course Eligibility & Progression',
+              excerpt: 'Registration for advanced courses requires prior successful completion and clearance of all specified prerequisite courses.'
+            }
+          ],
+          ruleResults: { term: 'Prerequisite', multipleRules: 'Comma/AND requires all; OR requires either' },
+          followUp: "Ask 'What does NIL mean?' or 'What are the prerequisites for DATA301?'"
+        };
+      }
+
+      // 5. Meaning of Basket
+      const isGlossaryBasket =
+        normalizedQuery.includes('what is a basket') ||
+        normalizedQuery.includes('what is basket') ||
+        normalizedQuery.includes('what does basket mean') ||
+        normalizedQuery.includes('meaning of basket');
+
+      if (isGlossaryBasket) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Understanding Curriculum Baskets at Vidyashilp University**\n` +
+            `Official Knowledge Source: all the info for gai assignment.pdf (Section 3, Pages 2-4) & Semester_Spread_Structures_Sept_2026.xlsx\n\n` +
+            `At Vidyashilp University, a **Basket** is a designated academic category of courses with a prescribed minimum credit requirement necessary for award of the degree. Every course in the curriculum belongs to exactly one basket.\n\n` +
+            `### The 7 Curriculum Baskets (Total: 180 Credits for B.Tech)\n` +
+            `1. **B1 — University Core (UCOR, 18 credits):** Compulsory university-wide courses taken by every student regardless of major (Communication, Problem Solving with Design Thinking, Epistemology, Critical Thinking, Indian Life, Community Engagement).\n` +
+            `2. **B2 — Foundation (26–34 credits):** Core mathematics, natural sciences, and computational principles (Calculus, Linear Algebra, Probability & Statistics, Materials for Smart Devices, Psychology/Economics, Language).\n` +
+            `3. **B3 — Program Core (46–50 credits):** Mandatory discipline-specific engineering courses that form the essential core of Computer Science & Data Science (Data Structures, Algorithms, DBMS, Operating Systems, Networks, Computer Architecture, Python Programming).\n` +
+            `4. **B4 — Program Honors (20 credits):** Advanced specialized core courses for Data Science students (Foundations of Data Science, Exploratory Data Analysis, Machine Learning, Deep Learning, Optimization Techniques, NLP).\n` +
+            `5. **B5 — Specialization Tracks / Electives (20 credits):** 5 sequential courses in a chosen specialization (Track 1 Applied Deep Learning or Track 2 Full Stack Development for 2022–2025; Program Electives for 2026).\n` +
+            `6. **B6 — Open / Minor (24–32 credits):** Interdisciplinary courses or a structured minor sequence from another school (Management, Law, Design, Liberal Arts).\n` +
+            `7. **B7 — Internship / Capstone Project (14–18 credits):** Experiential practical requirements (Summer Training DATA801, Interdisciplinary Project DATA802, Capstone Project / Industrial Internship DATA803).\n\n` +
+            `*(Key Note: Baskets represent graduation requirements across all 8 semesters, not single-semester schedules).*`,
+          sources: [
+            {
+              documentTitle: 'all the info for gai assignment.pdf',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Section 3, Pages 2-4',
+              clauseNumber: 'Baskets (Course Categories)',
+              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=2',
+              isClickable: true,
+              excerpt: 'Basket = a category of courses with a minimum credit requirement. B1–B7 are basket IDs. Every course belongs to exactly one basket. Every batch requires 180 credits in total.'
+            },
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Credit Structure Sheets',
+              clauseNumber: 'Basket Allocations',
+              excerpt: 'Official breakdown of courses and credit requirements by basket category.'
+            }
+          ],
+          ruleResults: { term: 'Basket', totalBaskets: 7, degreeCredits: 180 },
+          followUp: "Ask 'What does Foundation mean?' or 'What is Program Honors?'"
+        };
+      }
+
+      // 6. Foundation Basket
+      const isGlossaryFoundation =
+        (normalizedQuery.includes('what is foundation') ||
+         normalizedQuery.includes('what does foundation mean') ||
+         normalizedQuery.includes('meaning of foundation')) &&
+        !normalizedQuery.includes('courses') && !normalizedQuery.includes('batch');
+
+      if (isGlossaryFoundation) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**The Foundation Basket at Vidyashilp University**\n` +
+            `Official Knowledge Source: all the info for gai assignment.pdf (Section 3, Page 2-3) & Semester_Spread_Structures_Sept_2026.xlsx\n\n` +
+            `• **Definition:** The **Foundation Basket (B2)** consists of core mathematical, natural science, computational, and multidisciplinary courses that provide the intellectual groundwork for advanced engineering study.\n` +
+            `• **Credit Requirement:** **26 to 34 credits** depending on admission batch (34 credits for Batches 2022–2024; 28 credits for Batch 2025; 26 credits for Batch 2026).\n` +
+            `• **Semester Distribution:** Foundation courses are distributed across multiple semesters (primarily Semesters 1, 2, 3, 4, and 6), NOT confined to Semester 1.\n\n` +
+            `### Representative Courses in Foundation Basket:\n` +
+            `• **Mathematics:** Calculus / Multivariate Calculus (\`MATH201\` / \`MATH208\`), Probability Theory & Statistics (\`MATH202\` + \`MATH205\` / \`MATH203\`), Linear Algebra (\`MATH204\` / \`MATH209\`), Advanced Statistical Analysis with R (\`MATH206\` / \`MATH210\`).\n` +
+            `• **Science & Materials:** Materials for Smart Devices (\`MTSC111\`), Sustainable Smart Materials (\`MTSC211\`).\n` +
+            `• **Design & Computing:** Design Workshop (\`COMP132\` / \`COMP133\`).\n` +
+            `• **Humanities & Multidisciplinary:** Introduction to Psychology (\`PSYC101\`) OR Introduction to Economics (\`ECON101\`), Language / Kannada (\`LANG101\`).`,
+          sources: [
+            {
+              documentTitle: 'all the info for gai assignment.pdf',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Section 3, Page 2-3',
+              clauseNumber: 'B2 – Foundation Basket',
+              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=2',
+              isClickable: true,
+              excerpt: 'B2 – Foundation = the science, maths and computational foundation: Calculus, Probability, Linear Algebra, Materials, Psychology/Economics, Language. 26 to 34 credits depending on batch.'
+            },
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Struct Sheets (2022-2026)',
+              clauseNumber: 'Foundation Allocations',
+              excerpt: 'Credit totals and course offerings categorized under the Foundation basket.'
+            }
+          ],
+          ruleResults: { basket: 'Foundation', basketCode: 'B2', credits: '26-34 credits across batches' },
+          followUp: "Ask 'What are the Foundation courses for Batch 2024?' or 'What is Program Core?'"
+        };
+      }
+
+      // 7. Program Core Basket
+      const isGlossaryProgramCore =
+        (normalizedQuery.includes('what is program core') ||
+         normalizedQuery.includes('what does program core mean') ||
+         normalizedQuery.includes('meaning of program core')) &&
+        !normalizedQuery.includes('courses') && !normalizedQuery.includes('batch');
+
+      if (isGlossaryProgramCore) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**The Program Core Basket at Vidyashilp University**\n` +
+            `Official Knowledge Source: all the info for gai assignment.pdf (Section 3, Page 3) & Semester_Spread_Structures_Sept_2026.xlsx\n\n` +
+            `• **Definition:** The **Program Core Basket (B3)** consists of compulsory discipline-specific engineering courses that form the essential technical backbone of the B.Tech Computer Science and Data Science degree.\n` +
+            `• **Credit Requirement:** **46 to 50 credits** across admission batches (46 credits for Batches 2022–2024; 50 credits for Batches 2025–2026).\n` +
+            `• **Core Areas Covered:**\n` +
+            `  - *Programming:* Programming in Python (\`DATA103\`), Object Oriented Programming (\`COMP205\`).\n` +
+            `  - *Algorithms & Theory:* Data Structures (\`COMP201\`), Analysis of Algorithms (\`COMP203\`), Theoretical Computer Science (\`COMP202\`).\n` +
+            `  - *Hardware & Systems:* Digital Design and Computer Organization (\`COMP204\`), Microprocessors and Computer Architecture (\`COMP206\`), Operating Systems (\`COMP207\` / \`COMP211\`), Computer Networks (\`COMP208\`).\n` +
+            `  - *Applied Systems:* Databases Management (\`COMP209\`), Artificial Intelligence (\`COMP301\`), Internet of Things (\`COMP302\`), Data Visualization and Storytelling (\`DATA132\`).`,
+          sources: [
+            {
+              documentTitle: 'all the info for gai assignment.pdf',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Section 3, Page 3',
+              clauseNumber: 'B3 – Program Core Basket',
+              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=3',
+              isClickable: true,
+              excerpt: 'B3 – Program Core (COMP and DATA courses) = compulsory engineering subjects of the programme: Data Structures, Algorithms, Operating Systems, Databases, Networks, Computer Architecture. 46 to 50 credits.'
+            },
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Struct Sheets',
+              clauseNumber: 'Program Core Allocations',
+              excerpt: 'Course records and credit allocations for compulsory engineering core subjects.'
+            }
+          ],
+          ruleResults: { basket: 'Program Core', basketCode: 'B3', credits: '46-50 credits' },
+          followUp: "Ask 'What are the Program Core courses in Batch 2026 Data Science?' or 'What is Program Honors?'"
+        };
+      }
+
+      // 8. Program Honors Basket
+      const isGlossaryProgramHonors =
+        (normalizedQuery.includes('what is program honors') ||
+         normalizedQuery.includes('what are program honors') ||
+         normalizedQuery.includes('what does program honors mean') ||
+         normalizedQuery.includes('meaning of program honors')) &&
+        !normalizedQuery.includes('courses') && !normalizedQuery.includes('batch');
+
+      if (isGlossaryProgramHonors) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**The Program Honors Basket at Vidyashilp University**\n` +
+            `Official Knowledge Source: all the info for gai assignment.pdf (Section 3, Page 3; Section 5, Page 5) & Semester_Spread_Structures_Sept_2026.xlsx\n\n` +
+            `• **Definition:** The **Program Honors Basket (B4)** comprises **20 credits** of advanced, specialized discipline courses specifically designed for the B.Tech Data Science program.\n` +
+            `• **Compulsory Nature:** Although named "Honors," its **20 credits are an integral, compulsory component of the 180 total degree credits** required for graduation in B.Tech Data Science.\n` +
+            `• **Courses in Program Honors:**\n` +
+            `  - \`DATA201 — Foundations to Data Science (3 credits)\`\n` +
+            `  - \`DATA202 / DATA209 — Exploratory Data Analysis / Advanced EDA (3–4 credits)\`\n` +
+            `  - \`MATH301 — Optimization Techniques for Data Science (4 credits)\`\n` +
+            `  - \`DATA301 — Machine Learning (4 credits)\`\n` +
+            `  - \`DATA302 — Deep Learning (4 credits)\`\n` +
+            `  - \`DATA403 — Natural Language Processing (4 credits, Batch 2025+)\`\n` +
+            `  - \`DATA207 — Human Centric AI (2 credits, Batches 2022–2024)\``,
+          sources: [
+            {
+              documentTitle: 'all the info for gai assignment.pdf',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Section 3, Page 3 & Section 5, Page 5',
+              clauseNumber: 'B4 – Program Honors Basket',
+              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=3',
+              isClickable: true,
+              excerpt: 'B4 – Program Honors / Program HONORS / Program Hons = advanced data science subjects: Foundations to Data Science, Exploratory Data Analysis, Machine Learning, Deep Learning, Optimization. 20 credits in every batch. Despite the name, its 20 credits count toward the 180, so it is compulsory.'
+            },
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Struct Sheets (2022-2026)',
+              clauseNumber: 'Program Honors Allocations',
+              excerpt: 'Exact 20 credit requirement maintained consistently across all curriculum structures.'
+            }
+          ],
+          ruleResults: { basket: 'Program Honors', basketCode: 'B4', credits: 20, isCompulsory: true },
+          followUp: "Ask 'How many credits are allocated to Program Honors in B.Tech?' or 'What is a specialization track?'"
+        };
+      }
+
+      // 9. Specialization Track
+      const isGlossarySpecialization =
+        normalizedQuery.includes('what is a specialization track') ||
+        normalizedQuery.includes('what is specialization track') ||
+        normalizedQuery.includes('what does specialization track mean') ||
+        normalizedQuery.includes('what are specialization tracks') ||
+        normalizedQuery.includes('explain specialization track') ||
+        normalizedQuery.includes('explain specialization tracks');
+
+      if (isGlossarySpecialization) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Specialization Tracks at Vidyashilp University**\n` +
+            `Official Knowledge Source: all the info for gai assignment.pdf (Section 3, Page 3; Part A6, Pages 8-10) & Semester_Spread_Structures_Sept_2026.xlsx\n\n` +
+            `• **Overview (Batches 2022–2025):** In the B.Tech Data Science curriculum, students complete **5 sequential courses (20 credits)** from **ONE** chosen Specialization Track (SPT Courses #1 through #5, scheduled across Semesters 5, 6, and 7).\n\n` +
+            `### The Two Specialization Tracks:\n` +
+            `1. **Track 1 — Applied Deep Learning:**\n` +
+            `   - Course #1: Probabilistic Graph Models (\`MATH401\`, S5, 4 cr)\n` +
+            `   - Course #2: Advanced Visualization & Storytelling (\`DATA402\`, S6, 4 cr) / Multi Modal Learning (\`DATA404\`, S6 in 2025)\n` +
+            `   - Course #3: Natural Language Processing (\`DATA403\`, S7, 4 cr) / Image Processing and Computer Vision (\`TBA\`, S7 in 2025)\n` +
+            `   - Course #4: Multi Modal Learning (\`DATA404\`, S7, 4 cr) / Advanced Topics in Deep Learning (\`DATA408\`, S7 in 2024)\n` +
+            `   - Course #5: Reinforcement Learning (\`DATA405\`, S7, 4 cr)\n\n` +
+            `2. **Track 2 — Full Stack Development:**\n` +
+            `   - Course #1: Web Framework (\`COMP401\`, S5, 4 cr)\n` +
+            `   - Course #2: Big Data Framework (\`DATA406\`, S6, 4 cr)\n` +
+            `   - Course #3: Software Architecture and Deployments (\`COMP402\`, S7, 4 cr)\n` +
+            `   - Course #4: Cloud Computing (\`COMP403\` / unassigned, S7, 4 cr)\n` +
+            `   - Course #5: Cloud & Cognitive Computing (\`COMP405\`, S7, 4 cr) / Reinforcement Learning (\`DATA405\`, S7 in 2024 & 2025)\n\n` +
+            `• **Common Courses:** Where cells list identical courses on both sides (e.g. \`Reinforcement Learning / Reinforcement Learning\`), students of both tracks take the course together.\n` +
+            `• **Batch 2026 Evolution:** For Batch 2026, specialization tracks were replaced by **Program Electives (20 credits)** where students choose 5 elective courses from an elective basket.`,
+          sources: [
+            {
+              documentTitle: 'all the info for gai assignment.pdf',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Section 3, Page 3 & Part A6, Pages 8-10',
+              clauseNumber: 'B5 – Specialization Tracks',
+              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=3',
+              isClickable: true,
+              excerpt: 'B5 – Specialization Tracks (batches 2022–2025) = 5 courses (20 credits) from ONE chosen track: Track 1 – Applied Deep Learning OR Track 2 – Full Stack Development.'
+            },
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Spread Sheets (S5, S6, S7)',
+              clauseNumber: 'Specialization Track Slots',
+              excerpt: 'Official curriculum records specifying Track 1 and Track 2 courses across batches 2022-2025.'
+            }
+          ],
+          ruleResults: { basket: 'Specialization Track', track1: 'Applied Deep Learning', track2: 'Full Stack Development', credits: 20 },
+          followUp: "Ask 'What is Open/Minor?' or 'What is Program Honors?'"
+        };
+      }
+
+      // 10. Open/Minor vs Elective
+      const isGlossaryOpenMinor =
+        normalizedQuery.includes('what is open/minor') ||
+        normalizedQuery.includes('what is open minor') ||
+        normalizedQuery.includes('what does open/minor mean') ||
+        normalizedQuery.includes('difference between an elective and an open/minor') ||
+        normalizedQuery.includes('difference between elective and open/minor') ||
+        normalizedQuery.includes('difference between elective and minor') ||
+        normalizedQuery.includes('difference between elective and open minor');
+
+      if (isGlossaryOpenMinor) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Open Electives vs. Minor Courses at Vidyashilp University**\n` +
+            `Official Knowledge Source: all the info for gai assignment.pdf (Section 3, Page 4; Part A5, Page 7) & 118351_Minor Courses for BTech_Students.xlsx\n\n` +
+            `In the **Open/Minor Basket (B6)** (which carries **24 to 32 credits** across Semesters 3 through 7), students take 4-credit course slots with two distinct pathways:\n\n` +
+            `### 1. Structured Minor Pathway\n` +
+            `• A student takes a coherent sequence of **6 courses (24 credits)** offered by a different School within Vidyashilp University to earn a recognized Minor credential alongside their B.Tech degree.\n` +
+            `• **Available Minors for B.Tech Students:**\n` +
+            `  - Law Minor (School of Law)\n` +
+            `  - Design Minor (School of Design)\n` +
+            `  - Psychology Minor (School of Liberal Arts & Sciences)\n` +
+            `  - Economics Minor (School of Liberal Arts & Sciences)\n` +
+            `  - Finance Minor (School of Business Studies)\n` +
+            `  - Marketing Minor (School of Business Studies)\n` +
+            `  - Start-up Minor (School of Business Studies)\n\n` +
+            `### 2. Open Electives Pathway\n` +
+            `• Students who do not wish to complete a structured Minor may freely choose multidisciplinary **Open Electives** from any department across the university to broaden their education.\n\n` +
+            `### Difference Between Program Electives and Open/Minor Courses:\n` +
+            `• **Program Electives:** Advanced technical courses inside the engineering discipline (e.g. AI/Data Science topics in Batch 2026).\n` +
+            `• **Open / Minor Courses:** Multidisciplinary courses taken from schools *outside* the engineering department (Law, Design, Business, Humanities).`,
+          sources: [
+            {
+              documentTitle: 'all the info for gai assignment.pdf',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Section 3, Page 4 & Part A5, Page 7',
+              clauseNumber: 'B6 – Open/Minor Basket',
+              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=4',
+              isClickable: true,
+              excerpt: 'B6 – Open/Minor = courses outside the student\'s major discipline. A student can use these to earn a Minor in another subject or take free Open electives. Every slot course is 4 credits (L-T-P 4-0-0).'
+            },
+            {
+              documentTitle: '118351_Minor Courses for BTech_Students.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Minor Course Tracks',
+              clauseNumber: 'Minor Programs',
+              excerpt: 'Curriculum structure defining 7 official minor programs available for B.Tech students.'
+            }
+          ],
+          ruleResults: { basket: 'Open/Minor', basketCode: 'B6', credits: '24-32 credits', minorSlots: 6 },
+          followUp: "Ask 'What is a specialization track?' or 'What are the Foundation courses for Batch 2024?'"
+        };
+      }
+
+      // 11. Zero Contact Hours with Credits (0-0-0)
+      const isGlossaryZeroContactHours =
+        normalizedQuery.includes('why does a course have credits but no weekly contact hours') ||
+        normalizedQuery.includes('why do some courses have credits but no contact hours') ||
+        normalizedQuery.includes('credits but no weekly contact hours') ||
+        normalizedQuery.includes('credits but no contact hours') ||
+        (normalizedQuery.includes('0-0-0') && normalizedQuery.includes('credit')) ||
+        (normalizedQuery.includes('zero contact') && normalizedQuery.includes('credit'));
+
+      if (isGlossaryZeroContactHours) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Why Courses Can Have Credits with Zero Weekly Contact Hours (L-T-P: 0-0-0)**\n` +
+            `Official Knowledge Source: all the info for gai assignment.pdf (Section 2, Page 2) & 4. Student Handbook Aug 2026.pdf (Clause 3.2 & Table 1)\n\n` +
+            `In the official curriculum workbook, several courses carry credits while listing an L-T-P value of **0-0-0**:\n\n` +
+            `### Official Examples from Curriculum:\n` +
+            `• **Sustainable Cities and Communities (\`MTSC781\`):** L-T-P 0-0-0 $\\to$ **3 credits** (Semester 3, Batch 2022)\n` +
+            `• **Human Values in Work and Life (\`SLAD206\`):** L-T-P 0-0-0 $\\to$ **2 credits** (Semester 4, Batches 2022–2024; Semester 3, Batch 2025)\n` +
+            `• **Foundation Seminar (\`SLAD207\`):** L-T-P 0-0-0 $\\to$ **1 credit** (Semester 4, Batches 2022–2024)\n` +
+            `• **Community Engagement & Service Experience (\`UCOR701\`):** L-T-P 0-0-0 $\\to$ **1 credit** (Semester 2, Batches 2022–2025)\n` +
+            `• **Language (\`LANG101\` / TBA):** L-T-P 0-0-0 $\\to$ **3 credits / 2 credits** (Semester 6)\n` +
+            `• **Summer Training/Internship (\`DATA801\`):** L-T-P 0-0-0 $\\to$ **2 credits** (Semester 5 / Summer after S4)\n` +
+            `• **Interdisciplinary Project (\`DATA802\`):** L-T-P 0-0-0 $\\to$ **4 credits** (Semester 7)\n` +
+            `• **Capstone Project / Industrial Internship (\`DATA803\`):** L-T-P 0-0-0 $\\to$ **12 credits** (Semester 8)\n\n` +
+            `### Pedagogical Rationale & Delivery Mode\n` +
+            `Under **Student Handbook Clause 3.2** and the Academic Reading Guide, these are **Non-Taught, Experiential, Project-Based, or Fieldwork Courses**:\n` +
+            `1. **No Weekly Classroom Lecturing:** They do not involve traditional weekly timetable classroom hours.\n` +
+            `2. **Quantum of Work:** Credits are awarded based on the prescribed **quantum of independent work, field hours, project development, or community service** completed by the student.\n` +
+            `3. **Delivery Framework:** Delivered through field engagements, self-paced/MOOC modules, intensive workshops, industry internships, or faculty-mentored research capstones (noted for university confirmation in reading guide).\n` +
+            `4. **Evaluation:** Assessment is 100% continuous assessment, project reports, jury evaluation, or viva voce.`,
+          sources: [
+            {
+              documentTitle: 'all the info for gai assignment.pdf',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Section 2, Page 2',
+              clauseNumber: '0-0-0 Hours Courses with Credits',
+              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=2',
+              isClickable: true,
+              excerpt: 'An L-T-P of 0-0-0 with credits > 0 (e.g. Sustainable Cities and Communities 0-0-0-3, Human Values 0-0-0-2, Community Engagement 0-0-0-1, internships and projects) means the course has no regular weekly classroom hours.'
+            },
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Clause 3.2 & Table 1',
+              clauseNumber: 'Course Types & Evaluation Weightages',
+              excerpt: 'Non-taught and practice-based courses assign credits based on the quantum of work prescribed; evaluated through continuous assessment and juries.'
+            }
+          ],
+          ruleResults: { term: '0-0-0 Courses', nature: 'Non-taught / Experiential / Project-based', creditsPreserved: true },
+          followUp: "Ask 'How are credits calculated?' or 'What does L-T-P mean?'"
+        };
+      }
+
+      // 12. Batch Course Shift Across Semesters
+      const isGlossaryBatchShift =
+        normalizedQuery.includes('why does a course appear in one semester for one batch and another semester for a different batch') ||
+        normalizedQuery.includes('why do courses appear in different semesters for different batches') ||
+        normalizedQuery.includes('why are courses in different semesters across batches') ||
+        normalizedQuery.includes('appear in one semester for one batch');
+
+      if (isGlossaryBatchShift) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Why Courses Appear in Different Semesters Across Admission Batches**\n` +
+            `Official Knowledge Source: all the info for gai assignment.pdf (Section 1 & 6, Pages 1, 4-5) & Semester_Spread_Structures_Sept_2026.xlsx\n\n` +
+            `At Vidyashilp University, the curriculum is versioned for each admission batch (**Batches 2022, 2023, 2024, 2025, and 2026**). A student follows their own admission batch's curriculum plan for all 8 semesters.\n\n` +
+            `Courses appear in different semesters across batches because the university continuously reviews and enhances its curriculum based on pedagogical improvements, prerequisite sequencing, and workload balancing:\n\n` +
+            `### Concrete Examples of Curriculum Shifts Across Batches:\n` +
+            `• **Calculus (\`MATH201\` $\\to$ \`MATH208\`):** Was in Semester 1 (Batch 2022) $\\to$ shifted to Semester 2 (Batch 2023) $\\to$ restructured as \`MATH208 Multivariate Calculus\` in Semester 1 (Batches 2025 & 2026).\n` +
+            `• **Operating Systems (\`COMP207\` $\\to$ \`COMP211\`):** Was in Semester 5 (Batches 2022 & 2023) $\\to$ moved earlier to Semester 4 (Batch 2025) to allow earlier systems foundations $\\to$ expanded to \`COMP211 Operating Systems\` (4 credits) in Semester 4 (Batch 2026).\n` +
+            `• **Programming in Python (\`DATA103\`):** Introduced in Semester 1 (Batch 2024+), replacing \`DATA130 Computational Thinking\` (Batch 2022) to establish programming skills immediately upon university entry.\n` +
+            `• **Data Visualization (\`DATA131\` $\\to$ \`DATA132\`):** Was 2 credits Foundation in Semester 1 (Batches 2022–2023) $\\to$ upgraded to 3 credits Program Core in Semester 2 (Batch 2024+).\n` +
+            `• **Exploratory Data Analysis (\`DATA202\` $\\to$ \`DATA209\`):** Upgraded from 3 credits to 4 credits in Batch 2025 as Advanced EDA to incorporate expanded data analytics techniques.\n\n` +
+            `*(Advising Rule: Always refer to your own batch's semester plan; never assume your senior's semester schedule matches your own).*`,
+          sources: [
+            {
+              documentTitle: 'all the info for gai assignment.pdf',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Section 1, Page 1 & Section 6, Pages 4-5',
+              clauseNumber: 'Course Equivalences Across Batches',
+              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=1',
+              isClickable: true,
+              excerpt: 'The curricula differ between batches. Always answer using the sheets for the student\'s own batch. Equivalences: Calculus MATH201 -> MATH208, OS COMP207 -> COMP211, Programming DATA130 -> DATA103.'
+            },
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Spread Sheets (2022-2026)',
+              clauseNumber: 'Curriculum Progression',
+              excerpt: 'Spread sheets demonstrating sequential evolution of course placements across batches.'
+            }
+          ],
+          ruleResults: { concept: 'Batch Curriculum Versioning', batchesSupported: ['2022', '2023', '2024', '2025', '2026'] },
+          followUp: "Ask 'Which mathematics course is offered in Batch 2023 Semester 1?' or 'What is the difference between semester spread and credit structure?'"
+        };
+      }
+
+      // 13. Total Semesters in B.Tech
+      const isGlossaryTotalSemesters =
+        normalizedQuery.includes('how many semesters are in the curriculum') ||
+        normalizedQuery.includes('how many semesters in the curriculum') ||
+        normalizedQuery.includes('how many semesters are in b.tech') ||
+        normalizedQuery.includes('how many semesters are there in the b.tech') ||
+        (normalizedQuery.includes('how many semesters') && normalizedQuery.includes('curriculum'));
+
+      if (isGlossaryTotalSemesters) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Semesters and Structure in the Vidyashilp University B.Tech Curriculum**\n` +
+            `Official Knowledge Source: all the info for gai assignment.pdf (Section 1 & 2, Page 1) & 4. Student Handbook Aug 2026.pdf (Section 2)\n\n` +
+            `• **Total Semesters:** The B.Tech curriculum comprises **8 regular semesters** (S1 through S8) across a standard duration of **4 academic years** (2 semesters per year).\n` +
+            `• **Academic Calendar Structure:**\n` +
+            `  - **Odd Semester:** Runs August through December\n` +
+            `  - **Even Semester:** Runs January through May\n` +
+            `  - **Summer Break / Term:** Occurs after Semester 2, after Semester 4, and after Semester 6. It is dedicated to summer training/internships (e.g. \`DATA801\`), remedial coursework, or supplementary evaluations.\n` +
+            `• **Total Degree Credits:** Exactly **180 credits** distributed across the 8 semesters.`,
+          sources: [
+            {
+              documentTitle: 'all the info for gai assignment.pdf',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Section 1 & 2, Page 1',
+              clauseNumber: 'Curriculum Structure & Headers',
+              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=1',
+              isClickable: true,
+              excerpt: 'S1, S2 ... S8 = Semester 1 to Semester 8 (2 semesters per year, 4 years). SUMMER = summer break between semesters. The total is always 180 credits.'
+            },
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Section 2',
+              clauseNumber: 'Academic Calendar & Semester Boundaries',
+              excerpt: 'The academic year comprises two regular semesters and an optional summer term for prescribed academic work.'
+            }
+          ],
+          ruleResults: { totalSemesters: 8, standardYears: 4, degreeCredits: 180 },
+          followUp: "Ask 'How many total credits are required for the B.Tech degree?' or 'What is a basket?'"
+        };
+      }
+
+      // 14. Credits Definition & Calculation Rules
+      const isCreditConcept =
+        normalizedQuery.includes('what are credits') ||
+        normalizedQuery.includes('what is a credit') ||
+        normalizedQuery.includes('how are credits calculated') ||
+        normalizedQuery.includes('how are course credits calculated') ||
+        normalizedQuery.includes('credit calculation rule') ||
+        normalizedQuery.includes('formula for credits') ||
+        normalizedQuery.includes('credit rule') ||
+        (normalizedQuery.includes('difference between weekly contact hours') && (normalizedQuery.includes('course credits') || normalizedQuery.includes('semester total')));
+
+      if (isCreditConcept) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Academic Credits & Credit Calculation Rules at Vidyashilp University**\n` +
+            `Official Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section 3, Clause 3.1 & 3.2, Table 1) & all the info for gai assignment.pdf (Section 2, Page 1-2)\n\n` +
+            `### 1. What are Credits?\n` +
+            `• **Academic Credits** represent the quantitative academic weight earned toward degree completion. A standard B.Tech degree requires exactly **180 credits** across 8 semesters.\n\n` +
+            `### 2. Credit Calculation Formula (Clause 3.1)\n` +
+            `For standard taught instructional courses, credits are calculated using the official university formula:\n` +
+            `$$\\text{Course Credits} = L + T + \\frac{P}{2}$$\n` +
+            `• **Lecture (L):** 1 contact hour per week = **1 credit** (1:1 ratio)\n` +
+            `• **Tutorial (T):** 1 contact hour per week = **1 credit** (1:1 ratio)\n` +
+            `• **Practical (P):** 2 contact hours per week = **1 credit** (2:1 ratio; 1 practical hour = 0.5 credit)\n\n` +
+            `### 3. Understanding the Four Key Metrics\n` +
+            `1. **Weekly Contact Hours ($L + T + P$):** The physical instructional hours a student attends each week for that course (e.g. DATA103 has 5 weekly contact hours: 1 L + 0 T + 4 P).\n` +
+            `2. **Course Credits ($L + T + P/2$):** The academic value earned toward graduation (e.g. DATA103 carries 3 credits: $1 + 0 + 4/2 = 3$).\n` +
+            `3. **Semester Total Contact Hours:** The sum of weekly contact hours across all enrolled courses in that semester (typically 25 to 30 contact hours per week).\n` +
+            `4. **Semester Total Credits:** The sum of course credits earned in that semester (typically 19 to 28 credits per semester).\n\n` +
+            `### 4. Important Verification & Non-Taught Courses Note\n` +
+            `• **Confirmation Flag:** In the official Academic Reading Guide, the formula $C = L + T + P/2$ is marked for university confirmation because non-taught courses ($0-0-0$ contact hours) do not follow it.\n` +
+            `• **Non-Taught Courses (Clause 3.2):** Courses like Community Engagement (\`UCOR701\`, 1 cr), Summer Training (\`DATA801\`, 2 cr), and Capstone Projects (\`DATA803\`, 12 cr) list an L-T-P of **0-0-0**; credits are assigned based on the quantum of work prescribed, not weekly classroom hours.\n` +
+            `• **Source of Truth:** Always verify against the official recorded credits in the curriculum workbook (*Semester_Spread_Structures_Sept_2026.xlsx*).`,
+          sources: [
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Section 3, Clause 3.1 & 3.2',
+              clauseNumber: 'Course Credit Structure (L-T-P)',
+              excerpt: 'The Credit Structure for defining and categorizing Courses is the L – T – P framework. Lecture/Tutorial: 1 contact hour/week = 1 Credit. Practical: 2 hours/week = 1 Credit.'
+            },
+            {
+              documentTitle: 'all the info for gai assignment.pdf',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Section 2, Page 1-2',
+              clauseNumber: 'Credit Rule and Contact Hours',
+              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=1',
+              isClickable: true,
+              excerpt: 'Credit rule: C = L + T + (P ÷ 2). An L-T-P of 0-0-0 with credits > 0 means the course has no regular weekly classroom hours.'
+            },
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Credit Columns Across Spread Sheets',
+              clauseNumber: 'Official Course Credits',
+              excerpt: 'Official curriculum records showing authoritative course credits.'
+            }
+          ],
+          ruleResults: { formula: 'C = L + T + P/2', lectureRatio: '1:1', practicalRatio: '2:1', totalDegreeCredits: 180 },
+          followUp: "Ask 'What is the difference between L-T-P and credits?' or 'Why does a course have credits but no weekly contact hours?'"
+        };
+      }
     }
 
     // ── 0. PRIVACY GUARDRAIL ──

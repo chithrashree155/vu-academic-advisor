@@ -19,7 +19,8 @@ const {
   parseERPCourseRegistration,
   parseExamEnrollmentSOP,
   parseChatbotFlowchart,
-  parseHolidayList
+  parseHolidayList,
+  parseAcademicExplanationPDF
 } = require('./pdf-parser');
 const { 
   parseSemesterSpreadWorkbook, 
@@ -263,7 +264,7 @@ async function runIngestion(dataDir = path.join(__dirname, '../../../data')) {
   });
 
   // NEW DOCUMENT 7: Holiday List.pdf
-  console.log('[13/13] Parsing Holiday List (Holiday List.pdf)...');
+  console.log('[13/14] Parsing Holiday List (Holiday List.pdf)...');
   const holidayPath = path.join(dataDir, 'Holiday List.pdf');
   const holidayResult = await parseHolidayList(holidayPath);
   allChunks.push(...holidayResult.chunks);
@@ -274,6 +275,23 @@ async function runIngestion(dataDir = path.join(__dirname, '../../../data')) {
     totalChunks: holidayResult.chunks.length,
     isNew: true
   });
+
+  // NEW DOCUMENT 8: all the info for gai assignment.pdf
+  const gaiPath = path.join(dataDir, 'all the info for gai assignment.pdf');
+  if (fs.existsSync(gaiPath)) {
+    console.log('[14/14] Parsing Academic Explanation Guide (all the info for gai assignment.pdf)...');
+    const gaiResult = await parseAcademicExplanationPDF(gaiPath);
+    allChunks.push(...gaiResult.chunks);
+    structuredData.documents.push({
+      documentName: gaiResult.documentName,
+      sourceType: gaiResult.sourceType,
+      hierarchyLevel: gaiResult.hierarchyLevel,
+      totalPages: gaiResult.totalPages,
+      totalChunks: gaiResult.totalChunks,
+      isNew: true,
+      version: 'Academic Reading Guide Sept 2026'
+    });
+  }
 
   // Deduplicate master courses list by courseCode
   const courseMap = new Map();

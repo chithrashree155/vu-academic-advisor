@@ -1,0 +1,2544 @@
+
+
+
+--- PAGE 0 ---
+ of 137
+GLOSSARY & READING GUIDE — 
+"Semester Spread & Structures" workbook
+(Context for the Academic Advisor Bot. Items 
+marked <<CONFIRM>> are still to be verified 
+by the university.)
+1. What the workbook contains
+•
+The workbook describes the 4-year B.Tech Data Science ("DS") curriculum, one version per 
+admission batch: 2022, 2023, 2024, 2025, 2026.
+•
+The year in a sheet name is the student's BATCH (year of admission), not the calendar year 
+in which a course is taught. A student admitted in 2024 follows "Sem_Spread_2024" and 
+"Struct_2024" for all 8 semesters. <<CONFIRM>>
+•
+Two kinds of sheets:
+◦
+"Sem Spread" / "Sem_Spread_<year>" (Semester Spread) = which course is taken in 
+which semester (S1–S8), with code, prerequisite, L-T-P-C and basket.
+◦
+"Struct_<year>" (Credit Structure) = the list of courses and credits inside each 
+basket, and the minimum credits per basket needed for the degree. It does not say 
+which semester a course is in.
+•
+The curricula differ between batches. Always answer using the sheets for the student's own 
+batch.
+2. Column headers and abbreviations
+•
+S1, S2 ... S8 = Semester 1 to Semester 8 (2 semesters per year, 4 years).
+•
+SEMESTER - I / SEMESTER - 2 ... = same as S1, S2 ...
+•
+SUMMER = summer break between semesters (after S2, after S4 and after S6). No regular 
+courses are listed in it.
+•
+Course Code / Code = unique course identifier, e.g. COMP201. "DATA 301" and 
+"DATA301" are the same course (the space is a typo).
+•
+Course = course title.
+•
+Pre-Req = prerequisite: a course that must be completed before this course can be taken. 
+Several codes separated by commas (e.g. "COMP204, COMP207") means ALL of them are 
+required.
+•
+NIL / Nil = no prerequisite.
+•
+L = Lecture hours per week.
+•
+T = Tutorial hours per week.
+•
+P = Practical / Lab hours per week.
+•
+C = Credits for the course.
+•
+L-T-P / "LTP: 3-0-2" = Lecture-Tutorial-Practical hours per week, written in that order. 
+"LTP: 3-0-2" means 3 lecture hours, 0 tutorial hours and 2 lab hours per week.
+•
+Credit rule (holds for almost every course): C = L + T + (P ÷ 2). Example: 3-0-2 → 4 
+credits; 2-0-4 → 4 credits; 1-0-2 → 2 credits. <<CONFIRM>>
+
+
+--- PAGE 1 ---
+ of 237
+•
+An L-T-P of 0-0-0 with credits > 0 (e.g. Sustainable Cities and Communities 0-0-0-3, 
+Human Values in Work and Life 0-0-0-2, Language 0-0-0-3, Community Engagement 
+0-0-0-1, internships and projects) means the course has no regular weekly classroom hours. 
+It is delivered as <<CONFIRM: online / MOOC / workshop / activity-based / self-paced>>.
+•
+Total (row) = sum of L, T, P and C for that semester.
+•
+Total HRS = weekly contact hours in the semester, i.e. L + T + P summed over all courses in 
+that semester.
+•
+Total Credits (last column) = credits in that row. The final column per basket = basket total.
+•
+Fixed Min = minimum credits required from that basket to graduate.
+•
+Credit Structure (for award of the Degree) = minimum credits per basket needed to earn the 
+degree. The total is always 180.
+•
+Cr = Credits.
+•
+= serial number in a list.
+•
+TBA = To Be Announced (course code or details not yet decided).
+•
+"/" between two courses (e.g. "PSYC101/ECON101 — Introduction to Psychology/
+Introduction to Economics") = the student takes ONE of the two options.
+•
+"/" inside a Specialization Track cell (e.g. "MATH401/COMP401 — Probabilistic Graph 
+Models / Web Framework") = the first option is for Track #1, the second for Track #2. The 
+prerequisites are given in the same order (e.g. "DATA301/NIL" → Track 1 needs DATA301, 
+Track 2 has none).
+•
+When a course name carries its own "LTP: x-y-z", that overrides the L/T/P numbers in the 
+columns (the columns show only one option's hours).
+•
+"#1 Course", "#2 Course" = the 1st, 2nd ... course of that type in sequence.
+•
+SPT = SPecialization Track. "SPT-Course #3" = the 3rd course of the student's chosen 
+specialization track.
+•
+SPIL = Socio-Cultural Perspectives on Indian Life (course UCOR205).
+•
+MLOps = Machine Learning Operations (deploying and maintaining ML models in 
+production).
+•
+AI = Artificial Intelligence; ML = Machine Learning; NLP = Natural Language Processing; 
+IoT = Internet of Things; EDA = Exploratory Data Analysis.
+3. Baskets (course categories). Every course belongs to exactly 
+one basket.
+•
+Basket = a category of courses with a minimum credit requirement. B1–B7 are basket IDs.
+•
+B1 – Univ Core / University Core (UCOR courses) = compulsory courses that every student 
+of the university takes, whatever the programme (communication, writing, critical thinking, 
+design thinking, Indian society, constitution, community engagement).
+•
+B2 – Foundation = compulsory basics: mathematics (calculus, probability, statistics, linear 
+algebra), materials science, academic writing, psychology/economics, language, human 
+values.
+•
+B3 – Program Core / Program CORE = compulsory computer science and data science 
+courses for this degree (data structures, algorithms, OS, networks, databases, AI, etc.).
+•
+B4 – Program Honors / Program HONORS / Program Hons = advanced data science 
+courses (machine learning, deep learning, EDA, optimization, NLP). Its 20 credits count 
+toward the 180. <<CONFIRM: compulsory for all, or optional for an "Honours" degree?>>
+•
+B5 – Specialization Tracks (batches 2022–2025) = 5 courses (20 credits) from ONE chosen 
+track:
+◦
+"Hons Sp Track #1 – Applied Deep Learning"
+
+
+--- PAGE 2 ---
+ of 337
+◦
+"Hons Sp Track #2 – Full Stack Development"
+◦
+Hons Sp Track = Honours Specialization Track.
+•
+B5 – Electives (batch 2026 only) = the two tracks are replaced by 5 electives (Elective 1–5, 
+20 credits) chosen from a list of 8 courses (Probabilistic Graph Models, Advanced Topics in 
+Deep Learning, Cloud & Cognitive Computing, Multi Modal Learning, Reinforcement 
+Learning, Web Framework, Big Data Framework, Software Architecture and Deployments). 
+<<CONFIRM: free choice of any 5?>>
+•
+B6 – Open/Minor = credits the student fills with either
+◦
+a Minor: a set of courses in a second subject area that earns a "Minor in <subject>", 
+or
+◦
+Open electives: courses from any department.
+◦
+2022–2024: 6 courses × 4 credits = 24 credits.
+◦
+2025–2026: 32 credits = Essentials of Business Management (2) + Psychology/
+Economics (2) + 6 Minor/Open courses × 4 (24) + Interdisciplinary Project (4).
+◦
+"Minor (#6 Course)" in S7 (2022–2024) = the 6th minor/open course, which must be 
+a Minor course. <<CONFIRM rules>>
+◦
+"Minor Total Credits" in the Struct sheets = total credits of the Open/Minor basket.
+•
+B7 – Internship/Capstone Project:
+◦
+Summer Training/Internship (DATA801, 2 credits)
+◦
+Interdisciplinary Project (DATA802, 4 credits; in B7 for 2022–2024, moved to B6 
+from 2025)
+◦
+Capstone Project/Industrial Internship (DATA803, 12 credits, Semester 8)
+◦
+18 credits for 2022–2024; 14 credits for 2025–2026.
+4. Course-type terms
+•
+Capstone Project = a large final-year project that brings together everything learned. 
+"Capstone Project/Industrial Internship" = in S8 the student does EITHER a capstone 
+project OR a full-semester internship at a company (12 credits; no classes in S8).
+•
+Industrial Internship = working at a company/industry for credit.
+•
+Summer Training/Internship (DATA801) = a short internship/training during the summer 
+break. It appears under S5, i.e. it is done in the summer after S4 and credited in S5. 
+<<CONFIRM>>
+•
+Interdisciplinary Project (DATA802; spelled "Inter-Desciplinary"/"Interdesciplinary" in 
+places) = a project combining data science with another field, done in S7.
+•
+Foundation Seminar (SLAD207) = a 1-credit seminar.
+•
+Community Engagement & Service Experience (UCOR701) = a 1-credit community-
+service/outreach activity.
+•
+Language (LANG101) = a language course; in 2024 written "Kannada/ Language" 
+(Kannada = state language of Karnataka, or another language). <<CONFIRM rule for who 
+takes Kannada>>
+•
+Design Workshop = hands-on design/making lab (0-0-4).
+5. Course code prefixes
+•
+UCOR = University Core
+•
+MATH = Mathematics
+•
+COMP = Computer Science / Computing
+•
+DATA = Data Science
+•
+MTSC = <<CONFIRM: e.g. Materials Science / Multidisciplinary Science?>> (MTSC111, 
+MTSC211, MTSC781)
+
+
+--- PAGE 3 ---
+ of 437
+•
+SLAD = <<CONFIRM: full form>> (SLAD206 Human Values, SLAD207 Foundation 
+Seminar)
+•
+ENGL = English
+•
+LANG = Language
+•
+PSYC (also written PSCY in 2025) = Psychology
+•
+ECON = Economics
+•
+LAWS = Law
+•
+MGMT = Management
+•
+Number: the first digit usually shows the year level (1xx = 1st year, 2xx = 2nd, 3xx = 3rd, 
+4xx = 4th year/advanced). 7xx = <<CONFIRM>>, 8xx = internships/projects (DATA801–
+803).
+6. Same course under different codes or names in different 
+batches (equivalences) <<CONFIRM>>
+•
+Communication Skills: UCOR103 (2022, 2023, 2025; 2 cr) | UCOR105 "Communication 
+and Leadership Skills" (2024; 3 cr) | UCOR107 (2026; 3 cr)
+•
+Critical Thinking: UCOR210 (2022–23; 2 cr) → UCOR310 (2024+; 3 cr)
+•
+Calculus: MATH201 Calculus (2022–24) → MATH208 Multivariate Calculus (2025+)
+•
+Probability: MATH202 Probability Theory + MATH205 Statistics with R (2022–23) → 
+MATH203 Probability and Statistics (2024+)
+•
+Linear Algebra: MATH204 (2022–24) → MATH209 (2025+)
+•
+Advanced Statistical Analysis and Research Methods (with R): MATH206 (2024–25; 2 cr) 
+→ MATH210 (2026; 3 cr)
+•
+Academic Writing: ENGL201 (2022–23; 3 cr) → ENGL210 (2024; 2 cr) → UCOR207 
+Analytical Academic Writing (2025; Univ Core)
+•
+Design Workshop: COMP132 (2 cr) → COMP133 (2026; 3 cr)
+•
+Operating Systems: COMP207 (3 cr) → COMP211 (2026; 4 cr)
+•
+Data visualisation: DATA131 Visualizing Data for Story Telling (2022–23; Foundation, 2 
+cr) → DATA132 Data Visualization and Storytelling (2024+; Program Core, 3 cr)
+•
+Exploratory Data Analysis: DATA202 (2022–24) → DATA209 Advanced Exploratory Data 
+Analysis (2025+)
+•
+Psychology/Economics: PSYC101/ECON101 (2022–24; 3 cr) → PSCY102/ECON105 
+"Principles of Economics" (2025; 2 cr) → PSYC105/ECON106 (2026; 2 cr)
+•
+Programming: DATA130 Computational Thinking (2022) → DATA103 Programming in 
+Python (2024+)
+•
+"Databases Management" = Database Management (Systems)
+7. Specialization-track and elective course codes
+•
+MATH401 Probabilistic Graph Models (Track 1)
+•
+COMP401 Web Framework (Track 2)
+•
+DATA402 Advanced Visualization and Storytelling (Track 1, 2022)
+•
+DATA406 Big Data Framework (Track 2)
+•
+DATA403 Natural Language Processing (Track 1; from 2025 in Program Honors)
+•
+COMP402 Software Architecture and Deployments (Track 2)
+•
+DATA404 Multi Modal Learning (Track 1)
+•
+DATA405 Reinforcement Learning
+•
+DATA408 Advanced Topics in Deep Learning (Track 1)
+•
+COMP405 Cloud & Cognitive Computing (Track 2)
+
+
+--- PAGE 4 ---
+ of 537
+•
+COMP403 Cloud Computing (2024, Foundation)
+•
+TBA Image Processing and Computer Vision (Track 1, 2025)
+•
+When a cell reads "X / X" (e.g. "Reinforcement Learning/Reinforcement Learning"), 
+students of BOTH tracks take the same course.
+8. Known typos and data issues (do not treat as real 
+differences)
+•
+"Summe Training" = Summer Training
+•
+"Visuatlization" = Visualization
+•
+"Inter-Desciplinary"/"Interdesciplinary" = Interdisciplinary
+•
+"Problem Solving for Design Thinking" = "Problem Solving with Design Thinking" 
+(UCOR104)
+•
+"PSCY102" = PSYC102 (Psychology)
+•
+"Digital Design and Computer Organization" (double space) = same course COMP204
+•
+Some prerequisites name courses that are not in that batch's plan (e.g. DATA206, 
+COMP210, or MATH201/MATH202/MATH204 in the 2025–26 plans). Read these through 
+the equivalence table in section 6 (e.g. DATA206 → DATA209?). <<CONFIRM>>
+•
+Sem_Spread_DS_2026: the "Fixed Min" values (University Core 24, Foundation 24, 
+Program Core 46) are out of date. The correct basket totals are those in Struct_2026_DS: 
+University Core 18, Foundation 26, Program Core 50, Program Honors 20, Electives 20, 
+Minor/Open 32, Internship/Capstone 14 = 180. <<CONFIRM>>
+ 
+ 
+ 
+Questions only you or the university can answer. These are the lines marked 
+<<CONFIRM>> in the file:
+1.
+Batch year: does “2024” in a sheet name mean students admitted in 2024? And is the 
+programme officially “B.Tech Data Science”?
+2.
+Courses with 0-0-0 hours but credits: Language, Human Values, Sustainable Cities and 
+Community Engagement have no weekly class hours but still carry credits. How are they 
+taught: online, as a workshop, or as an activity?
+3.
+Prefixes: what do MTSC and SLAD stand for? What does the 7xx numbering mean 
+(UCOR701, MTSC781)?
+4.
+Program Honors: is it compulsory for everyone? Its 20 credits count toward the 180, so it 
+looks compulsory despite the name. Does “Honours” change the degree title?
+5.
+Specialization tracks (2022–2025): when do students choose a track, can they switch, and 
+must all 5 courses come from one track?
+6.
+2026 electives: can students pick any 5 of the 8 listed courses?
+7.
+Minor vs Open: what are the rules? For example, must all 6 courses come from one subject 
+to earn a Minor, and can a student mix minor and open courses?
+8.
+Summer internship (DATA801): it’s listed under S5. Is it done in the summer after S4?
+9.
+Kannada: the 2024 sheet says “Kannada/ Language”. Who must take Kannada?
+10.
+Prerequisites that point to missing courses:
+◦
+DATA206: listed as a prerequisite for Machine Learning in 2025–26, but it doesn’t 
+exist. Is it DATA209?
+◦
+COMP210: listed for Human Centric AI in 2022, but doesn’t exist anywhere.
+◦
+MATH203 in 2022–23: listed as a prerequisite, but those batches only have 
+MATH202 and MATH205.
+
+
+--- PAGE 5 ---
+ of 637
+◦
+Old maths codes in 2025–26: MATH201, MATH202 and MATH204 are 
+prerequisites there, but those courses were renamed. Are my equivalences in section 
+6 of the file right?
+11.
+2026 credit totals disagree between the two sheets:
+12.
+Prerequisite rule: must the prerequisite be passed, or only taken?
+13.
+Highlighted cells: MLOps (2023) and Compiler Design (2026) are coloured. Does that 
+mean “new course”?
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+1. 
+I assumed 
+the Struct 
+sheet is 
+correct. Is it?
+1.Semester plan (“Fixed 
+Min”)
+1.Struct_2026_
+DS
+1.University 
+Core
+1.241.18
+1.Foundation1.241.26
+1.Program 
+Core
+1.461.50
+
+
+--- PAGE 6 ---
+ of 737
+ 
+COURSE DETAILS BY BATCH — B.Tech Data Science (source: 
+Semester_Spread_Structures_Sept_2026.xlsx)
+How to read each course line: Batch | Semester | Basket | Course code – Course name | L-T-P 
+(Lecture-Tutorial-Practical hours per week) | Credits | Prerequisite(s)
+•
+"AND" between prerequisites = all of them must be completed first. "OR" = any one of 
+them.
+•
+Credits follow C = L + T + P/2 for every course that has class hours (verified for all courses 
+in the workbook).
+•
+Every batch requires 180 credits in total.
+PART A — "EITHER / OR" COURSES (written with a slash 
+"/" in the sheets)
+A slash between two courses means the student takes ONE of them, not both.
+A1. Psychology OR Economics (every batch, Semester 1)
+•
+2022 batch | S1 | Foundation | PSYC101 / ECON101 – Introduction to Psychology OR 
+Introduction to Economics | L-T-P 2-1-0 | 3 credits | Prerequisite: None. Student picks ONE.
+•
+2023 batch | S1 | Foundation | PSYC101 / ECON101 – Introduction to Psychology OR 
+Introduction to Economics | L-T-P 2-1-0 | 3 credits | Prerequisite: None. Student picks ONE.
+•
+2024 batch | S1 | Foundation | PSYC101 / ECON101 – Introduction to Psychology OR 
+Introduction to Economics | L-T-P 2-1-0 | 3 credits | Prerequisite: None. Student picks ONE.
+•
+2025 batch | S1 | Open/Minor | PSCY102 / ECON105 – Introduction to Psychology OR 
+Principles of Economics | L-T-P 1-0-2 | 2 credits | Prerequisite: None. Student picks ONE.
+•
+2026 batch | S1 | Open/Minor | PSYC105 / ECON106 – Introduction to Psychology OR 
+Principles of Economics | L-T-P 1-1-0 | 2 credits | Prerequisite: None. Student picks ONE.
+A2. Capstone Project OR Industrial Internship (every batch, Semester 8)
+•
+DATA803 – Capstone Project / Industrial Internship | 12 credits | Prerequisite: None listed. 
+In Semester 8 the student does EITHER a capstone project OR a full-semester industrial 
+internship. It is the only item in S8.
+A3. Summer Training / Internship (every batch, listed in Semester 5)
+•
+DATA801 – Summer Training/Internship | 2 credits | Prerequisite: None. Here the slash 
+means "training or internship" (either form counts); it is one requirement, not two courses.
+A4. Language (2024 batch)
+•
+2024 batch | S6 | Foundation | LANG101 – "Kannada / Language" | 3 credits | Prerequisite: 
+None. Student takes Kannada OR another language.
+A5. Minor OR Open elective slots
+•
+"Minor/Open" slots: in each slot the student takes EITHER a course towards a Minor OR an 
+Open elective (any department). Every slot course is 4 credits (L-T-P 4-0-0). The exact slots 
+for each batch are listed in Part C.
+A6. Specialization Track courses (2022–2025 batches): "Track 1 option / Track 2 
+option"
+
+
+--- PAGE 7 ---
+ of 837
+Each student follows ONE track for all 5 SPT courses: Track 1 – Applied Deep Learning OR Track 
+2 – Full Stack Development. In a cell like "MATH401/COMP401", the left side is the Track 1 
+course and the right side is the Track 2 course; the prerequisites are written in the same order (e.g. 
+"DATA301/NIL"). If both sides are the same course, students of both tracks take it. Every SPT 
+course is 4 credits.
+2022 batch – Specialization Track courses
+•
+2022 batch | S5 | SPT-Course #1 | Track 1 – Applied Deep Learning: MATH401 – 
+Probabilistic Graph Models | L-T-P 3-0-2 | 4 credits | Prerequisite: None
+•
+2022 batch | S5 | SPT-Course #1 | Track 2 – Full Stack Development: COMP401 – Web 
+Framework | L-T-P 2-0-4 | 4 credits | Prerequisite: None
+•
+2022 batch | S6 | SPT-Course #2 | Track 1 – Applied Deep Learning: DATA402 – Advanced 
+Visualization and Storytelling | L-T-P 2-0-4 | 4 credits | Prerequisite: DATA301 Machine 
+Learning (S5)
+•
+2022 batch | S6 | SPT-Course #2 | Track 2 – Full Stack Development: DATA406 – Big Data 
+Framework | L-T-P 2-0-4 | 4 credits | Prerequisite: None
+•
+2022 batch | S7 | SPT-Course #3 | Track 1 – Applied Deep Learning: DATA403 – Natural 
+Language Processing | L-T-P 2-0-4 | 4 credits | Prerequisite: DATA302 Deep Learning (S6)
+•
+2022 batch | S7 | SPT-Course #3 | Track 2 – Full Stack Development: COMP402 – Software 
+Architecture and Deployments | L-T-P 2-0-4 | 4 credits | Prerequisite: COMP205 Object 
+Oriented Programming (S4) AND COMP401 Web Framework (S5)
+•
+2022 batch | S7 | SPT-Course #4 | Track 1 – Applied Deep Learning: DATA404 – Multi 
+Modal Learning | L-T-P 2-0-4 | 4 credits | Prerequisite: DATA302 Deep Learning (S6)
+•
+2022 batch | S7 | SPT-Course #4 | Track 2 – Full Stack Development: (code not given) – 
+Cloud Computing | L-T-P 2-0-4 | 4 credits | Prerequisite: not stated
+•
+2022 batch | S7 | SPT-Course #5 | Track 1 – Applied Deep Learning: DATA405 – 
+Reinforcement Learning | L-T-P 2-0-4 | 4 credits | Prerequisite: MATH202 Probability 
+Theory (S2) AND MATH204 Linear Algebra (S3)
+•
+2022 batch | S7 | SPT-Course #5 | Track 2 – Full Stack Development: (code not given) – 
+Cognitive Computing | L-T-P 2-0-4 | 4 credits | Prerequisite: not stated
+2023 batch – Specialization Track courses
+•
+2023 batch | S5 | SPT-Course #1 | Track 1 – Applied Deep Learning: MATH401 – 
+Probabilistic Graph Models | L-T-P 3-0-2 | 4 credits | Prerequisite: None
+•
+2023 batch | S5 | SPT-Course #1 | Track 2 – Full Stack Development: COMP401 – Web 
+Framework | L-T-P 2-0-4 | 4 credits | Prerequisite: None
+•
+2023 batch | S6 | SPT-Course #2 | Track 1 – Applied Deep Learning: DATA405 – 
+Reinforcement Learning | L-T-P 2-0-4 | 4 credits | Prerequisite: MATH202 Probability 
+Theory (S1) AND MATH204 Linear Algebra (S3)
+•
+2023 batch | S6 | SPT-Course #2 | Track 2 – Full Stack Development: DATA406 – Big Data 
+Framework | L-T-P 2-0-4 | 4 credits | Prerequisite: None
+•
+2023 batch | S7 | SPT-Course #3 | Both tracks: DATA403 – Natural Language Processing | 
+L-T-P 2-0-4 | 4 credits | Prerequisite: DATA302 Deep Learning (S6)
+•
+2023 batch | S7 | SPT-Course #4 | Track 1 – Applied Deep Learning: DATA404 – Multi 
+Modal Learning | L-T-P 2-0-4 | 4 credits | Prerequisite: DATA302 Deep Learning (S6)
+•
+2023 batch | S7 | SPT-Course #4 | Track 2 – Full Stack Development: COMP402 – Software 
+Architecture and Deployments | L-T-P 2-0-4 | 4 credits | Prerequisite: COMP205 Object 
+Oriented Programming (S4) AND COMP401 Web Framework (S5)
+
+
+--- PAGE 8 ---
+ of 937
+•
+2023 batch | S7 | SPT-Course #5 | Track 1 – Applied Deep Learning: DATA408 – Advanced 
+Topics in Deep Learning | L-T-P 3-0-2 | 4 credits | Prerequisite: DATA302 Deep Learning 
+(S6)
+•
+2023 batch | S7 | SPT-Course #5 | Track 2 – Full Stack Development: COMP405 – Cloud & 
+Cognitive Computing | L-T-P 2-0-4 | 4 credits | Prerequisite: not clear – sheet lists only 
+DATA302 for this slot
+2024 batch – Specialization Track courses
+•
+2024 batch | S5 | SPT-Course #1 | Track 1 – Applied Deep Learning: MATH401 – 
+Probabilistic Graph Models | L-T-P 3-0-2 | 4 credits | Prerequisite: None
+•
+2024 batch | S5 | SPT-Course #1 | Track 2 – Full Stack Development: COMP401 – Web 
+Framework | L-T-P 2-0-4 | 4 credits | Prerequisite: None
+•
+2024 batch | S6 | SPT-Course #2 | Track 1 – Applied Deep Learning: DATA404 – Multi 
+Modal Learning | L-T-P 2-0-4 | 4 credits | Prerequisite: DATA302 Deep Learning (S6) |  
+DATA302 is scheduled in S6, not before S6
+•
+2024 batch | S6 | SPT-Course #2 | Track 2 – Full Stack Development: DATA406 – Big Data 
+Framework | L-T-P 2-0-4 | 4 credits | Prerequisite: None
+•
+2024 batch | S7 | SPT-Course #3 | Both tracks: DATA403 – Natural Language Processing | 
+L-T-P 2-0-4 | 4 credits | Prerequisite: DATA302 Deep Learning (S6)
+•
+2024 batch | S7 | SPT-Course #4 | Track 1 – Applied Deep Learning: DATA408 – Advanced 
+Topics in Deep Learning | L-T-P 3-0-2 | 4 credits | Prerequisite: DATA302 Deep Learning 
+(S6)
+•
+2024 batch | S7 | SPT-Course #4 | Track 2 – Full Stack Development: COMP402 – Software 
+Architecture and Deployments | L-T-P 2-0-4 | 4 credits | Prerequisite: COMP205 Object 
+Oriented Programming (S5) AND COMP401 Web Framework (S5)
+•
+2024 batch | S7 | SPT-Course #5 | Both tracks: DATA405 – Reinforcement Learning | L-T-P 
+2-0-4 | 4 credits | Prerequisite: MATH202 Probability Theory – NOT in this batch's plan 
+AND MATH204 Linear Algebra (S3) |  MATH202 (Probability Theory) is not in this 
+batch's plan
+2025 batch – Specialization Track courses
+•
+2025 batch | S5 | SPT-Course #1 | Track 1 – Applied Deep Learning: MATH401 – 
+Probabilistic Graph Models | L-T-P 3-0-2 | 4 credits | Prerequisite: None
+•
+2025 batch | S5 | SPT-Course #1 | Track 2 – Full Stack Development: COMP401 – Web 
+Framework | L-T-P 2-0-4 | 4 credits | Prerequisite: None
+•
+2025 batch | S6 | SPT-Course #2 | Track 1 – Applied Deep Learning: DATA404 – Multi 
+Modal Learning | L-T-P 2-0-4 | 4 credits | Prerequisite: DATA302 Deep Learning (S6) |  
+DATA302 is scheduled in S6, not before S6
+•
+2025 batch | S6 | SPT-Course #2 | Track 2 – Full Stack Development: DATA406 – Big Data 
+Framework | L-T-P 2-0-4 | 4 credits | Prerequisite: None
+•
+2025 batch | S7 | SPT-Course #3 | Track 1 – Applied Deep Learning: TBA – Image 
+Processing and Computer Vision | L-T-P 2-0-4 | 4 credits | Prerequisite: TBA
+•
+2025 batch | S7 | SPT-Course #3 | Track 2 – Full Stack Development: COMP405 – Cloud & 
+Cognitive Computing | L-T-P 2-0-4 | 4 credits | Prerequisite: None
+•
+2025 batch | S7 | SPT-Course #4 | Track 1 – Applied Deep Learning: DATA408 – Advanced 
+Topics in Deep Learning | L-T-P 3-0-2 | 4 credits | Prerequisite: DATA302 Deep Learning 
+(S6)
+•
+2025 batch | S7 | SPT-Course #4 | Track 2 – Full Stack Development: COMP402 – Software 
+Architecture and Deployments | L-T-P 2-0-4 | 4 credits | Prerequisite: COMP205 Object 
+Oriented Programming (S4) AND COMP401 Web Framework (S5)
+
+
+--- PAGE 9 ---
+ of 1037
+•
+2025 batch | S7 | SPT-Course #5 | Both tracks: DATA405 – Reinforcement Learning | L-T-P 
+2-0-4 | 4 credits | Prerequisite: MATH202 Probability Theory – NOT in this batch's plan 
+AND MATH204 Linear Algebra – NOT in this batch's plan |  MATH202 (Probability 
+Theory) is not in this batch's plan; MATH204 (Linear Algebra) is not in this batch's plan
+2026 batch – Electives (tracks removed)
+•
+2026 batch | S5 | Elective 1 | L-T-P 2-0-4 | 4 credits
+•
+2026 batch | S6 | Elective 2 | L-T-P 2-0-4 | 4 credits
+•
+2026 batch | S7 | Elective 3, Elective 4, Elective 5 | L-T-P 2-0-4 each | 4 credits each
+•
+Elective pool (Struct_2026_DS): Probabilistic Graph Models, Advanced Topics in Deep 
+Learning, Cloud & Cognitive Computing, Multi Modal Learning, Reinforcement Learning, 
+Web Framework, Big Data Framework, Software Architecture and Deployments (4 credits 
+each). Course codes and prerequisites are not given in the sheet for 2026.
+A7. Slash inside a prerequisite
+•
+2022 batch | DATA207 Human Centric AI | Prerequisite "COMP210/COMP301" = 
+COMP210 OR COMP301. Note: COMP210 does not exist anywhere in the workbook; 
+COMP301 Artificial Intelligence (S4) is the usable option.
+A8. Track-wise summary (which 5 courses make up each track)
+•
+2022 batch | Track 1 – Applied Deep Learning: Probabilistic Graph Models, Advanced 
+Visualization and Storytelling, Natural Language Processing, Multi Modal Learning, 
+Reinforcement Learning (20 credits)
+•
+2022 batch | Track 2 – Full Stack Development: Web Framework, Big Data Framework, 
+Software Architecture and Deployments, Cloud Computing, Cognitive Computing (20 
+credits)
+•
+2023 batch | Track 1 – Applied Deep Learning: Probabilistic Graph Models, Reinforcement 
+Learning, Natural Language Processing, Multi Modal Learning, Advanced Topics in Deep 
+Learning (20 credits)
+•
+2023 batch | Track 2 – Full Stack Development: Web Framework, Big Data Framework, 
+Natural Language Processing, Software Architecture and Deployments, Cloud & Cognitive 
+Computing (20 credits)
+•
+2024 batch | Track 1 – Applied Deep Learning: Probabilistic Graph Models, Multi Modal 
+Learning, Natural Language Processing, Advanced Topics in Deep Learning, Reinforcement 
+Learning (20 credits)
+•
+2024 batch | Track 2 – Full Stack Development: Web Framework, Big Data Framework, 
+Natural Language Processing, Software Architecture and Deployments, Reinforcement 
+Learning (20 credits)
+•
+2025 batch | Track 1 – Applied Deep Learning: Probabilistic Graph Models, Multi Modal 
+Learning, Image Processing and Computer Vision, Advanced Topics in Deep Learning, 
+Reinforcement Learning (20 credits)
+•
+2025 batch | Track 2 – Full Stack Development: Web Framework, Big Data Framework, 
+Cloud & Cognitive Computing, Software Architecture and Deployments, Reinforcement 
+Learning (20 credits)
+PART B — PREREQUISITES (course → what must be 
+completed first), by batch
+Only courses that HAVE a prerequisite are listed here; every other course has "NIL" (no 
+prerequisite). Specialization-track prerequisites are in Part A6.
+
+
+--- PAGE 10 ---
+ of 1137
+2022 batch – prerequisites
+•
+2022 batch | S2 | MTSC211 – Sustainable Smart Materials | requires: MTSC111 Materials 
+for Smart Devices (S1)
+•
+2022 batch | S2 | ENGL201 – Academic Writing | requires: UCOR102 Introduction to 
+writing (S1)
+•
+2022 batch | S2 | MATH205 – Statistics with R | requires: MATH202 Probability Theory 
+(S2) |  MATH202 is scheduled in S2, not before S2
+•
+2022 batch | S3 | COMP203 – Analysis of Algorithms | requires: COMP201 Data Structures 
+(S2)
+•
+2022 batch | S3 | DATA202 – Exploratory Data Analysis | requires: DATA201 Foundations 
+to Data Science (S2) AND MATH203 Probability and Statistics – NOT in this batch's plan | 
+ MATH203 (Probability and Statistics) is not in this batch's plan
+•
+2022 batch | S4 | MATH301 – Optimization Techniques for Data Science | requires: 
+MATH201 Calculus (S1)
+•
+2022 batch | S5 | DATA301 – Machine Learning | requires: DATA202 Exploratory Data 
+Analysis (S3) AND MATH301 Optimization Techniques for Data Science (S4)
+•
+2022 batch | S5 | DATA207 – Human Centric AI | requires: COMP210 (course not found 
+anywhere in the workbook) – NOT in this batch's plan OR COMP301 Artificial Intelligence 
+(S4) |  COMP210 is not in this batch's plan and does not exist in any batch
+•
+2022 batch | S6 | COMP206 – Microprocessors and Computer Architecture | requires: 
+COMP204 Digital Design and Computer Organization (S4) AND COMP207 Operating 
+Systems (S5)
+•
+2022 batch | S6 | DATA302 – Deep Learning | requires: DATA301 Machine Learning (S5)
+•
+2022 batch | S7 | COMP302 – Internet of Things | requires: COMP132 Design Workshop 
+(S1) AND COMP201 Data Structures (S2) AND COMP206 Microprocessors and Computer 
+Architecture (S6) AND COMP208 Networks (S5) AND COMP301 Artificial Intelligence 
+(S4)
+2022 batch – reverse view (completing this course unlocks):
+•
+COMP132 Design Workshop → unlocks COMP302 Internet of Things (S7)
+•
+COMP201 Data Structures → unlocks COMP203 Analysis of Algorithms (S3), COMP302 
+Internet of Things (S7)
+•
+COMP204 Digital Design and Computer Organization → unlocks COMP206 
+Microprocessors and Computer Architecture (S6)
+•
+COMP206 Microprocessors and Computer Architecture → unlocks COMP302 Internet of 
+Things (S7)
+•
+COMP207 Operating Systems → unlocks COMP206 Microprocessors and Computer 
+Architecture (S6)
+•
+COMP208 Networks → unlocks COMP302 Internet of Things (S7)
+•
+COMP210 (course does not exist in the workbook) [NOT in this batch's plan] → unlocks 
+DATA207 Human Centric AI (S5)
+•
+COMP301 Artificial Intelligence → unlocks DATA207 Human Centric AI (S5), COMP302 
+Internet of Things (S7)
+•
+DATA201 Foundations to Data Science → unlocks DATA202 Exploratory Data Analysis 
+(S3)
+•
+DATA202 Exploratory Data Analysis → unlocks DATA301 Machine Learning (S5)
+•
+DATA301 Machine Learning → unlocks DATA302 Deep Learning (S6)
+•
+MATH201 Calculus → unlocks MATH301 Optimization Techniques for Data Science (S4)
+
+
+--- PAGE 11 ---
+ of 1237
+•
+MATH202 Probability Theory → unlocks MATH205 Statistics with R (S2)
+•
+MATH203 Probability and Statistics [NOT in this batch's plan] → unlocks DATA202 
+Exploratory Data Analysis (S3)
+•
+MATH301 Optimization Techniques for Data Science → unlocks DATA301 Machine 
+Learning (S5)
+•
+MTSC111 Materials for Smart Devices → unlocks MTSC211 Sustainable Smart Materials 
+(S2)
+•
+UCOR102 Introduction to writing → unlocks ENGL201 Academic Writing (S2)
+2023 batch – prerequisites
+•
+2023 batch | S2 | MTSC211 – Sustainable Smart Materials | requires: MTSC111 Materials 
+for Smart Devices (S1)
+•
+2023 batch | S2 | ENGL201 – Academic Writing | requires: UCOR102 Introduction to 
+writing (S1)
+•
+2023 batch | S2 | MATH205 – Statistics with R | requires: MATH202 Probability Theory 
+(S1)
+•
+2023 batch | S3 | COMP203 – Analysis of Algorithms | requires: COMP201 Data Structures 
+(S2)
+•
+2023 batch | S3 | DATA202 – Exploratory Data Analysis | requires: DATA201 Foundations 
+to Data Science (S2) AND MATH203 Probability and Statistics – NOT in this batch's plan | 
+ MATH203 (Probability and Statistics) is not in this batch's plan
+•
+2023 batch | S4 | MATH301 – Optimization Techniques for Data Science | requires: 
+MATH201 Calculus (S2)
+•
+2023 batch | S5 | COMP206 – Microprocessors and Computer Architecture | requires: 
+COMP204 Digital Design and Computer Organization (S4) AND COMP207 Operating 
+Systems (S5) |  COMP207 is scheduled in S5, not before S5
+•
+2023 batch | S5 | DATA301 – Machine Learning | requires: DATA202 Exploratory Data 
+Analysis (S3) AND MATH301 Optimization Techniques for Data Science (S4)
+•
+2023 batch | S6 | COMP302 – Internet of Things | requires: COMP132 Design Workshop 
+(S1) AND COMP201 Data Structures (S2) AND COMP206 Microprocessors and Computer 
+Architecture (S5) AND COMP208 Networks (S5) AND COMP301 Artificial Intelligence 
+(S4)
+•
+2023 batch | S6 | DATA302 – Deep Learning | requires: DATA301 Machine Learning (S5) 
+AND MATH201 Calculus (S2)
+•
+2023 batch | S6 | DATA303 – MLOps & Model Deployment | requires: DATA301 Machine 
+Learning (S5) AND COMP208 Networks (S5)
+2023 batch – reverse view (completing this course unlocks):
+•
+COMP132 Design Workshop → unlocks COMP302 Internet of Things (S6)
+•
+COMP201 Data Structures → unlocks COMP203 Analysis of Algorithms (S3), COMP302 
+Internet of Things (S6)
+•
+COMP204 Digital Design and Computer Organization → unlocks COMP206 
+Microprocessors and Computer Architecture (S5)
+•
+COMP206 Microprocessors and Computer Architecture → unlocks COMP302 Internet of 
+Things (S6)
+•
+COMP207 Operating Systems → unlocks COMP206 Microprocessors and Computer 
+Architecture (S5)
+•
+COMP208 Networks → unlocks COMP302 Internet of Things (S6), DATA303 MLOps & 
+Model Deployment (S6)
+
+
+--- PAGE 12 ---
+ of 1337
+•
+COMP301 Artificial Intelligence → unlocks COMP302 Internet of Things (S6)
+•
+DATA201 Foundations to Data Science → unlocks DATA202 Exploratory Data Analysis 
+(S3)
+•
+DATA202 Exploratory Data Analysis → unlocks DATA301 Machine Learning (S5)
+•
+DATA301 Machine Learning → unlocks DATA302 Deep Learning (S6), DATA303 MLOps 
+& Model Deployment (S6)
+•
+MATH201 Calculus → unlocks MATH301 Optimization Techniques for Data Science (S4), 
+DATA302 Deep Learning (S6)
+•
+MATH202 Probability Theory → unlocks MATH205 Statistics with R (S2)
+•
+MATH203 Probability and Statistics [NOT in this batch's plan] → unlocks DATA202 
+Exploratory Data Analysis (S3)
+•
+MATH301 Optimization Techniques for Data Science → unlocks DATA301 Machine 
+Learning (S5)
+•
+MTSC111 Materials for Smart Devices → unlocks MTSC211 Sustainable Smart Materials 
+(S2)
+•
+UCOR102 Introduction to writing → unlocks ENGL201 Academic Writing (S2)
+2024 batch – prerequisites
+•
+2024 batch | S2 | MTSC211 – Sustainable Smart Materials | requires: MTSC111 Materials 
+for Smart Devices (S1)
+•
+2024 batch | S2 | ENGL210 – Academic Writing | requires: UCOR102 Introduction to 
+writing (S1)
+•
+2024 batch | S2 | DATA132 – Data visualization and Storytelling | requires: DATA103 
+Programming in Python (S1)
+•
+2024 batch | S3 | COMP203 – Analysis of Algorithms | requires: COMP201 Data Structures 
+(S2)
+•
+2024 batch | S3 | DATA202 – Exploratory Data Analysis | requires: DATA201 Foundations 
+to Data Science (S2) AND MATH203 Probability and Statistics (S1)
+•
+2024 batch | S3 | MATH206 – Advanced Statistical Analysis and Research Methods with R | 
+requires: MATH203 Probability and Statistics (S1)
+•
+2024 batch | S5 | DATA301 – Machine Learning | requires: DATA202 Exploratory Data 
+Analysis (S3) AND MATH301 Optimization Techniques for Data Science (S4)
+•
+2024 batch | S6 | COMP206 – Microprocessors and Computer Architecture | requires: 
+COMP204 Digital Design and Computer Organization (S4) AND COMP207 Operating 
+Systems (S5)
+•
+2024 batch | S6 | DATA302 – Deep Learning | requires: DATA301 Machine Learning (S5)
+•
+2024 batch | S7 | COMP302 – Internet of Things | requires: COMP132 Design Workshop 
+(S1) AND COMP201 Data Structures (S2) AND COMP206 Microprocessors and Computer 
+Architecture (S6) AND COMP208 Networks (S5) AND COMP301 Artificial Intelligence 
+(S4)
+2024 batch – reverse view (completing this course unlocks):
+•
+COMP132 Design Workshop → unlocks COMP302 Internet of Things (S7)
+•
+COMP201 Data Structures → unlocks COMP203 Analysis of Algorithms (S3), COMP302 
+Internet of Things (S7)
+•
+COMP204 Digital Design and Computer Organization → unlocks COMP206 
+Microprocessors and Computer Architecture (S6)
+•
+COMP206 Microprocessors and Computer Architecture → unlocks COMP302 Internet of 
+Things (S7)
+
+
+--- PAGE 13 ---
+ of 1437
+•
+COMP207 Operating Systems → unlocks COMP206 Microprocessors and Computer 
+Architecture (S6)
+•
+COMP208 Networks → unlocks COMP302 Internet of Things (S7)
+•
+COMP301 Artificial Intelligence → unlocks COMP302 Internet of Things (S7)
+•
+DATA103 Programming in Python → unlocks DATA132 Data visualization and Storytelling 
+(S2)
+•
+DATA201 Foundations to Data Science → unlocks DATA202 Exploratory Data Analysis 
+(S3)
+•
+DATA202 Exploratory Data Analysis → unlocks DATA301 Machine Learning (S5)
+•
+DATA301 Machine Learning → unlocks DATA302 Deep Learning (S6)
+•
+MATH203 Probability and Statistics → unlocks DATA202 Exploratory Data Analysis (S3), 
+MATH206 Advanced Statistical Analysis and Research Methods with R (S3)
+•
+MATH301 Optimization Techniques for Data Science → unlocks DATA301 Machine 
+Learning (S5)
+•
+MTSC111 Materials for Smart Devices → unlocks MTSC211 Sustainable Smart Materials 
+(S2)
+•
+UCOR102 Introduction to writing → unlocks ENGL210 Academic Writing (S2)
+2025 batch – prerequisites
+•
+2025 batch | S2 | MTSC211 – Sustainable Smart Materials | requires: MTSC111 Materials 
+for Smart Devices (S1)
+•
+2025 batch | S2 | DATA132 – Data Visualization and Storytelling | requires: DATA103 
+Programming in Python (S1)
+•
+2025 batch | S3 | COMP203 – Analysis of Algorithms | requires: COMP201 Data Structures 
+(S2)
+•
+2025 batch | S3 | DATA209 – Advanced Exploratory Data Analysis | requires: DATA132 
+Data visualization and Storytelling (S2) AND MATH203 Probability and Statistics (S2)
+•
+2025 batch | S4 | MATH206 – Advanced Statistical Analysis and Research Methods with R | 
+requires: MATH203 Probability and Statistics (S2)
+•
+2025 batch | S4 | MATH301 – Optimization Techniques for Data Science | requires: 
+MATH201 Calculus – NOT in this batch's plan |  MATH201 (Calculus) is not in this 
+batch's plan
+•
+2025 batch | S5 | COMP206 – Microprocessors and Computer Architecture | requires: 
+COMP204 Digital Design and Computer Organization (S1) AND COMP207 Operating 
+Systems (S4)
+•
+2025 batch | S5 | DATA301 – Machine Learning | requires: DATA206 (course not found 
+anywhere in the workbook) – NOT in this batch's plan AND MATH301 Optimization 
+Techniques for Data Science (S4) |  DATA206 is not in this batch's plan and does not exist 
+in any batch
+•
+2025 batch | S6 | COMP302 – Internet of Things | requires: COMP132 Design Workshop 
+(S2) AND COMP201 Data Structures (S2) AND COMP206 Microprocessors and Computer 
+Architecture (S5) AND COMP208 Networks (S6) AND COMP301 Artificial Intelligence 
+(S4) |  COMP208 is scheduled in S6, not before S6
+•
+2025 batch | S6 | DATA302 – Deep Learning | requires: DATA301 Machine Learning (S5)
+•
+2025 batch | S7 | DATA403 – Natural Language Processing | requires: DATA302 Deep 
+Learning (S6)
+2025 batch – reverse view (completing this course unlocks):
+•
+COMP132 Design Workshop → unlocks COMP302 Internet of Things (S6)
+
+
+--- PAGE 14 ---
+ of 1537
+•
+COMP201 Data Structures → unlocks COMP203 Analysis of Algorithms (S3), COMP302 
+Internet of Things (S6)
+•
+COMP204 Digital Design and Computer Organization → unlocks COMP206 
+Microprocessors and Computer Architecture (S5)
+•
+COMP206 Microprocessors and Computer Architecture → unlocks COMP302 Internet of 
+Things (S6)
+•
+COMP207 Operating Systems → unlocks COMP206 Microprocessors and Computer 
+Architecture (S5)
+•
+COMP208 Networks → unlocks COMP302 Internet of Things (S6)
+•
+COMP301 Artificial Intelligence → unlocks COMP302 Internet of Things (S6)
+•
+DATA103 Programming in Python → unlocks DATA132 Data Visualization and 
+Storytelling (S2)
+•
+DATA132 Data visualization and Storytelling → unlocks DATA209 Advanced Exploratory 
+Data Analysis (S3)
+•
+DATA206 (course does not exist in the workbook) [NOT in this batch's plan] → unlocks 
+DATA301 Machine Learning (S5)
+•
+DATA301 Machine Learning → unlocks DATA302 Deep Learning (S6)
+•
+DATA302 Deep Learning → unlocks DATA403 Natural Language Processing (S7)
+•
+MATH201 Calculus [NOT in this batch's plan] → unlocks MATH301 Optimization 
+Techniques for Data Science (S4)
+•
+MATH203 Probability and Statistics → unlocks DATA209 Advanced Exploratory Data 
+Analysis (S3), MATH206 Advanced Statistical Analysis and Research Methods with R (S4)
+•
+MATH301 Optimization Techniques for Data Science → unlocks DATA301 Machine 
+Learning (S5)
+•
+MTSC111 Materials for Smart Devices → unlocks MTSC211 Sustainable Smart Materials 
+(S2)
+2026 batch – prerequisites
+•
+2026 batch | S2 | MTSC211 – Sustainable Smart Materials | requires: MTSC111 Materials 
+for Smart Devices (S1)
+•
+2026 batch | S2 | DATA132 – Data Visualization and Storytelling | requires: DATA103 
+Programming in Python (S1)
+•
+2026 batch | S3 | COMP203 – Analysis of Algorithms | requires: COMP201 Data Structures 
+(S2)
+•
+2026 batch | S3 | DATA209 – Advanced Exploratory Data Analysis | requires: DATA132 
+Data visualization and Storytelling (S2) AND MATH203 Probability and Statistics (S2)
+•
+2026 batch | S4 | MATH210 – Advanced Statistical Analysis and Research Methods | 
+requires: MATH203 Probability and Statistics (S2)
+•
+2026 batch | S4 | MATH301 – Optimization Techniques for Data Science | requires: 
+MATH201 Calculus – NOT in this batch's plan |  MATH201 (Calculus) is not in this 
+batch's plan
+•
+2026 batch | S5 | COMP206 – Microprocessors and Computer Architecture | requires: 
+COMP204 Digital Design and Computer Organization (S1) AND COMP207 Operating 
+Systems – NOT in this batch's plan |  COMP207 (Operating Systems) is not in this batch's 
+plan
+•
+2026 batch | S5 | DATA301 – Machine Learning | requires: DATA206 (course not found 
+anywhere in the workbook) – NOT in this batch's plan AND MATH301 Optimization 
+
+
+--- PAGE 15 ---
+ of 1637
+Techniques for Data Science (S4) |  DATA206 is not in this batch's plan and does not exist 
+in any batch
+•
+2026 batch | S6 | COMP302 – Internet of Things | requires: COMP132 Design Workshop – 
+NOT in this batch's plan AND COMP201 Data Structures (S2) AND COMP206 
+Microprocessors and Computer Architecture (S5) AND COMP208 Networks (S6) AND 
+COMP301 Artificial Intelligence (S4) |  COMP132 (Design Workshop) is not in this 
+batch's plan; COMP208 is scheduled in S6, not before S6
+•
+2026 batch | S6 | DATA302 – Deep Learning | requires: DATA301 Machine Learning (S5)
+•
+2026 batch | S7 | DATA403 – Natural Language Processing | requires: DATA302 Deep 
+Learning (S6)
+2026 batch – reverse view (completing this course unlocks):
+•
+COMP132 Design Workshop [NOT in this batch's plan] → unlocks COMP302 Internet of 
+Things (S6)
+•
+COMP201 Data Structures → unlocks COMP203 Analysis of Algorithms (S3), COMP302 
+Internet of Things (S6)
+•
+COMP204 Digital Design and Computer Organization → unlocks COMP206 
+Microprocessors and Computer Architecture (S5)
+•
+COMP206 Microprocessors and Computer Architecture → unlocks COMP302 Internet of 
+Things (S6)
+•
+COMP207 Operating Systems [NOT in this batch's plan] → unlocks COMP206 
+Microprocessors and Computer Architecture (S5)
+•
+COMP208 Networks → unlocks COMP302 Internet of Things (S6)
+•
+COMP301 Artificial Intelligence → unlocks COMP302 Internet of Things (S6)
+•
+DATA103 Programming in Python → unlocks DATA132 Data Visualization and 
+Storytelling (S2)
+•
+DATA132 Data visualization and Storytelling → unlocks DATA209 Advanced Exploratory 
+Data Analysis (S3)
+•
+DATA206 (course does not exist in the workbook) [NOT in this batch's plan] → unlocks 
+DATA301 Machine Learning (S5)
+•
+DATA301 Machine Learning → unlocks DATA302 Deep Learning (S6)
+•
+DATA302 Deep Learning → unlocks DATA403 Natural Language Processing (S7)
+•
+MATH201 Calculus [NOT in this batch's plan] → unlocks MATH301 Optimization 
+Techniques for Data Science (S4)
+•
+MATH203 Probability and Statistics → unlocks DATA209 Advanced Exploratory Data 
+Analysis (S3), MATH210 Advanced Statistical Analysis and Research Methods (S4)
+•
+MATH301 Optimization Techniques for Data Science → unlocks DATA301 Machine 
+Learning (S5)
+•
+MTSC111 Materials for Smart Devices → unlocks MTSC211 Sustainable Smart Materials 
+(S2)
+Prerequisite problems found (show to the university for correction)
+•
+2022 batch | MATH205 Statistics with R: MATH202 is scheduled in S2, not before S2
+•
+2022 batch | DATA202 Exploratory Data Analysis: MATH203 (Probability and Statistics) is 
+not in this batch's plan
+•
+2022 batch | DATA207 Human Centric AI: COMP210 is not in this batch's plan and does 
+not exist in any batch
+•
+2023 batch | DATA202 Exploratory Data Analysis: MATH203 (Probability and Statistics) is 
+not in this batch's plan
+
+
+--- PAGE 16 ---
+ of 1737
+•
+2023 batch | COMP206 Microprocessors and Computer Architecture: COMP207 is 
+scheduled in S5, not before S5
+•
+2025 batch | MATH301 Optimization Techniques for Data Science: MATH201 (Calculus) is 
+not in this batch's plan
+•
+2025 batch | DATA301 Machine Learning: DATA206 is not in this batch's plan and does not 
+exist in any batch
+•
+2025 batch | COMP302 Internet of Things: COMP208 is scheduled in S6, not before S6
+•
+2026 batch | MATH301 Optimization Techniques for Data Science: MATH201 (Calculus) is 
+not in this batch's plan
+•
+2026 batch | COMP206 Microprocessors and Computer Architecture: COMP207 (Operating 
+Systems) is not in this batch's plan
+•
+2026 batch | DATA301 Machine Learning: DATA206 is not in this batch's plan and does not 
+exist in any batch
+•
+2026 batch | COMP302 Internet of Things: COMP132 (Design Workshop) is not in this 
+batch's plan
+•
+2026 batch | COMP302 Internet of Things: COMP208 is scheduled in S6, not before S6
+•
+2024 & 2025 batch | SPT-Course #5 Reinforcement Learning requires MATH202, 
+MATH204. 2024 has MATH203 instead of MATH202; 2025 has MATH203 and MATH209 
+instead of both.
+•
+2024 & 2025 batch | SPT-Course #2 Multi Modal Learning (Track 1, S6) requires DATA302 
+Deep Learning, which is also in S6 (same semester).
+•
+2023 batch | SPT-Course #5 lists only "DATA302" as prerequisite though the slot has two 
+options; it is unclear whether Cloud & Cognitive Computing (Track 2) needs it.
+PART C — COMPLETE COURSE LIST WITH CREDITS, 
+by batch and semester
+2022 batch – full semester plan
+2022 batch – Semester 1 (total 22 credits; 30 contact hours/week = L 12 + T 2 + P 16)
+•
+2022 batch | S1 | University Core | UCOR103 – Communication Skills | L-T-P 1-0-2 | 2 
+credits | Prerequisite: None
+•
+2022 batch | S1 | University Core | UCOR104 – Problem Solving with Design Thinking | L-
+T-P 1-0-2 | 2 credits | Prerequisite: None
+•
+2022 batch | S1 | University Core | UCOR102 – Introduction to writing | L-T-P 1-0-2 | 2 
+credits | Prerequisite: None
+•
+2022 batch | S1 | Foundation | MATH201 – Calculus | L-T-P 2-1-0 | 3 credits | Prerequisite: 
+None
+•
+2022 batch | S1 | Foundation | COMP132 – Design Workshop | L-T-P 0-0-4 | 2 credits | 
+Prerequisite: None
+•
+2022 batch | S1 | Foundation | MTSC111 – Materials for Smart Devices | L-T-P 2-0-2 | 3 
+credits | Prerequisite: None
+•
+2022 batch | S1 | Foundation | DATA131 – Visualizing Data for Story Telling | L-T-P 1-0-2 | 
+2 credits | Prerequisite: None
+•
+2022 batch | S1 | Foundation | PSYC101/ECON101 – Introduction to Psychology/
+Introduction to Economics | L-T-P 2-1-0 | 3 credits | Prerequisite: None | Either/or: student 
+chooses ONE of the two
+•
+2022 batch | S1 | Program Core | DATA130 – Computational Thinking | L-T-P 2-0-2 | 3 
+credits | Prerequisite: None
+2022 batch – Semester 2 (total 24 credits; 30 contact hours/week = L 15 + T 1 + P 14)
+
+
+--- PAGE 17 ---
+ of 1837
+•
+2022 batch | S2 | University Core | UCOR203 – Leadership and Teamwork Skills | L-T-P 
+1-0-2 | 2 credits | Prerequisite: None
+•
+2022 batch | S2 | University Core | UCOR701 – Community Engagement & Service 
+Experience | L-T-P 0-0-0 | 1 credit | Prerequisite: None
+•
+2022 batch | S2 | University Core | UCOR106 – Learning to Learn | L-T-P 1-0-2 | 2 credits | 
+Prerequisite: None
+•
+2022 batch | S2 | Foundation | MATH202 – Probability Theory | L-T-P 2-1-0 | 3 credits | 
+Prerequisite: None
+•
+2022 batch | S2 | Foundation | MTSC211 – Sustainable Smart Materials | L-T-P 2-0-2 | 3 
+credits | Prerequisite: MTSC111 Materials for Smart Devices (S1)
+•
+2022 batch | S2 | Foundation | ENGL201 – Academic Writing | L-T-P 2-0-2 | 3 credits | 
+Prerequisite: UCOR102 Introduction to writing (S1)
+•
+2022 batch | S2 | Program Core | COMP201 – Data Structures | L-T-P 3-0-2 | 4 credits | 
+Prerequisite: None
+•
+2022 batch | S2 | Program Core | MATH205 – Statistics with R | L-T-P 2-0-2 | 3 credits | 
+Prerequisite: MATH202 Probability Theory (S2)
+•
+2022 batch | S2 | Program Honors | DATA201 – Foundations to Data Science | L-T-P 2-0-2 | 
+3 credits | Prerequisite: None
+2022 batch – Semester 3 (total 26 credits; 25 contact hours/week = L 17 + T 4 + P 4)
+•
+2022 batch | S3 | University Core | UCOR205 – Socio Cultural Perspectives on Indian Life-
+SPIL | L-T-P 2-1-0 | 3 credits | Prerequisite: None
+•
+2022 batch | S3 | University Core | UCOR201 – Introduction to Epistemology | L-T-P 1-1-0 | 
+2 credits | Prerequisite: None
+•
+2022 batch | S3 | Foundation | MTSC781 – Sustainable Cities and Communities | L-T-P 
+0-0-0 | 3 credits | Prerequisite: None
+•
+2022 batch | S3 | Foundation | MATH204 – Linear Algebra | L-T-P 2-1-0 | 3 credits | 
+Prerequisite: None
+•
+2022 batch | S3 | Program Core | COMP203 – Analysis of Algorithms | L-T-P 3-0-2 | 4 
+credits | Prerequisite: COMP201 Data Structures (S2)
+•
+2022 batch | S3 | Program Core | COMP202 – Theoretical Computer Science | L-T-P 3-1-0 | 
+4 credits | Prerequisite: None
+•
+2022 batch | S3 | Program Honors | DATA202 – Exploratory Data Analysis | L-T-P 2-0-2 | 3 
+credits | Prerequisite: DATA201 Foundations to Data Science (S2) AND MATH203 
+Probability and Statistics – NOT in this batch's plan
+•
+2022 batch | S3 | Open/Minor | (no code) – Minor/Open (#1 Course) | L-T-P 4-0-0 | 4 credits 
+| Prerequisite: None
+2022 batch – Semester 4 (total 28 credits; 28 contact hours/week = L 20 + T 2 + P 6)
+•
+2022 batch | S4 | University Core | UCOR210 – Critical Thinking | L-T-P 2-0-0 | 2 credits | 
+Prerequisite: None
+•
+2022 batch | S4 | Foundation | SLAD206 – Human Values in Work and Life | L-T-P 0-0-0 | 2 
+credits | Prerequisite: None
+•
+2022 batch | S4 | Foundation | SLAD207 – Foundation Seminar | L-T-P 0-0-0 | 1 credit | 
+Prerequisite: None
+•
+2022 batch | S4 | Program Core | COMP205 – Object Oriented Programming | L-T-P 2-0-2 | 
+3 credits | Prerequisite: None
+•
+2022 batch | S4 | Program Core | COMP204 – Digital Design and Computer Organization | 
+L-T-P 3-1-0 | 4 credits | Prerequisite: None
+•
+2022 batch | S4 | Program Core | COMP301 – Artificial Intelligence | L-T-P 3-0-2 | 4 credits | 
+Prerequisite: None
+
+
+--- PAGE 18 ---
+ of 1937
+•
+2022 batch | S4 | Program Core | COMP209 – Databases Management | L-T-P 3-0-2 | 4 
+credits | Prerequisite: None
+•
+2022 batch | S4 | Program Honors | MATH301 – Optimization Techniques for Data Science | 
+L-T-P 3-1-0 | 4 credits | Prerequisite: MATH201 Calculus (S1)
+•
+2022 batch | S4 | Open/Minor | (no code) – Minor/Open (#2 Course) | L-T-P 4-0-0 | 4 credits 
+| Prerequisite: None
+2022 batch – Semester 5 (total 23 credits; 28 contact hours/week = L 14 + T 0 + P 14)
+•
+2022 batch | S5 | Program Core | COMP208 – Networks | L-T-P 3-0-2 | 4 credits | 
+Prerequisite: None
+•
+2022 batch | S5 | Program Core | COMP207 – Operating Systems | L-T-P 2-0-2 | 3 credits | 
+Prerequisite: None
+•
+2022 batch | S5 | Program Honors | DATA301 – Machine Learning | L-T-P 2-0-4 | 4 credits | 
+Prerequisite: DATA202 Exploratory Data Analysis (S3) AND MATH301 Optimization 
+Techniques for Data Science (S4)
+•
+2022 batch | S5 | Program Honors | DATA207 – Human Centric AI | L-T-P 1-0-2 | 2 credits | 
+Prerequisite: COMP210 (course not found anywhere in the workbook) – NOT in this batch's 
+plan OR COMP301 Artificial Intelligence (S4)
+•
+2022 batch | S5 | Specialization Track | SPT-Course #1-Probabilistic Graph Models LTP: 
+3-0-2 /Web Framework LTP: 2-0-4 | 4 credits | see Part A6 for both track options and 
+prerequisites
+•
+2022 batch | S5 | Open/Minor | (no code) – Minor/Open (#3 Course) | L-T-P 4-0-0 | 4 credits 
+| Prerequisite: None
+•
+2022 batch | S5 | Internship/Capstone Project | DATA801 – Summer Training/Internship | L-
+T-P 0-0-0 | 2 credits | Prerequisite: None
+2022 batch – Semester 6 (total 23 credits; 25 contact hours/week = L 15 + T 0 + P 10)
+•
+2022 batch | S6 | Foundation | LANG101 – Language | L-T-P 0-0-0 | 3 credits | Prerequisite: 
+None
+•
+2022 batch | S6 | Program Core | COMP206 – Microprocessors and Computer Architecture | 
+L-T-P 3-0-2 | 4 credits | Prerequisite: COMP204 Digital Design and Computer Organization 
+(S4) AND COMP207 Operating Systems (S5)
+•
+2022 batch | S6 | Program Honors | DATA302 – Deep Learning | L-T-P 2-0-4 | 4 credits | 
+Prerequisite: DATA301 Machine Learning (S5)
+•
+2022 batch | S6 | Specialization Track | SPT-Course #2 (Advanced Visualization and 
+Storytelling/Big Data Framework) | 4 credits | see Part A6 for both track options and 
+prerequisites
+•
+2022 batch | S6 | Open/Minor | (no code) – Minor/Open (#4, #5 Courses) | L-T-P 8-0-0 | 8 
+credits | Prerequisite: None | = 2 separate Minor/Open courses of 4 credits each
+2022 batch – Semester 7 (total 22 credits; 26 contact hours/week = L 10 + T 0 + P 16)
+•
+2022 batch | S7 | Program Core | COMP302 – Internet of Things | L-T-P 0-0-4 | 2 credits | 
+Prerequisite: COMP132 Design Workshop (S1) AND COMP201 Data Structures (S2) AND 
+COMP206 Microprocessors and Computer Architecture (S6) AND COMP208 Networks 
+(S5) AND COMP301 Artificial Intelligence (S4)
+•
+2022 batch | S7 | Specialization Track | SPT-Course #3 (Natural Language Processing / 
+Software Architecture and Deployments) | 4 credits | see Part A6 for both track options and 
+prerequisites
+•
+2022 batch | S7 | Specialization Track | SPT-Course #4 (Multi Modal Learning / Cloud 
+Computing) | 4 credits | see Part A6 for both track options and prerequisites
+
+
+--- PAGE 19 ---
+ of 2037
+•
+2022 batch | S7 | Specialization Track | SPT-Course #5 (Reinforcement Learning/ Cognitive 
+Computing) | 4 credits | see Part A6 for both track options and prerequisites
+•
+2022 batch | S7 | Open/Minor | (no code) – Minor (#6 Course) | L-T-P 4-0-0 | 4 credits | 
+Prerequisite: None
+•
+2022 batch | S7 | Internship/Capstone Project | DATA802 – Interdisciplinary Project | L-T-P 
+0-0-0 | 4 credits | Prerequisite: None
+2022 batch – Semester 8 (total 12 credits; 0 contact hours/week = L 0 + T 0 + P 0)
+•
+2022 batch | S8 | Internship/Capstone Project | DATA803 – Capstone Project/Industrial 
+Internship | L-T-P 0-0-0 | 12 credits | Prerequisite: None
+2022 batch – credits per basket (from the semester plan)
+•
+2022 batch | B1 University Core: 18 credits
+•
+2022 batch | B2 Foundation: 34 credits
+•
+2022 batch | B3 Program Core: 46 credits
+•
+2022 batch | B4 Program Honors: 20 credits
+•
+2022 batch | B5 Specialization Track: 20 credits
+•
+2022 batch | B6 Open/Minor: 24 credits
+•
+2022 batch | B7 Internship/Capstone Project: 18 credits
+•
+2022 batch | TOTAL: 180 credits
+2023 batch – full semester plan
+2023 batch – Semester 1 (total 19 credits; 26 contact hours/week = L 10 + T 2 + P 14)
+•
+2023 batch | S1 | University Core | UCOR103 – Communication Skills | L-T-P 1-0-2 | 2 
+credits | Prerequisite: None
+•
+2023 batch | S1 | University Core | UCOR104 – Problem Solving with Design Thinking | L-
+T-P 1-0-2 | 2 credits | Prerequisite: None
+•
+2023 batch | S1 | University Core | UCOR102 – Introduction to writing | L-T-P 1-0-2 | 2 
+credits | Prerequisite: None
+•
+2023 batch | S1 | Foundation | MATH202 – Probability Theory | L-T-P 2-1-0 | 3 credits | 
+Prerequisite: None
+•
+2023 batch | S1 | Foundation | COMP132 – Design Workshop | L-T-P 0-0-4 | 2 credits | 
+Prerequisite: None
+•
+2023 batch | S1 | Foundation | MTSC111 – Materials for Smart Devices | L-T-P 2-0-2 | 3 
+credits | Prerequisite: None
+•
+2023 batch | S1 | Foundation | PSYC101/ECON101 – Introduction to Psychology/
+Introduction to Economics | L-T-P 2-1-0 | 3 credits | Prerequisite: None | Either/or: student 
+chooses ONE of the two
+•
+2023 batch | S1 | Foundation | DATA131 – Visualizing Data for Story Telling | L-T-P 1-0-2 | 
+2 credits | Prerequisite: None
+2023 batch – Semester 2 (total 24 credits; 30 contact hours/week = L 15 + T 1 + P 14)
+•
+2023 batch | S2 | University Core | UCOR203 – Leadership and Teamwork Skills | L-T-P 
+1-0-2 | 2 credits | Prerequisite: None
+•
+2023 batch | S2 | University Core | UCOR701 – Community Engagement & Service 
+Experience | L-T-P 0-0-0 | 1 credit | Prerequisite: None
+•
+2023 batch | S2 | University Core | UCOR106 – Learning to Learn | L-T-P 1-0-2 | 2 credits | 
+Prerequisite: None
+•
+2023 batch | S2 | Foundation | MATH201 – Calculus | L-T-P 2-1-0 | 3 credits | Prerequisite: 
+None
+
+
+--- PAGE 20 ---
+ of 2137
+•
+2023 batch | S2 | Foundation | MTSC211 – Sustainable Smart Materials | L-T-P 2-0-2 | 3 
+credits | Prerequisite: MTSC111 Materials for Smart Devices (S1)
+•
+2023 batch | S2 | Foundation | ENGL201 – Academic Writing | L-T-P 2-0-2 | 3 credits | 
+Prerequisite: UCOR102 Introduction to writing (S1)
+•
+2023 batch | S2 | Program Core | COMP201 – Data Structures | L-T-P 3-0-2 | 4 credits | 
+Prerequisite: None
+•
+2023 batch | S2 | Program Core | MATH205 – Statistics with R | L-T-P 2-0-2 | 3 credits | 
+Prerequisite: MATH202 Probability Theory (S1)
+•
+2023 batch | S2 | Program Honors | DATA201 – Foundations to Data Science | L-T-P 2-0-2 | 
+3 credits | Prerequisite: None
+2023 batch – Semester 3 (total 29 credits; 29 contact hours/week = L 19 + T 4 + P 6)
+•
+2023 batch | S3 | University Core | UCOR205 – Socio Cultural Perspectives on Indian Life-
+SPIL | L-T-P 2-1-0 | 3 credits | Prerequisite: None
+•
+2023 batch | S3 | University Core | UCOR201 – Introduction to Epistemology | L-T-P 1-1-0 | 
+2 credits | Prerequisite: None
+•
+2023 batch | S3 | Foundation | MTSC781 – Sustainable Cities and Communities | L-T-P 
+0-0-0 | 3 credits | Prerequisite: None
+•
+2023 batch | S3 | Foundation | MATH204 – Linear Algebra | L-T-P 2-1-0 | 3 credits | 
+Prerequisite: None
+•
+2023 batch | S3 | Program Core | COMP203 – Analysis of Algorithms | L-T-P 3-0-2 | 4 
+credits | Prerequisite: COMP201 Data Structures (S2)
+•
+2023 batch | S3 | Program Core | COMP202 – Theoretical Computer Science | L-T-P 3-1-0 | 
+4 credits | Prerequisite: None
+•
+2023 batch | S3 | Program Core | MATH207 – Research Methodology | L-T-P 2-0-2 | 3 
+credits | Prerequisite: None
+•
+2023 batch | S3 | Program Honors | DATA202 – Exploratory Data Analysis | L-T-P 2-0-2 | 3 
+credits | Prerequisite: DATA201 Foundations to Data Science (S2) AND MATH203 
+Probability and Statistics – NOT in this batch's plan
+•
+2023 batch | S3 | Open/Minor | (no code) – Minor/Open (#1 Course) | L-T-P 4-0-0 | 4 credits 
+| Prerequisite: None
+2023 batch – Semester 4 (total 28 credits; 28 contact hours/week = L 20 + T 2 + P 6)
+•
+2023 batch | S4 | University Core | UCOR210 – Critical Thinking | L-T-P 2-0-0 | 2 credits | 
+Prerequisite: None
+•
+2023 batch | S4 | Foundation | SLAD206 – Human Values in Work and Life | L-T-P 0-0-0 | 2 
+credits | Prerequisite: None
+•
+2023 batch | S4 | Foundation | SLAD207 – Foundation Seminar | L-T-P 0-0-0 | 1 credit | 
+Prerequisite: None
+•
+2023 batch | S4 | Program Core | COMP209 – Databases Management | L-T-P 3-0-2 | 4 
+credits | Prerequisite: None
+•
+2023 batch | S4 | Program Core | COMP204 – Digital Design and Computer Organization | 
+L-T-P 3-1-0 | 4 credits | Prerequisite: None
+•
+2023 batch | S4 | Program Core | COMP301 – Artificial Intelligence | L-T-P 3-0-2 | 4 credits | 
+Prerequisite: None
+•
+2023 batch | S4 | Program Core | COMP205 – Object Oriented Programming | L-T-P 2-0-2 | 
+3 credits | Prerequisite: None
+•
+2023 batch | S4 | Program Honors | MATH301 – Optimization Techniques for Data Science | 
+L-T-P 3-1-0 | 4 credits | Prerequisite: MATH201 Calculus (S2)
+•
+2023 batch | S4 | Open/Minor | (no code) – Minor/Open (#2 Course) | L-T-P 4-0-0 | 4 credits 
+| Prerequisite: None
+
+
+--- PAGE 21 ---
+ of 2237
+2023 batch – Semester 5 (total 28 credits; 30 contact hours/week = L 16 + T 0 + P 14)
+•
+2023 batch | S5 | Foundation | LANG101 – Language | L-T-P 0-0-0 | 3 credits | Prerequisite: 
+None
+•
+2023 batch | S5 | Program Core | COMP208 – Networks | L-T-P 3-0-2 | 4 credits | 
+Prerequisite: None
+•
+2023 batch | S5 | Program Core | COMP207 – Operating Systems | L-T-P 2-0-2 | 3 credits | 
+Prerequisite: None
+•
+2023 batch | S5 | Program Core | COMP206 – Microprocessors and Computer Architecture | 
+L-T-P 3-0-2 | 4 credits | Prerequisite: COMP204 Digital Design and Computer Organization 
+(S4) AND COMP207 Operating Systems (S5)
+•
+2023 batch | S5 | Program Honors | DATA301 – Machine Learning | L-T-P 2-0-4 | 4 credits | 
+Prerequisite: DATA202 Exploratory Data Analysis (S3) AND MATH301 Optimization 
+Techniques for Data Science (S4)
+•
+2023 batch | S5 | Specialization Track | SPT-Course #1-Probabilistic Graph Models LTP: 
+3-0-2 /Web Framework LTP: 2-0-4 | 4 credits | see Part A6 for both track options and 
+prerequisites
+•
+2023 batch | S5 | Open/Minor | (no code) – Minor/Open (#3 Course) | L-T-P 4-0-0 | 4 credits 
+| Prerequisite: None
+•
+2023 batch | S5 | Internship/Capstone Project | DATA801 – Summer Training/Internship | L-
+T-P 0-0-0 | 2 credits | Prerequisite: None
+2023 batch – Semester 6 (total 20 credits; 27 contact hours/week = L 13 + T 0 + P 14)
+•
+2023 batch | S6 | Program Core | COMP302 – Internet of Things | L-T-P 0-0-4 | 2 credits | 
+Prerequisite: COMP132 Design Workshop (S1) AND COMP201 Data Structures (S2) AND 
+COMP206 Microprocessors and Computer Architecture (S5) AND COMP208 Networks 
+(S5) AND COMP301 Artificial Intelligence (S4)
+•
+2023 batch | S6 | Program Honors | DATA302 – Deep Learning | L-T-P 2-0-4 | 4 credits | 
+Prerequisite: DATA301 Machine Learning (S5) AND MATH201 Calculus (S2)
+•
+2023 batch | S6 | Program Honors | DATA303 – MLOps & Model Deployment | L-T-P 1-0-2 
+| 2 credits | Prerequisite: DATA301 Machine Learning (S5) AND COMP208 Networks (S5)
+•
+2023 batch | S6 | Specialization Track | SPT-Course #2-Reinforcement Learning/Big Data 
+Framework | 4 credits | see Part A6 for both track options and prerequisites
+•
+2023 batch | S6 | Open/Minor | (no code) – Minor/Open (#4, #5 Courses) | L-T-P 8-0-0 | 8 
+credits | Prerequisite: None | = 2 separate Minor/Open courses of 4 credits each
+2023 batch – Semester 7 (total 20 credits; 16 contact hours/week = L 8 + T 0 + P 8)
+•
+2023 batch | S7 | Specialization Track | SPT-Course #3 (Natural Language Processing / 
+Natural Language Processing) | 4 credits | see Part A6 for both track options and 
+prerequisites
+•
+2023 batch | S7 | Specialization Track | SPT-Course #4 (Multi Modal Learning/ Software 
+Architecture and Deployments) | 4 credits | see Part A6 for both track options and 
+prerequisites
+•
+2023 batch | S7 | Specialization Track | SPT-Course #5 Advanced Topics in Deep Learning 
+LTP: 3-0-2/ Cloud &Cognitive Computing LTP: 2-0-4 | 4 credits | see Part A6 for both track 
+options and prerequisites
+•
+2023 batch | S7 | Open/Minor | (no code) – Minor (#6 Course) | L-T-P 4-0-0 | 4 credits | 
+Prerequisite: None
+•
+2023 batch | S7 | Internship/Capstone Project | DATA802 – Interdisciplinary Project | L-T-P 
+0-0-0 | 4 credits | Prerequisite: None
+2023 batch – Semester 8 (total 12 credits; 0 contact hours/week = L 0 + T 0 + P 0)
+
+
+--- PAGE 22 ---
+ of 2337
+•
+2023 batch | S8 | Internship/Capstone Project | DATA803 – Capstone Project/Industrial 
+Internship | L-T-P 0-0-0 | 12 credits | Prerequisite: None
+2023 batch – credits per basket (from the semester plan)
+•
+2023 batch | B1 University Core: 18 credits
+•
+2023 batch | B2 Foundation: 34 credits
+•
+2023 batch | B3 Program Core: 46 credits
+•
+2023 batch | B4 Program Honors: 20 credits
+•
+2023 batch | B5 Specialization Track: 20 credits
+•
+2023 batch | B6 Open/Minor: 24 credits
+•
+2023 batch | B7 Internship/Capstone Project: 18 credits
+•
+2023 batch | TOTAL: 180 credits
+2024 batch – full semester plan
+2024 batch – Semester 1 (total 21 credits; 29 contact hours/week = L 11 + T 2 + P 16)
+•
+2024 batch | S1 | University Core | UCOR106 – Learning to Learn | L-T-P 1-0-2 | 2 credits | 
+Prerequisite: None
+•
+2024 batch | S1 | University Core | UCOR104 – Problem Solving with Design Thinking | L-
+T-P 1-0-2 | 2 credits | Prerequisite: None
+•
+2024 batch | S1 | University Core | UCOR102 – Introduction to writing | L-T-P 1-0-2 | 2 
+credits | Prerequisite: None
+•
+2024 batch | S1 | Foundation | MATH203 – Probability and Statistics | L-T-P 3-1-0 | 4 credits 
+| Prerequisite: None
+•
+2024 batch | S1 | Foundation | COMP132 – Design Workshop | L-T-P 0-0-4 | 2 credits | 
+Prerequisite: None
+•
+2024 batch | S1 | Foundation | MTSC111 – Materials for Smart Devices | L-T-P 2-0-2 | 3 
+credits | Prerequisite: None
+•
+2024 batch | S1 | Foundation | PSYC101/ECON101 – Introduction to Psychology/
+Introduction to Economics | L-T-P 2-1-0 | 3 credits | Prerequisite: None | Either/or: student 
+chooses ONE of the two
+•
+2024 batch | S1 | Program Core | DATA103 – Programming in Python | L-T-P 1-0-4 | 3 
+credits | Prerequisite: None
+2024 batch – Semester 2 (total 22 credits; 28 contact hours/week = L 13 + T 1 + P 14)
+•
+2024 batch | S2 | University Core | UCOR105 – Communication and Leadership Skills | L-
+T-P 2-0-2 | 3 credits | Prerequisite: None
+•
+2024 batch | S2 | University Core | UCOR701 – Community Engagement & Service 
+Experience | L-T-P 0-0-0 | 1 credit | Prerequisite: None
+•
+2024 batch | S2 | Foundation | MATH201 – Calculus | L-T-P 2-1-0 | 3 credits | Prerequisite: 
+None
+•
+2024 batch | S2 | Foundation | MTSC211 – Sustainable Smart Materials | L-T-P 2-0-2 | 3 
+credits | Prerequisite: MTSC111 Materials for Smart Devices (S1)
+•
+2024 batch | S2 | Foundation | ENGL210 – Academic Writing | L-T-P 1-0-2 | 2 credits | 
+Prerequisite: UCOR102 Introduction to writing (S1)
+•
+2024 batch | S2 | Program Core | COMP201 – Data Structures | L-T-P 3-0-2 | 4 credits | 
+Prerequisite: None
+•
+2024 batch | S2 | Program Core | DATA132 – Data visualization and Storytelling | L-T-P 
+1-0-4 | 3 credits | Prerequisite: DATA103 Programming in Python (S1)
+•
+2024 batch | S2 | Program Honors | DATA201 – Foundations to Data Science | L-T-P 2-0-2 | 
+3 credits | Prerequisite: None
+
+
+--- PAGE 23 ---
+ of 2437
+2024 batch – Semester 3 (total 28 credits; 29 contact hours/week = L 17 + T 4 + P 8)
+•
+2024 batch | S3 | University Core | UCOR205 – Socio Cultural Perspectives on Indian Life-
+SPIL | L-T-P 2-1-0 | 3 credits | Prerequisite: None
+•
+2024 batch | S3 | University Core | LAWS101 – Fundamentals of Indian Constitution and 
+Human Rights | L-T-P 1-1-0 | 2 credits | Prerequisite: None
+•
+2024 batch | S3 | Foundation | MTSC781 – Sustainable Cities and Communities | L-T-P 
+0-0-0 | 3 credits | Prerequisite: None
+•
+2024 batch | S3 | Foundation | MATH204 – Linear Algebra | L-T-P 2-1-0 | 3 credits | 
+Prerequisite: None
+•
+2024 batch | S3 | Program Core | COMP203 – Analysis of Algorithms | L-T-P 3-0-2 | 4 
+credits | Prerequisite: COMP201 Data Structures (S2)
+•
+2024 batch | S3 | Program Core | COMP202 – Theoretical Computer Science | L-T-P 3-1-0 | 
+4 credits | Prerequisite: None
+•
+2024 batch | S3 | Program Honors | DATA202 – Exploratory Data Analysis | L-T-P 2-0-2 | 3 
+credits | Prerequisite: DATA201 Foundations to Data Science (S2) AND MATH203 
+Probability and Statistics (S1)
+•
+2024 batch | S3 | Program Honors | MATH206 – Advanced Statistical Analysis and Research 
+Methods with R | L-T-P 0-0-4 | 2 credits | Prerequisite: MATH203 Probability and Statistics 
+(S1)
+•
+2024 batch | S3 | Open/Minor | (no code) – Minor/Open (#1 Course) | L-T-P 4-0-0 | 4 credits 
+| Prerequisite: None
+2024 batch – Semester 4 (total 28 credits; 29 contact hours/week = L 20 + T 3 + P 6)
+•
+2024 batch | S4 | University Core | UCOR310 – Critical Thinking | L-T-P 2-1-0 | 3 credits | 
+Prerequisite: None
+•
+2024 batch | S4 | Foundation | SLAD206 – Human Values in Work and Life | L-T-P 0-0-0 | 2 
+credits | Prerequisite: None
+•
+2024 batch | S4 | Foundation | COMP403 – Cloud Computing | L-T-P 2-0-2 | 3 credits | 
+Prerequisite: None
+•
+2024 batch | S4 | Program Core | COMP209 – Databases Management | L-T-P 3-0-2 | 4 
+credits | Prerequisite: None
+•
+2024 batch | S4 | Program Core | COMP204 – Digital Design and Computer Organization | 
+L-T-P 3-1-0 | 4 credits | Prerequisite: None
+•
+2024 batch | S4 | Program Core | COMP301 – Artificial Intelligence | L-T-P 3-0-2 | 4 credits | 
+Prerequisite: None
+•
+2024 batch | S4 | Program Honors | MATH301 – Optimization Techniques for Data Science | 
+L-T-P 3-1-0 | 4 credits | Prerequisite: None
+•
+2024 batch | S4 | Open/Minor | (no code) – Minor/Open (#2 Course) | L-T-P 4-0-0 | 4 credits 
+| Prerequisite: None
+2024 batch – Semester 5 (total 24 credits; 29 contact hours/week = L 15 + T 0 + P 14)
+•
+2024 batch | S5 | Program Core | COMP208 – Networks | L-T-P 3-0-2 | 4 credits | 
+Prerequisite: None
+•
+2024 batch | S5 | Program Core | COMP207 – Operating Systems | L-T-P 2-0-2 | 3 credits | 
+Prerequisite: None
+•
+2024 batch | S5 | Program Core | COMP205 – Object Oriented Programming | L-T-P 2-0-2 | 
+3 credits | Prerequisite: None
+•
+2024 batch | S5 | Program Honors | DATA301 – Machine Learning | L-T-P 2-0-4 | 4 credits | 
+Prerequisite: DATA202 Exploratory Data Analysis (S3) AND MATH301 Optimization 
+Techniques for Data Science (S4)
+
+
+--- PAGE 24 ---
+ of 2537
+•
+2024 batch | S5 | Specialization Track | SPT-Course #1-Probabilistic Graph Models LTP: 
+3-0-2 /Web Framework LTP: 2-0-4 | 4 credits | see Part A6 for both track options and 
+prerequisites
+•
+2024 batch | S5 | Open/Minor | (no code) – Minor/Open (#3 Course) | L-T-P 4-0-0 | 4 credits 
+| Prerequisite: None
+•
+2024 batch | S5 | Internship/Capstone Project | DATA801 – Summer Training/Internship | L-
+T-P 0-0-0 | 2 credits | Prerequisite: None
+2024 batch – Semester 6 (total 23 credits; 25 contact hours/week = L 15 + T 0 + P 10)
+•
+2024 batch | S6 | Foundation | LANG101 – Kannada/ Language | L-T-P 0-0-0 | 3 credits | 
+Prerequisite: None
+•
+2024 batch | S6 | Program Core | COMP206 – Microprocessors and Computer Architecture | 
+L-T-P 3-0-2 | 4 credits | Prerequisite: COMP204 Digital Design and Computer Organization 
+(S4) AND COMP207 Operating Systems (S5)
+•
+2024 batch | S6 | Program Honors | DATA302 – Deep Learning | L-T-P 2-0-4 | 4 credits | 
+Prerequisite: DATA301 Machine Learning (S5)
+•
+2024 batch | S6 | Specialization Track | SPT-Course #2-Multi Modal Learning/Big Data 
+Framework | 4 credits | see Part A6 for both track options and prerequisites
+•
+2024 batch | S6 | Open/Minor | (no code) – Minor/Open (#4, #5 Courses) | L-T-P 8-0-0 | 8 
+credits | Prerequisite: None | = 2 separate Minor/Open courses of 4 credits each
+2024 batch – Semester 7 (total 22 credits; 26 contact hours/week = L 10 + T 0 + P 16)
+•
+2024 batch | S7 | Program Core | COMP302 – Internet of Things | L-T-P 0-0-4 | 2 credits | 
+Prerequisite: COMP132 Design Workshop (S1) AND COMP201 Data Structures (S2) AND 
+COMP206 Microprocessors and Computer Architecture (S6) AND COMP208 Networks 
+(S5) AND COMP301 Artificial Intelligence (S4)
+•
+2024 batch | S7 | Specialization Track | SPT-Course #3 (Natural Language Processing / 
+Natural Language Processing) | 4 credits | see Part A6 for both track options and 
+prerequisites
+•
+2024 batch | S7 | Specialization Track | SPT-Course #4 (Advanced Topics in Deep Learning 
+LTP: 3-0-2/ Software Architecture and Deployments LTP: 2-0-4) | 4 credits | see Part A6 for 
+both track options and prerequisites
+•
+2024 batch | S7 | Specialization Track | SPT-Course #5 Reinforcement Learning/
+Reinforcement Learning | 4 credits | see Part A6 for both track options and prerequisites
+•
+2024 batch | S7 | Open/Minor | (no code) – Minor (#6 Course) | L-T-P 4-0-0 | 4 credits | 
+Prerequisite: None
+•
+2024 batch | S7 | Internship/Capstone Project | DATA802 – Interdisciplinary Project | L-T-P 
+0-0-0 | 4 credits | Prerequisite: None
+2024 batch – Semester 8 (total 12 credits; 0 contact hours/week = L 0 + T 0 + P 0)
+•
+2024 batch | S8 | Internship/Capstone Project | DATA803 – Capstone Project/Industrial 
+Internship | L-T-P 0-0-0 | 12 credits | Prerequisite: None
+2024 batch – credits per basket (from the semester plan)
+•
+2024 batch | B1 University Core: 18 credits
+•
+2024 batch | B2 Foundation: 34 credits
+•
+2024 batch | B3 Program Core: 46 credits
+•
+2024 batch | B4 Program Honors: 20 credits
+•
+2024 batch | B5 Specialization Track: 20 credits
+•
+2024 batch | B6 Open/Minor: 24 credits
+•
+2024 batch | B7 Internship/Capstone Project: 18 credits
+
+
+--- PAGE 25 ---
+ of 2637
+•
+2024 batch | TOTAL: 180 credits
+2025 batch – full semester plan
+2025 batch – Semester 1 (total 22 credits; 28 contact hours/week = L 13 + T 3 + P 12)
+•
+2025 batch | S1 | University Core | UCOR103 – Communication Skills | L-T-P 1-0-2 | 2 
+credits | Prerequisite: None
+•
+2025 batch | S1 | University Core | UCOR106 – Learning to Learn | L-T-P 1-0-2 | 2 credits | 
+Prerequisite: None
+•
+2025 batch | S1 | Foundation | MATH208 – Multivariate Calculus | L-T-P 3-1-0 | 4 credits | 
+Prerequisite: None
+•
+2025 batch | S1 | Foundation | MTSC111 – Materials for Smart Devices | L-T-P 2-0-2 | 3 
+credits | Prerequisite: None
+•
+2025 batch | S1 | Program Core | DATA103 – Programming in Python | L-T-P 1-0-4 | 3 
+credits | Prerequisite: None
+•
+2025 batch | S1 | Program Core | COMP204 – Digital Design and Computer Organization | 
+L-T-P 3-1-0 | 4 credits | Prerequisite: None
+•
+2025 batch | S1 | Open/Minor | MGMT101 – Essentials of Business Management | L-T-P 
+1-1-0 | 2 credits | Prerequisite: None
+•
+2025 batch | S1 | Open/Minor | PSCY102/ECON105 – Introduction to Psychology/
+Principles of Economics | L-T-P 1-0-2 | 2 credits | Prerequisite: None | Either/or: student 
+chooses ONE of the two
+2025 batch – Semester 2 (total 25 credits; 29 contact hours/week = L 13 + T 2 + P 14)
+•
+2025 batch | S2 | University Core | UCOR111 – Environmental Studies and Sustainability | 
+L-T-P 0-0-0 | 2 credits | Prerequisite: None
+•
+2025 batch | S2 | University Core | LAWS101 – Fundamentals of Indian Constitution and 
+Human Rights | L-T-P 1-1-0 | 2 credits | Prerequisite: None
+•
+2025 batch | S2 | University Core | UCOR701 – Community Engagement & Service 
+Experience | L-T-P 0-0-0 | 1 credit | Prerequisite: None
+•
+2025 batch | S2 | Foundation | MATH203 – Probability and Statistics | L-T-P 3-1-0 | 4 credits 
+| Prerequisite: None
+•
+2025 batch | S2 | Foundation | MTSC211 – Sustainable Smart Materials | L-T-P 2-0-2 | 3 
+credits | Prerequisite: MTSC111 Materials for Smart Devices (S1)
+•
+2025 batch | S2 | Foundation | COMP132 – Design Workshop | L-T-P 0-0-4 | 2 credits | 
+Prerequisite: None
+•
+2025 batch | S2 | Program Core | COMP201 – Data Structures | L-T-P 3-0-2 | 4 credits | 
+Prerequisite: None
+•
+2025 batch | S2 | Program Core | DATA132 – Data Visualization and Storytelling | L-T-P 
+1-0-4 | 3 credits | Prerequisite: DATA103 Programming in Python (S1)
+•
+2025 batch | S2 | Program Core | COMP209 – Databases Management | L-T-P 3-0-2 | 4 
+credits | Prerequisite: None
+2025 batch – Semester 3 (total 25 credits; 26 contact hours/week = L 17 + T 3 + P 6)
+•
+2025 batch | S3 | University Core | UCOR207 – Analytical Academic Writing | L-T-P 2-1-0 | 
+3 credits | Prerequisite: None
+•
+2025 batch | S3 | University Core | SLAD206 – Human Values in Work and Life | L-T-P 
+0-0-0 | 2 credits | Prerequisite: None
+•
+2025 batch | S3 | Foundation | MATH209 – Linear Algebra | L-T-P 3-1-0 | 4 credits | 
+Prerequisite: None
+
+
+--- PAGE 26 ---
+ of 2737
+•
+2025 batch | S3 | Program Core | COMP202 – Theoretical Computer Science | L-T-P 3-1-0 | 
+4 credits | Prerequisite: None
+•
+2025 batch | S3 | Program Core | COMP203 – Analysis of Algorithms | L-T-P 3-0-2 | 4 
+credits | Prerequisite: COMP201 Data Structures (S2)
+•
+2025 batch | S3 | Program Honors | DATA209 – Advanced Exploratory Data Analysis | L-T-
+P 2-0-4 | 4 credits | Prerequisite: DATA132 Data visualization and Storytelling (S2) AND 
+MATH203 Probability and Statistics (S2)
+•
+2025 batch | S3 | Open/Minor | (no code) – Minor/Open (1 Course) | L-T-P 4-0-0 | 4 credits | 
+Prerequisite: None
+2025 batch – Semester 4 (total 23 credits; 28 contact hours/week = L 16 + T 2 + P 10)
+•
+2025 batch | S4 | University Core | UCOR205 – Socio-Cultural Perspectives on Indian Life | 
+L-T-P 2-1-0 | 3 credits | Prerequisite: None
+•
+2025 batch | S4 | Foundation | MATH206 – Advanced Statistical Analysis and Research 
+Methods with R | L-T-P 0-0-4 | 2 credits | Prerequisite: MATH203 Probability and Statistics 
+(S2)
+•
+2025 batch | S4 | Program Core | COMP207 – Operating Systems | L-T-P 2-0-2 | 3 credits | 
+Prerequisite: None
+•
+2025 batch | S4 | Program Core | COMP301 – Artificial Intelligence | L-T-P 3-0-2 | 4 credits | 
+Prerequisite: None
+•
+2025 batch | S4 | Program Core | COMP205 – Object Oriented Programming | L-T-P 2-0-2 | 
+3 credits | Prerequisite: None
+•
+2025 batch | S4 | Program Honors | MATH301 – Optimization Techniques for Data Science | 
+L-T-P 3-1-0 | 4 credits | Prerequisite: MATH201 Calculus – NOT in this batch's plan
+•
+2025 batch | S4 | Open/Minor | (no code) – Minor/Open (1 Course) | L-T-P 4-0-0 | 4 credits | 
+Prerequisite: None
+2025 batch – Semester 5 (total 27 credits; 25 contact hours/week = L 16 + T 1 + P 8)
+•
+2025 batch | S5 | University Core | UCOR310 – Critical Thinking | L-T-P 2-1-0 | 3 credits | 
+Prerequisite: None
+•
+2025 batch | S5 | University Core | UCOR104 – Problem Solving with Design Thinking | L-
+T-P 1-0-2 | 2 credits | Prerequisite: None
+•
+2025 batch | S5 | Program Core | COMP206 – Microprocessors and Computer Architecture | 
+L-T-P 3-0-2 | 4 credits | Prerequisite: COMP204 Digital Design and Computer Organization 
+(S1) AND COMP207 Operating Systems (S4)
+•
+2025 batch | S5 | Program Honors | DATA301 – Machine Learning | L-T-P 2-0-4 | 4 credits | 
+Prerequisite: DATA206 (course not found anywhere in the workbook) – NOT in this batch's 
+plan AND MATH301 Optimization Techniques for Data Science (S4)
+•
+2025 batch | S5 | Specialization Track | SPT-Course #1-Probabilistic Graph Models LTP: 
+3-0-2/Web Framework LTP: 2-0-4 | 4 credits | see Part A6 for both track options and 
+prerequisites
+•
+2025 batch | S5 | Open/Minor | (no code) – Minor/Open (2 Courses) | L-T-P 8-0-0 | 8 credits 
+| Prerequisite: None
+•
+2025 batch | S5 | Internship/Capstone Project | DATA801 – Summer Training/Internship | L-
+T-P 0-0-0 | 2 credits | Prerequisite: None
+2025 batch – Semester 6 (total 22 credits; 27 contact hours/week = L 12 + T 1 + P 14)
+•
+2025 batch | S6 | University Core | UCOR215 – Humanistic Leadership Development | L-T-
+P 1-1-0 | 2 credits | Prerequisite: None
+•
+2025 batch | S6 | Foundation | TBA – Language | L-T-P 0-0-0 | 2 credits | Prerequisite: None
+
+
+--- PAGE 27 ---
+ of 2837
+•
+2025 batch | S6 | Program Core | COMP208 – Networks | L-T-P 3-0-2 | 4 credits | 
+Prerequisite: None
+•
+2025 batch | S6 | Program Core | COMP302 – Internet of Things | L-T-P 0-0-4 | 2 credits | 
+Prerequisite: COMP132 Design Workshop (S2) AND COMP201 Data Structures (S2) AND 
+COMP206 Microprocessors and Computer Architecture (S5) AND COMP208 Networks 
+(S6) AND COMP301 Artificial Intelligence (S4)
+•
+2025 batch | S6 | Program Honors | DATA302 – Deep Learning | L-T-P 2-0-4 | 4 credits | 
+Prerequisite: DATA301 Machine Learning (S5)
+•
+2025 batch | S6 | Specialization Track | SPT-Course #2-Multi Modal Learning/Big Data 
+Framework | 4 credits | see Part A6 for both track options and prerequisites
+•
+2025 batch | S6 | Open/Minor | (no code) – Minor/Open (1 Course) | L-T-P 4-0-0 | 4 credits | 
+Prerequisite: None
+2025 batch – Semester 7 (total 24 credits; 28 contact hours/week = L 12 + T 0 + P 16)
+•
+2025 batch | S7 | Program Honors | DATA403 – Natural Language Processing | L-T-P 2-0-4 | 
+4 credits | Prerequisite: DATA302 Deep Learning (S6)
+•
+2025 batch | S7 | Specialization Track | SPT-Course #3 (Image Processing and Computer 
+Vision/Cloud & Cognitive Computing) | 4 credits | see Part A6 for both track options and 
+prerequisites
+•
+2025 batch | S7 | Specialization Track | SPT-Course #4 (Advanced Topics in Deep Learning 
+LTP: 3-0-2/ Software Architecture and Deployments LTP: 2-0-4) | 4 credits | see Part A6 for 
+both track options and prerequisites
+•
+2025 batch | S7 | Specialization Track | SPT-Course #5 Reinforcement Learning/
+Reinforcement Learning | 4 credits | see Part A6 for both track options and prerequisites
+•
+2025 batch | S7 | Open/Minor | DATA802 – Inter-Desciplinary Project | L-T-P 0-0-0 | 4 
+credits | Prerequisite: None
+•
+2025 batch | S7 | Open/Minor | (no code) – Minor/Open (1 Course) | L-T-P 4-0-0 | 4 credits | 
+Prerequisite: None
+2025 batch – Semester 8 (total 12 credits; 0 contact hours/week = L 0 + T 0 + P 0)
+•
+2025 batch | S8 | Internship/Capstone Project | DATA803 – Capstone Project/ Industrial 
+Internship | L-T-P 0-0-0 | 12 credits | Prerequisite: None
+2025 batch – credits per basket (from the semester plan)
+•
+2025 batch | B1 University Core: 24 credits
+•
+2025 batch | B2 Foundation: 24 credits
+•
+2025 batch | B3 Program Core: 46 credits
+•
+2025 batch | B4 Program Honors: 20 credits
+•
+2025 batch | B5 Specialization Track: 20 credits
+•
+2025 batch | B6 Open/Minor: 32 credits
+•
+2025 batch | B7 Internship/Capstone Project: 14 credits
+•
+2025 batch | TOTAL: 180 credits
+2026 batch – full semester plan
+2026 batch – Semester 1 (total 23 credits; 28 contact hours/week = L 14 + T 4 + P 10)
+•
+2026 batch | S1 | University Core | UCOR107 – Communication Skills | L-T-P 2-0-2 | 3 
+credits | Prerequisite: None
+•
+2026 batch | S1 | University Core | UCOR106 – Learning to Learn | L-T-P 1-0-2 | 2 credits | 
+Prerequisite: None
+
+
+--- PAGE 28 ---
+ of 2937
+•
+2026 batch | S1 | Foundation | MATH208 – Multivariate Calculus | L-T-P 3-1-0 | 4 credits | 
+Prerequisite: None
+•
+2026 batch | S1 | Foundation | MTSC111 – Materials for Smart Devices | L-T-P 2-0-2 | 3 
+credits | Prerequisite: None
+•
+2026 batch | S1 | Program Core | DATA103 – Programming in Python | L-T-P 1-0-4 | 3 
+credits | Prerequisite: None
+•
+2026 batch | S1 | Program Core | COMP204 – Digital Design and Computer Organization | 
+L-T-P 3-1-0 | 4 credits | Prerequisite: None
+•
+2026 batch | S1 | Open/Minor | MGMT101 – Essentials of Business Management | L-T-P 
+1-1-0 | 2 credits | Prerequisite: None
+•
+2026 batch | S1 | Open/Minor | PSYC105/ECON106 – Introduction to Psychology/
+Principles of Economics | L-T-P 1-1-0 | 2 credits | Prerequisite: None | Either/or: student 
+chooses ONE of the two
+2026 batch – Semester 2 (total 26 credits; 30 contact hours/week = L 14 + T 2 + P 14)
+•
+2026 batch | S2 | University Core | UCOR111 – Environmental Studies and Sustainability | 
+L-T-P 0-0-0 | 2 credits | Prerequisite: None
+•
+2026 batch | S2 | University Core | LAWS101 – Fundamentals of Indian Constitution and 
+Human Rights | L-T-P 1-1-0 | 2 credits | Prerequisite: None
+•
+2026 batch | S2 | University Core | UCOR701 – Community Engagement & Service 
+Experience | L-T-P 0-0-0 | 1 credit | Prerequisite: None
+•
+2026 batch | S2 | Foundation | MATH203 – Probability and Statistics | L-T-P 3-1-0 | 4 credits 
+| Prerequisite: None
+•
+2026 batch | S2 | Foundation | MTSC211 – Sustainable Smart Materials | L-T-P 2-0-2 | 3 
+credits | Prerequisite: MTSC111 Materials for Smart Devices (S1)
+•
+2026 batch | S2 | Foundation | COMP133 – Design Workshop | L-T-P 1-0-4 | 3 credits | 
+Prerequisite: None
+•
+2026 batch | S2 | Program Core | COMP201 – Data Structures | L-T-P 3-0-2 | 4 credits | 
+Prerequisite: None
+•
+2026 batch | S2 | Program Core | DATA132 – Data Visualization and Storytelling | L-T-P 
+1-0-4 | 3 credits | Prerequisite: DATA103 Programming in Python (S1)
+•
+2026 batch | S2 | Program Core | COMP209 – Databases Management | L-T-P 3-0-2 | 4 
+credits | Prerequisite: None
+2026 batch – Semester 3 (total 20 credits; 23 contact hours/week = L 15 + T 2 + P 6)
+•
+2026 batch | S3 | Foundation | MATH209 – Linear Algebra | L-T-P 3-1-0 | 4 credits | 
+Prerequisite: None
+•
+2026 batch | S3 | Program Core | COMP202 – Theoretical Computer Science | L-T-P 3-1-0 | 
+4 credits | Prerequisite: None
+•
+2026 batch | S3 | Program Core | COMP203 – Analysis of Algorithms | L-T-P 3-0-2 | 4 
+credits | Prerequisite: COMP201 Data Structures (S2)
+•
+2026 batch | S3 | Program Honors | DATA209 – Advanced Exploratory Data Analysis | L-T-
+P 2-0-4 | 4 credits | Prerequisite: DATA132 Data visualization and Storytelling (S2) AND 
+MATH203 Probability and Statistics (S2)
+•
+2026 batch | S3 | Open/Minor | (no code) – Minor/Open (1 Course) | L-T-P 4-0-0 | 4 credits | 
+Prerequisite: None
+2026 batch – Semester 4 (total 25 credits; 30 contact hours/week = L 18 + T 2 + P 10)
+•
+2026 batch | S4 | University Core | UCOR205 – Socio-Cultural Perspectives on Indian Life | 
+L-T-P 2-1-0 | 3 credits | Prerequisite: None
+
+
+--- PAGE 29 ---
+ of 3037
+•
+2026 batch | S4 | Foundation | MATH210 – Advanced Statistical Analysis and Research 
+Methods | L-T-P 1-0-4 | 3 credits | Prerequisite: MATH203 Probability and Statistics (S2)
+•
+2026 batch | S4 | Program Core | COMP211 – Operating Systems | L-T-P 3-0-2 | 4 credits | 
+Prerequisite: None
+•
+2026 batch | S4 | Program Core | COMP301 – Artificial Intelligence | L-T-P 3-0-2 | 4 credits | 
+Prerequisite: None
+•
+2026 batch | S4 | Program Core | COMP205 – Object Oriented Programming | L-T-P 2-0-2 | 
+3 credits | Prerequisite: None
+•
+2026 batch | S4 | Program Honors | MATH301 – Optimization Techniques for Data Science | 
+L-T-P 3-1-0 | 4 credits | Prerequisite: MATH201 Calculus – NOT in this batch's plan
+•
+2026 batch | S4 | Open/Minor | (no code) – Minor/Open (1 Course) | L-T-P 4-0-0 | 4 credits | 
+Prerequisite: None
+2026 batch – Semester 5 (total 27 credits; 31 contact hours/week = L 18 + T 1 + P 12)
+•
+2026 batch | S5 | University Core | UCOR310 – Critical Thinking | L-T-P 2-1-0 | 3 credits | 
+Prerequisite: None
+•
+2026 batch | S5 | University Core | UCOR104 – Problem Solving with Design Thinking | L-
+T-P 1-0-2 | 2 credits | Prerequisite: None
+•
+2026 batch | S5 | Program Core | COMP206 – Microprocessors and Computer Architecture | 
+L-T-P 3-0-2 | 4 credits | Prerequisite: COMP204 Digital Design and Computer Organization 
+(S1) AND COMP207 Operating Systems – NOT in this batch's plan
+•
+2026 batch | S5 | Program Honors | DATA301 – Machine Learning | L-T-P 2-0-4 | 4 credits | 
+Prerequisite: DATA206 (course not found anywhere in the workbook) – NOT in this batch's 
+plan AND MATH301 Optimization Techniques for Data Science (S4)
+•
+2026 batch | S5 | Electives | (no code) – Elective 1 | L-T-P 2-0-4 | 4 credits | Prerequisite: 
+None
+•
+2026 batch | S5 | Open/Minor | (no code) – Minor/Open (2 Courses) | L-T-P 8-0-0 | 8 credits 
+| Prerequisite: None
+•
+2026 batch | S5 | Internship/Capstone Project | DATA801 – Summer Training/Internship | L-
+T-P 0-0-0 | 2 credits | Prerequisite: None
+2026 batch – Semester 6 (total 24 credits; 29 contact hours/week = L 15 + T 0 + P 14)
+•
+2026 batch | S6 | Foundation | TBA – Language | L-T-P 0-0-0 | 2 credits | Prerequisite: None
+•
+2026 batch | S6 | Program Core | COMP208 – Networks | L-T-P 3-0-2 | 4 credits | 
+Prerequisite: None
+•
+2026 batch | S6 | Program Core | COMP302 – Internet of Things | L-T-P 0-0-4 | 2 credits | 
+Prerequisite: COMP132 Design Workshop – NOT in this batch's plan AND COMP201 Data 
+Structures (S2) AND COMP206 Microprocessors and Computer Architecture (S5) AND 
+COMP208 Networks (S6) AND COMP301 Artificial Intelligence (S4)
+•
+2026 batch | S6 | Program Honors | DATA302 – Deep Learning | L-T-P 2-0-4 | 4 credits | 
+Prerequisite: DATA301 Machine Learning (S5)
+•
+2026 batch | S6 | Electives | (no code) – Elective 2 | L-T-P 2-0-4 | 4 credits | Prerequisite: 
+None
+•
+2026 batch | S6 | Open/Minor | (no code) – Minor/Open (2 Courses) | L-T-P 8-0-0 | 8 credits 
+| Prerequisite: None
+2026 batch – Semester 7 (total 23 credits; 27 contact hours/week = L 11 + T 0 + P 16)
+•
+2026 batch | S7 | Program Core | TBA – Compiler Design | L-T-P 3-0-0 | 3 credits | 
+Prerequisite: None
+•
+2026 batch | S7 | Program Honors | DATA403 – Natural Language Processing | L-T-P 2-0-4 | 
+4 credits | Prerequisite: DATA302 Deep Learning (S6)
+
+
+--- PAGE 30 ---
+ of 3137
+•
+2026 batch | S7 | Electives | (no code) – Elective 3 | L-T-P 2-0-4 | 4 credits | Prerequisite: 
+None
+•
+2026 batch | S7 | Electives | (no code) – Elective 4 | L-T-P 2-0-4 | 4 credits | Prerequisite: 
+None
+•
+2026 batch | S7 | Electives | (no code) – Elective 5 | L-T-P 2-0-4 | 4 credits | Prerequisite: 
+None
+•
+2026 batch | S7 | Open/Minor | DATA802 – Inter-Desciplinary Project | L-T-P 0-0-0 | 4 
+credits | Prerequisite: None
+2026 batch – Semester 8 (total 12 credits; 0 contact hours/week = L 0 + T 0 + P 0)
+•
+2026 batch | S8 | Internship/Capstone Project | DATA803 – Capstone Project/ Industrial 
+Internship | L-T-P 0-0-0 | 12 credits | Prerequisite: None
+2026 batch – credits per basket (from the semester plan)
+•
+2026 batch | B1 University Core: 18 credits
+•
+2026 batch | B2 Foundation: 26 credits
+•
+2026 batch | B3 Program Core: 50 credits
+•
+2026 batch | B4 Program Honors: 20 credits
+•
+2026 batch | B5 Electives: 20 credits
+•
+2026 batch | B6 Open/Minor: 32 credits
+•
+2026 batch | B7 Internship/Capstone Project: 14 credits
+•
+2026 batch | TOTAL: 180 credits
+
+
+--- PAGE 31 ---
+ of 3237
+GLOSSARY & READING GUIDE — 
+"Semester Spread & Structures" workbook
+(Context for the Academic Advisor Bot. Items 
+marked <<CONFIRM>> are still to be verified 
+by the university.)
+1. What the workbook contains
+•
+The workbook describes the 4-year B.Tech Data Science ("DS") curriculum, one version per 
+admission batch: 2022, 2023, 2024, 2025, 2026.
+•
+The year in a sheet name is the student's BATCH (year of admission), not the calendar year 
+in which a course is taught. A student admitted in 2024 follows "Sem_Spread_2024" and 
+"Struct_2024" for all 8 semesters. <<CONFIRM>>
+•
+Two kinds of sheets:
+◦
+"Sem Spread" / "Sem_Spread_<year>" (Semester Spread) = which course is taken in 
+which semester (S1–S8), with code, prerequisite, L-T-P-C and basket.
+◦
+"Struct_<year>" (Credit Structure) = the list of courses and credits inside each 
+basket, and the minimum credits per basket needed for the degree. It does not say 
+which semester a course is in.
+•
+The curricula differ between batches. Always answer using the sheets for the student's own 
+batch.
+2. Column headers and abbreviations
+•
+S1, S2 ... S8 = Semester 1 to Semester 8 (2 semesters per year, 4 years).
+•
+SEMESTER - I / SEMESTER - 2 ... = same as S1, S2 ...
+•
+SUMMER = summer break between semesters (after S2, after S4 and after S6). No regular 
+courses are listed in it.
+•
+Course Code / Code = unique course identifier, e.g. COMP201. "DATA 301" and 
+"DATA301" are the same course (the space is a typo).
+•
+Course = course title.
+•
+Pre-Req = prerequisite: a course that must be completed before this course can be taken. 
+Several codes separated by commas (e.g. "COMP204, COMP207") means ALL of them are 
+required.
+•
+NIL / Nil = no prerequisite.
+•
+L = Lecture hours per week.
+•
+T = Tutorial hours per week.
+•
+P = Practical / Lab hours per week.
+•
+C = Credits for the course.
+•
+L-T-P / "LTP: 3-0-2" = Lecture-Tutorial-Practical hours per week, written in that order. 
+"LTP: 3-0-2" means 3 lecture hours, 0 tutorial hours and 2 lab hours per week.
+•
+Credit rule: C = L + T + (P ÷ 2). It holds for every course that has class hours, in every 
+batch. Example: 3-0-2 → 4 credits; 2-0-4 → 4 credits; 1-0-2 → 2 credits.
+
+
+--- PAGE 32 ---
+ of 3337
+•
+An L-T-P of 0-0-0 with credits > 0 (e.g. Sustainable Cities and Communities 0-0-0-3, 
+Human Values in Work and Life 0-0-0-2, Language 0-0-0-3, Community Engagement 
+0-0-0-1, internships and projects) means the course has no regular weekly classroom hours. 
+It is delivered as <<CONFIRM: online / MOOC / workshop / activity-based / self-paced>>.
+•
+Total (row) = sum of L, T, P and C for that semester.
+•
+Total HRS = weekly contact hours in the semester, i.e. L + T + P summed over all courses in 
+that semester.
+•
+Total Credits (last column) = credits in that row.
+•
+For detailed per-course credits, prerequisites and either/or options, see the companion file 
+Course_Details_by_Batch.md. The final column per basket = basket total.
+•
+Fixed Min = minimum credits required from that basket to graduate.
+•
+Credit Structure (for award of the Degree) = minimum credits per basket needed to earn the 
+degree. The total is always 180.
+•
+Cr = Credits.
+•
+= serial number in a list.
+•
+TBA = To Be Announced (course code or details not yet decided).
+•
+"/" between two courses (e.g. "PSYC101/ECON101 — Introduction to Psychology/
+Introduction to Economics") = the student takes ONE of the two options.
+•
+"/" inside a Specialization Track cell (e.g. "MATH401/COMP401 — Probabilistic Graph 
+Models / Web Framework") = the first option is for Track #1, the second for Track #2. The 
+prerequisites are given in the same order (e.g. "DATA301/NIL" → Track 1 needs DATA301, 
+Track 2 has none).
+•
+When a course name carries its own "LTP: x-y-z", that overrides the L/T/P numbers in the 
+columns (the columns show only one option's hours).
+•
+"#1 Course", "#2 Course" = the 1st, 2nd ... course of that type in sequence.
+•
+SPT = SPecialization Track. "SPT-Course #3" = the 3rd course of the student's chosen 
+specialization track.
+•
+SPIL = Socio-Cultural Perspectives on Indian Life (course UCOR205).
+•
+MLOps = Machine Learning Operations (deploying and maintaining ML models in 
+production).
+•
+AI = Artificial Intelligence; ML = Machine Learning; NLP = Natural Language Processing; 
+IoT = Internet of Things; EDA = Exploratory Data Analysis.
+3. Baskets (course categories). Every course belongs to exactly 
+one basket.
+•
+Basket = a category of courses with a minimum credit requirement. B1–B7 are basket IDs.
+•
+B1 – Univ Core / University Core (UCOR courses) = compulsory courses that every student 
+of the university takes, whatever the programme (communication, writing, critical thinking, 
+design thinking, Indian society, constitution, community engagement).
+•
+B2 – Foundation = compulsory basics: mathematics (calculus, probability, statistics, linear 
+algebra), materials science, academic writing, psychology/economics, language, human 
+values.
+•
+B3 – Program Core / Program CORE = compulsory computer science and data science 
+courses for this degree (data structures, algorithms, OS, networks, databases, AI, etc.).
+•
+B4 – Program Honors / Program HONORS / Program Hons = advanced data science 
+courses (machine learning, deep learning, EDA, optimization, NLP). Its 20 credits count 
+toward the 180. <<CONFIRM: compulsory for all, or optional for an "Honours" degree?>>
+
+
+--- PAGE 33 ---
+ of 3437
+•
+B5 – Specialization Tracks (batches 2022–2025) = 5 courses (20 credits) from ONE chosen 
+track:
+◦
+"Hons Sp Track #1 – Applied Deep Learning"
+◦
+"Hons Sp Track #2 – Full Stack Development"
+◦
+Hons Sp Track = Honours Specialization Track.
+•
+B5 – Electives (batch 2026 only) = the two tracks are replaced by 5 electives (Elective 1–5, 
+20 credits) chosen from a list of 8 courses (Probabilistic Graph Models, Advanced Topics in 
+Deep Learning, Cloud & Cognitive Computing, Multi Modal Learning, Reinforcement 
+Learning, Web Framework, Big Data Framework, Software Architecture and Deployments). 
+<<CONFIRM: free choice of any 5?>>
+•
+B6 – Open/Minor = credits the student fills with either
+◦
+a Minor: a set of courses in a second subject area that earns a "Minor in <subject>", 
+or
+◦
+Open electives: courses from any department.
+◦
+2022–2024: 6 courses × 4 credits = 24 credits.
+◦
+2025–2026: 32 credits = Essentials of Business Management (2) + Psychology/
+Economics (2) + 6 Minor/Open courses × 4 (24) + Interdisciplinary Project (4).
+◦
+"Minor (#6 Course)" in S7 (2022–2024) = the 6th minor/open course, which must be 
+a Minor course. <<CONFIRM rules>>
+◦
+"Minor Total Credits" in the Struct sheets = total credits of the Open/Minor basket.
+•
+B7 – Internship/Capstone Project:
+◦
+Summer Training/Internship (DATA801, 2 credits)
+◦
+Interdisciplinary Project (DATA802, 4 credits; in B7 for 2022–2024, moved to B6 
+from 2025)
+◦
+Capstone Project/Industrial Internship (DATA803, 12 credits, Semester 8)
+◦
+18 credits for 2022–2024; 14 credits for 2025–2026.
+4. Course-type terms
+•
+Capstone Project = a large final-year project that brings together everything learned. 
+"Capstone Project/Industrial Internship" = in S8 the student does EITHER a capstone 
+project OR a full-semester internship at a company (12 credits; no classes in S8).
+•
+Industrial Internship = working at a company/industry for credit.
+•
+Summer Training/Internship (DATA801) = a short internship/training during the summer 
+break. It appears under S5, i.e. it is done in the summer after S4 and credited in S5. 
+<<CONFIRM>>
+•
+Interdisciplinary Project (DATA802; spelled "Inter-Desciplinary"/"Interdesciplinary" in 
+places) = a project combining data science with another field, done in S7.
+•
+Foundation Seminar (SLAD207) = a 1-credit seminar.
+•
+Community Engagement & Service Experience (UCOR701) = a 1-credit community-
+service/outreach activity.
+•
+Language (LANG101) = a language course; in 2024 written "Kannada/ Language" 
+(Kannada = state language of Karnataka, or another language). <<CONFIRM rule for who 
+takes Kannada>>
+•
+Design Workshop = hands-on design/making lab (0-0-4).
+5. Course code prefixes
+•
+UCOR = University Core
+•
+MATH = Mathematics
+•
+COMP = Computer Science / Computing
+•
+DATA = Data Science
+
+
+--- PAGE 34 ---
+ of 3537
+•
+MTSC = <<CONFIRM: e.g. Materials Science / Multidisciplinary Science?>> (MTSC111, 
+MTSC211, MTSC781)
+•
+SLAD = <<CONFIRM: full form>> (SLAD206 Human Values, SLAD207 Foundation 
+Seminar)
+•
+ENGL = English
+•
+LANG = Language
+•
+PSYC (also written PSCY in 2025) = Psychology
+•
+ECON = Economics
+•
+LAWS = Law
+•
+MGMT = Management
+•
+Number: the first digit usually shows the year level (1xx = 1st year, 2xx = 2nd, 3xx = 3rd, 
+4xx = 4th year/advanced). 7xx = <<CONFIRM>>, 8xx = internships/projects (DATA801–
+803).
+6. Same course under different codes or names in different 
+batches (equivalences) <<CONFIRM>>
+•
+Communication Skills: UCOR103 (2022, 2023, 2025; 2 cr) | UCOR105 "Communication 
+and Leadership Skills" (2024; 3 cr) | UCOR107 (2026; 3 cr)
+•
+Critical Thinking: UCOR210 (2022–23; 2 cr) → UCOR310 (2024+; 3 cr)
+•
+Calculus: MATH201 Calculus (2022–24) → MATH208 Multivariate Calculus (2025+)
+•
+Probability: MATH202 Probability Theory + MATH205 Statistics with R (2022–23) → 
+MATH203 Probability and Statistics (2024+)
+•
+Linear Algebra: MATH204 (2022–24) → MATH209 (2025+)
+•
+Advanced Statistical Analysis and Research Methods (with R): MATH206 (2024–25; 2 cr) 
+→ MATH210 (2026; 3 cr)
+•
+Academic Writing: ENGL201 (2022–23; 3 cr) → ENGL210 (2024; 2 cr) → UCOR207 
+Analytical Academic Writing (2025; Univ Core)
+•
+Design Workshop: COMP132 (2 cr) → COMP133 (2026; 3 cr)
+•
+Operating Systems: COMP207 (3 cr) → COMP211 (2026; 4 cr)
+•
+Data visualisation: DATA131 Visualizing Data for Story Telling (2022–23; Foundation, 2 
+cr) → DATA132 Data Visualization and Storytelling (2024+; Program Core, 3 cr)
+•
+Exploratory Data Analysis: DATA202 (2022–24) → DATA209 Advanced Exploratory Data 
+Analysis (2025+)
+•
+Psychology/Economics: PSYC101/ECON101 (2022–24; 3 cr) → PSCY102/ECON105 
+"Principles of Economics" (2025; 2 cr) → PSYC105/ECON106 (2026; 2 cr)
+•
+Programming: DATA130 Computational Thinking (2022) → DATA103 Programming in 
+Python (2024+)
+•
+"Databases Management" = Database Management (Systems)
+7. Specialization-track and elective course codes
+•
+MATH401 Probabilistic Graph Models (Track 1)
+•
+COMP401 Web Framework (Track 2)
+•
+DATA402 Advanced Visualization and Storytelling (Track 1, 2022)
+•
+DATA406 Big Data Framework (Track 2)
+•
+DATA403 Natural Language Processing (Track 1; from 2025 in Program Honors)
+•
+COMP402 Software Architecture and Deployments (Track 2)
+•
+DATA404 Multi Modal Learning (Track 1)
+•
+DATA405 Reinforcement Learning
+
+
+--- PAGE 35 ---
+ of 3637
+•
+DATA408 Advanced Topics in Deep Learning (Track 1)
+•
+COMP405 Cloud & Cognitive Computing (Track 2)
+•
+COMP403 Cloud Computing (2024, Foundation)
+•
+TBA Image Processing and Computer Vision (Track 1, 2025)
+•
+When a cell reads "X / X" (e.g. "Reinforcement Learning/Reinforcement Learning"), 
+students of BOTH tracks take the same course.
+8. Known typos and data issues (do not treat as real 
+differences)
+•
+"Summe Training" = Summer Training
+•
+"Visuatlization" = Visualization
+•
+"Inter-Desciplinary"/"Interdesciplinary" = Interdisciplinary
+•
+"Problem Solving for Design Thinking" = "Problem Solving with Design Thinking" 
+(UCOR104)
+•
+"PSCY102" = PSYC102 (Psychology)
+•
+"Digital Design and Computer Organization" (double space) = same course COMP204
+•
+Some prerequisites name courses that are not in that batch's plan (e.g. DATA206, 
+COMP210, or MATH201/MATH202/MATH204 in the 2025–26 plans). Read these through 
+the equivalence table in section 6 (e.g. DATA206 → DATA209?). <<CONFIRM>>
+•
+Sem_Spread_DS_2026: the "Fixed Min" values (University Core 24, Foundation 24, 
+Program Core 46) are out of date. The correct basket totals are those in Struct_2026_DS: 
+University Core 18, Foundation 26, Program Core 50, Program Honors 20, Electives 20, 
+Minor/Open 32, Internship/Capstone 14 = 180. (Verified: these are the sums of the courses 
+actually listed in Sem_Spread_DS_2026.)
+
+
+--- PAGE 36 ---
+ of 3737
+•
+Highlighted cells: MLOps & Model Deployment (2023) and Compiler Design (2026) are 
+coloured. This might mean “newly added course”.
+•
+Codes still “TBA”: Language (2025, 2026), Compiler Design (2026) and Image Processing 
+& Computer Vision (2025 Track 1).
+•
+A stray cell: the 2022 sheet has “COMP401” written in Semester 5 with no course next to 
+it. It looks like a leftover.
+•
+Changes between batches: there’s no ready-made summary of what changed from one 
+batch to the next. Students often ask “how is my batch different from my senior’s?”

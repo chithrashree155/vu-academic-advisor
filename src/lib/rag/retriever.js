@@ -63,6 +63,8 @@ function getOfficialDocumentUrl(docName, pageOrLocation = null) {
     canonicalFile = 'Academic Calendar Even Semester 2025-26 (1).pdf';
   } else if (lower.includes('odd semester') && lower.includes('calendar')) {
     canonicalFile = 'Academic_Calendar_ODD Semester_2026_27.pdf';
+  } else if (lower.includes('all the info') || lower.includes('gai') || lower.includes('glossary') || lower.includes('reading guide') || lower.includes('academic explanation')) {
+    canonicalFile = 'all the info for gai assignment.pdf';
   } else if (name.endsWith('.pdf') || name.endsWith('.xlsx')) {
     canonicalFile = name;
   }
@@ -329,6 +331,18 @@ class RagRetriever {
         }
 
         if (isHandbookQuery && chunk.documentName.includes('Handbook')) {
+          exactBonus += 3.0;
+        }
+
+        const isAcademicGuideQuery = query.toLowerCase().includes('glossary') ||
+          query.toLowerCase().includes('reading guide') ||
+          query.toLowerCase().includes('specialization track') ||
+          query.toLowerCase().includes('basket') ||
+          query.toLowerCase().includes('prerequisite') ||
+          query.toLowerCase().includes('l-t-p') ||
+          query.toLowerCase().includes('contact hours') ||
+          query.toLowerCase().includes('difference between');
+        if (isAcademicGuideQuery && chunk.sourceType === 'ACADEMIC_GUIDE') {
           exactBonus += 3.0;
         }
 

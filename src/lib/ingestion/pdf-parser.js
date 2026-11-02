@@ -460,6 +460,116 @@ Issued by: Registrar In-Charge, Vidyashilp University.`,
   };
 }
 
+async function parseAcademicExplanationPDF(filePath) {
+  const dataBuffer = fs.readFileSync(filePath);
+  const pageTexts = [];
+
+  const options = {
+    pagerender: function (pageData) {
+      return pageData.getTextContent().then(function (textContent) {
+        let lastY, text = '';
+        for (let item of textContent.items) {
+          if (lastY === item.transform[5] || !lastY) {
+            text += item.str + ' ';
+          } else {
+            text += '\n' + item.str + ' ';
+          }
+          lastY = item.transform[5];
+        }
+        pageTexts.push({
+          pageNumber: pageTexts.length + 1,
+          text: text.trim()
+        });
+        return text;
+      });
+    }
+  };
+
+  await pdfParse(dataBuffer, options);
+
+  const chunks = [];
+  let chunkIndex = 0;
+
+  for (const page of pageTexts) {
+    const pageNum = page.pageNumber;
+    const raw = page.text || '';
+    if (!raw || raw.length < 20) continue;
+
+    let section = 'Glossary & Reading Guide';
+    if (pageNum >= 7 && pageNum <= 10) section = 'Specialization Tracks & Either/Or Options';
+    else if (pageNum >= 11 && pageNum <= 17) section = 'Prerequisites & Unlock Chains Across Batches';
+    else if (pageNum >= 18 && pageNum <= 20) section = 'Batch 2022 Semester Plan & Credits';
+    else if (pageNum >= 21 && pageNum <= 23) section = 'Batch 2023 Semester Plan & Credits';
+    else if (pageNum >= 24 && pageNum <= 26) section = 'Batch 2024 Semester Plan & Credits';
+    else if (pageNum >= 27 && pageNum <= 29) section = 'Batch 2025 Semester Plan & Credits';
+    else if (pageNum >= 30 && pageNum <= 31) section = 'Batch 2026 Semester Plan & Credits';
+    else if (pageNum >= 32 && pageNum <= 37) section = 'Glossary, Equivalences & Confirmation Items';
+
+    const cleaned = raw.replace(/^\d+\s*---\s*\n?\s*of\s*\d+\s*/i, '').trim();
+    const paragraphs = cleaned.split(/\n\s*•\s*/).filter(p => p.trim().length > 15);
+
+    if (paragraphs.length <= 1) {
+      chunks.push({
+        chunkIndex: chunkIndex++,
+        documentName: 'all the info for gai assignment.pdf',
+        sourceType: 'ACADEMIC_GUIDE',
+        hierarchyLevel: 2,
+        pageNumber: pageNum,
+        sectionNumber: section,
+        clauseNumber: '',
+        batchScope: ['2022', '2023', '2024', '2025', '2026'],
+        content: cleaned,
+        metadata: { page: pageNum, section }
+      });
+    } else {
+      let cur = '';
+      for (let i = 0; i < paragraphs.length; i++) {
+        const item = '• ' + paragraphs[i].trim();
+        if ((cur + '\n' + item).length > 1000 && cur.length > 0) {
+          chunks.push({
+            chunkIndex: chunkIndex++,
+            documentName: 'all the info for gai assignment.pdf',
+            sourceType: 'ACADEMIC_GUIDE',
+            hierarchyLevel: 2,
+            pageNumber: pageNum,
+            sectionNumber: section,
+            clauseNumber: '',
+            batchScope: ['2022', '2023', '2024', '2025', '2026'],
+            content: cur.trim(),
+            metadata: { page: pageNum, section }
+          });
+          cur = item;
+        } else {
+          cur = cur ? cur + '\n' + item : item;
+        }
+      }
+      if (cur.trim().length > 0) {
+        chunks.push({
+          chunkIndex: chunkIndex++,
+          documentName: 'all the info for gai assignment.pdf',
+          sourceType: 'ACADEMIC_GUIDE',
+          hierarchyLevel: 2,
+          pageNumber: pageNum,
+          sectionNumber: section,
+          clauseNumber: '',
+          batchScope: ['2022', '2023', '2024', '2025', '2026'],
+          content: cur.trim(),
+          metadata: { page: pageNum, section }
+        });
+      }
+    }
+  }
+
+  return {
+    documentName: 'all the info for gai assignment.pdf',
+    sourceType: 'ACADEMIC_GUIDE',
+    hierarchyLevel: 2,
+    totalPages: pageTexts.length,
+    totalChunks: chunks.length,
+    chunks
+  };
+}
+
 module.exports = {
   parseHandbook,
   parseSOP,
@@ -470,6 +580,7 @@ module.exports = {
   parseERPCourseRegistration,
   parseExamEnrollmentSOP,
   parseChatbotFlowchart,
-  parseHolidayList
+  parseHolidayList,
+  parseAcademicExplanationPDF
 };
 

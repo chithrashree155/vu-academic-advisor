@@ -19457,5 +19457,2609 @@
       "year": "2026",
       "term": "Aug-Dec 2026"
     }
+  },
+  {
+    "chunkIndex": 0,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 1,
+    "sectionNumber": "Glossary & Reading Guide",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• of  1 37 \nGLOSSARY & READING GUIDE —  \n\"Semester Spread & Structures\" workbook \n(Context for the Academic Advisor Bot. Items  \nmarked <<CONFIRM>> are still to be veri fi ed  \nby the university.) \n1. What the workbook contains\n• The workbook describes the 4-year B.Tech Data Science (\"DS\") curriculum, one version per  \nadmission batch: 2022, 2023, 2024, 2025, 2026.\n• The year in a sheet name is the student's BATCH (year of admission), not the calendar year  \nin which a course is taught. A student admitted in 2024 follows \"Sem_Spread_2024\" and  \n\"Struct_2024\" for all 8 semesters. <<CONFIRM>>\n• Two kinds of sheets: \n◦ \n\"Sem Spread\" / \"Sem_Spread_<year>\" (Semester Spread) = which course is taken in  \nwhich semester (S1–S8), with code, prerequisite, L-T-P-C and basket. \n◦ \n\"Struct_<year>\" (Credit Structure) = the list of courses and credits inside each  \nbasket, and the minimum credits per basket needed for the degree. It does not say  \nwhich semester a course is in.",
+    "metadata": {
+      "page": 1,
+      "section": "Glossary & Reading Guide"
+    }
+  },
+  {
+    "chunkIndex": 1,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 1,
+    "sectionNumber": "Glossary & Reading Guide",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• The curricula differ between batches. Always answer using the sheets for the student's own  \nbatch. \n2. Column headers and abbreviations\n• S1, S2 ... S8 = Semester 1 to Semester 8 (2 semesters per year, 4 years).\n• SEMESTER - I / SEMESTER - 2 ... = same as S1, S2 ...\n• SUMMER = summer break between semesters (after S2, after S4 and after S6). No regular  \ncourses are listed in it.\n• Course Code / Code = unique course identi fi er, e.g. COMP201. \"DATA 301\" and  \n\"DATA301\" are the same course (the space is a typo).\n• Course = course title.\n• Pre-Req = prerequisite: a course that must be completed before this course can be taken.  \nSeveral codes separated by commas (e.g. \"COMP204, COMP207\") means ALL of them are  \nrequired.\n• NIL / Nil = no prerequisite.\n• L = Lecture hours per week.\n• T = Tutorial hours per week.\n• P = Practical / Lab hours per week.\n• C = Credits for the course.",
+    "metadata": {
+      "page": 1,
+      "section": "Glossary & Reading Guide"
+    }
+  },
+  {
+    "chunkIndex": 2,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 1,
+    "sectionNumber": "Glossary & Reading Guide",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• L-T-P / \"LTP: 3-0-2\" = Lecture-Tutorial-Practical hours per week, written in that order.  \n\"LTP: 3-0-2\" means 3 lecture hours, 0 tutorial hours and 2 lab hours per week.\n• Credit rule (holds for almost every course): C = L + T + (P ÷ 2). Example: 3-0-2  →  4  \ncredits; 2-0-4  →  4 credits; 1-0-2  →  2 credits. <<CONFIRM>>",
+    "metadata": {
+      "page": 1,
+      "section": "Glossary & Reading Guide"
+    }
+  },
+  {
+    "chunkIndex": 3,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 2,
+    "sectionNumber": "Glossary & Reading Guide",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• An L-T-P of 0-0-0 with credits > 0 (e.g. Sustainable Cities and Communities 0-0-0-3,  \nHuman Values in Work and Life 0-0-0-2, Language 0-0-0-3, Community Engagement  \n0-0-0-1, internships and projects) means the course has no regular weekly classroom hours.  \nIt is delivered as <<CONFIRM: online / MOOC / workshop / activity-based / self-paced>>.\n• Total (row) = sum of L, T, P and C for that semester.\n• Total HRS = weekly contact hours in the semester, i.e. L + T + P summed over all courses in  \nthat semester.\n• Total Credits (last column) = credits in that row. The  fi nal column per basket = basket total.\n• Fixed Min = minimum credits required from that basket to graduate.\n• Credit Structure (for award of the Degree) = minimum credits per basket needed to earn the  \ndegree. The total is always 180.\n• = serial number in a list.\n• TBA = To Be Announced (course code or details not yet decided).",
+    "metadata": {
+      "page": 2,
+      "section": "Glossary & Reading Guide"
+    }
+  },
+  {
+    "chunkIndex": 4,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 2,
+    "sectionNumber": "Glossary & Reading Guide",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• \"/\" between two courses (e.g. \"PSYC101/ECON101 — Introduction to Psychology/ \nIntroduction to Economics\") = the student takes ONE of the two options.\n• \"/\" inside a Specialization Track cell (e.g. \"MATH401/COMP401 — Probabilistic Graph  \nModels / Web Framework\") = the  fi rst option is for Track #1, the second for Track #2. The  \nprerequisites are given in the same order (e.g. \"DATA301/NIL\"  →  Track 1 needs DATA301,  \nTrack 2 has none).\n• When a course name carries its own \"LTP: x-y-z\", that overrides the L/T/P numbers in the  \ncolumns (the columns show only one option's hours).\n• \"#1 Course\", \"#2 Course\" = the 1st, 2nd ... course of that type in sequence.\n• SPT = SPecialization Track. \"SPT-Course #3\" = the 3rd course of the student's chosen  \nspecialization track.\n• SPIL = Socio-Cultural Perspectives on Indian Life (course UCOR205).\n• MLOps = Machine Learning Operations (deploying and maintaining ML models in  \nproduction).",
+    "metadata": {
+      "page": 2,
+      "section": "Glossary & Reading Guide"
+    }
+  },
+  {
+    "chunkIndex": 5,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 2,
+    "sectionNumber": "Glossary & Reading Guide",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• AI = Arti fi cial Intelligence; ML = Machine Learning; NLP = Natural Language Processing;  \nIoT = Internet of Things; EDA = Exploratory Data Analysis. \n3. Baskets (course categories). Every course belongs to exactly  \none basket.\n• Basket = a category of courses with a minimum credit requirement. B1–B7 are basket IDs.\n• B1 – Univ Core / University Core (UCOR courses) = compulsory courses that every student  \nof the university takes, whatever the programme (communication, writing, critical thinking,  \ndesign thinking, Indian society, constitution, community engagement).\n• B2 – Foundation = compulsory basics: mathematics (calculus, probability, statistics, linear  \nalgebra), materials science, academic writing, psychology/economics, language, human  \nvalues.\n• B3 – Program Core / Program CORE = compulsory computer science and data science  \ncourses for this degree (data structures, algorithms, OS, networks, databases, AI, etc.).",
+    "metadata": {
+      "page": 2,
+      "section": "Glossary & Reading Guide"
+    }
+  },
+  {
+    "chunkIndex": 6,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 2,
+    "sectionNumber": "Glossary & Reading Guide",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• B4 – Program Honors / Program HONORS / Program Hons = advanced data science  \ncourses (machine learning, deep learning, EDA, optimization, NLP). Its 20 credits count  \ntoward the 180. <<CONFIRM: compulsory for all, or optional for an \"Honours\" degree?>>\n• B5 – Specialization Tracks (batches 2022–2025) = 5 courses (20 credits) from ONE chosen  \ntrack: \n◦ \n\"Hons Sp Track #1 – Applied Deep Learning\"",
+    "metadata": {
+      "page": 2,
+      "section": "Glossary & Reading Guide"
+    }
+  },
+  {
+    "chunkIndex": 7,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 3,
+    "sectionNumber": "Glossary & Reading Guide",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• of  3 37 \n◦ \n\"Hons Sp Track #2 – Full Stack Development\" \n◦ \nHons Sp Track = Honours Specialization Track.\n• B5 – Electives (batch 2026 only) = the two tracks are replaced by 5 electives (Elective 1–5,  \n20 credits) chosen from a list of 8 courses (Probabilistic Graph Models, Advanced Topics in  \nDeep Learning, Cloud & Cognitive Computing, Multi Modal Learning, Reinforcement  \nLearning, Web Framework, Big Data Framework, Software Architecture and Deployments).  \n<<CONFIRM: free choice of any 5?>>",
+    "metadata": {
+      "page": 3,
+      "section": "Glossary & Reading Guide"
+    }
+  },
+  {
+    "chunkIndex": 8,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 3,
+    "sectionNumber": "Glossary & Reading Guide",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• B6 – Open/Minor = credits the student  fi lls with either \n◦ \na Minor: a set of courses in a second subject area that earns a \"Minor in <subject>\",  \nor \n◦ \nOpen electives: courses from any department. \n◦ \n2022–2024: 6 courses  ×  4 credits = 24 credits. \n◦ \n2025–2026: 32 credits = Essentials of Business Management (2) + Psychology/ \nEconomics (2) + 6 Minor/Open courses  ×  4 (24) + Interdisciplinary Project (4). \n◦ \n\"Minor (#6 Course)\" in S7 (2022–2024) = the 6th minor/open course, which must be  \na Minor course. <<CONFIRM rules>> \n◦ \n\"Minor Total Credits\" in the Struct sheets = total credits of the Open/Minor basket.\n• B7 – Internship/Capstone Project: \n◦ \nSummer Training/Internship (DATA801, 2 credits) \n◦ \nInterdisciplinary Project (DATA802, 4 credits; in B7 for 2022–2024, moved to B6  \nfrom 2025) \n◦ \nCapstone Project/Industrial Internship (DATA803, 12 credits, Semester 8) \n◦ \n18 credits for 2022–2024; 14 credits for 2025–2026. \n4. Course-type terms",
+    "metadata": {
+      "page": 3,
+      "section": "Glossary & Reading Guide"
+    }
+  },
+  {
+    "chunkIndex": 9,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 3,
+    "sectionNumber": "Glossary & Reading Guide",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Capstone Project = a large  fi nal-year project that brings together everything learned.  \n\"Capstone Project/Industrial Internship\" = in S8 the student does EITHER a capstone  \nproject OR a full-semester internship at a company (12 credits; no classes in S8).\n• Industrial Internship = working at a company/industry for credit.\n• Summer Training/Internship (DATA801) = a short internship/training during the summer  \nbreak. It appears under S5, i.e. it is done in the summer after S4 and credited in S5.  \n<<CONFIRM>>\n• Interdisciplinary Project (DATA802; spelled \"Inter-Desciplinary\"/\"Interdesciplinary\" in  \nplaces) = a project combining data science with another  fi eld, done in S7.\n• Foundation Seminar (SLAD207) = a 1-credit seminar.\n• Community Engagement & Service Experience (UCOR701) = a 1-credit community- \nservice/outreach activity.",
+    "metadata": {
+      "page": 3,
+      "section": "Glossary & Reading Guide"
+    }
+  },
+  {
+    "chunkIndex": 10,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 3,
+    "sectionNumber": "Glossary & Reading Guide",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Language (LANG101) = a language course; in 2024 written \"Kannada/ Language\"  \n(Kannada = state language of Karnataka, or another language). <<CONFIRM rule for who  \ntakes Kannada>>\n• Design Workshop = hands-on design/making lab (0-0-4). \n5. Course code pre fi xes\n• UCOR = University Core\n• MATH = Mathematics\n• COMP = Computer Science / Computing\n• DATA = Data Science\n• MTSC = <<CONFIRM: e.g. Materials Science / Multidisciplinary Science?>> (MTSC111,  \nMTSC211, MTSC781)",
+    "metadata": {
+      "page": 3,
+      "section": "Glossary & Reading Guide"
+    }
+  },
+  {
+    "chunkIndex": 11,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 4,
+    "sectionNumber": "Glossary & Reading Guide",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• SLAD = <<CONFIRM: full form>> (SLAD206 Human Values, SLAD207 Foundation  \nSeminar)\n• PSYC (also written PSCY in 2025) = Psychology\n• ECON = Economics\n• MGMT = Management\n• Number: the  fi rst digit usually shows the year level (1xx = 1st year, 2xx = 2nd, 3xx = 3rd,  \n4xx = 4th year/advanced). 7xx = <<CONFIRM>>, 8xx = internships/projects (DATA801– \n803). \n6. Same course under different codes or names in different  \nbatches (equivalences) <<CONFIRM>>\n• Communication Skills: UCOR103 (2022, 2023, 2025; 2 cr) | UCOR105 \"Communication  \nand Leadership Skills\" (2024; 3 cr) | UCOR107 (2026; 3 cr)\n• Critical Thinking: UCOR210 (2022–23; 2 cr)  →  UCOR310 (2024+; 3 cr)\n• Calculus: MATH201 Calculus (2022–24)  →  MATH208 Multivariate Calculus (2025+)\n• Probability: MATH202 Probability Theory + MATH205 Statistics with R (2022–23)  →   \nMATH203 Probability and Statistics (2024+)\n• Linear Algebra: MATH204 (2022–24)  →  MATH209 (2025+)",
+    "metadata": {
+      "page": 4,
+      "section": "Glossary & Reading Guide"
+    }
+  },
+  {
+    "chunkIndex": 12,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 4,
+    "sectionNumber": "Glossary & Reading Guide",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Advanced Statistical Analysis and Research Methods (with R): MATH206 (2024–25; 2 cr)  \n→  MATH210 (2026; 3 cr)\n• Academic Writing: ENGL201 (2022–23; 3 cr)  →  ENGL210 (2024; 2 cr)  →  UCOR207  \nAnalytical Academic Writing (2025; Univ Core)\n• Design Workshop: COMP132 (2 cr)  →  COMP133 (2026; 3 cr)\n• Operating Systems: COMP207 (3 cr)  →  COMP211 (2026; 4 cr)\n• Data visualisation: DATA131 Visualizing Data for Story Telling (2022–23; Foundation, 2  \ncr)  →  DATA132 Data Visualization and Storytelling (2024+; Program Core, 3 cr)\n• Exploratory Data Analysis: DATA202 (2022–24)  →  DATA209 Advanced Exploratory Data  \nAnalysis (2025+)\n• Psychology/Economics: PSYC101/ECON101 (2022–24; 3 cr)  →  PSCY102/ECON105  \n\"Principles of Economics\" (2025; 2 cr)  →  PSYC105/ECON106 (2026; 2 cr)\n• Programming: DATA130 Computational Thinking (2022)  →  DATA103 Programming in  \nPython (2024+)\n• \"Databases Management\" = Database Management (Systems) \n7. Specialization-track and elective course codes",
+    "metadata": {
+      "page": 4,
+      "section": "Glossary & Reading Guide"
+    }
+  },
+  {
+    "chunkIndex": 13,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 4,
+    "sectionNumber": "Glossary & Reading Guide",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• MATH401 Probabilistic Graph Models (Track 1)\n• COMP401 Web Framework (Track 2)\n• DATA402 Advanced Visualization and Storytelling (Track 1, 2022)\n• DATA406 Big Data Framework (Track 2)\n• DATA403 Natural Language Processing (Track 1; from 2025 in Program Honors)\n• COMP402 Software Architecture and Deployments (Track 2)\n• DATA404 Multi Modal Learning (Track 1)\n• DATA405 Reinforcement Learning\n• DATA408 Advanced Topics in Deep Learning (Track 1)\n• COMP405 Cloud & Cognitive Computing (Track 2)",
+    "metadata": {
+      "page": 4,
+      "section": "Glossary & Reading Guide"
+    }
+  },
+  {
+    "chunkIndex": 14,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 5,
+    "sectionNumber": "Glossary & Reading Guide",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• COMP403 Cloud Computing (2024, Foundation)\n• TBA Image Processing and Computer Vision (Track 1, 2025)\n• When a cell reads \"X / X\" (e.g. \"Reinforcement Learning/Reinforcement Learning\"),  \nstudents of BOTH tracks take the same course. \n8. Known typos and data issues (do not treat as real  \ndifferences)\n• \"Summe Training\" = Summer Training\n• \"Visuatlization\" = Visualization\n• \"Inter-Desciplinary\"/\"Interdesciplinary\" = Interdisciplinary\n• \"Problem Solving for Design Thinking\" = \"Problem Solving with Design Thinking\"  \n(UCOR104)\n• \"PSCY102\" = PSYC102 (Psychology)\n• \"Digital Design and Computer Organization\" (double space) = same course COMP204\n• Some prerequisites name courses that are not in that batch's plan (e.g. DATA206,  \nCOMP210, or MATH201/MATH202/MATH204 in the 2025–26 plans). Read these through  \nthe equivalence table in section 6 (e.g. DATA206  →  DATA209?). <<CONFIRM>>",
+    "metadata": {
+      "page": 5,
+      "section": "Glossary & Reading Guide"
+    }
+  },
+  {
+    "chunkIndex": 15,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 5,
+    "sectionNumber": "Glossary & Reading Guide",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Sem_Spread_DS_2026: the \"Fixed Min\" values (University Core 24, Foundation 24,  \nProgram Core 46) are out of date. The correct basket totals are those in Struct_2026_DS:  \nUniversity Core 18, Foundation 26, Program Core 50, Program Honors 20, Electives 20,  \nMinor/Open 32, Internship/Capstone 14 = 180. <<CONFIRM>> \n  \n  \n  \nQuestions only you or the university can answer. These are the lines marked  \n<<CONFIRM>>  in the  fi le: \n1. \nBatch year:  does “2024” in a sheet name mean students  admitted  in 2024? And is the  \nprogramme of fi cially “B.Tech Data Science”? \n2. \nCourses with 0-0-0 hours but credits:  Language, Human Values, Sustainable Cities and  \nCommunity Engagement have no weekly class hours but still carry credits. How are they  \ntaught: online, as a workshop, or as an activity? \n3. \nPre fi xes:  what do  MTSC  and  SLAD  stand for? What does the  7xx  numbering mean  \n(UCOR701, MTSC781)? \n4. \nProgram Honors:  is it compulsory for everyone? Its 20 credits count toward the 180, so it  \nlooks compulsory despite the name. Does “Honours” change the degree title? \n5. \nSpecialization tracks (2022–2025):  when do students choose a track, can they switch, and  \nmust all 5 courses come from one track? \n6. \n2026 electives:  can students pick any 5 of the 8 listed courses? \n7. \nMinor vs Open:  what are the rules? For example, must all 6 courses come from one subject  \nto earn a Minor, and can a student mix minor and open courses? \n8. \nSummer internship (DATA801):  it’s listed under S5. Is it done in the summer after S4? \n9. \nKannada:  the 2024 sheet says “Kannada/ Language”. Who must take Kannada? \n10. \nPrerequisites that point to missing courses: \n◦ \nDATA206:  listed as a prerequisite for Machine Learning in 2025–26, but it doesn’t  \nexist. Is it DATA209? \n◦ \nCOMP210:  listed for Human Centric AI in 2022, but doesn’t exist anywhere. \n◦ \nMATH203 in 2022–23:  listed as a prerequisite, but those batches only have  \nMATH202 and MATH205.",
+    "metadata": {
+      "page": 5,
+      "section": "Glossary & Reading Guide"
+    }
+  },
+  {
+    "chunkIndex": 16,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 6,
+    "sectionNumber": "Glossary & Reading Guide",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "of  6 37 \n◦ \nOld maths codes in 2025–26:  MATH201, MATH202 and MATH204 are  \nprerequisites there, but those courses were renamed. Are my equivalences in section  \n6 of the  fi le right? \n11. \n2026 credit totals disagree between the two sheets: \n12. \nPrerequisite rule:  must the prerequisite be  passed , or only taken? \n13. \nHighlighted cells:  MLOps (2023) and Compiler Design (2026) are coloured. Does that  \nmean “new course”? \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n1.   \nI assumed  \nthe Struct  \nsheet is  \ncorrect. Is it? \n1. Semester plan (“Fixed  \nMin”) \n1. Struct_2026_ \nDS \n1. University  \nCore \n1. 24 1. 18 \n1. Foundation 1. 24 1. 26 \n1. Program  \nCore \n1. 46 1. 50",
+    "metadata": {
+      "page": 6,
+      "section": "Glossary & Reading Guide"
+    }
+  },
+  {
+    "chunkIndex": 17,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 7,
+    "sectionNumber": "Specialization Tracks & Either/Or Options",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• of  7 37 \n  \nCOURSE DETAILS BY BATCH — B.Tech Data Science (source:  \nSemester_Spread_Structures_Sept_2026.xlsx) \nHow to read each course line: Batch | Semester | Basket | Course code – Course name | L-T-P  \n(Lecture-Tutorial-Practical hours per week) | Credits | Prerequisite(s)\n• \"AND\" between prerequisites = all of them must be completed  fi rst. \"OR\" = any one of  \nthem.\n• Credits follow C = L + T + P/2 for every course that has class hours (veri fi ed for all courses  \nin the workbook).\n• Every batch requires 180 credits in total. \nPART A — \"EITHER / OR\" COURSES (written with a slash  \n\"/\" in the sheets) \nA slash between two courses means the student takes ONE of them, not both. \nA1. Psychology OR Economics (every batch, Semester 1)\n• 2022 batch | S1 | Foundation | PSYC101 / ECON101 – Introduction to Psychology OR  \nIntroduction to Economics | L-T-P 2-1-0 | 3 credits | Prerequisite: None. Student picks ONE.",
+    "metadata": {
+      "page": 7,
+      "section": "Specialization Tracks & Either/Or Options"
+    }
+  },
+  {
+    "chunkIndex": 18,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 7,
+    "sectionNumber": "Specialization Tracks & Either/Or Options",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2023 batch | S1 | Foundation | PSYC101 / ECON101 – Introduction to Psychology OR  \nIntroduction to Economics | L-T-P 2-1-0 | 3 credits | Prerequisite: None. Student picks ONE.\n• 2024 batch | S1 | Foundation | PSYC101 / ECON101 – Introduction to Psychology OR  \nIntroduction to Economics | L-T-P 2-1-0 | 3 credits | Prerequisite: None. Student picks ONE.\n• 2025 batch | S1 | Open/Minor | PSCY102 / ECON105 – Introduction to Psychology OR  \nPrinciples of Economics | L-T-P 1-0-2 | 2 credits | Prerequisite: None. Student picks ONE.\n• 2026 batch | S1 | Open/Minor | PSYC105 / ECON106 – Introduction to Psychology OR  \nPrinciples of Economics | L-T-P 1-1-0 | 2 credits | Prerequisite: None. Student picks ONE. \nA2. Capstone Project OR Industrial Internship (every batch, Semester 8)",
+    "metadata": {
+      "page": 7,
+      "section": "Specialization Tracks & Either/Or Options"
+    }
+  },
+  {
+    "chunkIndex": 19,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 7,
+    "sectionNumber": "Specialization Tracks & Either/Or Options",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• DATA803 – Capstone Project / Industrial Internship | 12 credits | Prerequisite: None listed.  \nIn Semester 8 the student does EITHER a capstone project OR a full-semester industrial  \ninternship. It is the only item in S8. \nA3. Summer Training / Internship (every batch, listed in Semester 5)\n• DATA801 – Summer Training/Internship | 2 credits | Prerequisite: None. Here the slash  \nmeans \"training or internship\" (either form counts); it is one requirement, not two courses. \nA4. Language (2024 batch)\n• 2024 batch | S6 | Foundation | LANG101 – \"Kannada / Language\" | 3 credits | Prerequisite:  \nNone. Student takes Kannada OR another language. \nA5. Minor OR Open elective slots\n• \"Minor/Open\" slots: in each slot the student takes EITHER a course towards a Minor OR an  \nOpen elective (any department). Every slot course is 4 credits (L-T-P 4-0-0). The exact slots  \nfor each batch are listed in Part C. \nA6. Specialization Track courses (2022–2025 batches): \"Track 1 option / Track 2  \noption\"",
+    "metadata": {
+      "page": 7,
+      "section": "Specialization Tracks & Either/Or Options"
+    }
+  },
+  {
+    "chunkIndex": 20,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 8,
+    "sectionNumber": "Specialization Tracks & Either/Or Options",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• of  8 37 \nEach student follows ONE track for all 5 SPT courses: Track 1 – Applied Deep Learning OR Track  \n2 – Full Stack Development. In a cell like \"MATH401/COMP401\", the left side is the Track 1  \ncourse and the right side is the Track 2 course; the prerequisites are written in the same order (e.g.  \n\"DATA301/NIL\"). If both sides are the same course, students of both tracks take it. Every SPT  \ncourse is 4 credits. \n2022 batch – Specialization Track courses\n• 2022 batch | S5 | SPT-Course #1 | Track 1 – Applied Deep Learning: MATH401 –  \nProbabilistic Graph Models | L-T-P 3-0-2 | 4 credits | Prerequisite: None\n• 2022 batch | S5 | SPT-Course #1 | Track 2 – Full Stack Development: COMP401 – Web  \nFramework | L-T-P 2-0-4 | 4 credits | Prerequisite: None\n• 2022 batch | S6 | SPT-Course #2 | Track 1 – Applied Deep Learning: DATA402 – Advanced  \nVisualization and Storytelling | L-T-P 2-0-4 | 4 credits | Prerequisite: DATA301 Machine  \nLearning (S5)",
+    "metadata": {
+      "page": 8,
+      "section": "Specialization Tracks & Either/Or Options"
+    }
+  },
+  {
+    "chunkIndex": 21,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 8,
+    "sectionNumber": "Specialization Tracks & Either/Or Options",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2022 batch | S6 | SPT-Course #2 | Track 2 – Full Stack Development: DATA406 – Big Data  \nFramework | L-T-P 2-0-4 | 4 credits | Prerequisite: None\n• 2022 batch | S7 | SPT-Course #3 | Track 1 – Applied Deep Learning: DATA403 – Natural  \nLanguage Processing | L-T-P 2-0-4 | 4 credits | Prerequisite: DATA302 Deep Learning (S6)\n• 2022 batch | S7 | SPT-Course #3 | Track 2 – Full Stack Development: COMP402 – Software  \nArchitecture and Deployments | L-T-P 2-0-4 | 4 credits | Prerequisite: COMP205 Object  \nOriented Programming (S4) AND COMP401 Web Framework (S5)\n• 2022 batch | S7 | SPT-Course #4 | Track 1 – Applied Deep Learning: DATA404 – Multi  \nModal Learning | L-T-P 2-0-4 | 4 credits | Prerequisite: DATA302 Deep Learning (S6)\n• 2022 batch | S7 | SPT-Course #4 | Track 2 – Full Stack Development: (code not given) –  \nCloud Computing | L-T-P 2-0-4 | 4 credits | Prerequisite: not stated",
+    "metadata": {
+      "page": 8,
+      "section": "Specialization Tracks & Either/Or Options"
+    }
+  },
+  {
+    "chunkIndex": 22,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 8,
+    "sectionNumber": "Specialization Tracks & Either/Or Options",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2022 batch | S7 | SPT-Course #5 | Track 1 – Applied Deep Learning: DATA405 –  \nReinforcement Learning | L-T-P 2-0-4 | 4 credits | Prerequisite: MATH202 Probability  \nTheory (S2) AND MATH204 Linear Algebra (S3)\n• 2022 batch | S7 | SPT-Course #5 | Track 2 – Full Stack Development: (code not given) –  \nCognitive Computing | L-T-P 2-0-4 | 4 credits | Prerequisite: not stated \n2023 batch – Specialization Track courses\n• 2023 batch | S5 | SPT-Course #1 | Track 1 – Applied Deep Learning: MATH401 –  \nProbabilistic Graph Models | L-T-P 3-0-2 | 4 credits | Prerequisite: None\n• 2023 batch | S5 | SPT-Course #1 | Track 2 – Full Stack Development: COMP401 – Web  \nFramework | L-T-P 2-0-4 | 4 credits | Prerequisite: None\n• 2023 batch | S6 | SPT-Course #2 | Track 1 – Applied Deep Learning: DATA405 –  \nReinforcement Learning | L-T-P 2-0-4 | 4 credits | Prerequisite: MATH202 Probability  \nTheory (S1) AND MATH204 Linear Algebra (S3)",
+    "metadata": {
+      "page": 8,
+      "section": "Specialization Tracks & Either/Or Options"
+    }
+  },
+  {
+    "chunkIndex": 23,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 8,
+    "sectionNumber": "Specialization Tracks & Either/Or Options",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2023 batch | S6 | SPT-Course #2 | Track 2 – Full Stack Development: DATA406 – Big Data  \nFramework | L-T-P 2-0-4 | 4 credits | Prerequisite: None\n• 2023 batch | S7 | SPT-Course #3 | Both tracks: DATA403 – Natural Language Processing |  \nL-T-P 2-0-4 | 4 credits | Prerequisite: DATA302 Deep Learning (S6)\n• 2023 batch | S7 | SPT-Course #4 | Track 1 – Applied Deep Learning: DATA404 – Multi  \nModal Learning | L-T-P 2-0-4 | 4 credits | Prerequisite: DATA302 Deep Learning (S6)\n• 2023 batch | S7 | SPT-Course #4 | Track 2 – Full Stack Development: COMP402 – Software  \nArchitecture and Deployments | L-T-P 2-0-4 | 4 credits | Prerequisite: COMP205 Object  \nOriented Programming (S4) AND COMP401 Web Framework (S5)",
+    "metadata": {
+      "page": 8,
+      "section": "Specialization Tracks & Either/Or Options"
+    }
+  },
+  {
+    "chunkIndex": 24,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 9,
+    "sectionNumber": "Specialization Tracks & Either/Or Options",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2023 batch | S7 | SPT-Course #5 | Track 1 – Applied Deep Learning: DATA408 – Advanced  \nTopics in Deep Learning | L-T-P 3-0-2 | 4 credits | Prerequisite: DATA302 Deep Learning  \n(S6)\n• 2023 batch | S7 | SPT-Course #5 | Track 2 – Full Stack Development: COMP405 – Cloud &  \nCognitive Computing | L-T-P 2-0-4 | 4 credits | Prerequisite: not clear – sheet lists only  \nDATA302 for this slot \n2024 batch – Specialization Track courses\n• 2024 batch | S5 | SPT-Course #1 | Track 1 – Applied Deep Learning: MATH401 –  \nProbabilistic Graph Models | L-T-P 3-0-2 | 4 credits | Prerequisite: None\n• 2024 batch | S5 | SPT-Course #1 | Track 2 – Full Stack Development: COMP401 – Web  \nFramework | L-T-P 2-0-4 | 4 credits | Prerequisite: None\n• 2024 batch | S6 | SPT-Course #2 | Track 1 – Applied Deep Learning: DATA404 – Multi  \nModal Learning | L-T-P 2-0-4 | 4 credits | Prerequisite: DATA302 Deep Learning (S6) |     \nDATA302 is scheduled in S6, not before S6",
+    "metadata": {
+      "page": 9,
+      "section": "Specialization Tracks & Either/Or Options"
+    }
+  },
+  {
+    "chunkIndex": 25,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 9,
+    "sectionNumber": "Specialization Tracks & Either/Or Options",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2024 batch | S6 | SPT-Course #2 | Track 2 – Full Stack Development: DATA406 – Big Data  \nFramework | L-T-P 2-0-4 | 4 credits | Prerequisite: None\n• 2024 batch | S7 | SPT-Course #3 | Both tracks: DATA403 – Natural Language Processing |  \nL-T-P 2-0-4 | 4 credits | Prerequisite: DATA302 Deep Learning (S6)\n• 2024 batch | S7 | SPT-Course #4 | Track 1 – Applied Deep Learning: DATA408 – Advanced  \nTopics in Deep Learning | L-T-P 3-0-2 | 4 credits | Prerequisite: DATA302 Deep Learning  \n(S6)\n• 2024 batch | S7 | SPT-Course #4 | Track 2 – Full Stack Development: COMP402 – Software  \nArchitecture and Deployments | L-T-P 2-0-4 | 4 credits | Prerequisite: COMP205 Object  \nOriented Programming (S5) AND COMP401 Web Framework (S5)",
+    "metadata": {
+      "page": 9,
+      "section": "Specialization Tracks & Either/Or Options"
+    }
+  },
+  {
+    "chunkIndex": 26,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 9,
+    "sectionNumber": "Specialization Tracks & Either/Or Options",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2024 batch | S7 | SPT-Course #5 | Both tracks: DATA405 – Reinforcement Learning | L-T-P  \n2-0-4 | 4 credits | Prerequisite: MATH202 Probability Theory – NOT in this batch's plan  \nAND MATH204 Linear Algebra (S3) |    MATH202 (Probability Theory) is not in this  \nbatch's plan \n2025 batch – Specialization Track courses\n• 2025 batch | S5 | SPT-Course #1 | Track 1 – Applied Deep Learning: MATH401 –  \nProbabilistic Graph Models | L-T-P 3-0-2 | 4 credits | Prerequisite: None\n• 2025 batch | S5 | SPT-Course #1 | Track 2 – Full Stack Development: COMP401 – Web  \nFramework | L-T-P 2-0-4 | 4 credits | Prerequisite: None\n• 2025 batch | S6 | SPT-Course #2 | Track 1 – Applied Deep Learning: DATA404 – Multi  \nModal Learning | L-T-P 2-0-4 | 4 credits | Prerequisite: DATA302 Deep Learning (S6) |     \nDATA302 is scheduled in S6, not before S6\n• 2025 batch | S6 | SPT-Course #2 | Track 2 – Full Stack Development: DATA406 – Big Data  \nFramework | L-T-P 2-0-4 | 4 credits | Prerequisite: None",
+    "metadata": {
+      "page": 9,
+      "section": "Specialization Tracks & Either/Or Options"
+    }
+  },
+  {
+    "chunkIndex": 27,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 9,
+    "sectionNumber": "Specialization Tracks & Either/Or Options",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2025 batch | S7 | SPT-Course #3 | Track 1 – Applied Deep Learning: TBA – Image  \nProcessing and Computer Vision | L-T-P 2-0-4 | 4 credits | Prerequisite: TBA\n• 2025 batch | S7 | SPT-Course #3 | Track 2 – Full Stack Development: COMP405 – Cloud &  \nCognitive Computing | L-T-P 2-0-4 | 4 credits | Prerequisite: None\n• 2025 batch | S7 | SPT-Course #4 | Track 1 – Applied Deep Learning: DATA408 – Advanced  \nTopics in Deep Learning | L-T-P 3-0-2 | 4 credits | Prerequisite: DATA302 Deep Learning  \n(S6)\n• 2025 batch | S7 | SPT-Course #4 | Track 2 – Full Stack Development: COMP402 – Software  \nArchitecture and Deployments | L-T-P 2-0-4 | 4 credits | Prerequisite: COMP205 Object  \nOriented Programming (S4) AND COMP401 Web Framework (S5)",
+    "metadata": {
+      "page": 9,
+      "section": "Specialization Tracks & Either/Or Options"
+    }
+  },
+  {
+    "chunkIndex": 28,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 10,
+    "sectionNumber": "Specialization Tracks & Either/Or Options",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2025 batch | S7 | SPT-Course #5 | Both tracks: DATA405 – Reinforcement Learning | L-T-P  \n2-0-4 | 4 credits | Prerequisite: MATH202 Probability Theory – NOT in this batch's plan  \nAND MATH204 Linear Algebra – NOT in this batch's plan |    MATH202 (Probability  \nTheory) is not in this batch's plan; MATH204 (Linear Algebra) is not in this batch's plan \n2026 batch – Electives (tracks removed)\n• 2026 batch | S5 | Elective 1 | L-T-P 2-0-4 | 4 credits\n• 2026 batch | S6 | Elective 2 | L-T-P 2-0-4 | 4 credits\n• 2026 batch | S7 | Elective 3, Elective 4, Elective 5 | L-T-P 2-0-4 each | 4 credits each\n• Elective pool (Struct_2026_DS): Probabilistic Graph Models, Advanced Topics in Deep  \nLearning, Cloud & Cognitive Computing, Multi Modal Learning, Reinforcement Learning,  \nWeb Framework, Big Data Framework, Software Architecture and Deployments (4 credits  \neach). Course codes and prerequisites are not given in the sheet for 2026. \nA7. Slash inside a prerequisite",
+    "metadata": {
+      "page": 10,
+      "section": "Specialization Tracks & Either/Or Options"
+    }
+  },
+  {
+    "chunkIndex": 29,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 10,
+    "sectionNumber": "Specialization Tracks & Either/Or Options",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2022 batch | DATA207 Human Centric AI | Prerequisite \"COMP210/COMP301\" =  \nCOMP210 OR COMP301. Note: COMP210 does not exist anywhere in the workbook;  \nCOMP301 Arti fi cial Intelligence (S4) is the usable option. \nA8. Track-wise summary (which 5 courses make up each track)\n• 2022 batch | Track 1 – Applied Deep Learning: Probabilistic Graph Models, Advanced  \nVisualization and Storytelling, Natural Language Processing, Multi Modal Learning,  \nReinforcement Learning (20 credits)\n• 2022 batch | Track 2 – Full Stack Development: Web Framework, Big Data Framework,  \nSoftware Architecture and Deployments, Cloud Computing, Cognitive Computing (20  \ncredits)\n• 2023 batch | Track 1 – Applied Deep Learning: Probabilistic Graph Models, Reinforcement  \nLearning, Natural Language Processing, Multi Modal Learning, Advanced Topics in Deep  \nLearning (20 credits)",
+    "metadata": {
+      "page": 10,
+      "section": "Specialization Tracks & Either/Or Options"
+    }
+  },
+  {
+    "chunkIndex": 30,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 10,
+    "sectionNumber": "Specialization Tracks & Either/Or Options",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2023 batch | Track 2 – Full Stack Development: Web Framework, Big Data Framework,  \nNatural Language Processing, Software Architecture and Deployments, Cloud & Cognitive  \nComputing (20 credits)\n• 2024 batch | Track 1 – Applied Deep Learning: Probabilistic Graph Models, Multi Modal  \nLearning, Natural Language Processing, Advanced Topics in Deep Learning, Reinforcement  \nLearning (20 credits)\n• 2024 batch | Track 2 – Full Stack Development: Web Framework, Big Data Framework,  \nNatural Language Processing, Software Architecture and Deployments, Reinforcement  \nLearning (20 credits)\n• 2025 batch | Track 1 – Applied Deep Learning: Probabilistic Graph Models, Multi Modal  \nLearning, Image Processing and Computer Vision, Advanced Topics in Deep Learning,  \nReinforcement Learning (20 credits)",
+    "metadata": {
+      "page": 10,
+      "section": "Specialization Tracks & Either/Or Options"
+    }
+  },
+  {
+    "chunkIndex": 31,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 10,
+    "sectionNumber": "Specialization Tracks & Either/Or Options",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2025 batch | Track 2 – Full Stack Development: Web Framework, Big Data Framework,  \nCloud & Cognitive Computing, Software Architecture and Deployments, Reinforcement  \nLearning (20 credits) \nPART B — PREREQUISITES (course  →  what must be  \ncompleted  fi rst), by batch \nOnly courses that HAVE a prerequisite are listed here; every other course has \"NIL\" (no  \nprerequisite). Specialization-track prerequisites are in Part A6.",
+    "metadata": {
+      "page": 10,
+      "section": "Specialization Tracks & Either/Or Options"
+    }
+  },
+  {
+    "chunkIndex": 32,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 11,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• of  11 37 \n2022 batch – prerequisites\n• 2022 batch | S2 | MTSC211 – Sustainable Smart Materials | requires: MTSC111 Materials  \nfor Smart Devices (S1)\n• 2022 batch | S2 | ENGL201 – Academic Writing | requires: UCOR102 Introduction to  \nwriting (S1)\n• 2022 batch | S2 | MATH205 – Statistics with R | requires: MATH202 Probability Theory  \n(S2) |    MATH202 is scheduled in S2, not before S2\n• 2022 batch | S3 | COMP203 – Analysis of Algorithms | requires: COMP201 Data Structures  \n(S2)\n• 2022 batch | S3 | DATA202 – Exploratory Data Analysis | requires: DATA201 Foundations  \nto Data Science (S2) AND MATH203 Probability and Statistics – NOT in this batch's plan |  \n  MATH203 (Probability and Statistics) is not in this batch's plan\n• 2022 batch | S4 | MATH301 – Optimization Techniques for Data Science | requires:  \nMATH201 Calculus (S1)\n• 2022 batch | S5 | DATA301 – Machine Learning | requires: DATA202 Exploratory Data  \nAnalysis (S3) AND MATH301 Optimization Techniques for Data Science (S4)",
+    "metadata": {
+      "page": 11,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 33,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 11,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2022 batch | S5 | DATA207 – Human Centric AI | requires: COMP210 (course not found  \nanywhere in the workbook) – NOT in this batch's plan OR COMP301 Arti fi cial Intelligence  \n(S4) |    COMP210 is not in this batch's plan and does not exist in any batch\n• 2022 batch | S6 | COMP206 – Microprocessors and Computer Architecture | requires:  \nCOMP204 Digital Design and Computer Organization (S4) AND COMP207 Operating  \nSystems (S5)\n• 2022 batch | S6 | DATA302 – Deep Learning | requires: DATA301 Machine Learning (S5)\n• 2022 batch | S7 | COMP302 – Internet of Things | requires: COMP132 Design Workshop  \n(S1) AND COMP201 Data Structures (S2) AND COMP206 Microprocessors and Computer  \nArchitecture (S6) AND COMP208 Networks (S5) AND COMP301 Arti fi cial Intelligence  \n(S4) \n2022 batch – reverse view (completing this course unlocks):\n• COMP132 Design Workshop  →  unlocks COMP302 Internet of Things (S7)",
+    "metadata": {
+      "page": 11,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 34,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 11,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• COMP201 Data Structures  →  unlocks COMP203 Analysis of Algorithms (S3), COMP302  \nInternet of Things (S7)\n• COMP204 Digital Design and Computer Organization  →  unlocks COMP206  \nMicroprocessors and Computer Architecture (S6)\n• COMP206 Microprocessors and Computer Architecture  →  unlocks COMP302 Internet of  \nThings (S7)\n• COMP207 Operating Systems  →  unlocks COMP206 Microprocessors and Computer  \nArchitecture (S6)\n• COMP208 Networks  →  unlocks COMP302 Internet of Things (S7)\n• COMP210 (course does not exist in the workbook) [NOT in this batch's plan]  →  unlocks  \nDATA207 Human Centric AI (S5)\n• COMP301 Arti fi cial Intelligence  →  unlocks DATA207 Human Centric AI (S5), COMP302  \nInternet of Things (S7)\n• DATA201 Foundations to Data Science  →  unlocks DATA202 Exploratory Data Analysis  \n(S3)\n• DATA202 Exploratory Data Analysis  →  unlocks DATA301 Machine Learning (S5)\n• DATA301 Machine Learning  →  unlocks DATA302 Deep Learning (S6)",
+    "metadata": {
+      "page": 11,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 35,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 11,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• MATH201 Calculus  →  unlocks MATH301 Optimization Techniques for Data Science (S4)",
+    "metadata": {
+      "page": 11,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 36,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 12,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• MATH202 Probability Theory  →  unlocks MATH205 Statistics with R (S2)\n• MATH203 Probability and Statistics [NOT in this batch's plan]  →  unlocks DATA202  \nExploratory Data Analysis (S3)\n• MATH301 Optimization Techniques for Data Science  →  unlocks DATA301 Machine  \nLearning (S5)\n• MTSC111 Materials for Smart Devices  →  unlocks MTSC211 Sustainable Smart Materials  \n(S2)\n• UCOR102 Introduction to writing  →  unlocks ENGL201 Academic Writing (S2) \n2023 batch – prerequisites\n• 2023 batch | S2 | MTSC211 – Sustainable Smart Materials | requires: MTSC111 Materials  \nfor Smart Devices (S1)\n• 2023 batch | S2 | ENGL201 – Academic Writing | requires: UCOR102 Introduction to  \nwriting (S1)\n• 2023 batch | S2 | MATH205 – Statistics with R | requires: MATH202 Probability Theory  \n(S1)\n• 2023 batch | S3 | COMP203 – Analysis of Algorithms | requires: COMP201 Data Structures  \n(S2)",
+    "metadata": {
+      "page": 12,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 37,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 12,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2023 batch | S3 | DATA202 – Exploratory Data Analysis | requires: DATA201 Foundations  \nto Data Science (S2) AND MATH203 Probability and Statistics – NOT in this batch's plan |  \n  MATH203 (Probability and Statistics) is not in this batch's plan\n• 2023 batch | S4 | MATH301 – Optimization Techniques for Data Science | requires:  \nMATH201 Calculus (S2)\n• 2023 batch | S5 | COMP206 – Microprocessors and Computer Architecture | requires:  \nCOMP204 Digital Design and Computer Organization (S4) AND COMP207 Operating  \nSystems (S5) |    COMP207 is scheduled in S5, not before S5\n• 2023 batch | S5 | DATA301 – Machine Learning | requires: DATA202 Exploratory Data  \nAnalysis (S3) AND MATH301 Optimization Techniques for Data Science (S4)\n• 2023 batch | S6 | COMP302 – Internet of Things | requires: COMP132 Design Workshop  \n(S1) AND COMP201 Data Structures (S2) AND COMP206 Microprocessors and Computer  \nArchitecture (S5) AND COMP208 Networks (S5) AND COMP301 Arti fi cial Intelligence  \n(S4)",
+    "metadata": {
+      "page": 12,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 38,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 12,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2023 batch | S6 | DATA302 – Deep Learning | requires: DATA301 Machine Learning (S5)  \nAND MATH201 Calculus (S2)\n• 2023 batch | S6 | DATA303 – MLOps & Model Deployment | requires: DATA301 Machine  \nLearning (S5) AND COMP208 Networks (S5) \n2023 batch – reverse view (completing this course unlocks):\n• COMP132 Design Workshop  →  unlocks COMP302 Internet of Things (S6)\n• COMP201 Data Structures  →  unlocks COMP203 Analysis of Algorithms (S3), COMP302  \nInternet of Things (S6)\n• COMP204 Digital Design and Computer Organization  →  unlocks COMP206  \nMicroprocessors and Computer Architecture (S5)\n• COMP206 Microprocessors and Computer Architecture  →  unlocks COMP302 Internet of  \nThings (S6)\n• COMP207 Operating Systems  →  unlocks COMP206 Microprocessors and Computer  \nArchitecture (S5)\n• COMP208 Networks  →  unlocks COMP302 Internet of Things (S6), DATA303 MLOps &  \nModel Deployment (S6)",
+    "metadata": {
+      "page": 12,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 39,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 13,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• COMP301 Arti fi cial Intelligence  →  unlocks COMP302 Internet of Things (S6)\n• DATA201 Foundations to Data Science  →  unlocks DATA202 Exploratory Data Analysis  \n(S3)\n• DATA202 Exploratory Data Analysis  →  unlocks DATA301 Machine Learning (S5)\n• DATA301 Machine Learning  →  unlocks DATA302 Deep Learning (S6), DATA303 MLOps  \n& Model Deployment (S6)\n• MATH201 Calculus  →  unlocks MATH301 Optimization Techniques for Data Science (S4),  \nDATA302 Deep Learning (S6)\n• MATH202 Probability Theory  →  unlocks MATH205 Statistics with R (S2)\n• MATH203 Probability and Statistics [NOT in this batch's plan]  →  unlocks DATA202  \nExploratory Data Analysis (S3)\n• MATH301 Optimization Techniques for Data Science  →  unlocks DATA301 Machine  \nLearning (S5)\n• MTSC111 Materials for Smart Devices  →  unlocks MTSC211 Sustainable Smart Materials  \n(S2)\n• UCOR102 Introduction to writing  →  unlocks ENGL201 Academic Writing (S2) \n2024 batch – prerequisites",
+    "metadata": {
+      "page": 13,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 40,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 13,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2024 batch | S2 | MTSC211 – Sustainable Smart Materials | requires: MTSC111 Materials  \nfor Smart Devices (S1)\n• 2024 batch | S2 | ENGL210 – Academic Writing | requires: UCOR102 Introduction to  \nwriting (S1)\n• 2024 batch | S2 | DATA132 – Data visualization and Storytelling | requires: DATA103  \nProgramming in Python (S1)\n• 2024 batch | S3 | COMP203 – Analysis of Algorithms | requires: COMP201 Data Structures  \n(S2)\n• 2024 batch | S3 | DATA202 – Exploratory Data Analysis | requires: DATA201 Foundations  \nto Data Science (S2) AND MATH203 Probability and Statistics (S1)\n• 2024 batch | S3 | MATH206 – Advanced Statistical Analysis and Research Methods with R |  \nrequires: MATH203 Probability and Statistics (S1)\n• 2024 batch | S5 | DATA301 – Machine Learning | requires: DATA202 Exploratory Data  \nAnalysis (S3) AND MATH301 Optimization Techniques for Data Science (S4)",
+    "metadata": {
+      "page": 13,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 41,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 13,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2024 batch | S6 | COMP206 – Microprocessors and Computer Architecture | requires:  \nCOMP204 Digital Design and Computer Organization (S4) AND COMP207 Operating  \nSystems (S5)\n• 2024 batch | S6 | DATA302 – Deep Learning | requires: DATA301 Machine Learning (S5)\n• 2024 batch | S7 | COMP302 – Internet of Things | requires: COMP132 Design Workshop  \n(S1) AND COMP201 Data Structures (S2) AND COMP206 Microprocessors and Computer  \nArchitecture (S6) AND COMP208 Networks (S5) AND COMP301 Arti fi cial Intelligence  \n(S4) \n2024 batch – reverse view (completing this course unlocks):\n• COMP132 Design Workshop  →  unlocks COMP302 Internet of Things (S7)\n• COMP201 Data Structures  →  unlocks COMP203 Analysis of Algorithms (S3), COMP302  \nInternet of Things (S7)\n• COMP204 Digital Design and Computer Organization  →  unlocks COMP206  \nMicroprocessors and Computer Architecture (S6)\n• COMP206 Microprocessors and Computer Architecture  →  unlocks COMP302 Internet of  \nThings (S7)",
+    "metadata": {
+      "page": 13,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 42,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 14,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• COMP207 Operating Systems  →  unlocks COMP206 Microprocessors and Computer  \nArchitecture (S6)\n• COMP208 Networks  →  unlocks COMP302 Internet of Things (S7)\n• COMP301 Arti fi cial Intelligence  →  unlocks COMP302 Internet of Things (S7)\n• DATA103 Programming in Python  →  unlocks DATA132 Data visualization and Storytelling  \n(S2)\n• DATA201 Foundations to Data Science  →  unlocks DATA202 Exploratory Data Analysis  \n(S3)\n• DATA202 Exploratory Data Analysis  →  unlocks DATA301 Machine Learning (S5)\n• DATA301 Machine Learning  →  unlocks DATA302 Deep Learning (S6)\n• MATH203 Probability and Statistics  →  unlocks DATA202 Exploratory Data Analysis (S3),  \nMATH206 Advanced Statistical Analysis and Research Methods with R (S3)\n• MATH301 Optimization Techniques for Data Science  →  unlocks DATA301 Machine  \nLearning (S5)\n• MTSC111 Materials for Smart Devices  →  unlocks MTSC211 Sustainable Smart Materials  \n(S2)",
+    "metadata": {
+      "page": 14,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 43,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 14,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• UCOR102 Introduction to writing  →  unlocks ENGL210 Academic Writing (S2) \n2025 batch – prerequisites\n• 2025 batch | S2 | MTSC211 – Sustainable Smart Materials | requires: MTSC111 Materials  \nfor Smart Devices (S1)\n• 2025 batch | S2 | DATA132 – Data Visualization and Storytelling | requires: DATA103  \nProgramming in Python (S1)\n• 2025 batch | S3 | COMP203 – Analysis of Algorithms | requires: COMP201 Data Structures  \n(S2)\n• 2025 batch | S3 | DATA209 – Advanced Exploratory Data Analysis | requires: DATA132  \nData visualization and Storytelling (S2) AND MATH203 Probability and Statistics (S2)\n• 2025 batch | S4 | MATH206 – Advanced Statistical Analysis and Research Methods with R |  \nrequires: MATH203 Probability and Statistics (S2)\n• 2025 batch | S4 | MATH301 – Optimization Techniques for Data Science | requires:  \nMATH201 Calculus – NOT in this batch's plan |    MATH201 (Calculus) is not in this  \nbatch's plan",
+    "metadata": {
+      "page": 14,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 44,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 14,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2025 batch | S5 | COMP206 – Microprocessors and Computer Architecture | requires:  \nCOMP204 Digital Design and Computer Organization (S1) AND COMP207 Operating  \nSystems (S4)\n• 2025 batch | S5 | DATA301 – Machine Learning | requires: DATA206 (course not found  \nanywhere in the workbook) – NOT in this batch's plan AND MATH301 Optimization  \nTechniques for Data Science (S4) |    DATA206 is not in this batch's plan and does not exist  \nin any batch\n• 2025 batch | S6 | COMP302 – Internet of Things | requires: COMP132 Design Workshop  \n(S2) AND COMP201 Data Structures (S2) AND COMP206 Microprocessors and Computer  \nArchitecture (S5) AND COMP208 Networks (S6) AND COMP301 Arti fi cial Intelligence  \n(S4) |    COMP208 is scheduled in S6, not before S6\n• 2025 batch | S6 | DATA302 – Deep Learning | requires: DATA301 Machine Learning (S5)",
+    "metadata": {
+      "page": 14,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 45,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 14,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2025 batch | S7 | DATA403 – Natural Language Processing | requires: DATA302 Deep  \nLearning (S6) \n2025 batch – reverse view (completing this course unlocks):\n• COMP132 Design Workshop  →  unlocks COMP302 Internet of Things (S6)",
+    "metadata": {
+      "page": 14,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 46,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 15,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• COMP201 Data Structures  →  unlocks COMP203 Analysis of Algorithms (S3), COMP302  \nInternet of Things (S6)\n• COMP204 Digital Design and Computer Organization  →  unlocks COMP206  \nMicroprocessors and Computer Architecture (S5)\n• COMP206 Microprocessors and Computer Architecture  →  unlocks COMP302 Internet of  \nThings (S6)\n• COMP207 Operating Systems  →  unlocks COMP206 Microprocessors and Computer  \nArchitecture (S5)\n• COMP208 Networks  →  unlocks COMP302 Internet of Things (S6)\n• COMP301 Arti fi cial Intelligence  →  unlocks COMP302 Internet of Things (S6)\n• DATA103 Programming in Python  →  unlocks DATA132 Data Visualization and  \nStorytelling (S2)\n• DATA132 Data visualization and Storytelling  →  unlocks DATA209 Advanced Exploratory  \nData Analysis (S3)\n• DATA206 (course does not exist in the workbook) [NOT in this batch's plan]  →  unlocks  \nDATA301 Machine Learning (S5)\n• DATA301 Machine Learning  →  unlocks DATA302 Deep Learning (S6)",
+    "metadata": {
+      "page": 15,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 47,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 15,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• DATA302 Deep Learning  →  unlocks DATA403 Natural Language Processing (S7)\n• MATH201 Calculus [NOT in this batch's plan]  →  unlocks MATH301 Optimization  \nTechniques for Data Science (S4)\n• MATH203 Probability and Statistics  →  unlocks DATA209 Advanced Exploratory Data  \nAnalysis (S3), MATH206 Advanced Statistical Analysis and Research Methods with R (S4)\n• MATH301 Optimization Techniques for Data Science  →  unlocks DATA301 Machine  \nLearning (S5)\n• MTSC111 Materials for Smart Devices  →  unlocks MTSC211 Sustainable Smart Materials  \n(S2) \n2026 batch – prerequisites\n• 2026 batch | S2 | MTSC211 – Sustainable Smart Materials | requires: MTSC111 Materials  \nfor Smart Devices (S1)\n• 2026 batch | S2 | DATA132 – Data Visualization and Storytelling | requires: DATA103  \nProgramming in Python (S1)\n• 2026 batch | S3 | COMP203 – Analysis of Algorithms | requires: COMP201 Data Structures  \n(S2)",
+    "metadata": {
+      "page": 15,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 48,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 15,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2026 batch | S3 | DATA209 – Advanced Exploratory Data Analysis | requires: DATA132  \nData visualization and Storytelling (S2) AND MATH203 Probability and Statistics (S2)\n• 2026 batch | S4 | MATH210 – Advanced Statistical Analysis and Research Methods |  \nrequires: MATH203 Probability and Statistics (S2)\n• 2026 batch | S4 | MATH301 – Optimization Techniques for Data Science | requires:  \nMATH201 Calculus – NOT in this batch's plan |    MATH201 (Calculus) is not in this  \nbatch's plan\n• 2026 batch | S5 | COMP206 – Microprocessors and Computer Architecture | requires:  \nCOMP204 Digital Design and Computer Organization (S1) AND COMP207 Operating  \nSystems – NOT in this batch's plan |    COMP207 (Operating Systems) is not in this batch's  \nplan\n• 2026 batch | S5 | DATA301 – Machine Learning | requires: DATA206 (course not found  \nanywhere in the workbook) – NOT in this batch's plan AND MATH301 Optimization",
+    "metadata": {
+      "page": 15,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 49,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 16,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• of  16 37 \nTechniques for Data Science (S4) |    DATA206 is not in this batch's plan and does not exist  \nin any batch\n• 2026 batch | S6 | COMP302 – Internet of Things | requires: COMP132 Design Workshop –  \nNOT in this batch's plan AND COMP201 Data Structures (S2) AND COMP206  \nMicroprocessors and Computer Architecture (S5) AND COMP208 Networks (S6) AND  \nCOMP301 Arti fi cial Intelligence (S4) |    COMP132 (Design Workshop) is not in this  \nbatch's plan; COMP208 is scheduled in S6, not before S6\n• 2026 batch | S6 | DATA302 – Deep Learning | requires: DATA301 Machine Learning (S5)\n• 2026 batch | S7 | DATA403 – Natural Language Processing | requires: DATA302 Deep  \nLearning (S6) \n2026 batch – reverse view (completing this course unlocks):\n• COMP132 Design Workshop [NOT in this batch's plan]  →  unlocks COMP302 Internet of  \nThings (S6)\n• COMP201 Data Structures  →  unlocks COMP203 Analysis of Algorithms (S3), COMP302  \nInternet of Things (S6)",
+    "metadata": {
+      "page": 16,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 50,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 16,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• COMP204 Digital Design and Computer Organization  →  unlocks COMP206  \nMicroprocessors and Computer Architecture (S5)\n• COMP206 Microprocessors and Computer Architecture  →  unlocks COMP302 Internet of  \nThings (S6)\n• COMP207 Operating Systems [NOT in this batch's plan]  →  unlocks COMP206  \nMicroprocessors and Computer Architecture (S5)\n• COMP208 Networks  →  unlocks COMP302 Internet of Things (S6)\n• COMP301 Arti fi cial Intelligence  →  unlocks COMP302 Internet of Things (S6)\n• DATA103 Programming in Python  →  unlocks DATA132 Data Visualization and  \nStorytelling (S2)\n• DATA132 Data visualization and Storytelling  →  unlocks DATA209 Advanced Exploratory  \nData Analysis (S3)\n• DATA206 (course does not exist in the workbook) [NOT in this batch's plan]  →  unlocks  \nDATA301 Machine Learning (S5)\n• DATA301 Machine Learning  →  unlocks DATA302 Deep Learning (S6)\n• DATA302 Deep Learning  →  unlocks DATA403 Natural Language Processing (S7)",
+    "metadata": {
+      "page": 16,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 51,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 16,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• MATH201 Calculus [NOT in this batch's plan]  →  unlocks MATH301 Optimization  \nTechniques for Data Science (S4)\n• MATH203 Probability and Statistics  →  unlocks DATA209 Advanced Exploratory Data  \nAnalysis (S3), MATH210 Advanced Statistical Analysis and Research Methods (S4)\n• MATH301 Optimization Techniques for Data Science  →  unlocks DATA301 Machine  \nLearning (S5)\n• MTSC111 Materials for Smart Devices  →  unlocks MTSC211 Sustainable Smart Materials  \n(S2) \nPrerequisite problems found (show to the university for correction)\n• 2022 batch | MATH205 Statistics with R: MATH202 is scheduled in S2, not before S2\n• 2022 batch | DATA202 Exploratory Data Analysis: MATH203 (Probability and Statistics) is  \nnot in this batch's plan\n• 2022 batch | DATA207 Human Centric AI: COMP210 is not in this batch's plan and does  \nnot exist in any batch\n• 2023 batch | DATA202 Exploratory Data Analysis: MATH203 (Probability and Statistics) is  \nnot in this batch's plan",
+    "metadata": {
+      "page": 16,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 52,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 17,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2023 batch | COMP206 Microprocessors and Computer Architecture: COMP207 is  \nscheduled in S5, not before S5\n• 2025 batch | MATH301 Optimization Techniques for Data Science: MATH201 (Calculus) is  \nnot in this batch's plan\n• 2025 batch | DATA301 Machine Learning: DATA206 is not in this batch's plan and does not  \nexist in any batch\n• 2025 batch | COMP302 Internet of Things: COMP208 is scheduled in S6, not before S6\n• 2026 batch | MATH301 Optimization Techniques for Data Science: MATH201 (Calculus) is  \nnot in this batch's plan\n• 2026 batch | COMP206 Microprocessors and Computer Architecture: COMP207 (Operating  \nSystems) is not in this batch's plan\n• 2026 batch | DATA301 Machine Learning: DATA206 is not in this batch's plan and does not  \nexist in any batch\n• 2026 batch | COMP302 Internet of Things: COMP132 (Design Workshop) is not in this  \nbatch's plan\n• 2026 batch | COMP302 Internet of Things: COMP208 is scheduled in S6, not before S6",
+    "metadata": {
+      "page": 17,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 53,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 17,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2024 & 2025 batch | SPT-Course #5 Reinforcement Learning requires MATH202,  \nMATH204. 2024 has MATH203 instead of MATH202; 2025 has MATH203 and MATH209  \ninstead of both.\n• 2024 & 2025 batch | SPT-Course #2 Multi Modal Learning (Track 1, S6) requires DATA302  \nDeep Learning, which is also in S6 (same semester).\n• 2023 batch | SPT-Course #5 lists only \"DATA302\" as prerequisite though the slot has two  \noptions; it is unclear whether Cloud & Cognitive Computing (Track 2) needs it. \nPART C — COMPLETE COURSE LIST WITH CREDITS,  \nby batch and semester \n2022 batch – full semester plan \n2022 batch – Semester 1 (total 22 credits; 30 contact hours/week = L 12 + T 2 + P 16)\n• 2022 batch | S1 | University Core | UCOR103 – Communication Skills | L-T-P 1-0-2 | 2  \ncredits | Prerequisite: None\n• 2022 batch | S1 | University Core | UCOR104 – Problem Solving with Design Thinking | L- \nT-P 1-0-2 | 2 credits | Prerequisite: None",
+    "metadata": {
+      "page": 17,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 54,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 17,
+    "sectionNumber": "Prerequisites & Unlock Chains Across Batches",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2022 batch | S1 | University Core | UCOR102 – Introduction to writing | L-T-P 1-0-2 | 2  \ncredits | Prerequisite: None\n• 2022 batch | S1 | Foundation | MATH201 – Calculus | L-T-P 2-1-0 | 3 credits | Prerequisite:  \nNone\n• 2022 batch | S1 | Foundation | COMP132 – Design Workshop | L-T-P 0-0-4 | 2 credits |  \nPrerequisite: None\n• 2022 batch | S1 | Foundation | MTSC111 – Materials for Smart Devices | L-T-P 2-0-2 | 3  \ncredits | Prerequisite: None\n• 2022 batch | S1 | Foundation | DATA131 – Visualizing Data for Story Telling | L-T-P 1-0-2 |  \n2 credits | Prerequisite: None\n• 2022 batch | S1 | Foundation | PSYC101/ECON101 – Introduction to Psychology/ \nIntroduction to Economics | L-T-P 2-1-0 | 3 credits | Prerequisite: None | Either/or: student  \nchooses ONE of the two\n• 2022 batch | S1 | Program Core | DATA130 – Computational Thinking | L-T-P 2-0-2 | 3  \ncredits | Prerequisite: None \n2022 batch – Semester 2 (total 24 credits; 30 contact hours/week = L 15 + T 1 + P 14)",
+    "metadata": {
+      "page": 17,
+      "section": "Prerequisites & Unlock Chains Across Batches"
+    }
+  },
+  {
+    "chunkIndex": 55,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 18,
+    "sectionNumber": "Batch 2022 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2022 batch | S2 | University Core | UCOR203 – Leadership and Teamwork Skills | L-T-P  \n1-0-2 | 2 credits | Prerequisite: None\n• 2022 batch | S2 | University Core | UCOR701 – Community Engagement & Service  \nExperience | L-T-P 0-0-0 | 1 credit | Prerequisite: None\n• 2022 batch | S2 | University Core | UCOR106 – Learning to Learn | L-T-P 1-0-2 | 2 credits |  \nPrerequisite: None\n• 2022 batch | S2 | Foundation | MATH202 – Probability Theory | L-T-P 2-1-0 | 3 credits |  \nPrerequisite: None\n• 2022 batch | S2 | Foundation | MTSC211 – Sustainable Smart Materials | L-T-P 2-0-2 | 3  \ncredits | Prerequisite: MTSC111 Materials for Smart Devices (S1)\n• 2022 batch | S2 | Foundation | ENGL201 – Academic Writing | L-T-P 2-0-2 | 3 credits |  \nPrerequisite: UCOR102 Introduction to writing (S1)\n• 2022 batch | S2 | Program Core | COMP201 – Data Structures | L-T-P 3-0-2 | 4 credits |  \nPrerequisite: None",
+    "metadata": {
+      "page": 18,
+      "section": "Batch 2022 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 56,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 18,
+    "sectionNumber": "Batch 2022 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2022 batch | S2 | Program Core | MATH205 – Statistics with R | L-T-P 2-0-2 | 3 credits |  \nPrerequisite: MATH202 Probability Theory (S2)\n• 2022 batch | S2 | Program Honors | DATA201 – Foundations to Data Science | L-T-P 2-0-2 |  \n3 credits | Prerequisite: None \n2022 batch – Semester 3 (total 26 credits; 25 contact hours/week = L 17 + T 4 + P 4)\n• 2022 batch | S3 | University Core | UCOR205 – Socio Cultural Perspectives on Indian Life- \nSPIL | L-T-P 2-1-0 | 3 credits | Prerequisite: None\n• 2022 batch | S3 | University Core | UCOR201 – Introduction to Epistemology | L-T-P 1-1-0 |  \n2 credits | Prerequisite: None\n• 2022 batch | S3 | Foundation | MTSC781 – Sustainable Cities and Communities | L-T-P  \n0-0-0 | 3 credits | Prerequisite: None\n• 2022 batch | S3 | Foundation | MATH204 – Linear Algebra | L-T-P 2-1-0 | 3 credits |  \nPrerequisite: None\n• 2022 batch | S3 | Program Core | COMP203 – Analysis of Algorithms | L-T-P 3-0-2 | 4  \ncredits | Prerequisite: COMP201 Data Structures (S2)",
+    "metadata": {
+      "page": 18,
+      "section": "Batch 2022 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 57,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 18,
+    "sectionNumber": "Batch 2022 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2022 batch | S3 | Program Core | COMP202 – Theoretical Computer Science | L-T-P 3-1-0 |  \n4 credits | Prerequisite: None\n• 2022 batch | S3 | Program Honors | DATA202 – Exploratory Data Analysis | L-T-P 2-0-2 | 3  \ncredits | Prerequisite: DATA201 Foundations to Data Science (S2) AND MATH203  \nProbability and Statistics – NOT in this batch's plan\n• 2022 batch | S3 | Open/Minor | (no code) – Minor/Open (#1 Course) | L-T-P 4-0-0 | 4 credits  \n| Prerequisite: None \n2022 batch – Semester 4 (total 28 credits; 28 contact hours/week = L 20 + T 2 + P 6)\n• 2022 batch | S4 | University Core | UCOR210 – Critical Thinking | L-T-P 2-0-0 | 2 credits |  \nPrerequisite: None\n• 2022 batch | S4 | Foundation | SLAD206 – Human Values in Work and Life | L-T-P 0-0-0 | 2  \ncredits | Prerequisite: None\n• 2022 batch | S4 | Foundation | SLAD207 – Foundation Seminar | L-T-P 0-0-0 | 1 credit |  \nPrerequisite: None",
+    "metadata": {
+      "page": 18,
+      "section": "Batch 2022 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 58,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 18,
+    "sectionNumber": "Batch 2022 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2022 batch | S4 | Program Core | COMP205 – Object Oriented Programming | L-T-P 2-0-2 |  \n3 credits | Prerequisite: None\n• 2022 batch | S4 | Program Core | COMP204 – Digital Design and Computer Organization |  \nL-T-P 3-1-0 | 4 credits | Prerequisite: None\n• 2022 batch | S4 | Program Core | COMP301 – Arti fi cial Intelligence | L-T-P 3-0-2 | 4 credits |  \nPrerequisite: None",
+    "metadata": {
+      "page": 18,
+      "section": "Batch 2022 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 59,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 19,
+    "sectionNumber": "Batch 2022 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2022 batch | S4 | Program Core | COMP209 – Databases Management | L-T-P 3-0-2 | 4  \ncredits | Prerequisite: None\n• 2022 batch | S4 | Program Honors | MATH301 – Optimization Techniques for Data Science |  \nL-T-P 3-1-0 | 4 credits | Prerequisite: MATH201 Calculus (S1)\n• 2022 batch | S4 | Open/Minor | (no code) – Minor/Open (#2 Course) | L-T-P 4-0-0 | 4 credits  \n| Prerequisite: None \n2022 batch – Semester 5 (total 23 credits; 28 contact hours/week = L 14 + T 0 + P 14)\n• 2022 batch | S5 | Program Core | COMP208 – Networks | L-T-P 3-0-2 | 4 credits |  \nPrerequisite: None\n• 2022 batch | S5 | Program Core | COMP207 – Operating Systems | L-T-P 2-0-2 | 3 credits |  \nPrerequisite: None\n• 2022 batch | S5 | Program Honors | DATA301 – Machine Learning | L-T-P 2-0-4 | 4 credits |  \nPrerequisite: DATA202 Exploratory Data Analysis (S3) AND MATH301 Optimization  \nTechniques for Data Science (S4)",
+    "metadata": {
+      "page": 19,
+      "section": "Batch 2022 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 60,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 19,
+    "sectionNumber": "Batch 2022 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2022 batch | S5 | Program Honors | DATA207 – Human Centric AI | L-T-P 1-0-2 | 2 credits |  \nPrerequisite: COMP210 (course not found anywhere in the workbook) – NOT in this batch's  \nplan OR COMP301 Arti fi cial Intelligence (S4)\n• 2022 batch | S5 | Specialization Track | SPT-Course #1-Probabilistic Graph Models LTP:  \n3-0-2 /Web Framework LTP: 2-0-4 | 4 credits | see Part A6 for both track options and  \nprerequisites\n• 2022 batch | S5 | Open/Minor | (no code) – Minor/Open (#3 Course) | L-T-P 4-0-0 | 4 credits  \n| Prerequisite: None\n• 2022 batch | S5 | Internship/Capstone Project | DATA801 – Summer Training/Internship | L- \nT-P 0-0-0 | 2 credits | Prerequisite: None \n2022 batch – Semester 6 (total 23 credits; 25 contact hours/week = L 15 + T 0 + P 10)\n• 2022 batch | S6 | Foundation | LANG101 – Language | L-T-P 0-0-0 | 3 credits | Prerequisite:  \nNone",
+    "metadata": {
+      "page": 19,
+      "section": "Batch 2022 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 61,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 19,
+    "sectionNumber": "Batch 2022 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2022 batch | S6 | Program Core | COMP206 – Microprocessors and Computer Architecture |  \nL-T-P 3-0-2 | 4 credits | Prerequisite: COMP204 Digital Design and Computer Organization  \n(S4) AND COMP207 Operating Systems (S5)\n• 2022 batch | S6 | Program Honors | DATA302 – Deep Learning | L-T-P 2-0-4 | 4 credits |  \nPrerequisite: DATA301 Machine Learning (S5)\n• 2022 batch | S6 | Specialization Track | SPT-Course #2 (Advanced Visualization and  \nStorytelling/Big Data Framework) | 4 credits | see Part A6 for both track options and  \nprerequisites\n• 2022 batch | S6 | Open/Minor | (no code) – Minor/Open (#4, #5 Courses) | L-T-P 8-0-0 | 8  \ncredits | Prerequisite: None | = 2 separate Minor/Open courses of 4 credits each \n2022 batch – Semester 7 (total 22 credits; 26 contact hours/week = L 10 + T 0 + P 16)",
+    "metadata": {
+      "page": 19,
+      "section": "Batch 2022 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 62,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 19,
+    "sectionNumber": "Batch 2022 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2022 batch | S7 | Program Core | COMP302 – Internet of Things | L-T-P 0-0-4 | 2 credits |  \nPrerequisite: COMP132 Design Workshop (S1) AND COMP201 Data Structures (S2) AND  \nCOMP206 Microprocessors and Computer Architecture (S6) AND COMP208 Networks  \n(S5) AND COMP301 Arti fi cial Intelligence (S4)\n• 2022 batch | S7 | Specialization Track | SPT-Course #3 (Natural Language Processing /  \nSoftware Architecture and Deployments) | 4 credits | see Part A6 for both track options and  \nprerequisites\n• 2022 batch | S7 | Specialization Track | SPT-Course #4 (Multi Modal Learning / Cloud  \nComputing) | 4 credits | see Part A6 for both track options and prerequisites",
+    "metadata": {
+      "page": 19,
+      "section": "Batch 2022 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 63,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 20,
+    "sectionNumber": "Batch 2022 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2022 batch | S7 | Specialization Track | SPT-Course #5 (Reinforcement Learning/ Cognitive  \nComputing) | 4 credits | see Part A6 for both track options and prerequisites\n• 2022 batch | S7 | Open/Minor | (no code) – Minor (#6 Course) | L-T-P 4-0-0 | 4 credits |  \nPrerequisite: None\n• 2022 batch | S7 | Internship/Capstone Project | DATA802 – Interdisciplinary Project | L-T-P  \n0-0-0 | 4 credits | Prerequisite: None \n2022 batch – Semester 8 (total 12 credits; 0 contact hours/week = L 0 + T 0 + P 0)\n• 2022 batch | S8 | Internship/Capstone Project | DATA803 – Capstone Project/Industrial  \nInternship | L-T-P 0-0-0 | 12 credits | Prerequisite: None \n2022 batch – credits per basket (from the semester plan)\n• 2022 batch | B1 University Core: 18 credits\n• 2022 batch | B2 Foundation: 34 credits\n• 2022 batch | B3 Program Core: 46 credits\n• 2022 batch | B4 Program Honors: 20 credits\n• 2022 batch | B5 Specialization Track: 20 credits\n• 2022 batch | B6 Open/Minor: 24 credits",
+    "metadata": {
+      "page": 20,
+      "section": "Batch 2022 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 64,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 20,
+    "sectionNumber": "Batch 2022 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2022 batch | B7 Internship/Capstone Project: 18 credits\n• 2022 batch | TOTAL: 180 credits \n2023 batch – full semester plan \n2023 batch – Semester 1 (total 19 credits; 26 contact hours/week = L 10 + T 2 + P 14)\n• 2023 batch | S1 | University Core | UCOR103 – Communication Skills | L-T-P 1-0-2 | 2  \ncredits | Prerequisite: None\n• 2023 batch | S1 | University Core | UCOR104 – Problem Solving with Design Thinking | L- \nT-P 1-0-2 | 2 credits | Prerequisite: None\n• 2023 batch | S1 | University Core | UCOR102 – Introduction to writing | L-T-P 1-0-2 | 2  \ncredits | Prerequisite: None\n• 2023 batch | S1 | Foundation | MATH202 – Probability Theory | L-T-P 2-1-0 | 3 credits |  \nPrerequisite: None\n• 2023 batch | S1 | Foundation | COMP132 – Design Workshop | L-T-P 0-0-4 | 2 credits |  \nPrerequisite: None\n• 2023 batch | S1 | Foundation | MTSC111 – Materials for Smart Devices | L-T-P 2-0-2 | 3  \ncredits | Prerequisite: None",
+    "metadata": {
+      "page": 20,
+      "section": "Batch 2022 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 65,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 20,
+    "sectionNumber": "Batch 2022 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2023 batch | S1 | Foundation | PSYC101/ECON101 – Introduction to Psychology/ \nIntroduction to Economics | L-T-P 2-1-0 | 3 credits | Prerequisite: None | Either/or: student  \nchooses ONE of the two\n• 2023 batch | S1 | Foundation | DATA131 – Visualizing Data for Story Telling | L-T-P 1-0-2 |  \n2 credits | Prerequisite: None \n2023 batch – Semester 2 (total 24 credits; 30 contact hours/week = L 15 + T 1 + P 14)\n• 2023 batch | S2 | University Core | UCOR203 – Leadership and Teamwork Skills | L-T-P  \n1-0-2 | 2 credits | Prerequisite: None\n• 2023 batch | S2 | University Core | UCOR701 – Community Engagement & Service  \nExperience | L-T-P 0-0-0 | 1 credit | Prerequisite: None\n• 2023 batch | S2 | University Core | UCOR106 – Learning to Learn | L-T-P 1-0-2 | 2 credits |  \nPrerequisite: None\n• 2023 batch | S2 | Foundation | MATH201 – Calculus | L-T-P 2-1-0 | 3 credits | Prerequisite:  \nNone",
+    "metadata": {
+      "page": 20,
+      "section": "Batch 2022 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 66,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 21,
+    "sectionNumber": "Batch 2023 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2023 batch | S2 | Foundation | MTSC211 – Sustainable Smart Materials | L-T-P 2-0-2 | 3  \ncredits | Prerequisite: MTSC111 Materials for Smart Devices (S1)\n• 2023 batch | S2 | Foundation | ENGL201 – Academic Writing | L-T-P 2-0-2 | 3 credits |  \nPrerequisite: UCOR102 Introduction to writing (S1)\n• 2023 batch | S2 | Program Core | COMP201 – Data Structures | L-T-P 3-0-2 | 4 credits |  \nPrerequisite: None\n• 2023 batch | S2 | Program Core | MATH205 – Statistics with R | L-T-P 2-0-2 | 3 credits |  \nPrerequisite: MATH202 Probability Theory (S1)\n• 2023 batch | S2 | Program Honors | DATA201 – Foundations to Data Science | L-T-P 2-0-2 |  \n3 credits | Prerequisite: None \n2023 batch – Semester 3 (total 29 credits; 29 contact hours/week = L 19 + T 4 + P 6)\n• 2023 batch | S3 | University Core | UCOR205 – Socio Cultural Perspectives on Indian Life- \nSPIL | L-T-P 2-1-0 | 3 credits | Prerequisite: None",
+    "metadata": {
+      "page": 21,
+      "section": "Batch 2023 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 67,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 21,
+    "sectionNumber": "Batch 2023 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2023 batch | S3 | University Core | UCOR201 – Introduction to Epistemology | L-T-P 1-1-0 |  \n2 credits | Prerequisite: None\n• 2023 batch | S3 | Foundation | MTSC781 – Sustainable Cities and Communities | L-T-P  \n0-0-0 | 3 credits | Prerequisite: None\n• 2023 batch | S3 | Foundation | MATH204 – Linear Algebra | L-T-P 2-1-0 | 3 credits |  \nPrerequisite: None\n• 2023 batch | S3 | Program Core | COMP203 – Analysis of Algorithms | L-T-P 3-0-2 | 4  \ncredits | Prerequisite: COMP201 Data Structures (S2)\n• 2023 batch | S3 | Program Core | COMP202 – Theoretical Computer Science | L-T-P 3-1-0 |  \n4 credits | Prerequisite: None\n• 2023 batch | S3 | Program Core | MATH207 – Research Methodology | L-T-P 2-0-2 | 3  \ncredits | Prerequisite: None\n• 2023 batch | S3 | Program Honors | DATA202 – Exploratory Data Analysis | L-T-P 2-0-2 | 3  \ncredits | Prerequisite: DATA201 Foundations to Data Science (S2) AND MATH203  \nProbability and Statistics – NOT in this batch's plan",
+    "metadata": {
+      "page": 21,
+      "section": "Batch 2023 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 68,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 21,
+    "sectionNumber": "Batch 2023 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2023 batch | S3 | Open/Minor | (no code) – Minor/Open (#1 Course) | L-T-P 4-0-0 | 4 credits  \n| Prerequisite: None \n2023 batch – Semester 4 (total 28 credits; 28 contact hours/week = L 20 + T 2 + P 6)\n• 2023 batch | S4 | University Core | UCOR210 – Critical Thinking | L-T-P 2-0-0 | 2 credits |  \nPrerequisite: None\n• 2023 batch | S4 | Foundation | SLAD206 – Human Values in Work and Life | L-T-P 0-0-0 | 2  \ncredits | Prerequisite: None\n• 2023 batch | S4 | Foundation | SLAD207 – Foundation Seminar | L-T-P 0-0-0 | 1 credit |  \nPrerequisite: None\n• 2023 batch | S4 | Program Core | COMP209 – Databases Management | L-T-P 3-0-2 | 4  \ncredits | Prerequisite: None\n• 2023 batch | S4 | Program Core | COMP204 – Digital Design and Computer Organization |  \nL-T-P 3-1-0 | 4 credits | Prerequisite: None\n• 2023 batch | S4 | Program Core | COMP301 – Arti fi cial Intelligence | L-T-P 3-0-2 | 4 credits |  \nPrerequisite: None",
+    "metadata": {
+      "page": 21,
+      "section": "Batch 2023 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 69,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 21,
+    "sectionNumber": "Batch 2023 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2023 batch | S4 | Program Core | COMP205 – Object Oriented Programming | L-T-P 2-0-2 |  \n3 credits | Prerequisite: None\n• 2023 batch | S4 | Program Honors | MATH301 – Optimization Techniques for Data Science |  \nL-T-P 3-1-0 | 4 credits | Prerequisite: MATH201 Calculus (S2)\n• 2023 batch | S4 | Open/Minor | (no code) – Minor/Open (#2 Course) | L-T-P 4-0-0 | 4 credits  \n| Prerequisite: None",
+    "metadata": {
+      "page": 21,
+      "section": "Batch 2023 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 70,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 22,
+    "sectionNumber": "Batch 2023 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• of  22 37 \n2023 batch – Semester 5 (total 28 credits; 30 contact hours/week = L 16 + T 0 + P 14)\n• 2023 batch | S5 | Foundation | LANG101 – Language | L-T-P 0-0-0 | 3 credits | Prerequisite:  \nNone\n• 2023 batch | S5 | Program Core | COMP208 – Networks | L-T-P 3-0-2 | 4 credits |  \nPrerequisite: None\n• 2023 batch | S5 | Program Core | COMP207 – Operating Systems | L-T-P 2-0-2 | 3 credits |  \nPrerequisite: None\n• 2023 batch | S5 | Program Core | COMP206 – Microprocessors and Computer Architecture |  \nL-T-P 3-0-2 | 4 credits | Prerequisite: COMP204 Digital Design and Computer Organization  \n(S4) AND COMP207 Operating Systems (S5)\n• 2023 batch | S5 | Program Honors | DATA301 – Machine Learning | L-T-P 2-0-4 | 4 credits |  \nPrerequisite: DATA202 Exploratory Data Analysis (S3) AND MATH301 Optimization  \nTechniques for Data Science (S4)",
+    "metadata": {
+      "page": 22,
+      "section": "Batch 2023 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 71,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 22,
+    "sectionNumber": "Batch 2023 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2023 batch | S5 | Specialization Track | SPT-Course #1-Probabilistic Graph Models LTP:  \n3-0-2 /Web Framework LTP: 2-0-4 | 4 credits | see Part A6 for both track options and  \nprerequisites\n• 2023 batch | S5 | Open/Minor | (no code) – Minor/Open (#3 Course) | L-T-P 4-0-0 | 4 credits  \n| Prerequisite: None\n• 2023 batch | S5 | Internship/Capstone Project | DATA801 – Summer Training/Internship | L- \nT-P 0-0-0 | 2 credits | Prerequisite: None \n2023 batch – Semester 6 (total 20 credits; 27 contact hours/week = L 13 + T 0 + P 14)\n• 2023 batch | S6 | Program Core | COMP302 – Internet of Things | L-T-P 0-0-4 | 2 credits |  \nPrerequisite: COMP132 Design Workshop (S1) AND COMP201 Data Structures (S2) AND  \nCOMP206 Microprocessors and Computer Architecture (S5) AND COMP208 Networks  \n(S5) AND COMP301 Arti fi cial Intelligence (S4)\n• 2023 batch | S6 | Program Honors | DATA302 – Deep Learning | L-T-P 2-0-4 | 4 credits |  \nPrerequisite: DATA301 Machine Learning (S5) AND MATH201 Calculus (S2)",
+    "metadata": {
+      "page": 22,
+      "section": "Batch 2023 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 72,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 22,
+    "sectionNumber": "Batch 2023 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2023 batch | S6 | Program Honors | DATA303 – MLOps & Model Deployment | L-T-P 1-0-2  \n| 2 credits | Prerequisite: DATA301 Machine Learning (S5) AND COMP208 Networks (S5)\n• 2023 batch | S6 | Specialization Track | SPT-Course #2-Reinforcement Learning/Big Data  \nFramework | 4 credits | see Part A6 for both track options and prerequisites\n• 2023 batch | S6 | Open/Minor | (no code) – Minor/Open (#4, #5 Courses) | L-T-P 8-0-0 | 8  \ncredits | Prerequisite: None | = 2 separate Minor/Open courses of 4 credits each \n2023 batch – Semester 7 (total 20 credits; 16 contact hours/week = L 8 + T 0 + P 8)\n• 2023 batch | S7 | Specialization Track | SPT-Course #3 (Natural Language Processing /  \nNatural Language Processing) | 4 credits | see Part A6 for both track options and  \nprerequisites\n• 2023 batch | S7 | Specialization Track | SPT-Course #4 (Multi Modal Learning/ Software  \nArchitecture and Deployments) | 4 credits | see Part A6 for both track options and  \nprerequisites",
+    "metadata": {
+      "page": 22,
+      "section": "Batch 2023 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 73,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 22,
+    "sectionNumber": "Batch 2023 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2023 batch | S7 | Specialization Track | SPT-Course #5 Advanced Topics in Deep Learning  \nLTP: 3-0-2/ Cloud &Cognitive Computing LTP: 2-0-4 | 4 credits | see Part A6 for both track  \noptions and prerequisites\n• 2023 batch | S7 | Open/Minor | (no code) – Minor (#6 Course) | L-T-P 4-0-0 | 4 credits |  \nPrerequisite: None\n• 2023 batch | S7 | Internship/Capstone Project | DATA802 – Interdisciplinary Project | L-T-P  \n0-0-0 | 4 credits | Prerequisite: None \n2023 batch – Semester 8 (total 12 credits; 0 contact hours/week = L 0 + T 0 + P 0)",
+    "metadata": {
+      "page": 22,
+      "section": "Batch 2023 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 74,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 23,
+    "sectionNumber": "Batch 2023 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2023 batch | S8 | Internship/Capstone Project | DATA803 – Capstone Project/Industrial  \nInternship | L-T-P 0-0-0 | 12 credits | Prerequisite: None \n2023 batch – credits per basket (from the semester plan)\n• 2023 batch | B1 University Core: 18 credits\n• 2023 batch | B2 Foundation: 34 credits\n• 2023 batch | B3 Program Core: 46 credits\n• 2023 batch | B4 Program Honors: 20 credits\n• 2023 batch | B5 Specialization Track: 20 credits\n• 2023 batch | B6 Open/Minor: 24 credits\n• 2023 batch | B7 Internship/Capstone Project: 18 credits\n• 2023 batch | TOTAL: 180 credits \n2024 batch – full semester plan \n2024 batch – Semester 1 (total 21 credits; 29 contact hours/week = L 11 + T 2 + P 16)\n• 2024 batch | S1 | University Core | UCOR106 – Learning to Learn | L-T-P 1-0-2 | 2 credits |  \nPrerequisite: None\n• 2024 batch | S1 | University Core | UCOR104 – Problem Solving with Design Thinking | L- \nT-P 1-0-2 | 2 credits | Prerequisite: None",
+    "metadata": {
+      "page": 23,
+      "section": "Batch 2023 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 75,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 23,
+    "sectionNumber": "Batch 2023 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2024 batch | S1 | University Core | UCOR102 – Introduction to writing | L-T-P 1-0-2 | 2  \ncredits | Prerequisite: None\n• 2024 batch | S1 | Foundation | MATH203 – Probability and Statistics | L-T-P 3-1-0 | 4 credits  \n| Prerequisite: None\n• 2024 batch | S1 | Foundation | COMP132 – Design Workshop | L-T-P 0-0-4 | 2 credits |  \nPrerequisite: None\n• 2024 batch | S1 | Foundation | MTSC111 – Materials for Smart Devices | L-T-P 2-0-2 | 3  \ncredits | Prerequisite: None\n• 2024 batch | S1 | Foundation | PSYC101/ECON101 – Introduction to Psychology/ \nIntroduction to Economics | L-T-P 2-1-0 | 3 credits | Prerequisite: None | Either/or: student  \nchooses ONE of the two\n• 2024 batch | S1 | Program Core | DATA103 – Programming in Python | L-T-P 1-0-4 | 3  \ncredits | Prerequisite: None \n2024 batch – Semester 2 (total 22 credits; 28 contact hours/week = L 13 + T 1 + P 14)",
+    "metadata": {
+      "page": 23,
+      "section": "Batch 2023 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 76,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 23,
+    "sectionNumber": "Batch 2023 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2024 batch | S2 | University Core | UCOR105 – Communication and Leadership Skills | L- \nT-P 2-0-2 | 3 credits | Prerequisite: None\n• 2024 batch | S2 | University Core | UCOR701 – Community Engagement & Service  \nExperience | L-T-P 0-0-0 | 1 credit | Prerequisite: None\n• 2024 batch | S2 | Foundation | MATH201 – Calculus | L-T-P 2-1-0 | 3 credits | Prerequisite:  \nNone\n• 2024 batch | S2 | Foundation | MTSC211 – Sustainable Smart Materials | L-T-P 2-0-2 | 3  \ncredits | Prerequisite: MTSC111 Materials for Smart Devices (S1)\n• 2024 batch | S2 | Foundation | ENGL210 – Academic Writing | L-T-P 1-0-2 | 2 credits |  \nPrerequisite: UCOR102 Introduction to writing (S1)\n• 2024 batch | S2 | Program Core | COMP201 – Data Structures | L-T-P 3-0-2 | 4 credits |  \nPrerequisite: None\n• 2024 batch | S2 | Program Core | DATA132 – Data visualization and Storytelling | L-T-P  \n1-0-4 | 3 credits | Prerequisite: DATA103 Programming in Python (S1)",
+    "metadata": {
+      "page": 23,
+      "section": "Batch 2023 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 77,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 23,
+    "sectionNumber": "Batch 2023 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2024 batch | S2 | Program Honors | DATA201 – Foundations to Data Science | L-T-P 2-0-2 |  \n3 credits | Prerequisite: None",
+    "metadata": {
+      "page": 23,
+      "section": "Batch 2023 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 78,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 24,
+    "sectionNumber": "Batch 2024 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• of  24 37 \n2024 batch – Semester 3 (total 28 credits; 29 contact hours/week = L 17 + T 4 + P 8)\n• 2024 batch | S3 | University Core | UCOR205 – Socio Cultural Perspectives on Indian Life- \nSPIL | L-T-P 2-1-0 | 3 credits | Prerequisite: None\n• 2024 batch | S3 | University Core | LAWS101 – Fundamentals of Indian Constitution and  \nHuman Rights | L-T-P 1-1-0 | 2 credits | Prerequisite: None\n• 2024 batch | S3 | Foundation | MTSC781 – Sustainable Cities and Communities | L-T-P  \n0-0-0 | 3 credits | Prerequisite: None\n• 2024 batch | S3 | Foundation | MATH204 – Linear Algebra | L-T-P 2-1-0 | 3 credits |  \nPrerequisite: None\n• 2024 batch | S3 | Program Core | COMP203 – Analysis of Algorithms | L-T-P 3-0-2 | 4  \ncredits | Prerequisite: COMP201 Data Structures (S2)\n• 2024 batch | S3 | Program Core | COMP202 – Theoretical Computer Science | L-T-P 3-1-0 |  \n4 credits | Prerequisite: None",
+    "metadata": {
+      "page": 24,
+      "section": "Batch 2024 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 79,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 24,
+    "sectionNumber": "Batch 2024 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2024 batch | S3 | Program Honors | DATA202 – Exploratory Data Analysis | L-T-P 2-0-2 | 3  \ncredits | Prerequisite: DATA201 Foundations to Data Science (S2) AND MATH203  \nProbability and Statistics (S1)\n• 2024 batch | S3 | Program Honors | MATH206 – Advanced Statistical Analysis and Research  \nMethods with R | L-T-P 0-0-4 | 2 credits | Prerequisite: MATH203 Probability and Statistics  \n(S1)\n• 2024 batch | S3 | Open/Minor | (no code) – Minor/Open (#1 Course) | L-T-P 4-0-0 | 4 credits  \n| Prerequisite: None \n2024 batch – Semester 4 (total 28 credits; 29 contact hours/week = L 20 + T 3 + P 6)\n• 2024 batch | S4 | University Core | UCOR310 – Critical Thinking | L-T-P 2-1-0 | 3 credits |  \nPrerequisite: None\n• 2024 batch | S4 | Foundation | SLAD206 – Human Values in Work and Life | L-T-P 0-0-0 | 2  \ncredits | Prerequisite: None\n• 2024 batch | S4 | Foundation | COMP403 – Cloud Computing | L-T-P 2-0-2 | 3 credits |  \nPrerequisite: None",
+    "metadata": {
+      "page": 24,
+      "section": "Batch 2024 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 80,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 24,
+    "sectionNumber": "Batch 2024 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2024 batch | S4 | Program Core | COMP209 – Databases Management | L-T-P 3-0-2 | 4  \ncredits | Prerequisite: None\n• 2024 batch | S4 | Program Core | COMP204 – Digital Design and Computer Organization |  \nL-T-P 3-1-0 | 4 credits | Prerequisite: None\n• 2024 batch | S4 | Program Core | COMP301 – Arti fi cial Intelligence | L-T-P 3-0-2 | 4 credits |  \nPrerequisite: None\n• 2024 batch | S4 | Program Honors | MATH301 – Optimization Techniques for Data Science |  \nL-T-P 3-1-0 | 4 credits | Prerequisite: None\n• 2024 batch | S4 | Open/Minor | (no code) – Minor/Open (#2 Course) | L-T-P 4-0-0 | 4 credits  \n| Prerequisite: None \n2024 batch – Semester 5 (total 24 credits; 29 contact hours/week = L 15 + T 0 + P 14)\n• 2024 batch | S5 | Program Core | COMP208 – Networks | L-T-P 3-0-2 | 4 credits |  \nPrerequisite: None\n• 2024 batch | S5 | Program Core | COMP207 – Operating Systems | L-T-P 2-0-2 | 3 credits |  \nPrerequisite: None",
+    "metadata": {
+      "page": 24,
+      "section": "Batch 2024 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 81,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 24,
+    "sectionNumber": "Batch 2024 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2024 batch | S5 | Program Core | COMP205 – Object Oriented Programming | L-T-P 2-0-2 |  \n3 credits | Prerequisite: None\n• 2024 batch | S5 | Program Honors | DATA301 – Machine Learning | L-T-P 2-0-4 | 4 credits |  \nPrerequisite: DATA202 Exploratory Data Analysis (S3) AND MATH301 Optimization  \nTechniques for Data Science (S4)",
+    "metadata": {
+      "page": 24,
+      "section": "Batch 2024 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 82,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 25,
+    "sectionNumber": "Batch 2024 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2024 batch | S5 | Specialization Track | SPT-Course #1-Probabilistic Graph Models LTP:  \n3-0-2 /Web Framework LTP: 2-0-4 | 4 credits | see Part A6 for both track options and  \nprerequisites\n• 2024 batch | S5 | Open/Minor | (no code) – Minor/Open (#3 Course) | L-T-P 4-0-0 | 4 credits  \n| Prerequisite: None\n• 2024 batch | S5 | Internship/Capstone Project | DATA801 – Summer Training/Internship | L- \nT-P 0-0-0 | 2 credits | Prerequisite: None \n2024 batch – Semester 6 (total 23 credits; 25 contact hours/week = L 15 + T 0 + P 10)\n• 2024 batch | S6 | Foundation | LANG101 – Kannada/ Language | L-T-P 0-0-0 | 3 credits |  \nPrerequisite: None\n• 2024 batch | S6 | Program Core | COMP206 – Microprocessors and Computer Architecture |  \nL-T-P 3-0-2 | 4 credits | Prerequisite: COMP204 Digital Design and Computer Organization  \n(S4) AND COMP207 Operating Systems (S5)\n• 2024 batch | S6 | Program Honors | DATA302 – Deep Learning | L-T-P 2-0-4 | 4 credits |  \nPrerequisite: DATA301 Machine Learning (S5)",
+    "metadata": {
+      "page": 25,
+      "section": "Batch 2024 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 83,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 25,
+    "sectionNumber": "Batch 2024 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2024 batch | S6 | Specialization Track | SPT-Course #2-Multi Modal Learning/Big Data  \nFramework | 4 credits | see Part A6 for both track options and prerequisites\n• 2024 batch | S6 | Open/Minor | (no code) – Minor/Open (#4, #5 Courses) | L-T-P 8-0-0 | 8  \ncredits | Prerequisite: None | = 2 separate Minor/Open courses of 4 credits each \n2024 batch – Semester 7 (total 22 credits; 26 contact hours/week = L 10 + T 0 + P 16)\n• 2024 batch | S7 | Program Core | COMP302 – Internet of Things | L-T-P 0-0-4 | 2 credits |  \nPrerequisite: COMP132 Design Workshop (S1) AND COMP201 Data Structures (S2) AND  \nCOMP206 Microprocessors and Computer Architecture (S6) AND COMP208 Networks  \n(S5) AND COMP301 Arti fi cial Intelligence (S4)\n• 2024 batch | S7 | Specialization Track | SPT-Course #3 (Natural Language Processing /  \nNatural Language Processing) | 4 credits | see Part A6 for both track options and  \nprerequisites",
+    "metadata": {
+      "page": 25,
+      "section": "Batch 2024 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 84,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 25,
+    "sectionNumber": "Batch 2024 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2024 batch | S7 | Specialization Track | SPT-Course #4 (Advanced Topics in Deep Learning  \nLTP: 3-0-2/ Software Architecture and Deployments LTP: 2-0-4) | 4 credits | see Part A6 for  \nboth track options and prerequisites\n• 2024 batch | S7 | Specialization Track | SPT-Course #5 Reinforcement Learning/ \nReinforcement Learning | 4 credits | see Part A6 for both track options and prerequisites\n• 2024 batch | S7 | Open/Minor | (no code) – Minor (#6 Course) | L-T-P 4-0-0 | 4 credits |  \nPrerequisite: None\n• 2024 batch | S7 | Internship/Capstone Project | DATA802 – Interdisciplinary Project | L-T-P  \n0-0-0 | 4 credits | Prerequisite: None \n2024 batch – Semester 8 (total 12 credits; 0 contact hours/week = L 0 + T 0 + P 0)\n• 2024 batch | S8 | Internship/Capstone Project | DATA803 – Capstone Project/Industrial  \nInternship | L-T-P 0-0-0 | 12 credits | Prerequisite: None \n2024 batch – credits per basket (from the semester plan)\n• 2024 batch | B1 University Core: 18 credits",
+    "metadata": {
+      "page": 25,
+      "section": "Batch 2024 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 85,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 25,
+    "sectionNumber": "Batch 2024 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2024 batch | B2 Foundation: 34 credits\n• 2024 batch | B3 Program Core: 46 credits\n• 2024 batch | B4 Program Honors: 20 credits\n• 2024 batch | B5 Specialization Track: 20 credits\n• 2024 batch | B6 Open/Minor: 24 credits\n• 2024 batch | B7 Internship/Capstone Project: 18 credits",
+    "metadata": {
+      "page": 25,
+      "section": "Batch 2024 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 86,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 26,
+    "sectionNumber": "Batch 2024 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2024 batch | TOTAL: 180 credits \n2025 batch – full semester plan \n2025 batch – Semester 1 (total 22 credits; 28 contact hours/week = L 13 + T 3 + P 12)\n• 2025 batch | S1 | University Core | UCOR103 – Communication Skills | L-T-P 1-0-2 | 2  \ncredits | Prerequisite: None\n• 2025 batch | S1 | University Core | UCOR106 – Learning to Learn | L-T-P 1-0-2 | 2 credits |  \nPrerequisite: None\n• 2025 batch | S1 | Foundation | MATH208 – Multivariate Calculus | L-T-P 3-1-0 | 4 credits |  \nPrerequisite: None\n• 2025 batch | S1 | Foundation | MTSC111 – Materials for Smart Devices | L-T-P 2-0-2 | 3  \ncredits | Prerequisite: None\n• 2025 batch | S1 | Program Core | DATA103 – Programming in Python | L-T-P 1-0-4 | 3  \ncredits | Prerequisite: None\n• 2025 batch | S1 | Program Core | COMP204 – Digital Design and Computer Organization |  \nL-T-P 3-1-0 | 4 credits | Prerequisite: None\n• 2025 batch | S1 | Open/Minor | MGMT101 – Essentials of Business Management | L-T-P  \n1-1-0 | 2 credits | Prerequisite: None",
+    "metadata": {
+      "page": 26,
+      "section": "Batch 2024 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 87,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 26,
+    "sectionNumber": "Batch 2024 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2025 batch | S1 | Open/Minor | PSCY102/ECON105 – Introduction to Psychology/ \nPrinciples of Economics | L-T-P 1-0-2 | 2 credits | Prerequisite: None | Either/or: student  \nchooses ONE of the two \n2025 batch – Semester 2 (total 25 credits; 29 contact hours/week = L 13 + T 2 + P 14)\n• 2025 batch | S2 | University Core | UCOR111 – Environmental Studies and Sustainability |  \nL-T-P 0-0-0 | 2 credits | Prerequisite: None\n• 2025 batch | S2 | University Core | LAWS101 – Fundamentals of Indian Constitution and  \nHuman Rights | L-T-P 1-1-0 | 2 credits | Prerequisite: None\n• 2025 batch | S2 | University Core | UCOR701 – Community Engagement & Service  \nExperience | L-T-P 0-0-0 | 1 credit | Prerequisite: None\n• 2025 batch | S2 | Foundation | MATH203 – Probability and Statistics | L-T-P 3-1-0 | 4 credits  \n| Prerequisite: None\n• 2025 batch | S2 | Foundation | MTSC211 – Sustainable Smart Materials | L-T-P 2-0-2 | 3  \ncredits | Prerequisite: MTSC111 Materials for Smart Devices (S1)",
+    "metadata": {
+      "page": 26,
+      "section": "Batch 2024 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 88,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 26,
+    "sectionNumber": "Batch 2024 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2025 batch | S2 | Foundation | COMP132 – Design Workshop | L-T-P 0-0-4 | 2 credits |  \nPrerequisite: None\n• 2025 batch | S2 | Program Core | COMP201 – Data Structures | L-T-P 3-0-2 | 4 credits |  \nPrerequisite: None\n• 2025 batch | S2 | Program Core | DATA132 – Data Visualization and Storytelling | L-T-P  \n1-0-4 | 3 credits | Prerequisite: DATA103 Programming in Python (S1)\n• 2025 batch | S2 | Program Core | COMP209 – Databases Management | L-T-P 3-0-2 | 4  \ncredits | Prerequisite: None \n2025 batch – Semester 3 (total 25 credits; 26 contact hours/week = L 17 + T 3 + P 6)\n• 2025 batch | S3 | University Core | UCOR207 – Analytical Academic Writing | L-T-P 2-1-0 |  \n3 credits | Prerequisite: None\n• 2025 batch | S3 | University Core | SLAD206 – Human Values in Work and Life | L-T-P  \n0-0-0 | 2 credits | Prerequisite: None\n• 2025 batch | S3 | Foundation | MATH209 – Linear Algebra | L-T-P 3-1-0 | 4 credits |  \nPrerequisite: None",
+    "metadata": {
+      "page": 26,
+      "section": "Batch 2024 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 89,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 27,
+    "sectionNumber": "Batch 2025 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2025 batch | S3 | Program Core | COMP202 – Theoretical Computer Science | L-T-P 3-1-0 |  \n4 credits | Prerequisite: None\n• 2025 batch | S3 | Program Core | COMP203 – Analysis of Algorithms | L-T-P 3-0-2 | 4  \ncredits | Prerequisite: COMP201 Data Structures (S2)\n• 2025 batch | S3 | Program Honors | DATA209 – Advanced Exploratory Data Analysis | L-T- \nP 2-0-4 | 4 credits | Prerequisite: DATA132 Data visualization and Storytelling (S2) AND  \nMATH203 Probability and Statistics (S2)\n• 2025 batch | S3 | Open/Minor | (no code) – Minor/Open (1 Course) | L-T-P 4-0-0 | 4 credits |  \nPrerequisite: None \n2025 batch – Semester 4 (total 23 credits; 28 contact hours/week = L 16 + T 2 + P 10)\n• 2025 batch | S4 | University Core | UCOR205 – Socio-Cultural Perspectives on Indian Life |  \nL-T-P 2-1-0 | 3 credits | Prerequisite: None",
+    "metadata": {
+      "page": 27,
+      "section": "Batch 2025 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 90,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 27,
+    "sectionNumber": "Batch 2025 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2025 batch | S4 | Foundation | MATH206 – Advanced Statistical Analysis and Research  \nMethods with R | L-T-P 0-0-4 | 2 credits | Prerequisite: MATH203 Probability and Statistics  \n(S2)\n• 2025 batch | S4 | Program Core | COMP207 – Operating Systems | L-T-P 2-0-2 | 3 credits |  \nPrerequisite: None\n• 2025 batch | S4 | Program Core | COMP301 – Arti fi cial Intelligence | L-T-P 3-0-2 | 4 credits |  \nPrerequisite: None\n• 2025 batch | S4 | Program Core | COMP205 – Object Oriented Programming | L-T-P 2-0-2 |  \n3 credits | Prerequisite: None\n• 2025 batch | S4 | Program Honors | MATH301 – Optimization Techniques for Data Science |  \nL-T-P 3-1-0 | 4 credits | Prerequisite: MATH201 Calculus – NOT in this batch's plan\n• 2025 batch | S4 | Open/Minor | (no code) – Minor/Open (1 Course) | L-T-P 4-0-0 | 4 credits |  \nPrerequisite: None \n2025 batch – Semester 5 (total 27 credits; 25 contact hours/week = L 16 + T 1 + P 8)",
+    "metadata": {
+      "page": 27,
+      "section": "Batch 2025 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 91,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 27,
+    "sectionNumber": "Batch 2025 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2025 batch | S5 | University Core | UCOR310 – Critical Thinking | L-T-P 2-1-0 | 3 credits |  \nPrerequisite: None\n• 2025 batch | S5 | University Core | UCOR104 – Problem Solving with Design Thinking | L- \nT-P 1-0-2 | 2 credits | Prerequisite: None\n• 2025 batch | S5 | Program Core | COMP206 – Microprocessors and Computer Architecture |  \nL-T-P 3-0-2 | 4 credits | Prerequisite: COMP204 Digital Design and Computer Organization  \n(S1) AND COMP207 Operating Systems (S4)\n• 2025 batch | S5 | Program Honors | DATA301 – Machine Learning | L-T-P 2-0-4 | 4 credits |  \nPrerequisite: DATA206 (course not found anywhere in the workbook) – NOT in this batch's  \nplan AND MATH301 Optimization Techniques for Data Science (S4)\n• 2025 batch | S5 | Specialization Track | SPT-Course #1-Probabilistic Graph Models LTP:  \n3-0-2/Web Framework LTP: 2-0-4 | 4 credits | see Part A6 for both track options and  \nprerequisites",
+    "metadata": {
+      "page": 27,
+      "section": "Batch 2025 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 92,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 27,
+    "sectionNumber": "Batch 2025 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2025 batch | S5 | Open/Minor | (no code) – Minor/Open (2 Courses) | L-T-P 8-0-0 | 8 credits  \n| Prerequisite: None\n• 2025 batch | S5 | Internship/Capstone Project | DATA801 – Summer Training/Internship | L- \nT-P 0-0-0 | 2 credits | Prerequisite: None \n2025 batch – Semester 6 (total 22 credits; 27 contact hours/week = L 12 + T 1 + P 14)\n• 2025 batch | S6 | University Core | UCOR215 – Humanistic Leadership Development | L-T- \nP 1-1-0 | 2 credits | Prerequisite: None\n• 2025 batch | S6 | Foundation | TBA – Language | L-T-P 0-0-0 | 2 credits | Prerequisite: None",
+    "metadata": {
+      "page": 27,
+      "section": "Batch 2025 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 93,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 28,
+    "sectionNumber": "Batch 2025 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2025 batch | S6 | Program Core | COMP208 – Networks | L-T-P 3-0-2 | 4 credits |  \nPrerequisite: None\n• 2025 batch | S6 | Program Core | COMP302 – Internet of Things | L-T-P 0-0-4 | 2 credits |  \nPrerequisite: COMP132 Design Workshop (S2) AND COMP201 Data Structures (S2) AND  \nCOMP206 Microprocessors and Computer Architecture (S5) AND COMP208 Networks  \n(S6) AND COMP301 Arti fi cial Intelligence (S4)\n• 2025 batch | S6 | Program Honors | DATA302 – Deep Learning | L-T-P 2-0-4 | 4 credits |  \nPrerequisite: DATA301 Machine Learning (S5)\n• 2025 batch | S6 | Specialization Track | SPT-Course #2-Multi Modal Learning/Big Data  \nFramework | 4 credits | see Part A6 for both track options and prerequisites\n• 2025 batch | S6 | Open/Minor | (no code) – Minor/Open (1 Course) | L-T-P 4-0-0 | 4 credits |  \nPrerequisite: None \n2025 batch – Semester 7 (total 24 credits; 28 contact hours/week = L 12 + T 0 + P 16)",
+    "metadata": {
+      "page": 28,
+      "section": "Batch 2025 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 94,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 28,
+    "sectionNumber": "Batch 2025 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2025 batch | S7 | Program Honors | DATA403 – Natural Language Processing | L-T-P 2-0-4 |  \n4 credits | Prerequisite: DATA302 Deep Learning (S6)\n• 2025 batch | S7 | Specialization Track | SPT-Course #3 (Image Processing and Computer  \nVision/Cloud & Cognitive Computing) | 4 credits | see Part A6 for both track options and  \nprerequisites\n• 2025 batch | S7 | Specialization Track | SPT-Course #4 (Advanced Topics in Deep Learning  \nLTP: 3-0-2/ Software Architecture and Deployments LTP: 2-0-4) | 4 credits | see Part A6 for  \nboth track options and prerequisites\n• 2025 batch | S7 | Specialization Track | SPT-Course #5 Reinforcement Learning/ \nReinforcement Learning | 4 credits | see Part A6 for both track options and prerequisites\n• 2025 batch | S7 | Open/Minor | DATA802 – Inter-Desciplinary Project | L-T-P 0-0-0 | 4  \ncredits | Prerequisite: None",
+    "metadata": {
+      "page": 28,
+      "section": "Batch 2025 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 95,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 28,
+    "sectionNumber": "Batch 2025 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2025 batch | S7 | Open/Minor | (no code) – Minor/Open (1 Course) | L-T-P 4-0-0 | 4 credits |  \nPrerequisite: None \n2025 batch – Semester 8 (total 12 credits; 0 contact hours/week = L 0 + T 0 + P 0)\n• 2025 batch | S8 | Internship/Capstone Project | DATA803 – Capstone Project/ Industrial  \nInternship | L-T-P 0-0-0 | 12 credits | Prerequisite: None \n2025 batch – credits per basket (from the semester plan)\n• 2025 batch | B1 University Core: 24 credits\n• 2025 batch | B2 Foundation: 24 credits\n• 2025 batch | B3 Program Core: 46 credits\n• 2025 batch | B4 Program Honors: 20 credits\n• 2025 batch | B5 Specialization Track: 20 credits\n• 2025 batch | B6 Open/Minor: 32 credits\n• 2025 batch | B7 Internship/Capstone Project: 14 credits\n• 2025 batch | TOTAL: 180 credits \n2026 batch – full semester plan \n2026 batch – Semester 1 (total 23 credits; 28 contact hours/week = L 14 + T 4 + P 10)",
+    "metadata": {
+      "page": 28,
+      "section": "Batch 2025 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 96,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 28,
+    "sectionNumber": "Batch 2025 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2026 batch | S1 | University Core | UCOR107 – Communication Skills | L-T-P 2-0-2 | 3  \ncredits | Prerequisite: None\n• 2026 batch | S1 | University Core | UCOR106 – Learning to Learn | L-T-P 1-0-2 | 2 credits |  \nPrerequisite: None",
+    "metadata": {
+      "page": 28,
+      "section": "Batch 2025 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 97,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 29,
+    "sectionNumber": "Batch 2025 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2026 batch | S1 | Foundation | MATH208 – Multivariate Calculus | L-T-P 3-1-0 | 4 credits |  \nPrerequisite: None\n• 2026 batch | S1 | Foundation | MTSC111 – Materials for Smart Devices | L-T-P 2-0-2 | 3  \ncredits | Prerequisite: None\n• 2026 batch | S1 | Program Core | DATA103 – Programming in Python | L-T-P 1-0-4 | 3  \ncredits | Prerequisite: None\n• 2026 batch | S1 | Program Core | COMP204 – Digital Design and Computer Organization |  \nL-T-P 3-1-0 | 4 credits | Prerequisite: None\n• 2026 batch | S1 | Open/Minor | MGMT101 – Essentials of Business Management | L-T-P  \n1-1-0 | 2 credits | Prerequisite: None\n• 2026 batch | S1 | Open/Minor | PSYC105/ECON106 – Introduction to Psychology/ \nPrinciples of Economics | L-T-P 1-1-0 | 2 credits | Prerequisite: None | Either/or: student  \nchooses ONE of the two \n2026 batch – Semester 2 (total 26 credits; 30 contact hours/week = L 14 + T 2 + P 14)",
+    "metadata": {
+      "page": 29,
+      "section": "Batch 2025 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 98,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 29,
+    "sectionNumber": "Batch 2025 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2026 batch | S2 | University Core | UCOR111 – Environmental Studies and Sustainability |  \nL-T-P 0-0-0 | 2 credits | Prerequisite: None\n• 2026 batch | S2 | University Core | LAWS101 – Fundamentals of Indian Constitution and  \nHuman Rights | L-T-P 1-1-0 | 2 credits | Prerequisite: None\n• 2026 batch | S2 | University Core | UCOR701 – Community Engagement & Service  \nExperience | L-T-P 0-0-0 | 1 credit | Prerequisite: None\n• 2026 batch | S2 | Foundation | MATH203 – Probability and Statistics | L-T-P 3-1-0 | 4 credits  \n| Prerequisite: None\n• 2026 batch | S2 | Foundation | MTSC211 – Sustainable Smart Materials | L-T-P 2-0-2 | 3  \ncredits | Prerequisite: MTSC111 Materials for Smart Devices (S1)\n• 2026 batch | S2 | Foundation | COMP133 – Design Workshop | L-T-P 1-0-4 | 3 credits |  \nPrerequisite: None\n• 2026 batch | S2 | Program Core | COMP201 – Data Structures | L-T-P 3-0-2 | 4 credits |  \nPrerequisite: None",
+    "metadata": {
+      "page": 29,
+      "section": "Batch 2025 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 99,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 29,
+    "sectionNumber": "Batch 2025 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2026 batch | S2 | Program Core | DATA132 – Data Visualization and Storytelling | L-T-P  \n1-0-4 | 3 credits | Prerequisite: DATA103 Programming in Python (S1)\n• 2026 batch | S2 | Program Core | COMP209 – Databases Management | L-T-P 3-0-2 | 4  \ncredits | Prerequisite: None \n2026 batch – Semester 3 (total 20 credits; 23 contact hours/week = L 15 + T 2 + P 6)\n• 2026 batch | S3 | Foundation | MATH209 – Linear Algebra | L-T-P 3-1-0 | 4 credits |  \nPrerequisite: None\n• 2026 batch | S3 | Program Core | COMP202 – Theoretical Computer Science | L-T-P 3-1-0 |  \n4 credits | Prerequisite: None\n• 2026 batch | S3 | Program Core | COMP203 – Analysis of Algorithms | L-T-P 3-0-2 | 4  \ncredits | Prerequisite: COMP201 Data Structures (S2)\n• 2026 batch | S3 | Program Honors | DATA209 – Advanced Exploratory Data Analysis | L-T- \nP 2-0-4 | 4 credits | Prerequisite: DATA132 Data visualization and Storytelling (S2) AND  \nMATH203 Probability and Statistics (S2)",
+    "metadata": {
+      "page": 29,
+      "section": "Batch 2025 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 100,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 29,
+    "sectionNumber": "Batch 2025 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2026 batch | S3 | Open/Minor | (no code) – Minor/Open (1 Course) | L-T-P 4-0-0 | 4 credits |  \nPrerequisite: None \n2026 batch – Semester 4 (total 25 credits; 30 contact hours/week = L 18 + T 2 + P 10)\n• 2026 batch | S4 | University Core | UCOR205 – Socio-Cultural Perspectives on Indian Life |  \nL-T-P 2-1-0 | 3 credits | Prerequisite: None",
+    "metadata": {
+      "page": 29,
+      "section": "Batch 2025 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 101,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 30,
+    "sectionNumber": "Batch 2026 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2026 batch | S4 | Foundation | MATH210 – Advanced Statistical Analysis and Research  \nMethods | L-T-P 1-0-4 | 3 credits | Prerequisite: MATH203 Probability and Statistics (S2)\n• 2026 batch | S4 | Program Core | COMP211 – Operating Systems | L-T-P 3-0-2 | 4 credits |  \nPrerequisite: None\n• 2026 batch | S4 | Program Core | COMP301 – Arti fi cial Intelligence | L-T-P 3-0-2 | 4 credits |  \nPrerequisite: None\n• 2026 batch | S4 | Program Core | COMP205 – Object Oriented Programming | L-T-P 2-0-2 |  \n3 credits | Prerequisite: None\n• 2026 batch | S4 | Program Honors | MATH301 – Optimization Techniques for Data Science |  \nL-T-P 3-1-0 | 4 credits | Prerequisite: MATH201 Calculus – NOT in this batch's plan\n• 2026 batch | S4 | Open/Minor | (no code) – Minor/Open (1 Course) | L-T-P 4-0-0 | 4 credits |  \nPrerequisite: None \n2026 batch – Semester 5 (total 27 credits; 31 contact hours/week = L 18 + T 1 + P 12)",
+    "metadata": {
+      "page": 30,
+      "section": "Batch 2026 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 102,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 30,
+    "sectionNumber": "Batch 2026 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2026 batch | S5 | University Core | UCOR310 – Critical Thinking | L-T-P 2-1-0 | 3 credits |  \nPrerequisite: None\n• 2026 batch | S5 | University Core | UCOR104 – Problem Solving with Design Thinking | L- \nT-P 1-0-2 | 2 credits | Prerequisite: None\n• 2026 batch | S5 | Program Core | COMP206 – Microprocessors and Computer Architecture |  \nL-T-P 3-0-2 | 4 credits | Prerequisite: COMP204 Digital Design and Computer Organization  \n(S1) AND COMP207 Operating Systems – NOT in this batch's plan\n• 2026 batch | S5 | Program Honors | DATA301 – Machine Learning | L-T-P 2-0-4 | 4 credits |  \nPrerequisite: DATA206 (course not found anywhere in the workbook) – NOT in this batch's  \nplan AND MATH301 Optimization Techniques for Data Science (S4)\n• 2026 batch | S5 | Electives | (no code) – Elective 1 | L-T-P 2-0-4 | 4 credits | Prerequisite:  \nNone\n• 2026 batch | S5 | Open/Minor | (no code) – Minor/Open (2 Courses) | L-T-P 8-0-0 | 8 credits  \n| Prerequisite: None",
+    "metadata": {
+      "page": 30,
+      "section": "Batch 2026 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 103,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 30,
+    "sectionNumber": "Batch 2026 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2026 batch | S5 | Internship/Capstone Project | DATA801 – Summer Training/Internship | L- \nT-P 0-0-0 | 2 credits | Prerequisite: None \n2026 batch – Semester 6 (total 24 credits; 29 contact hours/week = L 15 + T 0 + P 14)\n• 2026 batch | S6 | Foundation | TBA – Language | L-T-P 0-0-0 | 2 credits | Prerequisite: None\n• 2026 batch | S6 | Program Core | COMP208 – Networks | L-T-P 3-0-2 | 4 credits |  \nPrerequisite: None\n• 2026 batch | S6 | Program Core | COMP302 – Internet of Things | L-T-P 0-0-4 | 2 credits |  \nPrerequisite: COMP132 Design Workshop – NOT in this batch's plan AND COMP201 Data  \nStructures (S2) AND COMP206 Microprocessors and Computer Architecture (S5) AND  \nCOMP208 Networks (S6) AND COMP301 Arti fi cial Intelligence (S4)\n• 2026 batch | S6 | Program Honors | DATA302 – Deep Learning | L-T-P 2-0-4 | 4 credits |  \nPrerequisite: DATA301 Machine Learning (S5)\n• 2026 batch | S6 | Electives | (no code) – Elective 2 | L-T-P 2-0-4 | 4 credits | Prerequisite:  \nNone",
+    "metadata": {
+      "page": 30,
+      "section": "Batch 2026 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 104,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 30,
+    "sectionNumber": "Batch 2026 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2026 batch | S6 | Open/Minor | (no code) – Minor/Open (2 Courses) | L-T-P 8-0-0 | 8 credits  \n| Prerequisite: None \n2026 batch – Semester 7 (total 23 credits; 27 contact hours/week = L 11 + T 0 + P 16)\n• 2026 batch | S7 | Program Core | TBA – Compiler Design | L-T-P 3-0-0 | 3 credits |  \nPrerequisite: None\n• 2026 batch | S7 | Program Honors | DATA403 – Natural Language Processing | L-T-P 2-0-4 |  \n4 credits | Prerequisite: DATA302 Deep Learning (S6)",
+    "metadata": {
+      "page": 30,
+      "section": "Batch 2026 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 105,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 31,
+    "sectionNumber": "Batch 2026 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2026 batch | S7 | Electives | (no code) – Elective 3 | L-T-P 2-0-4 | 4 credits | Prerequisite:  \nNone\n• 2026 batch | S7 | Electives | (no code) – Elective 4 | L-T-P 2-0-4 | 4 credits | Prerequisite:  \nNone\n• 2026 batch | S7 | Electives | (no code) – Elective 5 | L-T-P 2-0-4 | 4 credits | Prerequisite:  \nNone\n• 2026 batch | S7 | Open/Minor | DATA802 – Inter-Desciplinary Project | L-T-P 0-0-0 | 4  \ncredits | Prerequisite: None \n2026 batch – Semester 8 (total 12 credits; 0 contact hours/week = L 0 + T 0 + P 0)\n• 2026 batch | S8 | Internship/Capstone Project | DATA803 – Capstone Project/ Industrial  \nInternship | L-T-P 0-0-0 | 12 credits | Prerequisite: None \n2026 batch – credits per basket (from the semester plan)\n• 2026 batch | B1 University Core: 18 credits\n• 2026 batch | B2 Foundation: 26 credits\n• 2026 batch | B3 Program Core: 50 credits\n• 2026 batch | B4 Program Honors: 20 credits\n• 2026 batch | B5 Electives: 20 credits\n• 2026 batch | B6 Open/Minor: 32 credits",
+    "metadata": {
+      "page": 31,
+      "section": "Batch 2026 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 106,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 31,
+    "sectionNumber": "Batch 2026 Semester Plan & Credits",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• 2026 batch | B7 Internship/Capstone Project: 14 credits\n• 2026 batch | TOTAL: 180 credits",
+    "metadata": {
+      "page": 31,
+      "section": "Batch 2026 Semester Plan & Credits"
+    }
+  },
+  {
+    "chunkIndex": 107,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 32,
+    "sectionNumber": "Glossary, Equivalences & Confirmation Items",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• of  32 37 \nGLOSSARY & READING GUIDE —  \n\"Semester Spread & Structures\" workbook \n(Context for the Academic Advisor Bot. Items  \nmarked <<CONFIRM>> are still to be veri fi ed  \nby the university.) \n1. What the workbook contains\n• The workbook describes the 4-year B.Tech Data Science (\"DS\") curriculum, one version per  \nadmission batch: 2022, 2023, 2024, 2025, 2026.\n• The year in a sheet name is the student's BATCH (year of admission), not the calendar year  \nin which a course is taught. A student admitted in 2024 follows \"Sem_Spread_2024\" and  \n\"Struct_2024\" for all 8 semesters. <<CONFIRM>>\n• Two kinds of sheets: \n◦ \n\"Sem Spread\" / \"Sem_Spread_<year>\" (Semester Spread) = which course is taken in  \nwhich semester (S1–S8), with code, prerequisite, L-T-P-C and basket. \n◦ \n\"Struct_<year>\" (Credit Structure) = the list of courses and credits inside each  \nbasket, and the minimum credits per basket needed for the degree. It does not say  \nwhich semester a course is in.",
+    "metadata": {
+      "page": 32,
+      "section": "Glossary, Equivalences & Confirmation Items"
+    }
+  },
+  {
+    "chunkIndex": 108,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 32,
+    "sectionNumber": "Glossary, Equivalences & Confirmation Items",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• The curricula differ between batches. Always answer using the sheets for the student's own  \nbatch. \n2. Column headers and abbreviations\n• S1, S2 ... S8 = Semester 1 to Semester 8 (2 semesters per year, 4 years).\n• SEMESTER - I / SEMESTER - 2 ... = same as S1, S2 ...\n• SUMMER = summer break between semesters (after S2, after S4 and after S6). No regular  \ncourses are listed in it.\n• Course Code / Code = unique course identi fi er, e.g. COMP201. \"DATA 301\" and  \n\"DATA301\" are the same course (the space is a typo).\n• Course = course title.\n• Pre-Req = prerequisite: a course that must be completed before this course can be taken.  \nSeveral codes separated by commas (e.g. \"COMP204, COMP207\") means ALL of them are  \nrequired.\n• NIL / Nil = no prerequisite.\n• L = Lecture hours per week.\n• T = Tutorial hours per week.\n• P = Practical / Lab hours per week.\n• C = Credits for the course.",
+    "metadata": {
+      "page": 32,
+      "section": "Glossary, Equivalences & Confirmation Items"
+    }
+  },
+  {
+    "chunkIndex": 109,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 32,
+    "sectionNumber": "Glossary, Equivalences & Confirmation Items",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• L-T-P / \"LTP: 3-0-2\" = Lecture-Tutorial-Practical hours per week, written in that order.  \n\"LTP: 3-0-2\" means 3 lecture hours, 0 tutorial hours and 2 lab hours per week.\n• Credit rule: C = L + T + (P ÷ 2). It holds for every course that has class hours, in every  \nbatch. Example: 3-0-2  →  4 credits; 2-0-4  →  4 credits; 1-0-2  →  2 credits.",
+    "metadata": {
+      "page": 32,
+      "section": "Glossary, Equivalences & Confirmation Items"
+    }
+  },
+  {
+    "chunkIndex": 110,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 33,
+    "sectionNumber": "Glossary, Equivalences & Confirmation Items",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• An L-T-P of 0-0-0 with credits > 0 (e.g. Sustainable Cities and Communities 0-0-0-3,  \nHuman Values in Work and Life 0-0-0-2, Language 0-0-0-3, Community Engagement  \n0-0-0-1, internships and projects) means the course has no regular weekly classroom hours.  \nIt is delivered as <<CONFIRM: online / MOOC / workshop / activity-based / self-paced>>.\n• Total (row) = sum of L, T, P and C for that semester.\n• Total HRS = weekly contact hours in the semester, i.e. L + T + P summed over all courses in  \nthat semester.\n• Total Credits (last column) = credits in that row.\n• For detailed per-course credits, prerequisites and either/or options, see the companion  fi le  \nCourse_Details_by_Batch.md. The  fi nal column per basket = basket total.\n• Fixed Min = minimum credits required from that basket to graduate.\n• Credit Structure (for award of the Degree) = minimum credits per basket needed to earn the  \ndegree. The total is always 180.\n• = serial number in a list.",
+    "metadata": {
+      "page": 33,
+      "section": "Glossary, Equivalences & Confirmation Items"
+    }
+  },
+  {
+    "chunkIndex": 111,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 33,
+    "sectionNumber": "Glossary, Equivalences & Confirmation Items",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• TBA = To Be Announced (course code or details not yet decided).\n• \"/\" between two courses (e.g. \"PSYC101/ECON101 — Introduction to Psychology/ \nIntroduction to Economics\") = the student takes ONE of the two options.\n• \"/\" inside a Specialization Track cell (e.g. \"MATH401/COMP401 — Probabilistic Graph  \nModels / Web Framework\") = the  fi rst option is for Track #1, the second for Track #2. The  \nprerequisites are given in the same order (e.g. \"DATA301/NIL\"  →  Track 1 needs DATA301,  \nTrack 2 has none).\n• When a course name carries its own \"LTP: x-y-z\", that overrides the L/T/P numbers in the  \ncolumns (the columns show only one option's hours).\n• \"#1 Course\", \"#2 Course\" = the 1st, 2nd ... course of that type in sequence.\n• SPT = SPecialization Track. \"SPT-Course #3\" = the 3rd course of the student's chosen  \nspecialization track.\n• SPIL = Socio-Cultural Perspectives on Indian Life (course UCOR205).",
+    "metadata": {
+      "page": 33,
+      "section": "Glossary, Equivalences & Confirmation Items"
+    }
+  },
+  {
+    "chunkIndex": 112,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 33,
+    "sectionNumber": "Glossary, Equivalences & Confirmation Items",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• MLOps = Machine Learning Operations (deploying and maintaining ML models in  \nproduction).\n• AI = Arti fi cial Intelligence; ML = Machine Learning; NLP = Natural Language Processing;  \nIoT = Internet of Things; EDA = Exploratory Data Analysis. \n3. Baskets (course categories). Every course belongs to exactly  \none basket.\n• Basket = a category of courses with a minimum credit requirement. B1–B7 are basket IDs.\n• B1 – Univ Core / University Core (UCOR courses) = compulsory courses that every student  \nof the university takes, whatever the programme (communication, writing, critical thinking,  \ndesign thinking, Indian society, constitution, community engagement).\n• B2 – Foundation = compulsory basics: mathematics (calculus, probability, statistics, linear  \nalgebra), materials science, academic writing, psychology/economics, language, human  \nvalues.",
+    "metadata": {
+      "page": 33,
+      "section": "Glossary, Equivalences & Confirmation Items"
+    }
+  },
+  {
+    "chunkIndex": 113,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 33,
+    "sectionNumber": "Glossary, Equivalences & Confirmation Items",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• B3 – Program Core / Program CORE = compulsory computer science and data science  \ncourses for this degree (data structures, algorithms, OS, networks, databases, AI, etc.).\n• B4 – Program Honors / Program HONORS / Program Hons = advanced data science  \ncourses (machine learning, deep learning, EDA, optimization, NLP). Its 20 credits count  \ntoward the 180. <<CONFIRM: compulsory for all, or optional for an \"Honours\" degree?>>",
+    "metadata": {
+      "page": 33,
+      "section": "Glossary, Equivalences & Confirmation Items"
+    }
+  },
+  {
+    "chunkIndex": 114,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 34,
+    "sectionNumber": "Glossary, Equivalences & Confirmation Items",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• B5 – Specialization Tracks (batches 2022–2025) = 5 courses (20 credits) from ONE chosen  \ntrack: \n◦ \n\"Hons Sp Track #1 – Applied Deep Learning\" \n◦ \n\"Hons Sp Track #2 – Full Stack Development\" \n◦ \nHons Sp Track = Honours Specialization Track.\n• B5 – Electives (batch 2026 only) = the two tracks are replaced by 5 electives (Elective 1–5,  \n20 credits) chosen from a list of 8 courses (Probabilistic Graph Models, Advanced Topics in  \nDeep Learning, Cloud & Cognitive Computing, Multi Modal Learning, Reinforcement  \nLearning, Web Framework, Big Data Framework, Software Architecture and Deployments).  \n<<CONFIRM: free choice of any 5?>>",
+    "metadata": {
+      "page": 34,
+      "section": "Glossary, Equivalences & Confirmation Items"
+    }
+  },
+  {
+    "chunkIndex": 115,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 34,
+    "sectionNumber": "Glossary, Equivalences & Confirmation Items",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• B6 – Open/Minor = credits the student  fi lls with either \n◦ \na Minor: a set of courses in a second subject area that earns a \"Minor in <subject>\",  \nor \n◦ \nOpen electives: courses from any department. \n◦ \n2022–2024: 6 courses  ×  4 credits = 24 credits. \n◦ \n2025–2026: 32 credits = Essentials of Business Management (2) + Psychology/ \nEconomics (2) + 6 Minor/Open courses  ×  4 (24) + Interdisciplinary Project (4). \n◦ \n\"Minor (#6 Course)\" in S7 (2022–2024) = the 6th minor/open course, which must be  \na Minor course. <<CONFIRM rules>> \n◦ \n\"Minor Total Credits\" in the Struct sheets = total credits of the Open/Minor basket.\n• B7 – Internship/Capstone Project: \n◦ \nSummer Training/Internship (DATA801, 2 credits) \n◦ \nInterdisciplinary Project (DATA802, 4 credits; in B7 for 2022–2024, moved to B6  \nfrom 2025) \n◦ \nCapstone Project/Industrial Internship (DATA803, 12 credits, Semester 8) \n◦ \n18 credits for 2022–2024; 14 credits for 2025–2026. \n4. Course-type terms",
+    "metadata": {
+      "page": 34,
+      "section": "Glossary, Equivalences & Confirmation Items"
+    }
+  },
+  {
+    "chunkIndex": 116,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 34,
+    "sectionNumber": "Glossary, Equivalences & Confirmation Items",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Capstone Project = a large  fi nal-year project that brings together everything learned.  \n\"Capstone Project/Industrial Internship\" = in S8 the student does EITHER a capstone  \nproject OR a full-semester internship at a company (12 credits; no classes in S8).\n• Industrial Internship = working at a company/industry for credit.\n• Summer Training/Internship (DATA801) = a short internship/training during the summer  \nbreak. It appears under S5, i.e. it is done in the summer after S4 and credited in S5.  \n<<CONFIRM>>\n• Interdisciplinary Project (DATA802; spelled \"Inter-Desciplinary\"/\"Interdesciplinary\" in  \nplaces) = a project combining data science with another  fi eld, done in S7.\n• Foundation Seminar (SLAD207) = a 1-credit seminar.\n• Community Engagement & Service Experience (UCOR701) = a 1-credit community- \nservice/outreach activity.",
+    "metadata": {
+      "page": 34,
+      "section": "Glossary, Equivalences & Confirmation Items"
+    }
+  },
+  {
+    "chunkIndex": 117,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 34,
+    "sectionNumber": "Glossary, Equivalences & Confirmation Items",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Language (LANG101) = a language course; in 2024 written \"Kannada/ Language\"  \n(Kannada = state language of Karnataka, or another language). <<CONFIRM rule for who  \ntakes Kannada>>\n• Design Workshop = hands-on design/making lab (0-0-4). \n5. Course code pre fi xes\n• UCOR = University Core\n• MATH = Mathematics\n• COMP = Computer Science / Computing\n• DATA = Data Science",
+    "metadata": {
+      "page": 34,
+      "section": "Glossary, Equivalences & Confirmation Items"
+    }
+  },
+  {
+    "chunkIndex": 118,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 35,
+    "sectionNumber": "Glossary, Equivalences & Confirmation Items",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• MTSC = <<CONFIRM: e.g. Materials Science / Multidisciplinary Science?>> (MTSC111,  \nMTSC211, MTSC781)\n• SLAD = <<CONFIRM: full form>> (SLAD206 Human Values, SLAD207 Foundation  \nSeminar)\n• PSYC (also written PSCY in 2025) = Psychology\n• ECON = Economics\n• MGMT = Management\n• Number: the  fi rst digit usually shows the year level (1xx = 1st year, 2xx = 2nd, 3xx = 3rd,  \n4xx = 4th year/advanced). 7xx = <<CONFIRM>>, 8xx = internships/projects (DATA801– \n803). \n6. Same course under different codes or names in different  \nbatches (equivalences) <<CONFIRM>>\n• Communication Skills: UCOR103 (2022, 2023, 2025; 2 cr) | UCOR105 \"Communication  \nand Leadership Skills\" (2024; 3 cr) | UCOR107 (2026; 3 cr)\n• Critical Thinking: UCOR210 (2022–23; 2 cr)  →  UCOR310 (2024+; 3 cr)\n• Calculus: MATH201 Calculus (2022–24)  →  MATH208 Multivariate Calculus (2025+)\n• Probability: MATH202 Probability Theory + MATH205 Statistics with R (2022–23)  →   \nMATH203 Probability and Statistics (2024+)",
+    "metadata": {
+      "page": 35,
+      "section": "Glossary, Equivalences & Confirmation Items"
+    }
+  },
+  {
+    "chunkIndex": 119,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 35,
+    "sectionNumber": "Glossary, Equivalences & Confirmation Items",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Linear Algebra: MATH204 (2022–24)  →  MATH209 (2025+)\n• Advanced Statistical Analysis and Research Methods (with R): MATH206 (2024–25; 2 cr)  \n→  MATH210 (2026; 3 cr)\n• Academic Writing: ENGL201 (2022–23; 3 cr)  →  ENGL210 (2024; 2 cr)  →  UCOR207  \nAnalytical Academic Writing (2025; Univ Core)\n• Design Workshop: COMP132 (2 cr)  →  COMP133 (2026; 3 cr)\n• Operating Systems: COMP207 (3 cr)  →  COMP211 (2026; 4 cr)\n• Data visualisation: DATA131 Visualizing Data for Story Telling (2022–23; Foundation, 2  \ncr)  →  DATA132 Data Visualization and Storytelling (2024+; Program Core, 3 cr)\n• Exploratory Data Analysis: DATA202 (2022–24)  →  DATA209 Advanced Exploratory Data  \nAnalysis (2025+)\n• Psychology/Economics: PSYC101/ECON101 (2022–24; 3 cr)  →  PSCY102/ECON105  \n\"Principles of Economics\" (2025; 2 cr)  →  PSYC105/ECON106 (2026; 2 cr)\n• Programming: DATA130 Computational Thinking (2022)  →  DATA103 Programming in  \nPython (2024+)",
+    "metadata": {
+      "page": 35,
+      "section": "Glossary, Equivalences & Confirmation Items"
+    }
+  },
+  {
+    "chunkIndex": 120,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 35,
+    "sectionNumber": "Glossary, Equivalences & Confirmation Items",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• \"Databases Management\" = Database Management (Systems) \n7. Specialization-track and elective course codes\n• MATH401 Probabilistic Graph Models (Track 1)\n• COMP401 Web Framework (Track 2)\n• DATA402 Advanced Visualization and Storytelling (Track 1, 2022)\n• DATA406 Big Data Framework (Track 2)\n• DATA403 Natural Language Processing (Track 1; from 2025 in Program Honors)\n• COMP402 Software Architecture and Deployments (Track 2)\n• DATA404 Multi Modal Learning (Track 1)\n• DATA405 Reinforcement Learning",
+    "metadata": {
+      "page": 35,
+      "section": "Glossary, Equivalences & Confirmation Items"
+    }
+  },
+  {
+    "chunkIndex": 121,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 36,
+    "sectionNumber": "Glossary, Equivalences & Confirmation Items",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• DATA408 Advanced Topics in Deep Learning (Track 1)\n• COMP405 Cloud & Cognitive Computing (Track 2)\n• COMP403 Cloud Computing (2024, Foundation)\n• TBA Image Processing and Computer Vision (Track 1, 2025)\n• When a cell reads \"X / X\" (e.g. \"Reinforcement Learning/Reinforcement Learning\"),  \nstudents of BOTH tracks take the same course. \n8. Known typos and data issues (do not treat as real  \ndifferences)\n• \"Summe Training\" = Summer Training\n• \"Visuatlization\" = Visualization\n• \"Inter-Desciplinary\"/\"Interdesciplinary\" = Interdisciplinary\n• \"Problem Solving for Design Thinking\" = \"Problem Solving with Design Thinking\"  \n(UCOR104)\n• \"PSCY102\" = PSYC102 (Psychology)\n• \"Digital Design and Computer Organization\" (double space) = same course COMP204\n• Some prerequisites name courses that are not in that batch's plan (e.g. DATA206,  \nCOMP210, or MATH201/MATH202/MATH204 in the 2025–26 plans). Read these through  \nthe equivalence table in section 6 (e.g. DATA206  →  DATA209?). <<CONFIRM>>",
+    "metadata": {
+      "page": 36,
+      "section": "Glossary, Equivalences & Confirmation Items"
+    }
+  },
+  {
+    "chunkIndex": 122,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 36,
+    "sectionNumber": "Glossary, Equivalences & Confirmation Items",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Sem_Spread_DS_2026: the \"Fixed Min\" values (University Core 24, Foundation 24,  \nProgram Core 46) are out of date. The correct basket totals are those in Struct_2026_DS:  \nUniversity Core 18, Foundation 26, Program Core 50, Program Honors 20, Electives 20,  \nMinor/Open 32, Internship/Capstone 14 = 180. (Veri fi ed: these are the sums of the courses  \nactually listed in Sem_Spread_DS_2026.)",
+    "metadata": {
+      "page": 36,
+      "section": "Glossary, Equivalences & Confirmation Items"
+    }
+  },
+  {
+    "chunkIndex": 123,
+    "documentName": "all the info for gai assignment.pdf",
+    "sourceType": "ACADEMIC_GUIDE",
+    "hierarchyLevel": 2,
+    "pageNumber": 37,
+    "sectionNumber": "Glossary, Equivalences & Confirmation Items",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Highlighted cells:  MLOps & Model Deployment (2023) and Compiler Design (2026) are  \ncoloured. This might mean “newly added course”.\n• Codes still “TBA”:  Language (2025, 2026), Compiler Design (2026) and Image Processing  \n& Computer Vision (2025 Track 1).\n• A stray cell:  the 2022 sheet has “COMP401” written in Semester 5 with no course next to  \nit. It looks like a leftover.\n• Changes between batches:  there’s no ready-made summary of what changed from one  \nbatch to the next. Students often ask “how is my batch different from my senior’s?”",
+    "metadata": {
+      "page": 37,
+      "section": "Glossary, Equivalences & Confirmation Items"
+    }
   }
 ]

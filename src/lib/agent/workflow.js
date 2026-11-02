@@ -34,6 +34,8 @@ const retriever = ragModule.retriever || (ragModule.default && ragModule.default
 const DOCUMENT_HIERARCHY = {
   '4. Student Handbook Aug 2026.pdf': 1,
   '118225_Semester_Spread_Structures_Sept_2026.xlsx': 2,
+  'Semester_Spread_Structures_Sept_2026.xlsx': 2,
+  'all the info for gai assignment.pdf': 2,
   '118351_Minor Courses for BTech_Students.xlsx': 2,
   'Academic Calendar Even Semester 2025-26 (1).pdf': 3,
   'Academic_Calendar_ODD Semester_2026_27.pdf': 3,
