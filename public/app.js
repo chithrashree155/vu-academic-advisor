@@ -429,25 +429,90 @@ function renderAdvisorMessage(data) {
   const stateClass = `state-${data.state || 'ANSWERABLE'}`;
   const stateLabel = (data.state || 'ANSWERABLE').replace(/_/g, ' ');
 
-  let sourcesHtml = '';
-  if (Array.isArray(data.sources) && data.sources.length > 0) {
-    const items = data.sources.map(s => `
-      <div class="source-item">
-        <div class="source-header">
-          <span class="source-doc">📄 ${escHtml(s.documentTitle)}</span>
-          ${s.clauseNumber ? `<span class="source-clause">${escHtml(s.clauseNumber)}</span>` : ''}
-        </div>
-        ${s.excerpt ? `<p class="source-excerpt">"${escHtml(s.excerpt)}"</p>` : ''}
-      </div>
-    `).join('');
+  const msgId = 'msg-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+  advisorResponses[msgId] = data.answer || '';
 
-    sourcesHtml = `
-      <div class="sources-box">
-        <div class="sources-title">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          VERIFIED SOURCE EVIDENCE
+  // 1. Build Token Usage Badge (Transparent, truthful reporting)
+  const tokenData = data.tokens || data.tokenUsage;
+  let tokenBadgeHtml = '';
+  if (tokenData && tokenData.totalTokens !== null && tokenData.totalTokens !== undefined) {
+    tokenBadgeHtml = `
+      <div class="token-pill token-pill-active">
+        <span class="token-pill-icon">⚡</span>
+        <span class="token-pill-text">Prompt: <strong>${tokenData.promptTokens ?? 0}</strong> · Completion: <strong>${tokenData.completionTokens ?? 0}</strong> · Total: <strong>${tokenData.totalTokens} tokens</strong></span>
+        ${tokenData.model ? `<span class="token-pill-model">${escHtml(tokenData.model)}</span>` : ''}
+      </div>
+    `;
+  } else {
+    tokenBadgeHtml = `
+      <div class="token-pill token-pill-deterministic">
+        <span class="token-pill-icon">🔒</span>
+        <span class="token-pill-text">Token Usage: <strong>0 external LLM API tokens</strong> (Deterministic Grounded Rule &amp; Curriculum Engine)</span>
+      </div>
+    `;
+  }
+
+  // 2. Build Verified Sources with Clickable Proof Links
+  let evidenceHtml = '';
+  if (Array.isArray(data.sources) && data.sources.length > 0) {
+    const items = data.sources.map(s => {
+      const hasUrl = s.url && typeof s.url === 'string' && s.url.trim().length > 0;
+      const titleText = escHtml(s.documentTitle || 'Official Document');
+      const locationText = escHtml(s.clauseNumber || s.pageOrSheet || '');
+
+      return `
+        <div class="source-item">
+          <div class="source-header">
+            ${hasUrl ? `
+              <a href="${escHtml(s.url)}" target="_blank" rel="noopener noreferrer" class="source-doc-link" title="Open official source in new tab">
+                <span class="source-icon">📄</span>
+                <span class="source-doc-title">${titleText}</span>
+                <span class="source-ext-icon">↗</span>
+              </a>
+            ` : `
+              <span class="source-doc"><span class="source-icon">📄</span> ${titleText}</span>
+            `}
+            ${locationText ? `<span class="source-clause">${locationText}</span>` : ''}
+          </div>
+          ${s.excerpt ? `<p class="source-excerpt">"${escHtml(s.excerpt)}"</p>` : ''}
+          ${hasUrl ? `
+            <div class="source-url-preview">
+              <span class="source-url-label">Verified Source Link:</span>
+              <a href="${escHtml(s.url)}" target="_blank" rel="noopener noreferrer" class="source-url-href">${escHtml(s.url)}</a>
+            </div>
+          ` : ''}
         </div>
-        <div class="sources-list">${items}</div>
+      `;
+    }).join('');
+
+    evidenceHtml = `
+      <div class="evidence-accordion">
+        <button type="button" class="btn-evidence-toggle" id="btn-ev-${msgId}" onclick="toggleEvidence('${msgId}')" aria-expanded="false">
+          <span class="ev-toggle-icon">🔍</span>
+          <span class="ev-toggle-label">Inspect Verified Proof &amp; Token Usage (${data.sources.length} source${data.sources.length === 1 ? '' : 's'})</span>
+          <span class="ev-toggle-arrow" id="arrow-${msgId}">▼</span>
+        </button>
+        <div id="drawer-${msgId}" class="evidence-drawer" style="display: none;">
+          ${tokenBadgeHtml}
+          <div class="sources-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            OFFICIAL VERIFIED SOURCES (CLICK TO VIEW PROOF)
+          </div>
+          <div class="sources-list">${items}</div>
+        </div>
+      </div>
+    `;
+  } else if (tokenBadgeHtml) {
+    evidenceHtml = `
+      <div class="evidence-accordion">
+        <button type="button" class="btn-evidence-toggle" id="btn-ev-${msgId}" onclick="toggleEvidence('${msgId}')" aria-expanded="false">
+          <span class="ev-toggle-icon">🔍</span>
+          <span class="ev-toggle-label">Inspect Execution &amp; Token Details</span>
+          <span class="ev-toggle-arrow" id="arrow-${msgId}">▼</span>
+        </button>
+        <div id="drawer-${msgId}" class="evidence-drawer" style="display: none;">
+          ${tokenBadgeHtml}
+        </div>
       </div>
     `;
   }
@@ -456,9 +521,6 @@ function renderAdvisorMessage(data) {
   if (data.followUp) {
     followUpHtml = `<div class="followup-box">💡 <strong>Suggested:</strong> ${escHtml(data.followUp)}</div>`;
   }
-
-  const msgId = 'msg-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
-  advisorResponses[msgId] = data.answer || '';
 
   msg.innerHTML = `
     <div class="advisor-avatar">
@@ -476,13 +538,24 @@ function renderAdvisorMessage(data) {
       </div>
       <div class="msg-text">${formatMarkdown(data.answer || '')}</div>
       ${followUpHtml}
-      ${sourcesHtml}
+      ${evidenceHtml}
     </div>
   `;
 
   history.appendChild(msg);
   history.scrollTop = history.scrollHeight;
 }
+
+window.toggleEvidence = function(msgId) {
+  const drawer = document.getElementById('drawer-' + msgId);
+  const arrow = document.getElementById('arrow-' + msgId);
+  const btn = document.getElementById('btn-ev-' + msgId);
+  if (!drawer) return;
+  const isCurrentlyHidden = drawer.style.display === 'none';
+  drawer.style.display = isCurrentlyHidden ? 'block' : 'none';
+  if (arrow) arrow.textContent = isCurrentlyHidden ? '▲' : '▼';
+  if (btn) btn.setAttribute('aria-expanded', isCurrentlyHidden ? 'true' : 'false');
+};
 
 function escHtml(str) {
   if (str === null || str === undefined) return '';

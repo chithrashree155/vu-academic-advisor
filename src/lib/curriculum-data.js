@@ -793,6 +793,9 @@ function getBasketCourses(basketQuery, versionQuery = null, semesterQuery = null
           .map(c => c.semesterNum)
       )].sort((a, b) => a - b);
 
+      const bCred = getBasketCredits(basketKey, version);
+      const allocatedCredits = bCred ? bCred.credits : null;
+
       return {
         hasSpecificVersion: true,
         hasSemesterFilter: true,
@@ -802,6 +805,7 @@ function getBasketCourses(basketQuery, versionQuery = null, semesterQuery = null
         program,
         basketName: basketNameLabel,
         sourceSheet: sheetName,
+        allocatedCredits,
         courses: matching.map(c => ({
           courseCode: c.courseCode,
           name: c.courseName,

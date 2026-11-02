@@ -7,6 +7,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 const { processAdvisorQuery, getStudentProfileById, getStudentIdList } = require('./lib/advisory-engine');
 const { generateCourseInfographic, getSupportedPrograms } = require('./lib/multimodal/infographic');
 const { runAgenticAdvisingWorkflow } = require('./lib/agent/workflow');
@@ -19,6 +20,44 @@ const PORT = process.env.APP_PORT || 3000;
 app.use(cors());
 app.use(express.json({ limit: '50kb' }));
 app.use(express.static(path.join(__dirname, '../public')));
+
+// Serve official university curriculum documents (PDFs, Excel spreadsheets)
+const DATA_DIR = path.join(__dirname, '../data');
+app.use('/documents', express.static(DATA_DIR));
+app.use('/data', express.static(DATA_DIR));
+
+// Explicit route to serve documents with exact headers and fallback locations
+app.get('/documents/:filename', (req, res) => {
+  const rawFilename = req.params.filename;
+  if (!rawFilename || typeof rawFilename !== 'string') {
+    return res.status(400).send('Invalid filename');
+  }
+  const filename = path.basename(decodeURIComponent(rawFilename));
+  const candidatePaths = [
+    path.join(__dirname, '../data', filename),
+    path.join(process.cwd(), 'data', filename),
+    path.join(__dirname, '..', filename),
+    path.join(process.cwd(), filename)
+  ];
+
+  for (const candidate of candidatePaths) {
+    if (fs.existsSync(candidate)) {
+      if (filename.toLowerCase().endsWith('.pdf')) {
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
+      } else if (filename.toLowerCase().endsWith('.xlsx')) {
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+      }
+      return res.sendFile(candidate);
+    }
+  }
+
+  res.status(404).json({
+    status: 'error',
+    message: `Official document "${filename}" was not found on the server.`
+  });
+});
 
 // Security guardrail patterns
 const SENSITIVE_PROMPT_PATTERNS = [

@@ -20,6 +20,70 @@ const STOP_WORDS = new Set([
   'answer', 'tell', 'give', 'say', 'yes', 'no', 'something', 'anything', 'random', 'please'
 ]);
 
+/**
+ * Maps document title and location/page to its authentic viewable URL.
+ */
+function getOfficialDocumentUrl(docName, pageOrLocation = null) {
+  if (!docName) return null;
+  const name = String(docName).trim();
+  const lower = name.toLowerCase();
+
+  if (lower.includes('digii') && (lower.includes('portal') || lower.includes('login') || lower.includes('campus') || lower.includes('collpoll'))) {
+    return 'https://vidyashilp.digiicampus.com/';
+  }
+  if (lower.includes('grievance')) {
+    return 'https://vidyashilp.edu.in/Student_Grievance/';
+  }
+  if (lower.includes('antiragging') || lower.includes('anti-ragging') || lower.includes('anti ragging')) {
+    return 'https://www.antiragging.in/';
+  }
+
+  let canonicalFile = null;
+  if (lower.includes('handbook')) {
+    canonicalFile = '4. Student Handbook Aug 2026.pdf';
+  } else if (lower.includes('semester_spread') || lower.includes('spread_structure') || lower.includes('spreads') || lower.includes('curriculum')) {
+    canonicalFile = 'Semester_Spread_Structures_Sept_2026.xlsx';
+  } else if (lower.includes('minor courses') || lower.includes('118351')) {
+    canonicalFile = '118351_Minor Courses for BTech_Students.xlsx';
+  } else if (lower.includes('courses offered') || (lower.includes('summer') && lower.includes('offering'))) {
+    canonicalFile = 'Courses Offered.pdf';
+  } else if (lower.includes('circular') && lower.includes('summer')) {
+    canonicalFile = 'Circular - Summer Term June 2026.pdf';
+  } else if (lower.includes('sop student') || lower.includes('19082025')) {
+    canonicalFile = 'SOP STUDENT 19082025 - Final.pdf';
+  } else if (lower.includes('digii process') || lower.includes('minor selection')) {
+    canonicalFile = 'Digii Process - Minor Selection.pdf';
+  } else if (lower.includes('erp course') || lower.includes('registration manual')) {
+    canonicalFile = 'ERP Course Registration Manual.pdf';
+  } else if (lower.includes('exam enrollment')) {
+    canonicalFile = 'Exam Enrollment-SOP (1).pdf';
+  } else if (lower.includes('holiday')) {
+    canonicalFile = 'Holiday List.pdf';
+  } else if (lower.includes('even semester') && lower.includes('calendar')) {
+    canonicalFile = 'Academic Calendar Even Semester 2025-26 (1).pdf';
+  } else if (lower.includes('odd semester') && lower.includes('calendar')) {
+    canonicalFile = 'Academic_Calendar_ODD Semester_2026_27.pdf';
+  } else if (name.endsWith('.pdf') || name.endsWith('.xlsx')) {
+    canonicalFile = name;
+  }
+
+  if (!canonicalFile) return null;
+
+  let url = `/documents/${encodeURIComponent(canonicalFile)}`;
+  if (canonicalFile.endsWith('.pdf') && pageOrLocation) {
+    const locStr = String(pageOrLocation);
+    const pageMatch = locStr.match(/(?:page|p\.?)\s*(\d+)/i) || locStr.match(/\b(\d+)\b/);
+    if (pageMatch && pageMatch[1]) {
+      const pageNum = parseInt(pageMatch[1], 10);
+      if (pageNum > 0 && pageNum <= 150) {
+        url += `#page=${pageNum}`;
+      }
+    }
+  }
+
+  return url;
+}
+
 class RagRetriever {
   constructor(chunksPath) {
     this.chunksPath = chunksPath;
@@ -129,6 +193,9 @@ class RagRetriever {
       batch,
       semester,
       academicYear,
+      school,
+      courseCategory,
+      courseCode,
       sourceType,
       topK = 5
     } = options;
@@ -142,14 +209,18 @@ class RagRetriever {
     }
 
     try {
+      // Automatic batch detection from query for strict batch isolation
+      const queryBatchMatch = query.match(/\b(202[2-6])\b/);
+      const effectiveBatch = batch || (queryBatchMatch ? queryBatchMatch[1] : null);
+
       // Step 1: Strict Metadata Filtering
       const candidateChunks = this.chunks.filter((chunk) => {
         if (!chunk || typeof chunk.content !== 'string') return false;
         if (sourceType && chunk.sourceType !== sourceType) return false;
 
-        if (batch) {
-          if (chunk.metadata?.batch && chunk.metadata.batch !== batch) return false;
-          if (chunk.batchScope && Array.isArray(chunk.batchScope) && !chunk.batchScope.includes(batch)) return false;
+        if (effectiveBatch) {
+          if (chunk.metadata?.batch && chunk.metadata.batch !== effectiveBatch) return false;
+          if (chunk.batchScope && Array.isArray(chunk.batchScope) && !chunk.batchScope.includes(effectiveBatch)) return false;
         }
         if (program) {
           if (chunk.program && chunk.program !== program) return false;
@@ -157,6 +228,9 @@ class RagRetriever {
         }
         if (semester && chunk.metadata?.semester && chunk.metadata.semester !== semester) return false;
         if (academicYear && chunk.metadata?.academicYear && chunk.metadata.academicYear !== academicYear) return false;
+        if (school && chunk.metadata?.school && chunk.metadata.school !== school) return false;
+        if (courseCategory && chunk.metadata?.basket && chunk.metadata.basket.toLowerCase() !== courseCategory.toLowerCase()) return false;
+        if (courseCode && chunk.metadata?.courseCode && chunk.metadata.courseCode.toUpperCase() !== courseCode.toUpperCase()) return false;
 
         return true;
       });
@@ -259,14 +333,18 @@ class RagRetriever {
         }
 
         const score = matchCount + exactBonus;
+        const pageOrSheet = chunk.metadata?.sourceSheet || chunk.pageNumber || chunk.sectionNumber || 'Official Record';
+        const docUrl = getOfficialDocumentUrl(chunk.documentName, pageOrSheet);
 
         return {
           chunkText: chunk.content,
           documentName: chunk.documentName || 'Official Document',
           sourceType: chunk.sourceType || 'DOCUMENT',
           hierarchyLevel: chunk.hierarchyLevel || 3,
-          pageOrSheet: chunk.metadata?.sourceSheet || chunk.pageNumber || chunk.sectionNumber,
-          clauseNumber: chunk.clauseNumber,
+          pageOrSheet: pageOrSheet,
+          clauseNumber: chunk.clauseNumber || '',
+          url: docUrl,
+          isClickable: !!docUrl,
           metadata: chunk.metadata,
           similarityScore: Math.min(1.0, score / 6.0),
           rawScore: score

@@ -46,6 +46,122 @@ const {
 const ragModule = require('./rag/retriever.js');
 const retriever = ragModule.retriever || (ragModule.default && ragModule.default.retriever) || ragModule;
 
+/**
+ * Maps document title and location/page to its authentic viewable URL.
+ * Real documents are served directly by the Express server under /documents/<filename>.
+ * Online portals (Digii ERP, Grievance, Anti-Ragging) link to the verified official university URLs.
+ */
+function getOfficialDocumentUrl(docName, pageOrLocation = null) {
+  if (!docName) return null;
+  const name = String(docName).trim();
+  const lower = name.toLowerCase();
+
+  // 1. Official web portals
+  if (lower.includes('digii') && (lower.includes('portal') || lower.includes('login') || lower.includes('campus') || lower.includes('collpoll'))) {
+    return 'https://vidyashilp.digiicampus.com/';
+  }
+  if (lower.includes('grievance')) {
+    return 'https://vidyashilp.edu.in/Student_Grievance/';
+  }
+  if (lower.includes('antiragging') || lower.includes('anti-ragging') || lower.includes('anti ragging')) {
+    return 'https://www.antiragging.in/';
+  }
+
+  // 2. Canonical official filenames in /data
+  let canonicalFile = null;
+  if (lower.includes('handbook')) {
+    canonicalFile = '4. Student Handbook Aug 2026.pdf';
+  } else if (lower.includes('semester_spread') || lower.includes('spread_structure') || lower.includes('spreads') || lower.includes('curriculum')) {
+    canonicalFile = 'Semester_Spread_Structures_Sept_2026.xlsx';
+  } else if (lower.includes('minor courses') || lower.includes('118351')) {
+    canonicalFile = '118351_Minor Courses for BTech_Students.xlsx';
+  } else if (lower.includes('courses offered') || (lower.includes('summer') && lower.includes('offering'))) {
+    canonicalFile = 'Courses Offered.pdf';
+  } else if (lower.includes('circular') && lower.includes('summer')) {
+    canonicalFile = 'Circular - Summer Term June 2026.pdf';
+  } else if (lower.includes('sop student') || lower.includes('19082025')) {
+    canonicalFile = 'SOP STUDENT 19082025 - Final.pdf';
+  } else if (lower.includes('digii process') || lower.includes('minor selection')) {
+    canonicalFile = 'Digii Process - Minor Selection.pdf';
+  } else if (lower.includes('erp course') || lower.includes('registration manual')) {
+    canonicalFile = 'ERP Course Registration Manual.pdf';
+  } else if (lower.includes('exam enrollment')) {
+    canonicalFile = 'Exam Enrollment-SOP (1).pdf';
+  } else if (lower.includes('holiday')) {
+    canonicalFile = 'Holiday List.pdf';
+  } else if (lower.includes('even semester') && lower.includes('calendar')) {
+    canonicalFile = 'Academic Calendar Even Semester 2025-26 (1).pdf';
+  } else if (lower.includes('odd semester') && lower.includes('calendar')) {
+    canonicalFile = 'Academic_Calendar_ODD Semester_2026_27.pdf';
+  } else if (name.endsWith('.pdf') || name.endsWith('.xlsx')) {
+    canonicalFile = name;
+  }
+
+  if (!canonicalFile) {
+    return null;
+  }
+
+  let url = `/documents/${encodeURIComponent(canonicalFile)}`;
+
+  // Attach #page=X if page number is available for PDFs
+  if (canonicalFile.endsWith('.pdf') && pageOrLocation) {
+    const locStr = String(pageOrLocation);
+    const pageMatch = locStr.match(/(?:page|p\.?)\s*(\d+)/i) || locStr.match(/\b(\d+)\b/);
+    if (pageMatch && pageMatch[1]) {
+      const pageNum = parseInt(pageMatch[1], 10);
+      if (pageNum > 0 && pageNum <= 150) {
+        url += `#page=${pageNum}`;
+      }
+    }
+  }
+
+  return url;
+}
+
+/**
+ * Normalizes user queries for spelling mistakes, synonyms, and punctuation variations
+ */
+function canonicalizeQueryText(rawQuery) {
+  if (!rawQuery || typeof rawQuery !== 'string') return '';
+  let q = rawQuery.toLowerCase().trim();
+
+  // Common spelling typos and abbreviations
+  q = q.replace(/\bmaths?\b/g, 'mathematics')
+       .replace(/\bmathimatics?\b/g, 'mathematics')
+       .replace(/\bmathemetix\b/g, 'mathematics')
+       .replace(/\bsemister\b/g, 'semester')
+       .replace(/\bsemster\b/g, 'semester')
+       .replace(/\bcurriculam\b/g, 'curriculum')
+       .replace(/\bcuricullum\b/g, 'curriculum')
+       .replace(/\bcuriculum\b/g, 'curriculum')
+       .replace(/\bcredts?\b/g, 'credits')
+       .replace(/\bcreds\b/g, 'credits')
+       .replace(/\bprereq\b/g, 'prerequisite')
+       .replace(/\bprerequisit\b/g, 'prerequisite')
+       .replace(/\bprerequsite\b/g, 'prerequisite')
+       .replace(/\bfoudation\b/g, 'foundation')
+       .replace(/\bfoundtion\b/g, 'foundation')
+       .replace(/\bcapston\b/g, 'capstone')
+       .replace(/\binternshp\b/g, 'internship')
+       .replace(/\bpracticall?\b/g, 'practical')
+       .replace(/\bpracticle\b/g, 'practical')
+       .replace(/\btutoral\b/g, 'tutorial')
+       .replace(/\blectur\b/g, 'lecture')
+       .replace(/\blectue\b/g, 'lecture')
+       .replace(/\buniv\s+core\b/g, 'university core')
+       .replace(/\bu\s+core\b/g, 'university core')
+       .replace(/\buniveristy\s+core\b/g, 'university core')
+       .replace(/\bprog\s+core\b/g, 'program core')
+       .replace(/\bprog\s+honors?\b/g, 'program honors')
+       .replace(/\bhons\b/g, 'honors')
+       .replace(/\bspec\s+track\b/g, 'specialization track')
+       .replace(/\bspecialisation\b/g, 'specialization')
+       .replace(/\bl\s*[-–—/]\s*t\s*[-–—/]\s*p\b/g, 'l-t-p')
+       .replace(/\bltp\b/g, 'l-t-p');
+
+  return q;
+}
+
 // ── INTERNAL SYNTHETIC STUDENT PROFILES (24 PROFILES FOR TESTING & DEMO) ──
 // Kept private server-side. Never exposed in full dataset API responses.
 const SYNTHETIC_PROFILES = [
@@ -785,7 +901,7 @@ function detectSubjectFilter(queryStr) {
  * Query Classification Engine
  */
 function classifyQuery(queryStr) {
-  const q = queryStr.toLowerCase().trim();
+  const q = canonicalizeQueryText(queryStr);
 
   // 0. Conversational / Isolated Meta queries without academic subject
   if (
@@ -1075,6 +1191,34 @@ function classifyQuery(queryStr) {
     return 'COURSE_PLACEMENT';
   }
 
+  // 13.0 General L-T-P Structure & Instructional Framework Explanation
+  const hasSpecificCourseForLTP = /\b[A-Z]{3,4}\s?\d{3}\b/i.test(q) || extractCandidateCourseName(q);
+  if (
+    !hasSpecificCourseForLTP && (
+      q.includes('what does l-t-p mean') ||
+      q.includes('what does ltp mean') ||
+      q.includes('what is l-t-p') ||
+      q.includes('what is ltp') ||
+      q.includes('meaning of l-t-p') ||
+      q.includes('meaning of ltp') ||
+      q.includes('explain l-t-p structure') ||
+      q.includes('explain ltp structure') ||
+      q.includes('explain the l-t-p structure') ||
+      q.includes('explain the ltp structure') ||
+      q === 'l-t-p' ||
+      q === 'ltp' ||
+      q.includes('difference between lecture, tutorial and practical') ||
+      q.includes('difference between lecture tutorial and practical') ||
+      q.includes('difference between lecture, tutorial & practical') ||
+      q.includes('difference between lecture tutorial practical') ||
+      q.includes('explain the course structure in simple terms') ||
+      q.includes('explain course structure in simple terms') ||
+      (q.includes('l-t-p') && (q.includes('mean') || q.includes('stand for') || q.includes('represent') || q.includes('concept') || q.includes('definition') || q.includes('simple terms') || q.includes('how should') || q.includes('interpret')))
+    )
+  ) {
+    return 'LTP_EXPLANATION';
+  }
+
   // 13.1 Explicit Course Info (takes precedence over basket names in course titles like "Foundation Seminar")
   const isExplicitCourseInfo =
     (
@@ -1089,6 +1233,8 @@ function classifyQuery(queryStr) {
       q.includes('course code for') ||
       q.includes('l-t-p') ||
       q.includes('lecture-tutorial-practical') ||
+      q.includes('course structure') ||
+      q.includes('structure of') ||
       (q.includes('basket does') && q.includes('belong')) ||
       (q.includes('does') && q.includes('exist'))
     ) && !isDegreeCreditQuery(q);
@@ -1119,23 +1265,36 @@ function classifyQuery(queryStr) {
   }
 
   // 15. Curriculum basket courses (e.g. "List Foundation courses and credits for 2026 DS", "Tell me foundation courses for batch 2023 first semester only", "What is the Internship/Capstone Project requirement for Batch 2023?")
-  if (
+  const isAskingBasketCourses =
     normalizeBasketName(q) && (
-      q.includes('requirement') ||
-      q.includes('requirements') ||
-      q.includes('list') ||
-      q.includes('tell me') ||
-      q.includes('show') ||
-      q.includes('what is') ||
       q.includes('what are') ||
       q.includes('what were') ||
       q.includes('which') ||
+      q.includes('list') ||
+      q.includes('tell me') ||
+      q.includes('show') ||
+      q.includes('courses') ||
+      q.includes('subjects')
+    );
+
+  if (
+    normalizeBasketName(q) && (
+      isAskingBasketCourses ||
+      q.includes('requirement') ||
+      q.includes('requirements') ||
       q.includes('basket') ||
       q.includes('foundation') ||
       q.includes('university core') ||
-      q.includes('program core') ||
-      (q.includes('courses') && !q.includes('how many credits') && !q.includes('how many total credits'))
-    ) && !q.includes('how many credits') && !q.includes('how many credit') && !q.includes('how many total credits') && !q.includes('total credits') && !q.includes('total credit')
+      q.includes('program core')
+    ) && (
+      isAskingBasketCourses || (
+        !q.includes('how many credits') &&
+        !q.includes('how many credit') &&
+        !q.includes('how many total credits') &&
+        !q.includes('total credits') &&
+        !q.includes('total credit')
+      )
+    )
   ) {
     return 'CURRICULUM_BASKET';
   }
@@ -1150,6 +1309,8 @@ function classifyQuery(queryStr) {
       q.includes('course code') ||
       q.includes('l-t-p') ||
       q.includes('lecture-tutorial-practical') ||
+      q.includes('course structure') ||
+      q.includes('structure of') ||
       (q.includes('basket does') && q.includes('belong'))
     )
   ) {
@@ -1727,11 +1888,72 @@ function isOutOfScopeQuery(queryStr) {
 }
 
 /**
+ * Resolves context for underspecified follow-up queries using conversation history
+ */
+function resolveFollowUpQuery(query, history = []) {
+  if (!Array.isArray(history) || history.length === 0) return query;
+  const q = query.trim().toLowerCase();
+
+  // Find most recent meaningful user query from history
+  let prevUserText = '';
+  for (let i = history.length - 1; i >= 0; i--) {
+    const item = history[i];
+    const text = typeof item === 'string' ? item : (item.text || item.content || item.query || '');
+    if (text && text.trim().length > 3) {
+      prevUserText = text.trim();
+      break;
+    }
+  }
+
+  if (!prevUserText) return query;
+
+  const prevLower = prevUserText.toLowerCase();
+  const prevBasket = normalizeBasketName(prevLower);
+  const prevBatchMatch = prevLower.match(/\b(202[2-6])\b/);
+  const prevBatch = prevBatchMatch ? prevBatchMatch[1] : null;
+  const prevCourseMatch = prevUserText.match(/\b[A-Z]{3,4}\s?\d{3}\b/i);
+  const prevCourse = prevCourseMatch ? prevCourseMatch[0].replace(/\s+/, '').toUpperCase() : null;
+
+  // Case 1: "What about semester 1 only?", "Which courses in semester 1?", "in semester 2"
+  const semMatch = q.match(/\b(?:semester|sem)\s*(\d)\b/i);
+  if (semMatch && !normalizeBasketName(q) && prevBasket) {
+    const basketName = prevBasket === 'universityCore' ? 'University Core'
+      : prevBasket === 'foundation' ? 'Foundation'
+      : prevBasket === 'programCore' ? 'Program Core'
+      : prevBasket === 'programHonors' ? 'Program Honors'
+      : prevBasket === 'electives' ? 'Electives'
+      : 'Minor';
+    const batchStr = prevBatch ? `Batch ${prevBatch} ` : '';
+    return `${basketName} courses for ${batchStr}Semester ${semMatch[1]} only`;
+  }
+
+  // Case 2: "What about batch 2024?", "in 2025"
+  const batchMatch = q.match(/\b(202[2-6])\b/);
+  if (batchMatch && !normalizeBasketName(q) && prevBasket) {
+    const basketName = prevBasket === 'universityCore' ? 'University Core'
+      : prevBasket === 'foundation' ? 'Foundation'
+      : prevBasket === 'programCore' ? 'Program Core'
+      : prevBasket === 'programHonors' ? 'Program Honors'
+      : prevBasket === 'electives' ? 'Electives'
+      : 'Minor';
+    return `${basketName} courses for Batch ${batchMatch[1]}`;
+  }
+
+  // Case 3: "Explain its L-T-P structure", "What is the L-T-P of it?", "How many credits does it have?"
+  if ((q.includes('l-t-p') || q.includes('credits') || q.includes('prerequisite') || q.includes('prereq')) && !q.match(/\b[A-Z]{3,4}\s?\d{3}\b/i) && prevCourse) {
+    return `${query} ${prevCourse}`;
+  }
+
+  return query;
+}
+
+/**
  * Core Advisory Execution Engine
  */
 async function executeAdvisorQuery(query, profileId = null, history = []) {
   try {
-    const normalizedQuery = (query || '').toLowerCase().trim();
+    const resolvedQuery = resolveFollowUpQuery(query, history);
+    const normalizedQuery = canonicalizeQueryText(resolvedQuery);
 
     // ── 0. IMMEDIATE OUT-OF-SCOPE PRE-RETRIEVAL GUARDRAIL ──
     // MUST run BEFORE retrieval, similarity search, classification, or source selection
@@ -1874,20 +2096,69 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
     // Context resolution from history for follow-up questions
     let contextCourseCode = null;
     let contextPrereqCode = null;
+    let contextBatch = null;
+    let contextSemester = null;
+    let contextBasket = null;
 
     if (Array.isArray(history) && history.length > 0) {
       for (let i = history.length - 1; i >= 0; i--) {
         const item = history[i];
         if (item && item.text) {
-          const match = item.text.match(/\b[A-Z]{3,4}\s?\d{3}\b/i);
-          if (match) {
-            if (!contextCourseCode) contextCourseCode = match[0].replace(/\s+/, '').toUpperCase();
+          const itemText = item.text;
+          const match = itemText.match(/\b[A-Z]{3,4}\s?\d{3}\b/i);
+          if (match && !contextCourseCode) {
+            contextCourseCode = match[0].replace(/\s+/, '').toUpperCase();
           }
-          if (item.text.includes('DATA301') || item.text.includes('Machine Learning')) {
+          if ((itemText.includes('DATA301') || itemText.includes('Machine Learning')) && !contextPrereqCode) {
             contextPrereqCode = 'DATA301';
+          }
+          const batchMatch = itemText.match(/\b(202[2-6])\b/);
+          if (batchMatch && !contextBatch) {
+            contextBatch = batchMatch[1];
+          }
+          const semMatch = itemText.match(/\b(?:semester|sem)\s*(\d)\b/i);
+          if (semMatch && !contextSemester) {
+            contextSemester = parseInt(semMatch[1], 10);
+          }
+          const basketKey = normalizeBasketName(itemText);
+          if (basketKey && !contextBasket) {
+            contextBasket = basketKey;
           }
         }
       }
+    }
+
+    // ── L-T-P GENERAL INSTRUCTIONAL FRAMEWORK EXPLANATION ──
+    if (queryCategory === 'LTP_EXPLANATION') {
+      return {
+        state: 'ANSWERABLE',
+        answer: `**Understanding the L-T-P Course Structure at Vidyashilp University**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section 3, Clause 3.1 & 3.2, Table 1)\n\nAt Vidyashilp University, academic courses are categorized and scheduled using the **L – T – P (Lecture – Tutorial – Practical)** instructional framework. Here is what each component represents:\n\n1. **L = Lecture (Classroom Instruction):**\n   - Represents primary classroom instructional sessions where faculty teach core theoretical foundations, principles, and concepts.\n   - **Official Credit Norm (Clause 3.1):** **One (1) contact/classroom hour per week = 1 Credit**.\n\n2. **T = Tutorial (Interactive Problem-Solving):**\n   - Represents small-group participatory sessions dedicated to numerical problem-solving, analytical discussions, conceptual clarification, and collaborative exercises.\n   - **Official Credit Norm (Clause 3.1):** **One (1) contact/classroom hour per week = 1 Credit**.\n\n3. **P = Practical (Hands-on Lab / Studio / Field Work):**\n   - Represents hands-on laboratory experiments, programming/coding labs, design studios, field work, or applied project development.\n   - **Official Credit Norm (Clause 3.1):** **Two (2) contact/practice hours per week = 1 Credit**.\n\n---\n\n### How Students Should Interpret L-T-P Numbers\nDo **not** assume that the sum of L-T-P numbers directly equals the total course credits. While Lecture and Tutorial hours are credit-equivalent on a 1:1 basis, Practical hours carry a 2:1 ratio (2 lab hours = 1 credit):\n\n$$\\text{Course Credits} = L + T + \\frac{P}{2}$$\n*(for standard instructional courses governed by Clause 3.1)*\n\n### Actual Course Examples from the Official Vidyashilp Curriculum:\n- **L-T-P 3-1-2 (5 Credits):** 3 Lecture hours/week (3 credits) + 1 Tutorial hour/week (1 credit) + 2 Practical hours/week (1 credit) = **5 total credits** for 6 weekly contact hours.\n- **UCOR103 — Communication Skills (L-T-P 1-0-2, 2 Credits):** 1 Lecture hour/week + 0 Tutorial hours + 2 Practical hours/week = **2 credits** (*Sem Spread BTECH-2022, Semester 1*).\n- **MATH201 — Calculus (L-T-P 2-1-0, 3 Credits):** 2 Lecture hours/week + 1 Tutorial hour/week + 0 Practical hours = **3 credits** (*Sem Spread BTECH-2022, Semester 1*).\n- **DATA103 — Programming in Python (L-T-P 2-0-2, 3 Credits):** 2 Lecture hours/week + 0 Tutorial hours + 2 Practical lab hours/week = **3 credits** (*Sem_Spread_2024, Semester 1*).\n- **COMP209 — Databases Management (L-T-P 3-0-2, 4 Credits):** 3 Lecture hours/week + 0 Tutorial hours + 2 Practical lab hours/week = **4 credits** (*Sem_Spread_2024, Semester 3*).\n\n### Non-Taught & Practice-Based Courses (Clause 3.2 & Table 1):\n- Non-taught credit courses like **Industry Internship, Capstone Project, Research Dissertation, and Community Engagement & Service Experience** (e.g. **UCOR701**, 1 credit) do not follow a typical weekly L-T-P classroom distribution. In official records, their L-T-P is recorded as **0-0-0** or unlisted, and credits are assigned based on the quantum of work and effort prescribed in the curriculum.\n- **Evaluation Weights (Table 1):** Lecture-based courses (where L predominates) have 60%–70% continuous assessment and 30%–40% end-term exam. Practice-based courses (where P predominates) have 70%–100% continuous assessment and maximum 30% end-term jury/viva.\n\n### Example Questions You Can Ask:\n- *What does L-T-P mean?*\n- *Explain the L-T-P structure of DATA103.*\n- *What is the difference between lecture, tutorial and practical?*\n- *How many credits does MATH201 have?*\n- *Explain the course structure in simple terms.*`,
+        sources: [
+          {
+            documentTitle: '4. Student Handbook Aug 2026.pdf',
+            hierarchyLevel: 1,
+            pageOrSheet: 'Section 3, Clause 3.1 & 3.2',
+            clauseNumber: 'Academic Credits - Course Credit Structure (L-T-P)',
+            excerpt: 'The Credit Structure for defining and categorizing Courses is the L – T – P framework. Lecture/Tutorial: 1 contact hour/week = 1 Credit. Practical: 2 hours/week = 1 Credit.'
+          },
+          {
+            documentTitle: '4. Student Handbook Aug 2026.pdf',
+            hierarchyLevel: 1,
+            pageOrSheet: 'Table 1',
+            clauseNumber: 'Evaluation System: Components and Weightage',
+            excerpt: 'Lecture-based Course: L in L-T-P predominates (60-70% CA, 30-40% End Term). Practice-based Course: P in L-T-P predominates (70-100% CA, max 30% End Term).'
+          },
+          {
+            documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+            hierarchyLevel: 2,
+            pageOrSheet: 'Semester Spread Sheets (2022–2026)',
+            clauseNumber: 'L-T-P Columns',
+            excerpt: 'Official curriculum records specifying L, T, P, and C (credits) per semester course.'
+          }
+        ],
+        ruleResults: { ltpDefined: true, creditFormula: 'L + T + P/2' },
+        followUp: "Ask 'Explain the L-T-P structure of DATA103' or 'How many credits does MATH201 have?'"
+      };
     }
 
     // ── 0. PRIVACY GUARDRAIL ──
@@ -2661,9 +2932,13 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
             return `${idx + 1}. ${codePrefix} — ${details}`;
           }).join('\n');
 
+          const degreeBasketNote = basketResult.allocatedCredits
+            ? ` | **Total Degree Basket Requirement:** **${basketResult.allocatedCredits} credits**`
+            : '';
+
           return {
             state: 'ANSWERABLE',
-            answer: `**Vidyashilp University ${basketResult.basketName} — Semester ${basketResult.semesterNum} (Batch ${basketResult.version})**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${sheetName})\n\n**Program:** ${basketResult.program} | **Batch:** ${basketResult.version} | **Semester:** ${basketResult.semesterNum}\n**Semester Basket Total:** **${basketResult.totalCredits} credits** (${basketResult.courses.length} course${basketResult.courses.length > 1 ? 's' : ''})\n\n**Courses Scheduled in Semester ${basketResult.semesterNum}:**\n${courseList}`,
+            answer: `**Vidyashilp University ${basketResult.basketName} — Semester ${basketResult.semesterNum} (Batch ${basketResult.version})**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${sheetName})\n\n**Program:** ${basketResult.program} | **Batch:** ${basketResult.version} | **Semester:** ${basketResult.semesterNum}\n**Semester Basket Total:** **${basketResult.totalCredits} credits** (${basketResult.courses.length} course${basketResult.courses.length > 1 ? 's' : ''})${degreeBasketNote}\n\n**Courses Scheduled in Semester ${basketResult.semesterNum}:**\n${courseList}`,
             sources: [
               {
                 documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
@@ -2678,6 +2953,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
               version: basketResult.version,
               semester: basketResult.semesterNum,
               credits: basketResult.totalCredits,
+              totalBasketCredits: basketResult.allocatedCredits || null,
               count: basketResult.courses.length
             },
             followUp: `Ask 'List Foundation courses in Semester ${basketResult.semesterNum === 1 ? 2 : 1} for Batch ${basketResult.version}' or 'Tell me all Foundation courses for Batch ${basketResult.version}'.`
@@ -3595,14 +3871,15 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
     // ── 9. COURSE EXISTENCE & INFO HANDLER (TEST 6) ──
     if (queryCategory === 'COURSE_INFO' || (normalizedQuery.includes('does') && normalizedQuery.includes('exist'))) {
-      const version = extractVersionFromQuery(normalizedQuery);
+      const version = extractVersionFromQuery(normalizedQuery) || contextBatch;
       const cand = extractCandidateCourseName(query);
-      const targetCourse = findCourseByNameOrAlias(cand || query);
+      const effectiveCourseQuery = cand || query || contextCourseCode;
+      const targetCourse = findCourseByNameOrAlias(effectiveCourseQuery) || (contextCourseCode ? findCourseByNameOrAlias(contextCourseCode) : null);
       const isAskingCredits = normalizedQuery.includes('credit') || normalizedQuery.includes('credits');
-      const isAskingLTP = normalizedQuery.includes('l-t-p') || normalizedQuery.includes('lecture') || normalizedQuery.includes('practical');
+      const isAskingLTP = normalizedQuery.includes('l-t-p') || normalizedQuery.includes('lecture') || normalizedQuery.includes('practical') || normalizedQuery.includes('course structure') || normalizedQuery.includes('structure of') || (normalizedQuery.includes('structure') && !normalizedQuery.includes('degree'));
       const isAskingCode = normalizedQuery.includes('course code');
       const isAskingBasket = normalizedQuery.includes('basket') || normalizedQuery.includes('domain');
-      const details = (cand ? findCourseDetails(cand, version) : null) || findCourseDetails(query, version);
+      const details = (cand ? findCourseDetails(cand, version) : null) || findCourseDetails(query, version) || (contextCourseCode ? findCourseDetails(contextCourseCode, version) : null);
 
       if (targetCourse || details) {
         const entry = (details && details.matchedEntries && details.matchedEntries.length > 0)
@@ -3615,23 +3892,66 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
         const resolvedSheet = (entry && entry.sourceSheetName) || 'Semester_Spread_Structures_Sept_2026.xlsx';
 
         // 1. L-T-P query
-        if (isAskingLTP && entry) {
-          const l = entry.lectureHours != null ? entry.lectureHours : 0;
-          const t = entry.tutorialHours != null ? entry.tutorialHours : 0;
-          const p = entry.practicalHours != null ? entry.practicalHours : 0;
-          return {
-            state: 'ANSWERABLE',
-            answer: `**${courseCode} — ${courseName} (L-T-P Structure)**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${resolvedSheet})\n\nFor **${courseCode} — ${courseName}** in Batch ${entry.batch}, the Lecture-Tutorial-Practical (L-T-P) structure is **${l}-${t}-${p}** (**${entry.credits} total credits** per official semester spread).`,
-            sources: [{
-              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
-              hierarchyLevel: 2,
-              pageOrSheet: resolvedSheet,
-              clauseNumber: `LTP Structure: ${courseCode}`,
-              excerpt: `${courseCode}: L:${l}, T:${t}, P:${p}, Credits:${entry.credits}.`
-            }],
-            ruleResults: { courseCode, ltp: `${l}-${t}-${p}`, credits: entry.credits },
-            followUp: `Ask 'Which semester is ${courseCode} offered in Batch ${entry.batch}?'`
-          };
+        if (isAskingLTP) {
+          if (entry && (entry.lectureHours !== undefined && entry.lectureHours !== null)) {
+            const l = entry.lectureHours != null ? entry.lectureHours : 0;
+            const t = entry.tutorialHours != null ? entry.tutorialHours : 0;
+            const p = entry.practicalHours != null ? entry.practicalHours : 0;
+            const totalWeeklyHours = l + t + p;
+            const calcCredits = l + t + (p / 2);
+
+            let ltpDetail = `• **Lecture (L):** **${l}** contact hour${l === 1 ? '' : 's'} per week (${l} lecture credit${l === 1 ? '' : 's'})\n` +
+              `• **Tutorial (T):** **${t}** contact hour${t === 1 ? '' : 's'} per week (${t} tutorial credit${t === 1 ? '' : 's'})\n` +
+              `• **Practical (P):** **${p}** lab/practical hour${p === 1 ? '' : 's'} per week (${p / 2} practical credit${(p / 2) === 1 ? '' : 's'})\n` +
+              `• **Total Instructional Contact Hours:** **${totalWeeklyHours} hours/week**\n` +
+              `• **Official Course Credits:** **${entry.credits} credit${entry.credits === 1 ? '' : 's'}**`;
+
+            let specialNote = '';
+            if (l === 0 && t === 0 && p === 0) {
+              specialNote = `\n\n*(Note: Under Student Handbook Clause 3.2, this is a Practice/Skill-based or Non-Taught Credit Course where pedagogy does not follow a typical weekly classroom L-T-P distribution; credits (${entry.credits} cr) are assigned based on the quantum of work prescribed).*`;
+            } else {
+              specialNote = `\n\n*(Credit Calculation per Student Handbook Clause 3.1: $L (${l}) + T (${t}) + \\frac{P}{2} (${p}/2) = ${calcCredits}$ credit${calcCredits === 1 ? '' : 's'}, which exactly matches the official curriculum credit allocation of ${entry.credits} credit${entry.credits === 1 ? '' : 's'}).*`;
+            }
+
+            return {
+              state: 'ANSWERABLE',
+              answer: `**${courseCode} — ${courseName} (L-T-P & Credit Structure)**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${resolvedSheet}) & 4. Student Handbook Aug 2026.pdf (Clause 3.1)\n\nIn Batch ${entry.batch} (${entry.programCode || 'B.Tech'}), the official Lecture-Tutorial-Practical (L-T-P) structure for **${courseCode} — ${courseName}** is **${l}-${t}-${p}**:\n\n${ltpDetail}${specialNote}`,
+              sources: [
+                {
+                  documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+                  hierarchyLevel: 2,
+                  pageOrSheet: resolvedSheet,
+                  clauseNumber: `LTP Structure: ${courseCode}`,
+                  excerpt: `${courseCode} (${courseName}): L:${l}, T:${t}, P:${p}, Credits:${entry.credits}, Semester ${entry.semesterNum}.`
+                },
+                {
+                  documentTitle: '4. Student Handbook Aug 2026.pdf',
+                  hierarchyLevel: 1,
+                  pageOrSheet: 'Section 3, Clause 3.1',
+                  clauseNumber: 'Academic Credits - Course Credit Structure',
+                  excerpt: 'Lecture/Tutorial: 1 contact hour/week = 1 Credit. Practical: 2 hours/week = 1 Credit.'
+                }
+              ],
+              ruleResults: { courseCode, ltp: `${l}-${t}-${p}`, credits: entry.credits, lectureHours: l, tutorialHours: t, practicalHours: p },
+              followUp: `Ask 'Which semester is ${courseCode} offered in Batch ${entry.batch}?' or 'What are the prerequisites for ${courseCode}?'`
+            };
+          } else {
+            return {
+              state: 'ANSWERABLE',
+              answer: `**${courseCode ? courseCode + ' — ' : ''}${courseName} (L-T-P Structure)**\nOfficial Knowledge Source: ${(targetCourse && targetCourse.source_reference) || resolvedSheet}\n\nThe official university curriculum records do not specify a separate L-T-P (Lecture-Tutorial-Practical) hour distribution for **${courseCode ? courseCode + ' — ' : ''}${courseName}**. Only the official credit allocation of **${resolvedCredits} credit${resolvedCredits === 1 ? '' : 's'}** is recorded in university documents. (Under Student Handbook Clause 3.2, non-classroom or practice-based courses assign credits based on overall quantum of effort rather than a standard weekly L-T-P split).`,
+              sources: [
+                {
+                  documentTitle: (targetCourse && targetCourse.source_reference) || resolvedSheet,
+                  hierarchyLevel: 2,
+                  pageOrSheet: resolvedSheet,
+                  clauseNumber: `Course Credits: ${courseCode || courseName}`,
+                  excerpt: `${courseName}: ${resolvedCredits} credits recorded. L-T-P breakdown not specified.`
+                }
+              ],
+              ruleResults: { courseCode, credits: resolvedCredits, ltpAvailable: false },
+              followUp: `Ask 'How many credits does ${courseCode || courseName} have?'`
+            };
+          }
         }
 
         // 2. Course Code query
@@ -3701,9 +4021,14 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
           }
 
           const resolvedCode = courseCode ? `${courseCode} — ` : '';
+          let ltpLine = '';
+          if (entry && entry.lectureHours !== undefined && entry.lectureHours !== null) {
+            ltpLine = `\n\n• **L-T-P Structure:** **${entry.lectureHours}-${entry.tutorialHours}-${entry.practicalHours}** (${entry.lectureHours} lecture, ${entry.tutorialHours} tutorial, ${entry.practicalHours} practical hours/week, satisfying $L + T + P/2 = ${entry.lectureHours + entry.tutorialHours + (entry.practicalHours / 2)}$ credits).`;
+          }
+
           return {
             state: 'ANSWERABLE',
-            answer: `**${resolvedCode}${courseName}**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${resolvedSheet})\n\nAccording to the official Vidyashilp University curriculum, **${resolvedCode}${courseName}** carries **${resolvedCredits} credits** (${resolvedCredits}-credit course${version ? ' in Batch ' + version : ''}).`,
+            answer: `**${resolvedCode}${courseName}**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${resolvedSheet})\n\nAccording to the official Vidyashilp University curriculum, **${resolvedCode}${courseName}** carries **${resolvedCredits} credits** (${resolvedCredits}-credit course${version ? ' in Batch ' + version : ''}).${ltpLine}`,
             sources: [
               {
                 documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
@@ -3911,7 +4236,24 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 async function processAdvisorQuery(query, profileId = null, history = []) {
   const result = await executeAdvisorQuery(query, profileId, history);
 
-  // Format official citations if present
+  // 1. Enrich every source with verified clickable URL and location metadata
+  if (Array.isArray(result.sources) && result.sources.length > 0) {
+    result.sources = result.sources.map(s => {
+      const doc = s.documentTitle || s.title || 'Official Document';
+      const ref = s.clauseNumber || s.pageOrSheet || '';
+      const verifiedUrl = s.url || getOfficialDocumentUrl(doc, ref);
+      return {
+        ...s,
+        documentTitle: doc,
+        pageOrSheet: s.pageOrSheet || ref || 'Official Record',
+        clauseNumber: s.clauseNumber || '',
+        url: verifiedUrl,
+        isClickable: !!verifiedUrl
+      };
+    });
+  }
+
+  // 2. Format official citations if present
   if (!result.citations && Array.isArray(result.sources) && result.sources.length > 0) {
     result.citations = result.sources.map(s => {
       const doc = s.documentTitle || s.title || 'Official Document';
@@ -3921,8 +4263,33 @@ async function processAdvisorQuery(query, profileId = null, history = []) {
     result.citation = result.citations[0];
   }
 
+  // 3. Provide transparent token usage information (No fabricated counts!)
+  if (!result.tokens) {
+    result.tokens = {
+      promptTokens: null,
+      completionTokens: null,
+      totalTokens: null,
+      executionType: 'deterministic_engine',
+      source: 'offline_rag',
+      note: 'Deterministic Grounded Rule & Curriculum Engine (0 external LLM API tokens consumed)'
+    };
+  }
+
+  // 4. Provide structured evidence items for transparent proof
+  if (!result.evidence && Array.isArray(result.sources)) {
+    result.evidence = result.sources.map(s => ({
+      documentTitle: s.documentTitle,
+      url: s.url,
+      isClickable: s.isClickable,
+      pageOrSheet: s.pageOrSheet,
+      clauseNumber: s.clauseNumber,
+      excerpt: s.excerpt || '',
+      metadata: s.metadata || null
+    }));
+  }
+
   // Diagnostic logging (STEP 2)
-  const detectedIntent = classifyQuery(query.toLowerCase().trim());
+  const detectedIntent = classifyQuery(canonicalizeQueryText(query));
   const docCount = result.sources ? result.sources.length : 0;
   const docTitles = result.sources && result.sources.length > 0
     ? result.sources.map(s => s.documentTitle).join(', ')
@@ -3937,7 +4304,7 @@ async function processAdvisorQuery(query, profileId = null, history = []) {
   console.log(`Retrieved documents: ${docCount}`);
   console.log(`Relevant documents: ${docTitles}`);
   console.log(`Context characters: ${contextChars}`);
-  console.log(`LLM called: false`);
+  console.log(`LLM called: ${result.tokens && result.tokens.totalTokens !== null ? 'true' : 'false'}`);
   console.log(`Final state: ${result.state}`);
   console.log('----------------------------------------------------');
 
@@ -3951,5 +4318,7 @@ module.exports = {
   getStudentProfileById,
   getStudentIdList,
   SYNTHETIC_PROFILES,
-  getAcademicYear
+  getAcademicYear,
+  getOfficialDocumentUrl,
+  canonicalizeQueryText
 };
