@@ -535,6 +535,107 @@ const TEST_CASES = [
         reason: isRefused ? 'Safely refused fabricated non-existent course' : 'Hallucinated credit value'
       };
     }
+  },
+
+  // ── CATEGORY 11: L-T-P & CREDIT DISAMBIGUATION REGRESSIONS ──
+  {
+    id: 31,
+    category: '11. L-T-P Disambiguation Regressions',
+    query: 'What does 1-0-4 mean in DATA103?',
+    history: [],
+    validate: (res) => {
+      const ans = res.answer || '';
+      const hasL = ans.includes('Lecture (L):') && ans.includes('1');
+      const hasT = ans.includes('Tutorial (T):') && ans.includes('0');
+      const hasP = ans.includes('Practical (P):') && ans.includes('4');
+      const hasContact = ans.includes('5') && (ans.includes('Contact Hours') || ans.includes('hours/week'));
+      const hasCredits = ans.includes('3 credits') || ans.includes('3 credit');
+      const hasDiff = ans.includes('Difference Between Weekly Contact Hours and Credits');
+      return {
+        passed: hasL && hasT && hasP && hasContact && hasCredits && hasDiff && res.state === 'ANSWERABLE',
+        reason: hasL && hasP ? 'Exact 1-0-4 breakdown, 5 contact hrs, 3 credits, and contact hr vs credit diff explained' : 'Incomplete 1-0-4 answer'
+      };
+    }
+  },
+  {
+    id: 32,
+    category: '11. L-T-P Disambiguation Regressions',
+    query: "Explain DATA103's L-T-P.",
+    history: [],
+    validate: (res) => {
+      const ans = res.answer || '';
+      const has104 = ans.includes('1-0-4');
+      const hasCredits = ans.includes('3 credits') || ans.includes('3 credit');
+      return {
+        passed: has104 && hasCredits && res.state === 'ANSWERABLE',
+        reason: has104 && hasCredits ? 'Accurately resolved possessive DATA103 L-T-P (1-0-4, 3 cr)' : 'Missing 1-0-4 or 3 credits'
+      };
+    }
+  },
+  {
+    id: 33,
+    category: '11. L-T-P Disambiguation Regressions',
+    query: 'How many practical hours does DATA103 have?',
+    history: [],
+    validate: (res) => {
+      const ans = res.answer || '';
+      const has4Hours = ans.includes('4 practical') || (ans.includes('Practical (P):') && ans.includes('4'));
+      const hasCredits = ans.includes('3 credits') || ans.includes('3 credit');
+      return {
+        passed: has4Hours && hasCredits && res.state === 'ANSWERABLE',
+        reason: has4Hours ? 'Correctly identified 4 practical hours and explained 3 credits' : 'Missing 4 practical hours'
+      };
+    }
+  },
+  {
+    id: 34,
+    category: '11. L-T-P Disambiguation Regressions',
+    query: 'What is the difference between L-T-P and credits?',
+    history: [],
+    validate: (res) => {
+      const ans = res.answer || '';
+      const hasDifference = ans.includes('Difference Between L-T-P (Contact Hours) and Academic Credits');
+      const hasFormula = ans.includes('L + T') && (ans.includes('P/2') || ans.includes('\\frac{P}{2}') || ans.includes('P / 2'));
+      const hasData103 = ans.includes('DATA103') && ans.includes('1-0-4');
+      const noBatchComparison = !ans.includes('Curriculum Comparison: Batch 2024') && !ans.includes('vs. Batch 2025');
+      return {
+        passed: hasDifference && hasFormula && hasData103 && noBatchComparison && res.state === 'ANSWERABLE',
+        reason: hasDifference && noBatchComparison ? 'Clean conceptual differentiation with DATA103 example without batch comparison' : 'Returned batch comparison or missing concept'
+      };
+    }
+  },
+  {
+    id: 35,
+    category: '11. L-T-P Disambiguation Regressions',
+    query: 'Does 1-0-4 mean 4 credits?',
+    history: [],
+    validate: (res) => {
+      const ans = res.answer || '';
+      const hasNo = ans.includes('No.') || ans.includes('not 4');
+      const has3Credits = ans.includes('3 credits') || ans.includes('3 credit');
+      const hasRatio = ans.includes('2:1') || ans.includes('2 practical hours equal 1 credit') || ans.includes('2 lab hours');
+      return {
+        passed: hasNo && has3Credits && hasRatio && res.state === 'ANSWERABLE',
+        reason: hasNo ? 'Explicitly clarified that 1-0-4 yields 3 credits, not 4' : 'Failed to refute 4 credits misconception'
+      };
+    }
+  },
+  {
+    id: 36,
+    category: '11. L-T-P Disambiguation Regressions',
+    query: 'Explain L-T-P using DATA103 as an example.',
+    history: [],
+    validate: (res) => {
+      const ans = res.answer || '';
+      const has104 = ans.includes('1-0-4');
+      const has4Practical = ans.includes('4') && ans.includes('practical');
+      const has3Credits = ans.includes('3 credits') || ans.includes('3 credit');
+      const distinguishesHoursFromCredits = ans.includes('Distinguishing Practical Hours from Credits') || ans.includes('Difference Between Weekly Contact Hours and Credits');
+      return {
+        passed: has104 && has4Practical && has3Credits && distinguishesHoursFromCredits && res.state === 'ANSWERABLE',
+        reason: has104 && distinguishesHoursFromCredits ? 'Exemplified L-T-P using DATA103 and distinguished 4 practical hours from 3 credits' : 'Incomplete explanation with DATA103'
+      };
+    }
   }
 ];
 

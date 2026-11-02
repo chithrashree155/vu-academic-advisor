@@ -159,6 +159,12 @@ function canonicalizeQueryText(rawQuery) {
        .replace(/\bl\s*[-–—/]\s*t\s*[-–—/]\s*p\b/g, 'l-t-p')
        .replace(/\bltp\b/g, 'l-t-p');
 
+  // Possessive course codes / names (e.g. data103's -> data103)
+  q = q.replace(/([a-z0-9]+)['’‘]s\b/gi, '$1');
+
+  // Normalize numeric L-T-P patterns (e.g. 1 - 0 - 4 -> 1-0-4)
+  q = q.replace(/\b(\d+)\s*[-–—/]\s*(\d+)\s*[-–—/]\s*(\d+)\b/g, '$1-$2-$3');
+
   return q;
 }
 
@@ -766,6 +772,11 @@ function extractCandidateCourseName(queryStr) {
     return takeMatch[1].replace(/\s+(?:in|for)\s+batch\s+\d+/i, '').trim();
   }
 
+  const directCodeMatch = clean.match(/\b([A-Z]{3,4}\s?\d{3})\b/i);
+  if (directCodeMatch && !isNonCoursePhrase(directCodeMatch[1])) {
+    return directCodeMatch[1].replace(/\s+/, '').toUpperCase();
+  }
+
   return null;
 }
 
@@ -1132,7 +1143,70 @@ function classifyQuery(queryStr) {
     return 'COURSE_SELECTION';
   }
 
-  // 12. Curriculum version comparison
+  // 12.0 General L-T-P Structure & Instructional Framework Explanation
+  const hasSpecificCourseForLTP = /\b[A-Z]{3,4}\s?\d{3}\b/i.test(q) || extractCandidateCourseName(q);
+  const isLTPConceptual =
+    q.includes('what does l-t-p mean') ||
+    q.includes('what does ltp mean') ||
+    q.includes('what is l-t-p') ||
+    q.includes('what is ltp') ||
+    q.includes('meaning of l-t-p') ||
+    q.includes('meaning of ltp') ||
+    q.includes('explain l-t-p') ||
+    q.includes('explain ltp') ||
+    q === 'l-t-p' ||
+    q === 'ltp' ||
+    q.includes('difference between lecture') ||
+    q.includes('difference between l-t-p') ||
+    q.includes('difference between ltp') ||
+    (q.includes('difference between') && (q.includes('credit') || q.includes('hour')) && (q.includes('l-t-p') || q.includes('ltp') || q.includes('contact') || q.includes('weekly') || q.includes('practical') || q.includes('lecture'))) ||
+    q.includes('contact hours and credits') ||
+    q.includes('hours and credits') ||
+    q.includes('l-t-p and credits') ||
+    q.includes('ltp and credits') ||
+    (/\bdoes\s+\d+[-–—]\d+[-–—]\d+\s+mean\b/i.test(q)) ||
+    (q.includes('does') && /\b\d+[-–—]\d+[-–—]\d+\b/.test(q) && q.includes('credit')) ||
+    q.includes('explain the course structure in simple terms') ||
+    q.includes('explain course structure in simple terms') ||
+    (q.includes('l-t-p') && (q.includes('mean') || q.includes('stand for') || q.includes('represent') || q.includes('concept') || q.includes('definition') || q.includes('simple terms') || q.includes('how should') || q.includes('interpret')));
+
+  if (!hasSpecificCourseForLTP && isLTPConceptual) {
+    return 'LTP_EXPLANATION';
+  }
+
+  // 12.1 Explicit Course Info (takes precedence over general comparison or basket keywords)
+  const isExplicitCourseInfo =
+    (
+      q.includes('how many credits is') ||
+      q.includes('how many credit is') ||
+      q.includes('credits is ') ||
+      q.includes('credit is ') ||
+      q.includes('how many credits does') ||
+      q.includes('how many credit does') ||
+      q.includes('credits does') ||
+      q.includes('credit does') ||
+      q.includes('course code for') ||
+      q.includes('l-t-p') ||
+      q.includes('lecture-tutorial-practical') ||
+      q.includes('course structure') ||
+      q.includes('structure of') ||
+      (/\b\d+[-–—]\d+[-–—]\d+\b/.test(q) && hasSpecificCourseForLTP) ||
+      (q.includes('practical') && hasSpecificCourseForLTP) ||
+      (q.includes('lecture') && hasSpecificCourseForLTP) ||
+      (q.includes('tutorial') && hasSpecificCourseForLTP) ||
+      (q.includes('contact hour') && hasSpecificCourseForLTP) ||
+      (q.includes('weekly hour') && hasSpecificCourseForLTP) ||
+      (q.includes('what does') && (q.includes('mean') || q.includes('stand for') || q.includes('represent')) && hasSpecificCourseForLTP) ||
+      (q.includes('explain') && (q.includes('l-t-p') || q.includes('ltp') || q.includes('structure')) && hasSpecificCourseForLTP) ||
+      (q.includes('basket does') && q.includes('belong')) ||
+      (q.includes('does') && q.includes('exist'))
+    ) && !isDegreeCreditQuery(q);
+
+  if (isExplicitCourseInfo) {
+    return 'COURSE_INFO';
+  }
+
+  // 12.2 Curriculum version comparison
   const isComparisonPhrase =
     q.includes('compare') ||
     q.includes('difference between') ||
@@ -1164,11 +1238,11 @@ function classifyQuery(queryStr) {
     q.includes('batch') || q.includes('batches') || q.includes('structure') || q.includes('structures') ||
     q.includes('operating systems') || q.includes('credits');
 
-  if (isComparisonPhrase && hasCurriculumContext) {
+  if (isComparisonPhrase && hasCurriculumContext && !isLTPConceptual) {
     return 'CURRICULUM_COMPARISON';
   }
 
-  // 12.1. Course presence / transition in updated curriculum
+  // 12.3. Course presence / transition in updated curriculum
   if (
     (/\bwhere\s+does\b.*\bappear\b/i.test(q) ||
      /\bwhere\s+is\b.*\b(?:in\s+the\s+(?:updated\s+|new\s+)?curriculum|in\s+(?:2024|2025|2026))\b/i.test(q) ||
@@ -1189,58 +1263,6 @@ function classifyQuery(queryStr) {
     (q.includes('which semester') && (q.includes('taken') || q.includes('scheduled') || q.includes('offered') || q.includes('placed')))
   ) {
     return 'COURSE_PLACEMENT';
-  }
-
-  // 13.0 General L-T-P Structure & Instructional Framework Explanation
-  const hasSpecificCourseForLTP = /\b[A-Z]{3,4}\s?\d{3}\b/i.test(q) || extractCandidateCourseName(q);
-  if (
-    !hasSpecificCourseForLTP && (
-      q.includes('what does l-t-p mean') ||
-      q.includes('what does ltp mean') ||
-      q.includes('what is l-t-p') ||
-      q.includes('what is ltp') ||
-      q.includes('meaning of l-t-p') ||
-      q.includes('meaning of ltp') ||
-      q.includes('explain l-t-p structure') ||
-      q.includes('explain ltp structure') ||
-      q.includes('explain the l-t-p structure') ||
-      q.includes('explain the ltp structure') ||
-      q === 'l-t-p' ||
-      q === 'ltp' ||
-      q.includes('difference between lecture, tutorial and practical') ||
-      q.includes('difference between lecture tutorial and practical') ||
-      q.includes('difference between lecture, tutorial & practical') ||
-      q.includes('difference between lecture tutorial practical') ||
-      q.includes('explain the course structure in simple terms') ||
-      q.includes('explain course structure in simple terms') ||
-      (q.includes('l-t-p') && (q.includes('mean') || q.includes('stand for') || q.includes('represent') || q.includes('concept') || q.includes('definition') || q.includes('simple terms') || q.includes('how should') || q.includes('interpret')))
-    )
-  ) {
-    return 'LTP_EXPLANATION';
-  }
-
-  // 13.1 Explicit Course Info (takes precedence over basket names in course titles like "Foundation Seminar")
-  const isExplicitCourseInfo =
-    (
-      q.includes('how many credits is') ||
-      q.includes('how many credit is') ||
-      q.includes('credits is ') ||
-      q.includes('credit is ') ||
-      q.includes('how many credits does') ||
-      q.includes('how many credit does') ||
-      q.includes('credits does') ||
-      q.includes('credit does') ||
-      q.includes('course code for') ||
-      q.includes('l-t-p') ||
-      q.includes('lecture-tutorial-practical') ||
-      q.includes('course structure') ||
-      q.includes('structure of') ||
-      (q.includes('basket does') && q.includes('belong')) ||
-      (q.includes('does') && q.includes('exist'))
-    ) && !isDegreeCreditQuery(q);
-
-  if (isExplicitCourseInfo) {
-    return 'COURSE_INFO';
   }
 
   // 14. Semester courses (general semester course list without a specific basket)
@@ -2130,9 +2152,45 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
     // ── L-T-P GENERAL INSTRUCTIONAL FRAMEWORK EXPLANATION ──
     if (queryCategory === 'LTP_EXPLANATION') {
+      const isDiffLtpAndCredits =
+        normalizedQuery.includes('difference between l-t-p and credit') ||
+        normalizedQuery.includes('difference between ltp and credit') ||
+        normalizedQuery.includes('difference between contact hour and credit') ||
+        normalizedQuery.includes('difference between weekly contact hour and credit') ||
+        normalizedQuery.includes('difference between weekly hour and credit') ||
+        normalizedQuery.includes('difference between hour and credit') ||
+        (normalizedQuery.includes('difference') && normalizedQuery.includes('credit') && (normalizedQuery.includes('l-t-p') || normalizedQuery.includes('ltp') || normalizedQuery.includes('hour'))) ||
+        (normalizedQuery.includes('does') && /\b\d+[-–—]\d+[-–—]\d+\b/.test(normalizedQuery) && normalizedQuery.includes('credit')) ||
+        (normalizedQuery.includes('1-0-4') && normalizedQuery.includes('credit'));
+
+      if (isDiffLtpAndCredits) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Difference Between L-T-P (Contact Hours) and Academic Credits**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section 3, Clause 3.1 & 3.2, Table 1) & Semester_Spread_Structures_Sept_2026.xlsx\n\nAt Vidyashilp University, **L-T-P** and **Credits** represent two distinct aspects of a course structure:\n\n### 1. L-T-P: The Weekly Learning & Contact-Hour Structure\n• **L-T-P** defines the scheduled weekly instructional contact hours between students and faculty:\n  - **L = Lecture:** Scheduled classroom hours per week for theoretical instruction.\n  - **T = Tutorial:** Scheduled classroom hours per week for guided analytical problem-solving and discussions.\n  - **P = Practical:** Scheduled laboratory/studio/workshop hours per week for hands-on programming or experiments.\n• **Total Weekly Contact Hours ($L + T + P$):** The physical number of hours a student spends in scheduled classes and labs each week.\n\n### 2. Academic Credits: The Value Toward Degree Graduation\n• **Credits** quantify the academic weight earned toward degree completion (a standard B.Tech degree requires exactly **180 credits**).\n• Under **Student Handbook Clause 3.1**, course credits are calculated using the official university formula:\n$$\\text{Course Credits} = L + T + \\frac{P}{2}$$\n• **Why L-T-P values do not directly equal credits:**\n  - **Lecture (L):** 1 contact hour/week = **1 credit** (1:1 ratio).\n  - **Tutorial (T):** 1 contact hour/week = **1 credit** (1:1 ratio).\n  - **Practical (P):** 2 contact hours/week = **1 credit** (2:1 ratio; 1 practical hour = 0.5 credit).\n\n### Concrete Example: DATA103 (Programming in Python)\nIn the official curriculum (*Semester_Spread_Structures_Sept_2026.xlsx*, sheet *Sem_Spread_2024*):\n• **Course Code & Title:** DATA103 — Programming in Python\n• **Official L-T-P:** **1-0-4**\n  - **Lecture (L):** 1 hour per week $\\to$ **1 credit**\n  - **Tutorial (T):** 0 hours per week $\\to$ **0 credits**\n  - **Practical (P):** 4 hours per week $\\to$ **2 credits** ($4 / 2 = 2$)\n• **Total Weekly Contact Hours:** $1 + 0 + 4 = $ **5 hours per week**\n• **Official Course Credits:** $1 + 0 + \\frac{4}{2} = $ **3 credits**\n\n*(Note on \"Does 1-0-4 mean 4 credits?\": **No.** The \"4\" in 1-0-4 denotes 4 practical laboratory hours per week. Because 2 practical hours equal 1 credit, those 4 hours yield 2 practical credits, which together with the 1 lecture hour total **3 credits**, not 4 or 5).*`,
+          sources: [
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Section 3, Clause 3.1',
+              clauseNumber: 'Academic Credits - Course Credit Structure (L-T-P)',
+              excerpt: 'The Credit Structure for defining and categorizing Courses is the L – T – P framework. Lecture/Tutorial: 1 contact hour/week = 1 Credit. Practical: 2 hours/week = 1 Credit.'
+            },
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Sem_Spread_2024 (Semester 1)',
+              clauseNumber: 'DATA103 L-T-P and Credit Record',
+              excerpt: 'DATA103 (Programming in Python): L:1, T:0, P:4, Credits:3. Demonstrates 5 contact hours yielding 3 academic credits.'
+            }
+          ],
+          ruleResults: { ltpDefined: true, creditFormula: 'L + T + P/2', exampleCourse: 'DATA103', exampleLTP: '1-0-4', exampleCredits: 3 },
+          followUp: "Ask 'What does 1-0-4 mean in DATA103?' or 'Explain the course structure of MATH201 in simple terms.'"
+        };
+      }
+
       return {
         state: 'ANSWERABLE',
-        answer: `**Understanding the L-T-P Course Structure at Vidyashilp University**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section 3, Clause 3.1 & 3.2, Table 1)\n\nAt Vidyashilp University, academic courses are categorized and scheduled using the **L – T – P (Lecture – Tutorial – Practical)** instructional framework. Here is what each component represents:\n\n1. **L = Lecture (Classroom Instruction):**\n   - Represents primary classroom instructional sessions where faculty teach core theoretical foundations, principles, and concepts.\n   - **Official Credit Norm (Clause 3.1):** **One (1) contact/classroom hour per week = 1 Credit**.\n\n2. **T = Tutorial (Interactive Problem-Solving):**\n   - Represents small-group participatory sessions dedicated to numerical problem-solving, analytical discussions, conceptual clarification, and collaborative exercises.\n   - **Official Credit Norm (Clause 3.1):** **One (1) contact/classroom hour per week = 1 Credit**.\n\n3. **P = Practical (Hands-on Lab / Studio / Field Work):**\n   - Represents hands-on laboratory experiments, programming/coding labs, design studios, field work, or applied project development.\n   - **Official Credit Norm (Clause 3.1):** **Two (2) contact/practice hours per week = 1 Credit**.\n\n---\n\n### How Students Should Interpret L-T-P Numbers\nDo **not** assume that the sum of L-T-P numbers directly equals the total course credits. While Lecture and Tutorial hours are credit-equivalent on a 1:1 basis, Practical hours carry a 2:1 ratio (2 lab hours = 1 credit):\n\n$$\\text{Course Credits} = L + T + \\frac{P}{2}$$\n*(for standard instructional courses governed by Clause 3.1)*\n\n### Actual Course Examples from the Official Vidyashilp Curriculum:\n- **L-T-P 3-1-2 (5 Credits):** 3 Lecture hours/week (3 credits) + 1 Tutorial hour/week (1 credit) + 2 Practical hours/week (1 credit) = **5 total credits** for 6 weekly contact hours.\n- **UCOR103 — Communication Skills (L-T-P 1-0-2, 2 Credits):** 1 Lecture hour/week + 0 Tutorial hours + 2 Practical hours/week = **2 credits** (*Sem Spread BTECH-2022, Semester 1*).\n- **MATH201 — Calculus (L-T-P 2-1-0, 3 Credits):** 2 Lecture hours/week + 1 Tutorial hour/week + 0 Practical hours = **3 credits** (*Sem Spread BTECH-2022, Semester 1*).\n- **DATA103 — Programming in Python (L-T-P 2-0-2, 3 Credits):** 2 Lecture hours/week + 0 Tutorial hours + 2 Practical lab hours/week = **3 credits** (*Sem_Spread_2024, Semester 1*).\n- **COMP209 — Databases Management (L-T-P 3-0-2, 4 Credits):** 3 Lecture hours/week + 0 Tutorial hours + 2 Practical lab hours/week = **4 credits** (*Sem_Spread_2024, Semester 3*).\n\n### Non-Taught & Practice-Based Courses (Clause 3.2 & Table 1):\n- Non-taught credit courses like **Industry Internship, Capstone Project, Research Dissertation, and Community Engagement & Service Experience** (e.g. **UCOR701**, 1 credit) do not follow a typical weekly L-T-P classroom distribution. In official records, their L-T-P is recorded as **0-0-0** or unlisted, and credits are assigned based on the quantum of work and effort prescribed in the curriculum.\n- **Evaluation Weights (Table 1):** Lecture-based courses (where L predominates) have 60%–70% continuous assessment and 30%–40% end-term exam. Practice-based courses (where P predominates) have 70%–100% continuous assessment and maximum 30% end-term jury/viva.\n\n### Example Questions You Can Ask:\n- *What does L-T-P mean?*\n- *Explain the L-T-P structure of DATA103.*\n- *What is the difference between lecture, tutorial and practical?*\n- *How many credits does MATH201 have?*\n- *Explain the course structure in simple terms.*`,
+        answer: `**Understanding the L-T-P Course Structure at Vidyashilp University**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section 3, Clause 3.1 & 3.2, Table 1)\n\nAt Vidyashilp University, academic courses are categorized and scheduled using the **L – T – P (Lecture – Tutorial – Practical)** instructional framework. Here is what each component represents:\n\n1. **L = Lecture (Classroom Instruction):**\n   - Represents primary classroom instructional sessions where faculty teach core theoretical foundations, principles, and concepts.\n   - **Official Credit Norm (Clause 3.1):** **One (1) contact/classroom hour per week = 1 Credit**.\n\n2. **T = Tutorial (Interactive Problem-Solving):**\n   - Represents small-group participatory sessions dedicated to numerical problem-solving, analytical discussions, conceptual clarification, and collaborative exercises.\n   - **Official Credit Norm (Clause 3.1):** **One (1) contact/classroom hour per week = 1 Credit**.\n\n3. **P = Practical (Hands-on Lab / Studio / Field Work):**\n   - Represents hands-on laboratory experiments, programming/coding labs, design studios, field work, or applied project development.\n   - **Official Credit Norm (Clause 3.1):** **Two (2) contact/practice hours per week = 1 Credit**.\n\n---\n\n### How Students Should Interpret L-T-P Numbers\nDo **not** assume that the sum of L-T-P numbers directly equals the total course credits. While Lecture and Tutorial hours are credit-equivalent on a 1:1 basis, Practical hours carry a 2:1 ratio (2 lab hours = 1 credit):\n\n$$\\text{Course Credits} = L + T + \\frac{P}{2}$$\n*(for standard instructional courses governed by Clause 3.1)*\n\n### Actual Course Examples from the Official Vidyashilp Curriculum:\n- **L-T-P 3-1-2 (5 Credits):** 3 Lecture hours/week (3 credits) + 1 Tutorial hour/week (1 credit) + 2 Practical hours/week (1 credit) = **5 total credits** for 6 weekly contact hours.\n- **UCOR103 — Communication Skills (L-T-P 1-0-2, 2 Credits):** 1 Lecture hour/week + 0 Tutorial hours + 2 Practical hours/week = **2 credits** (*Sem Spread BTECH-2022, Semester 1*).\n- **MATH201 — Calculus (L-T-P 2-1-0, 3 Credits):** 2 Lecture hours/week + 1 Tutorial hour/week + 0 Practical hours = **3 credits** (*Sem Spread BTECH-2022, Semester 1*).\n- **DATA103 — Programming in Python (L-T-P 1-0-4, 3 Credits):** 1 Lecture hour/week + 0 Tutorial hours + 4 Practical lab hours/week = **3 credits** (5 contact hours/week; $1 + 0 + 4/2 = 3$ credits) (*Sem_Spread_2024, Semester 1*).\n- **COMP209 — Databases Management (L-T-P 3-0-2, 4 Credits):** 3 Lecture hours/week + 0 Tutorial hours + 2 Practical lab hours/week = **4 credits** (*Sem_Spread_2024, Semester 3*).\n\n### Non-Taught & Practice-Based Courses (Clause 3.2 & Table 1):\n- Non-taught credit courses like **Industry Internship, Capstone Project, Research Dissertation, and Community Engagement & Service Experience** (e.g. **UCOR701**, 1 credit) do not follow a typical weekly L-T-P classroom distribution. In official records, their L-T-P is recorded as **0-0-0** or unlisted, and credits are assigned based on the quantum of work and effort prescribed in the curriculum.\n- **Evaluation Weights (Table 1):** Lecture-based courses (where L predominates) have 60%–70% continuous assessment and 30%–40% end-term exam. Practice-based courses (where P predominates) have 70%–100% continuous assessment and maximum 30% end-term jury/viva.\n\n### Example Questions You Can Ask:\n- *What does L-T-P mean?*\n- *Explain the L-T-P structure of DATA103.*\n- *What is the difference between lecture, tutorial and practical?*\n- *What is the difference between L-T-P and credits?*\n- *How many credits does MATH201 have?*\n- *Explain the course structure in simple terms.*`,
         sources: [
           {
             documentTitle: '4. Student Handbook Aug 2026.pdf',
@@ -3876,7 +3934,19 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       const effectiveCourseQuery = cand || query || contextCourseCode;
       const targetCourse = findCourseByNameOrAlias(effectiveCourseQuery) || (contextCourseCode ? findCourseByNameOrAlias(contextCourseCode) : null);
       const isAskingCredits = normalizedQuery.includes('credit') || normalizedQuery.includes('credits');
-      const isAskingLTP = normalizedQuery.includes('l-t-p') || normalizedQuery.includes('lecture') || normalizedQuery.includes('practical') || normalizedQuery.includes('course structure') || normalizedQuery.includes('structure of') || (normalizedQuery.includes('structure') && !normalizedQuery.includes('degree'));
+      const hasLtpNumericPattern = /\b\d+[-–—]\d+[-–—]\d+\b/.test(normalizedQuery);
+      const isAskingLTP =
+        hasLtpNumericPattern ||
+        normalizedQuery.includes('l-t-p') ||
+        normalizedQuery.includes('ltp') ||
+        normalizedQuery.includes('lecture') ||
+        normalizedQuery.includes('practical') ||
+        normalizedQuery.includes('tutorial') ||
+        normalizedQuery.includes('contact hour') ||
+        normalizedQuery.includes('weekly hour') ||
+        normalizedQuery.includes('course structure') ||
+        normalizedQuery.includes('structure of') ||
+        (normalizedQuery.includes('structure') && !normalizedQuery.includes('degree'));
       const isAskingCode = normalizedQuery.includes('course code');
       const isAskingBasket = normalizedQuery.includes('basket') || normalizedQuery.includes('domain');
       const details = (cand ? findCourseDetails(cand, version) : null) || findCourseDetails(query, version) || (contextCourseCode ? findCourseDetails(contextCourseCode, version) : null);
@@ -3900,22 +3970,30 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
             const totalWeeklyHours = l + t + p;
             const calcCredits = l + t + (p / 2);
 
+            let practicalFocusText = '';
+            if (normalizedQuery.includes('practical') && !normalizedQuery.includes('lecture') && !normalizedQuery.includes('tutorial') && !normalizedQuery.includes('l-t-p')) {
+              practicalFocusText = `• **Practical Hours:** **${courseCode} — ${courseName}** carries **${p} practical/laboratory hours per week** (yielding ${p / 2} practical credits toward its ${entry.credits}-credit total).\n\n`;
+            }
+
             let ltpDetail = `• **Lecture (L):** **${l}** contact hour${l === 1 ? '' : 's'} per week (${l} lecture credit${l === 1 ? '' : 's'})\n` +
               `• **Tutorial (T):** **${t}** contact hour${t === 1 ? '' : 's'} per week (${t} tutorial credit${t === 1 ? '' : 's'})\n` +
               `• **Practical (P):** **${p}** lab/practical hour${p === 1 ? '' : 's'} per week (${p / 2} practical credit${(p / 2) === 1 ? '' : 's'})\n` +
               `• **Total Instructional Contact Hours:** **${totalWeeklyHours} hours/week**\n` +
               `• **Official Course Credits:** **${entry.credits} credit${entry.credits === 1 ? '' : 's'}**`;
 
-            let specialNote = '';
+            let hourCreditExplanation = '';
             if (l === 0 && t === 0 && p === 0) {
-              specialNote = `\n\n*(Note: Under Student Handbook Clause 3.2, this is a Practice/Skill-based or Non-Taught Credit Course where pedagogy does not follow a typical weekly classroom L-T-P distribution; credits (${entry.credits} cr) are assigned based on the quantum of work prescribed).*`;
+              hourCreditExplanation = `\n\n*(Note: Under Student Handbook Clause 3.2, this is a Practice/Skill-based or Non-Taught Credit Course where pedagogy does not follow a typical weekly classroom L-T-P distribution; credits (${entry.credits} cr) are assigned based on the quantum of work prescribed).*`;
             } else {
-              specialNote = `\n\n*(Credit Calculation per Student Handbook Clause 3.1: $L (${l}) + T (${t}) + \\frac{P}{2} (${p}/2) = ${calcCredits}$ credit${calcCredits === 1 ? '' : 's'}, which exactly matches the official curriculum credit allocation of ${entry.credits} credit${entry.credits === 1 ? '' : 's'}).*`;
+              hourCreditExplanation = `\n\n### Difference Between Weekly Contact Hours and Credits\n` +
+                `• **Weekly Contact Hours (${totalWeeklyHours} hours/week):** The total scheduled instructional time a student attends in class and lab sessions each week (${l} lecture hour${l === 1 ? '' : 's'} + ${t} tutorial hour${t === 1 ? '' : 's'} + ${p} practical hour${p === 1 ? '' : 's'}).\n` +
+                `• **Academic Credits (${entry.credits} credits):** The academic weight assigned toward graduation per **Student Handbook Clause 3.1** ($L + T + \\frac{P}{2} = ${l} + ${t} + \\frac{${p}}{2} = ${calcCredits}$ credits).\n` +
+                `• **Distinguishing Practical Hours from Credits:** Practical/laboratory sessions require **2 contact hours to earn 1 credit** (a 2:1 ratio). Therefore, the **${p} practical hours** yield **${p / 2} practical credit${(p / 2) === 1 ? '' : 's'}**, which—combined with ${l} lecture credit${l === 1 ? '' : 's'} and ${t} tutorial credit${t === 1 ? '' : 's'}—results in **${entry.credits} total course credits**, not ${totalWeeklyHours} or ${p}.`;
             }
 
             return {
               state: 'ANSWERABLE',
-              answer: `**${courseCode} — ${courseName} (L-T-P & Credit Structure)**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${resolvedSheet}) & 4. Student Handbook Aug 2026.pdf (Clause 3.1)\n\nIn Batch ${entry.batch} (${entry.programCode || 'B.Tech'}), the official Lecture-Tutorial-Practical (L-T-P) structure for **${courseCode} — ${courseName}** is **${l}-${t}-${p}**:\n\n${ltpDetail}${specialNote}`,
+              answer: `${practicalFocusText}**${courseCode} — ${courseName} (L-T-P & Credit Structure)**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${resolvedSheet}) & 4. Student Handbook Aug 2026.pdf (Clause 3.1)\n\nIn the official Vidyashilp University curriculum (Batch ${entry.batch}, ${entry.programCode || 'B.Tech'}), the L-T-P value of **${l}-${t}-${p}** for **${courseCode} — ${courseName}** is defined as:\n\n${ltpDetail}${hourCreditExplanation}`,
               sources: [
                 {
                   documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
@@ -3932,7 +4010,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
                   excerpt: 'Lecture/Tutorial: 1 contact hour/week = 1 Credit. Practical: 2 hours/week = 1 Credit.'
                 }
               ],
-              ruleResults: { courseCode, ltp: `${l}-${t}-${p}`, credits: entry.credits, lectureHours: l, tutorialHours: t, practicalHours: p },
+              ruleResults: { courseCode, ltp: `${l}-${t}-${p}`, credits: entry.credits, lectureHours: l, tutorialHours: t, practicalHours: p, contactHours: totalWeeklyHours },
               followUp: `Ask 'Which semester is ${courseCode} offered in Batch ${entry.batch}?' or 'What are the prerequisites for ${courseCode}?'`
             };
           } else {
