@@ -55,7 +55,7 @@ const {
   handleMinorSlotFit,
   handleMinorBatchComparison
 } = require('./minor-advisory-handlers');
-const { resolveMinorKey, isMinorCourseCode } = require('./minor-courses-data');
+const { resolveMinorKey } = require('./minor-courses-data');
 
 const ragModule = require('./rag/retriever.js');
 const retriever = ragModule.retriever || (ragModule.default && ragModule.default.retriever) || ragModule;
@@ -1027,9 +1027,6 @@ function classifyQuery(queryStr) {
   // 1.3. B.Tech Minor Courses Specialized Routing
   const minorKey = resolveMinorKey(q);
 
-  if (/\b(PSYC306|ECON301|MGMT210|MGMT302|CDES712)\b/i.test(q) && (q.includes('prerequisite') || q.includes('prereq'))) {
-    return 'MINOR_PREREQUISITE';
-  }
   if ((q.includes('slot') || q.includes('fit') || q.includes('mismatch')) && (q.includes('minor') || q.includes('open') || minorKey)) {
     return 'MINOR_SLOT_FIT';
   }
@@ -2109,7 +2106,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
     if (explicitCodeMatch) {
       const testCode = (explicitCodeMatch[1] + explicitCodeMatch[2]).toUpperCase();
       const currData = loadCurriculumData();
-      const isKnown = findCourseByCode(testCode) || (currData.curriculumCourses && currData.curriculumCourses.some(c => c.courseCode && c.courseCode.toUpperCase() === testCode)) || isMinorCourseCode(testCode);
+      const isKnown = findCourseByCode(testCode) || (currData.curriculumCourses && currData.curriculumCourses.some(c => c.courseCode && c.courseCode.toUpperCase() === testCode));
       if (!isKnown) {
         const suggestions = getSuggestedCourses().slice(0, 4).map(c => `• **${c.code} — ${c.name}** (${c.credits} cr)`).join('\n');
         return {
@@ -4817,7 +4814,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
     const codeMatchInQuery = query.match(/\b[A-Z]{3,4}\s?\d{3}\b/i);
     if (codeMatchInQuery) {
       const extractedCode = codeMatchInQuery[0].replace(/\s+/, '').toUpperCase();
-      const knownCourse = findCourseByCode(extractedCode) || isMinorCourseCode(extractedCode);
+      const knownCourse = findCourseByCode(extractedCode);
       if (!knownCourse) {
         const suggestions = getSuggestedCourses().map(c => `• **${c.code} — ${c.name}** (${c.credits} cr)`).join('\n');
         return {

@@ -16,10 +16,10 @@ async function runTestSuite() {
   let passCount = 0;
   let failCount = 0;
 
-  async function testCase(id, category, question, validator, queryOverride = null) {
+  async function testCase(id, category, question, validator) {
     const start = Date.now();
     try {
-      const res = await processAdvisorQuery(queryOverride || question);
+      const res = await processAdvisorQuery(question);
       const latency = Date.now() - start;
       const validation = validator(res);
 
@@ -229,9 +229,8 @@ async function runTestSuite() {
 
   await testCase(13, 'B. Prerequisites', 'Explain the prerequisite issue for MGMT210 in Finance 2025', res => {
     const ans = res.answer || '';
-    const low = ans.toLowerCase();
     const hasPrereq = ans.includes('FINA333');
-    const hasIssue = low.includes('not offered to the 2025 batch') || low.includes('not offered to 2025');
+    const hasIssue = ans.includes('not offered to the 2025 batch') || ans.includes('not offered to 2025');
     const passed = hasPrereq && hasIssue;
     return {
       passed,
@@ -242,9 +241,8 @@ async function runTestSuite() {
 
   await testCase(14, 'B. Prerequisites', 'Explain the prerequisite issue for MGMT302 in Marketing 2025', res => {
     const ans = res.answer || '';
-    const low = ans.toLowerCase();
     const hasPrereq = ans.includes('MKTG201');
-    const hasIssue = low.includes('not offered to the 2025 batch') || low.includes('not offered to 2025');
+    const hasIssue = ans.includes('not offered to the 2025 batch') || ans.includes('not offered to 2025');
     const passed = hasPrereq && hasIssue;
     return {
       passed,
@@ -417,7 +415,7 @@ async function runTestSuite() {
       expected: 'Source objects contain specific pageOrSheet reference',
       notes: hasSheetOrPage ? 'pageOrSheet location metadata verified' : 'Missing pageOrSheet location'
     };
-  }, 'What are the courses in the Law minor for Batch 2023?');
+  });
 
   await testCase(28, 'D. Source UI', 'Verify source preview modal DOM element exists in index.html', () => {
     const html = fs.readFileSync(path.join(__dirname, '../public/index.html'), 'utf8');
@@ -587,3 +585,4 @@ if (require.main === module) {
 }
 
 module.exports = { runTestSuite };
+
