@@ -153,6 +153,14 @@ app.get('/api/document-preview', (req, res) => {
       });
     }
 
+    // Block access to internal assignment documents
+    if (lower.includes('all the info') || lower.includes('gai assignment') || lower.includes('academic_info')) {
+      return res.status(403).json({
+        status: 'error',
+        message: 'Internal assignment documents cannot be accessed or viewed as official sources.'
+      });
+    }
+
     // 3. PDF Documents
     let canonicalPdf = '4. Student Handbook Aug 2026.pdf';
     let pdfTitle = 'Official Student Handbook';
@@ -177,9 +185,6 @@ app.get('/api/document-preview', (req, res) => {
     } else if (lower.includes('holiday')) {
       canonicalPdf = 'Holiday List.pdf';
       pdfTitle = 'University Academic Calendar & Holiday List';
-    } else if (lower.includes('academic_info') || lower.includes('all the info') || lower.includes('gai')) {
-      canonicalPdf = 'Gai stuff but for minors.pdf';
-      pdfTitle = 'Academic Course Information';
     }
 
     return res.json({

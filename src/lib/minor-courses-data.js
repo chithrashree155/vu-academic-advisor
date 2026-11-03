@@ -576,7 +576,11 @@ function resolveMinorKey(inputStr) {
   if (!inputStr || typeof inputStr !== 'string') return null;
   const lower = inputStr.toLowerCase();
   if (lower.includes('law')) return 'Law';
-  if (lower.includes('design') || lower.includes('cdes')) return 'Design';
+  if ((lower.includes('compiler design') || lower.includes('design workshop')) && !lower.includes('minor')) {
+    return null;
+  }
+  if (lower.includes('design minor') || (lower.includes('design') && lower.includes('minor')) || /\bcdes\s?(217|312|402|504|712)\b/i.test(lower)) return 'Design';
+  if (lower.includes('design') && !lower.includes('workshop') && !lower.includes('compiler')) return 'Design';
   if (lower.includes('psych') || lower.includes('psyc')) return 'Psychology';
   if (lower.includes('econ')) return 'Economics';
   if (lower.includes('finan') || lower.includes('fina')) return 'Finance';
@@ -633,10 +637,43 @@ function getMinorCourses(minorKey, batch) {
   };
 }
 
+// Pre-compute all known minor course codes for instant lookup
+const ALL_MINOR_CODES = new Set();
+for (const mKey of Object.keys(MINORS_INFO)) {
+  const m = MINORS_INFO[mKey];
+  for (const b of Object.keys(m.batches)) {
+    const bData = m.batches[b];
+    if (Array.isArray(bData.courses)) {
+      for (const c of bData.courses) {
+        if (c.code) ALL_MINOR_CODES.add(c.code.toUpperCase().replace(/\s+/g, ''));
+        if (c.prerequisites) {
+          const matched = c.prerequisites.match(/[A-Z]{3,4}\s?\d{3}/gi);
+          if (matched) {
+            matched.forEach(code => ALL_MINOR_CODES.add(code.toUpperCase().replace(/\s+/g, '')));
+          }
+        }
+      }
+    }
+  }
+}
+// Prerequisite references mentioned in anomaly notes
+[
+  'PSYC101', 'PSYC102', 'PSYC103', 'PSYC105', 'PSYC201', 'PSYC202', 'PSYC241', 'PSYC306', 'PSYC255', 'PSYC104',
+  'ECON201', 'ECON202', 'ECON301', 'MATH131', 'FINA333', 'MKTG201', 'MGMT203', 'MGMT210', 'MGMT302', 'MGMT328', 'MGMT330',
+  'CDES217', 'CDES312', 'CDES712', 'CDES402', 'CDES504', 'LAWM305', 'LAWE200', 'LAWC410', 'LAWB210', 'LAWM306', 'LAWE301'
+].forEach(c => ALL_MINOR_CODES.add(c));
+
+function isMinorCourseCode(code) {
+  if (!code) return false;
+  return ALL_MINOR_CODES.has(code.toUpperCase().replace(/\s+/g, ''));
+}
+
 module.exports = {
   MINOR_KEYS,
   MINORS_INFO,
   DS_OPEN_MINOR_SLOTS,
+  ALL_MINOR_CODES,
+  isMinorCourseCode,
   resolveMinorKey,
   getAvailableMinorsForBatch,
   getMinorCourses

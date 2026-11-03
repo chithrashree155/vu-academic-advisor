@@ -27,6 +27,10 @@ const STOP_WORDS = new Set([
 function getDocumentCleanTitle(docName) {
   if (!docName) return 'Official University Document';
   const lower = String(docName).toLowerCase();
+  // Internal assignment files must NEVER be represented as official sources or displayed publicly
+  if (lower.includes('all the info') || lower.includes('gai assignment') || lower.includes('academic explanation')) {
+    return null;
+  }
   if (lower.includes('handbook')) return 'Official Student Handbook';
   if (lower.includes('minor') || lower.includes('118351') || lower.includes('gai stuff but for minors')) return 'B.Tech Minor Courses';
   if (lower.includes('semester_spread') || lower.includes('spread_structure') || lower.includes('118225') || lower.includes('struct_') || lower.includes('sem spread')) return 'Official Semester Structure';
@@ -38,7 +42,6 @@ function getDocumentCleanTitle(docName) {
   if (lower.includes('exam')) return 'Exam Enrollment SOP';
   if (lower.includes('holiday')) return 'University Academic Calendar & Holiday List';
   if (lower.includes('calendar')) return 'University Academic Calendar';
-  if (lower.includes('all the info') || lower.includes('gai') || lower.includes('academic explanation')) return 'Academic Course Information';
   return 'Official University Document';
 }
 
@@ -85,9 +88,9 @@ function getOfficialDocumentUrl(docName, pageOrLocation = null) {
     canonicalFile = 'Academic Calendar Even Semester 2025-26 (1).pdf';
   } else if (lower.includes('odd semester') && lower.includes('calendar')) {
     canonicalFile = 'Academic_Calendar_ODD Semester_2026_27.pdf';
-  } else if (lower.includes('all the info') || lower.includes('gai') || lower.includes('glossary') || lower.includes('reading guide') || lower.includes('academic explanation')) {
-    // Sanitize internal document - map to official handbook / curriculum or clean preview
-    canonicalFile = '4. Student Handbook Aug 2026.pdf';
+  } else if (lower.includes('all the info') || lower.includes('gai') || lower.includes('academic explanation')) {
+    // Internal assignment document: never provide a public URL or download link
+    return null;
   } else if (name.endsWith('.pdf') || name.endsWith('.xlsx')) {
     canonicalFile = name;
   }
@@ -374,6 +377,7 @@ class RagRetriever {
         const docUrl = getOfficialDocumentUrl(chunk.documentName, pageOrSheet);
 
         const cleanTitle = getDocumentCleanTitle(chunk.documentName);
+        if (!cleanTitle) return null; // Internal assignment files are strictly excluded from public evidence
         let previewDoc = 'handbook';
         const docLower = (chunk.documentName || '').toLowerCase();
         if (docLower.includes('minor') || docLower.includes('118351')) previewDoc = 'minor_courses';
@@ -397,7 +401,7 @@ class RagRetriever {
         };
       });
 
-      const relevant = scored.filter(s => s.rawScore >= 3.0);
+      const relevant = scored.filter(s => s && s.rawScore >= 3.0);
 
       relevant.sort((a, b) => {
         const aHierarchyBonus = Math.max(0, (8 - (a.hierarchyLevel || 3)) * 0.15);

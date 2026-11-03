@@ -455,12 +455,21 @@ function renderAdvisorMessage(data) {
   // 2. Build Verified Sources with Clickable Proof Links
   let evidenceHtml = '';
   if (Array.isArray(data.sources) && data.sources.length > 0) {
-    const items = data.sources.map(s => {
+    // Strictly filter out internal assignment files - only authentic official university sources are displayed
+    const verifiedSources = data.sources.filter(s => {
+      const t = (s.documentTitle || s.documentName || '').toLowerCase();
+      const u = (s.url || '').toLowerCase();
+      return !t.includes('all the info') &&
+             !t.includes('gai assignment') &&
+             !t.includes('academic course information') &&
+             !t.includes('academic explanation') &&
+             !u.includes('all%20the%20info') &&
+             !u.includes('gai%20assignment');
+    });
+
+    const items = verifiedSources.map(s => {
       let rawTitle = s.documentTitle || s.documentName || 'Official Document';
-      // Sanitize away any internal assignment filenames
-      if (rawTitle.toLowerCase().includes('all the info') || rawTitle.toLowerCase().includes('gai assignment')) {
-        rawTitle = 'Academic Course Information';
-      } else if (rawTitle.toLowerCase().includes('118351') || rawTitle.toLowerCase().includes('minor')) {
+      if (rawTitle.toLowerCase().includes('118351') || rawTitle.toLowerCase().includes('minor')) {
         rawTitle = 'B.Tech Minor Courses';
       } else if (rawTitle.toLowerCase().includes('118225') || rawTitle.toLowerCase().includes('semester_spread')) {
         rawTitle = 'Official Semester Structure';
@@ -482,7 +491,6 @@ function renderAdvisorMessage(data) {
       else if (tLower.includes('erp')) docKey = 'erp_manual';
       else if (tLower.includes('exam')) docKey = 'exam_sop';
       else if (tLower.includes('holiday')) docKey = 'holiday_list';
-      else if (tLower.includes('academic course information')) docKey = 'academic_info';
 
       const sheetOrPage = s.previewSheet || s.pageOrSheet || '';
 
@@ -511,7 +519,7 @@ function renderAdvisorMessage(data) {
       <div class="evidence-accordion">
         <button type="button" class="btn-evidence-toggle" id="btn-ev-${msgId}" onclick="toggleEvidence('${msgId}')" aria-expanded="false">
           <span class="ev-toggle-icon">🔍</span>
-          <span class="ev-toggle-label">Inspect Verified Proof &amp; Token Usage (${data.sources.length} source${data.sources.length === 1 ? '' : 's'})</span>
+          <span class="ev-toggle-label">Inspect Verified Proof &amp; Token Usage (${verifiedSources.length} source${verifiedSources.length === 1 ? '' : 's'})</span>
           <span class="ev-toggle-arrow" id="arrow-${msgId}">▼</span>
         </button>
         <div id="drawer-${msgId}" class="evidence-drawer" style="display: none;">
