@@ -453,7 +453,7 @@ const TEST_CASES = [
     validate: (res) => {
       const ans = res.answer || '';
       const hasHandbook = res.sources.some(s => s.documentTitle.includes('Handbook'));
-      const hasSpread = res.sources.some(s => s.documentTitle.includes('Semester_Spread'));
+      const hasSpread = res.sources.some(s => s.documentTitle.includes('Semester Structure') || s.documentTitle.includes('Semester_Spread') || (s.documentName && s.documentName.includes('Semester_Spread')));
       const multipleSources = res.sources.length >= 2;
       return {
         passed: multipleSources && hasHandbook && hasSpread && res.state === 'ANSWERABLE',

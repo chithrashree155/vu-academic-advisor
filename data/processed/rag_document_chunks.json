@@ -22061,5 +22061,1385 @@
       "page": 37,
       "section": "Glossary, Equivalences & Confirmation Items"
     }
+  },
+  {
+    "chunkIndex": 0,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 1,
+    "sectionNumber": "Terms Used in Minor Courses Workbook",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• of  1 14 \nMINOR COURSES FOR B.TECH  \nSTUDENTS — details by minor and batch \n(source: Minor_Courses_for_BTech_Students.xlsx; 7 sheets = 7 minors) \nPART 0 — TERMS USED IN THIS WORKBOOK\n• Minor = a set of courses in a second subject, taken alongside the main B.Tech degree.  \nCompleting it earns a \"Minor in <subject>\". In the B.Tech DS plan, minor courses go into  \nthe B6 \"Open/Minor\" basket.\n• Every minor adds up to 24 credits in every batch (veri fi ed, counting the TBD/Don't Know  \nplaceholder rows).\n• Minors offered: Law, Design, Psychology, Economics, Finance, Marketing, Start-up.\n• Each sheet is split into blocks by \"20XX Batch\" = the admission batch the list applies to.",
+    "metadata": {
+      "page": 1,
+      "section": "Terms Used in Minor Courses Workbook",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 1,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 1,
+    "sectionNumber": "Terms Used in Minor Courses Workbook",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Columns: Sl.No. = serial number; Course Code; Course Title; L = lecture hours/week; T =  \ntutorial hours/week; P = practical hours/week; Credit; Semester = the semester (1–8) in  \nwhich the course is taken; Pre-rq = prerequisite.\n• Finance, Marketing and Start-up sheets have an extra UNLABELLED column after Pre-rq.  \nIt gives the NAME of the prerequisite course.\n• Nil / NIL = no prerequisite.\n• Credits follow C = L + T + P/2, as in the main curriculum. Two exceptions are listed in Part  \n4.\n• \"TBA\" (To Be Announced) / \"TBD\" (To Be Decided) / \"Don't Know\" rows: the remaining  \ncredits of that minor are not decided yet. The number in the Credit column on that row =  \nhow many credits are still undecided, NOT a single course.\n• \"New\" in the Course Code column = a new course that has no code yet.",
+    "metadata": {
+      "page": 1,
+      "section": "Terms Used in Minor Courses Workbook",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 2,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 1,
+    "sectionNumber": "Terms Used in Minor Courses Workbook",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• \"(GIVE NEW NAME)\" / \"New Name\" = internal drafting notes: the course will be  \nrenamed. The  fi nal name is not known.\n• \"(R)\" after a course title (e.g. \"Introduction to Financial Accounting (R)\") = <<CONFIRM:  \nprobably \"Revised\" version>>.\n• \"No Students\" (Economics, 2024 batch) = no student of the 2024 batch chose the  \nEconomics minor, so no courses are listed.\n• FAMA = Financial and Management Accounting (Finance minor, 2022 batch; code  \nunknown).\n• Code pre fi xes: LAWx = Law (LAWM, LAWE, LAWC, LAWB, LAWP, LAWS sub-series);  \nCDES = Communication Design; PSYC = Psychology; ECON = Economics; FINA =  \nFinance; MGMT = Management; MKTG = Marketing (MKMT201 is a typo for  \nMKTG201).\n• A prerequisite such as \"ECON201, ECON202/ECON207\" = ECON201 AND (ECON202  \nOR ECON207). Commas = AND, slash = OR.",
+    "metadata": {
+      "page": 1,
+      "section": "Terms Used in Minor Courses Workbook",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 3,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 1,
+    "sectionNumber": "Terms Used in Minor Courses Workbook",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• A prerequisite such as \"MKMT201/ MGMT207/ FINA201\" = any ONE of them. \nPART 1 — WHICH MINOR IS AVAILABLE TO WHICH  \nBATCH\n• Law minor | 2022 batch | NOT OFFERED (no block for this batch in the sheet)\n• Law minor | 2023 batch | partly de fi ned: 19 credits decided, 5 credits still TBD/new\n• Law minor | 2024 batch | partly de fi ned: 14 credits decided, 10 credits still TBD/new",
+    "metadata": {
+      "page": 1,
+      "section": "Terms Used in Minor Courses Workbook",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 4,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 2,
+    "sectionNumber": "Minor Availability & Allocation by Batch (Law, Design, Psychology, Economics, Finance, Marketing, Start-up)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Law minor | 2025 batch | partly de fi ned: 7 credits decided, 17 credits still TBD/new\n• Law minor | 2026 batch | nothing decided yet (all 24 credits TBD)\n• Design minor | 2022 batch | partly de fi ned: 20 credits decided, 4 credits still TBD/new\n• Design minor | 2023 batch | fully de fi ned (24 of 24 credits)\n• Design minor | 2024 batch | partly de fi ned: 16 credits decided, 8 credits still TBD/new\n• Design minor | 2025 batch | partly de fi ned: 4 credits decided, 20 credits still TBD/new\n• Design minor | 2026 batch | nothing decided yet (all 24 credits TBD)\n• Psychology minor | 2022 batch | fully de fi ned (24 of 24 credits)\n• Psychology minor | 2023 batch | fully de fi ned (24 of 24 credits)\n• Psychology minor | 2024 batch | fully de fi ned (24 of 24 credits)\n• Psychology minor | 2025 batch | fully de fi ned (24 of 24 credits)",
+    "metadata": {
+      "page": 2,
+      "section": "Minor Availability & Allocation by Batch (Law, Design, Psychology, Economics, Finance, Marketing, Start-up)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 5,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 2,
+    "sectionNumber": "Minor Availability & Allocation by Batch (Law, Design, Psychology, Economics, Finance, Marketing, Start-up)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Psychology minor | 2026 batch | fully de fi ned (24 of 24 credits)\n• Economics minor | 2022 batch | fully de fi ned (24 of 24 credits)\n• Economics minor | 2023 batch | fully de fi ned (24 of 24 credits)\n• Economics minor | 2024 batch | NOT RUNNING – \"No Students\" chose it\n• Economics minor | 2025 batch | fully de fi ned (24 of 24 credits)\n• Economics minor | 2026 batch | fully de fi ned (24 of 24 credits)\n• Finance minor | 2022 batch | fully de fi ned (24 of 24 credits)\n• Finance minor | 2023 batch | fully de fi ned (24 of 24 credits)\n• Finance minor | 2024 batch | fully de fi ned (24 of 24 credits)\n• Finance minor | 2025 batch | partly de fi ned: 14 credits decided, 10 credits still TBD/new\n• Finance minor | 2026 batch | partly de fi ned: 4 credits decided, 20 credits still TBD/new\n• Marketing minor | 2022 batch | fully de fi ned (24 of 24 credits)",
+    "metadata": {
+      "page": 2,
+      "section": "Minor Availability & Allocation by Batch (Law, Design, Psychology, Economics, Finance, Marketing, Start-up)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 6,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 2,
+    "sectionNumber": "Minor Availability & Allocation by Batch (Law, Design, Psychology, Economics, Finance, Marketing, Start-up)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Marketing minor | 2023 batch | fully de fi ned (24 of 24 credits)\n• Marketing minor | 2024 batch | fully de fi ned (24 of 24 credits)\n• Marketing minor | 2025 batch | partly de fi ned: 15 credits decided, 9 credits still TBD/new\n• Marketing minor | 2026 batch | partly de fi ned: 4 credits decided, 20 credits still TBD/new\n• Start-up minor | 2022 batch | NOT OFFERED (no block for this batch in the sheet)\n• Start-up minor | 2023 batch | NOT OFFERED (no block for this batch in the sheet)\n• Start-up minor | 2024 batch | partly de fi ned: 8 credits decided, 16 credits still TBD/new\n• Start-up minor | 2025 batch | partly de fi ned: 14 credits decided, 10 credits still TBD/new\n• Start-up minor | 2026 batch | NOT OFFERED (no block for this batch in the sheet) \nPART 2 — COURSES IN EACH MINOR, by batch (semester  \norder) \nLaw minor – 2023 batch",
+    "metadata": {
+      "page": 2,
+      "section": "Minor Availability & Allocation by Batch (Law, Design, Psychology, Economics, Finance, Marketing, Start-up)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 7,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 2,
+    "sectionNumber": "Minor Availability & Allocation by Batch (Law, Design, Psychology, Economics, Finance, Marketing, Start-up)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Law minor | 2023 batch | S5 | LAWM305 – Regulating platform and Gig workers | L-T-P  \n3-0-2 | 4 credits | Prerequisite: None\n• Law minor | 2023 batch | S6 | LAWE200 – Moral Philosophy and Justice | L-T-P 2-0-0 | 2  \ncredits | Prerequisite: None\n• Law minor | 2023 batch | S6 | LAWC410 – Introduction to Alternative Dispute Resolution  \nMethods | L-T-P 2-0-2 | 3 credits | Prerequisite: None\n• Law minor | 2023 batch | S6 | LAWB210 – Criminology and Victimology | L-T-P 2-2-0 | 4  \ncredits | Prerequisite: None\n• Law minor | 2023 batch | S7 | LAWM306 – Law Relating to start-ups | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: None\n• Law minor | 2023 batch | S7 | LAWE301 – Intellectual Property Rights | L-T-P 2-0-0 | 2  \ncredits | Prerequisite: None\n• Law minor | 2023 batch | Remaining 5 credits: Don't Know – courses not decided yet",
+    "metadata": {
+      "page": 2,
+      "section": "Minor Availability & Allocation by Batch (Law, Design, Psychology, Economics, Finance, Marketing, Start-up)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 8,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 3,
+    "sectionNumber": "Law & Design Minor Courses (Batches 2024-2026, 2022)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• of  3 14 \nLaw minor – 2024 batch\n• Law minor | 2024 batch | S3 | LAWP100 – Political Science I | L-T-P 2-1-0 | 3 credits |  \nPrerequisite: None\n• Law minor | 2024 batch | S3 | LAWS301 – Legal Methods | L-T-P 2-0-2 | 3 credits |  \nPrerequisite: None\n• Law minor | 2024 batch | S4 | LAWM301 – Constitution for Citizens | L-T-P 2-2-0 | 4 credits  \n| Prerequisite: None\n• Law minor | 2024 batch | S5 | LAWM302 – Basics of International Law | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: None\n• Law minor | 2024 batch | Remaining 10 credits: TBA – courses not decided yet \nLaw minor – 2025 batch\n• Law minor | 2025 batch | S2 | LAWP101 – Introduction to Political science | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: None\n• Law minor | 2025 batch | S3 | LAWS301 – Legal Methods | L-T-P 2-0-2 | 3 credits |  \nPrerequisite: None",
+    "metadata": {
+      "page": 3,
+      "section": "Law & Design Minor Courses (Batches 2024-2026, 2022)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 9,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 3,
+    "sectionNumber": "Law & Design Minor Courses (Batches 2024-2026, 2022)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Law minor | 2025 batch | Remaining 17 credits: TBA – courses not decided yet \nLaw minor – 2026 batch\n• Law minor | 2026 batch | Remaining 24 credits: TBA – courses not decided yet \nDesign minor – 2022 batch\n• Design minor | 2022 batch | S3 | CDES105 – Appreciating and Deconstructing Art and  \nMedia | L-T-P 3-0-0 | 3 credits | Prerequisite: None\n• Design minor | 2022 batch | S5 | CDES203 – Motion Graphic Design | L-T-P 1-0-2 | 2  \ncredits | Prerequisite: None\n• Design minor | 2022 batch | S5 | CDES504 – Environment Design and Communication | L- \nT-P 1-1-0 | 2 credits | Prerequisite: None\n• Design minor | 2022 batch | S6 | CDES704 – Integrative Studio VI- Exhibition/Museum | L- \nT-P 2-2-0 | 4 credits | Prerequisite: None\n• Design minor | 2022 batch | S6 | CDES402 – Interaction Design- UI UX | L-T-P 1-3-0 | 4  \ncredits | Prerequisite: None",
+    "metadata": {
+      "page": 3,
+      "section": "Law & Design Minor Courses (Batches 2024-2026, 2022)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 10,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 3,
+    "sectionNumber": "Law & Design Minor Courses (Batches 2024-2026, 2022)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Design minor | 2022 batch | S7 | CDES216 – Drawing and Moving Images | L-T-P 1-1-0 | 2  \ncredits | Prerequisite: None\n• Design minor | 2022 batch | S7 | CDES712 – Designing Futures | L-T-P 1-2-0 | 3 credits |  \nPrerequisite: CDES402 Interaction Design- UI UX (this minor, S6) AND CDES504  \nEnvironment Design and Communication (this minor, S5)\n• Design minor | 2022 batch | Remaining 4 credits: DON'T KNOW – courses not decided yet \nDesign minor – 2023 batch\n• Design minor | 2023 batch | S3 | CDES105 – Appreciating and Deconstructing Art and  \nMedia | L-T-P 3-0-0 | 3 credits | Prerequisite: None\n• Design minor | 2023 batch | S4 | CDES702 – Integrative Studio II- Sensemaking,  \nVisualization | L-T-P 2-2-0 | 4 credits | Prerequisite: None\n• Design minor | 2023 batch | S5 | CDES221 – Information Architecture and Design | L-T-P  \n2-2-0 | 4 credits | Prerequisite: None",
+    "metadata": {
+      "page": 3,
+      "section": "Law & Design Minor Courses (Batches 2024-2026, 2022)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 11,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 3,
+    "sectionNumber": "Law & Design Minor Courses (Batches 2024-2026, 2022)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Design minor | 2023 batch | S6 | CDES219 – Elements of Sound | L-T-P 2-2-0 | 4 credits |  \nPrerequisite: None",
+    "metadata": {
+      "page": 3,
+      "section": "Law & Design Minor Courses (Batches 2024-2026, 2022)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 12,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 4,
+    "sectionNumber": "Design & Psychology Minor Courses (Batches 2023-2026, 2022)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Design minor | 2023 batch | S6 | CDES301 – Sketch to Story | L-T-P 2-2-0 | 4 credits |  \nPrerequisite: None\n• Design minor | 2023 batch | S7 | CDES312 – Designing Futures | L-T-P 2-2-2 | 5 credits |  \nPrerequisite: None \nDesign minor – 2024 batch\n• Design minor | 2024 batch | S3 | CDES217 – Making with Reframed Media | L-T-P 2-3-0 | 4  \ncredits | Prerequisite: None\n• Design minor | 2024 batch | S4 | CDES218 – Frames and Frequencies | L-T-P 2-2-0 | 4  \ncredits | Prerequisite: None\n• Design minor | 2024 batch | S5 | CDES221 – Information Architecture and Design | L-T-P  \n2-2-0 | 4 credits | Prerequisite: None\n• Design minor | 2024 batch | S5 | CDES227 – Drawing and Moving Image | L-T-P 2-2-0 | 4  \ncredits | Prerequisite: None\n• Design minor | 2024 batch | Remaining 8 credits: TBD – courses not decided yet \nDesign minor – 2025 batch",
+    "metadata": {
+      "page": 4,
+      "section": "Design & Psychology Minor Courses (Batches 2023-2026, 2022)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 13,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 4,
+    "sectionNumber": "Design & Psychology Minor Courses (Batches 2023-2026, 2022)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Design minor | 2025 batch | S3 | CDES217 – Making with Reframed Media | L-T-P 2-2-0 | 4  \ncredits | Prerequisite: None\n• Design minor | 2025 batch | Remaining 20 credits: TBD – courses not decided yet \nDesign minor – 2026 batch\n• Design minor | 2026 batch | Remaining 24 credits: TBD – courses not decided yet \nPsychology minor – 2022 batch\n• Psychology minor | 2022 batch | S3 | PSYC201 – Biological Psychology | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: None\n• Psychology minor | 2022 batch | S4 | PSYC202 – Cognitive Psychology | L-T-P 2-2-0 | 4  \ncredits | Prerequisite: PSYC101 Introduction to Psychology (B.Tech DS plan, S1)\n• Psychology minor | 2022 batch | S5 | PSYC255 – Psychopathology | L-T-P 3-1-0 | 4 credits |  \nPrerequisite: None",
+    "metadata": {
+      "page": 4,
+      "section": "Design & Psychology Minor Courses (Batches 2023-2026, 2022)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 14,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 4,
+    "sectionNumber": "Design & Psychology Minor Courses (Batches 2023-2026, 2022)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Psychology minor | 2022 batch | S6 | PSYC241 – Social Psychology | L-T-P 2-2-0 | 4 credits  \n| Prerequisite: PSYC101 Introduction to Psychology (B.Tech DS plan, S1)\n• Psychology minor | 2022 batch | S6 | PSYC204 – Developmental Psychology | L-T-P 3-1-0 |  \n4 credits | Prerequisite: PSYC101 Introduction to Psychology (B.Tech DS plan, S1)\n• Psychology minor | 2022 batch | S7 | PSYC303 – Psychological Testing and Measurement |  \nL-T-P 3-1-0 | 4 credits | Prerequisite: PSYC101 Introduction to Psychology (B.Tech DS  \nplan, S1) AND PSYC202 Cognitive Psychology (this minor, S4) AND MATH131 (course  \nnot found in either workbook) \nPsychology minor – 2023 batch\n• Psychology minor | 2023 batch | S3 | PSYC201 – Biological Psychology | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: None",
+    "metadata": {
+      "page": 4,
+      "section": "Design & Psychology Minor Courses (Batches 2023-2026, 2022)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 15,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 4,
+    "sectionNumber": "Design & Psychology Minor Courses (Batches 2023-2026, 2022)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Psychology minor | 2023 batch | S4 | PSYC202 – Cognitive Psychology | L-T-P 2-2-0 | 4  \ncredits | Prerequisite: PSYC101 Introduction to Psychology (B.Tech DS plan, S1)\n• Psychology minor | 2023 batch | S5 | PSYC104 – Lifespan Development I | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: PSYC101 Introduction to Psychology (B.Tech DS plan, S1)\n• Psychology minor | 2023 batch | S6 | PSYC241 – Social Psychology | L-T-P 2-2-0 | 4 credits  \n| Prerequisite: PSYC101 Introduction to Psychology (B.Tech DS plan, S1)",
+    "metadata": {
+      "page": 4,
+      "section": "Design & Psychology Minor Courses (Batches 2023-2026, 2022)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 16,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 5,
+    "sectionNumber": "Psychology Minor Courses (Batches 2023-2026)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Psychology minor | 2023 batch | S6 | PSYC306 – Health Psychology | L-T-P 3-1-0 | 4 credits  \n| Prerequisite: PSYC101 Introduction to Psychology (B.Tech DS plan, S1) AND PSYC201  \nBiological Psychology (this minor, S3)\n• Psychology minor | 2023 batch | S7 | PSYC255 – Psychopathology | L-T-P 3-1-0 | 4 credits |  \nPrerequisite: None \nPsychology minor – 2024 batch\n• Psychology minor | 2024 batch | S3 | PSYC201/PSYC103 – Biological Psychology/  \nFoundations of Psychology I | L-T-P 3-1-0 | 4 credits | Prerequisite: None | Either/or: student  \ntakes ONE of the two\n• Psychology minor | 2024 batch | S4 | PSYC202 – Cognitive Psychology | L-T-P 2-2-0 | 4  \ncredits | Prerequisite: PSYC101 Introduction to Psychology (B.Tech DS plan, S1)",
+    "metadata": {
+      "page": 5,
+      "section": "Psychology Minor Courses (Batches 2023-2026)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 17,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 5,
+    "sectionNumber": "Psychology Minor Courses (Batches 2023-2026)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Psychology minor | 2024 batch | S5 | PSYC241 – Social Psychology | L-T-P 2-2-0 | 4 credits  \n| Prerequisite: PSYC101 Introduction to Psychology (B.Tech DS plan, S1)\n• Psychology minor | 2024 batch | S6 | PSYC306 – Health Psychology | L-T-P 3-1-0 | 4 credits  \n| Prerequisite: PSYC101 Introduction to Psychology (B.Tech DS plan, S1) AND PSYC201  \nBiological Psychology/ Foundations of Psychology I (this minor, S3)\n• Psychology minor | 2024 batch | S6 | PSYC104 – Lifespan Development I | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: None\n• Psychology minor | 2024 batch | S7 | PSYC255 – Psychopathology | L-T-P 3-1-0 | 4 credits |  \nPrerequisite: None \nPsychology minor – 2025 batch\n• Psychology minor | 2025 batch | S3 | PSYC201/PSYC103 – Biological Psychology/  \nFoundations of Psychology I | L-T-P 3-1-0 | 4 credits | Prerequisite: None | Either/or: student  \ntakes ONE of the two",
+    "metadata": {
+      "page": 5,
+      "section": "Psychology Minor Courses (Batches 2023-2026)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 18,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 5,
+    "sectionNumber": "Psychology Minor Courses (Batches 2023-2026)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Psychology minor | 2025 batch | S4 | PSYC202 – Cognitive Psychology | L-T-P 2-2-0 | 4  \ncredits | Prerequisite: PSYC101 Introduction to Psychology – NOT offered to this batch\n• Psychology minor | 2025 batch | S5 | PSYC241 – Social Psychology | L-T-P 2-2-0 | 4 credits  \n| Prerequisite: PSYC101 Introduction to Psychology – NOT offered to this batch\n• Psychology minor | 2025 batch | S6 | PSYC306 – Health Psychology | L-T-P 3-1-0 | 4 credits  \n| Prerequisite: PSYC101 Introduction to Psychology – NOT offered to this batch AND  \nPSYC201 Biological Psychology/ Foundations of Psychology I (this minor, S3)\n• Psychology minor | 2025 batch | S6 | PSYC104 – Lifespan Development I | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: None\n• Psychology minor | 2025 batch | S7 | PSYC255 – Psychopathology | L-T-P 3-1-0 | 4 credits |  \nPrerequisite: None \nPsychology minor – 2026 batch",
+    "metadata": {
+      "page": 5,
+      "section": "Psychology Minor Courses (Batches 2023-2026)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 19,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 5,
+    "sectionNumber": "Psychology Minor Courses (Batches 2023-2026)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Psychology minor | 2026 batch | S3 | PSYC201/PSYC103 – Biological Psychology/  \nFoundations of Psychology I | L-T-P 3-1-0 | 4 credits | Prerequisite: None | Either/or: student  \ntakes ONE of the two\n• Psychology minor | 2026 batch | S4 | PSYC202 – Cognitive Psychology | L-T-P 2-2-0 | 4  \ncredits | Prerequisite: PSYC101 Introduction to Psychology – NOT offered to this batch\n• Psychology minor | 2026 batch | S5 | PSYC241 – Social Psychology | L-T-P 2-2-0 | 4 credits  \n| Prerequisite: PSYC101 Introduction to Psychology – NOT offered to this batch\n• Psychology minor | 2026 batch | S6 | PSYC306 – Health Psychology | L-T-P 3-1-0 | 4 credits  \n| Prerequisite: PSYC101 Introduction to Psychology – NOT offered to this batch AND  \nPSYC201 Biological Psychology/ Foundations of Psychology I (this minor, S3)",
+    "metadata": {
+      "page": 5,
+      "section": "Psychology Minor Courses (Batches 2023-2026)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 20,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 5,
+    "sectionNumber": "Psychology Minor Courses (Batches 2023-2026)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Psychology minor | 2026 batch | S6 | PSYC104 – Lifespan Development I | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: None",
+    "metadata": {
+      "page": 5,
+      "section": "Psychology Minor Courses (Batches 2023-2026)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 21,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 6,
+    "sectionNumber": "Psychology & Economics Minor Courses (Batches 2022-2025)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Psychology minor | 2026 batch | S7 | PSYC255 – Psychopathology | L-T-P 3-1-0 | 4 credits |  \nPrerequisite: None \nEconomics minor – 2022 batch\n• Economics minor | 2022 batch | S3 | ECON201 – Microeconomics | L-T-P 3-1-0 | 4 credits |  \nPrerequisite: None\n• Economics minor | 2022 batch | S4 | ECON220 – Behavourial Economics | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: None\n• Economics minor | 2022 batch | S5 | ECON207 – Macroeconomics and Applicants to Indian  \nEconomy | L-T-P 3-1-0 | 4 credits | Prerequisite: None\n• Economics minor | 2022 batch | S6 | ECON413 – Industrial Economics | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: ECON201 Microeconomics (this minor, S3) AND (ECON202 (course  \nnot found in either workbook) OR ECON207 Macroeconomics and Applicants to Indian  \nEconomy (this minor, S5))",
+    "metadata": {
+      "page": 6,
+      "section": "Psychology & Economics Minor Courses (Batches 2022-2025)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 22,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 6,
+    "sectionNumber": "Psychology & Economics Minor Courses (Batches 2022-2025)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Economics minor | 2022 batch | S6 | ECON325 – Public Economics | L-T-P 3-1-0 | 4 credits  \n| Prerequisite: ECON201 Microeconomics (this minor, S3) AND (ECON202 (course not  \nfound in either workbook) OR ECON207 Macroeconomics and Applicants to Indian  \nEconomy (this minor, S5))\n• Economics minor | 2022 batch | S7 | ECON316 – Digital Economics | L-T-P 3-1-0 | 4 credits  \n| Prerequisite: ECON201 Microeconomics (this minor, S3) \nEconomics minor – 2023 batch\n• Economics minor | 2023 batch | S3 | ECON201 – Microeconomics | L-T-P 3-1-0 | 4 credits |  \nPrerequisite: None\n• Economics minor | 2023 batch | S4 | ECON209 – Macroeconomics I | L-T-P 3-1-0 | 4 credits  \n| Prerequisite: None\n• Economics minor | 2023 batch | S5 | ECON316 – Digital Economics | L-T-P 3-1-0 | 4 credits  \n| Prerequisite: ECON201 Microeconomics (this minor, S3)",
+    "metadata": {
+      "page": 6,
+      "section": "Psychology & Economics Minor Courses (Batches 2022-2025)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 23,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 6,
+    "sectionNumber": "Psychology & Economics Minor Courses (Batches 2022-2025)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Economics minor | 2023 batch | S6 | ECON315 – Indian Economy | L-T-P 3-1-0 | 4 credits |  \nPrerequisite: ECON201 Microeconomics (this minor, S3) AND ECON209 Macroeconomics  \nI (this minor, S4)\n• Economics minor | 2023 batch | S6 | ECON322 – Economics of Health and Education | L-T- \nP 3-1-0 | 4 credits | Prerequisite: ECON201 Microeconomics (this minor, S3)\n• Economics minor | 2023 batch | S7 | ECON301 – International Economics | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: ECON201 Microeconomics (this minor, S3) AND ECON202 (course  \nnot found in either workbook) \nEconomics minor – 2024 batch\n• Economics minor | 2024 batch | No students opted for this minor; no courses listed. \nEconomics minor – 2025 batch\n• Economics minor | 2025 batch | S3 | ECON208 – Microeconomics I | L-T-P 3-1-0 | 4 credits  \n| Prerequisite: None",
+    "metadata": {
+      "page": 6,
+      "section": "Psychology & Economics Minor Courses (Batches 2022-2025)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 24,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 6,
+    "sectionNumber": "Psychology & Economics Minor Courses (Batches 2022-2025)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Economics minor | 2025 batch | S4 | ECON209 – Macroeconomics I | L-T-P 3-1-0 | 4 credits  \n| Prerequisite: None\n• Economics minor | 2025 batch | S5 | ECON316 – Digital Economics | L-T-P 3-1-0 | 4 credits  \n| Prerequisite: ECON201 Microeconomics – NOT offered to this batch\n• Economics minor | 2025 batch | S6 | ECON315 – Indian Economy | L-T-P 3-1-0 | 4 credits |  \nPrerequisite: ECON201 Microeconomics – NOT offered to this batch AND ECON209  \nMacroeconomics I (this minor, S4)",
+    "metadata": {
+      "page": 6,
+      "section": "Psychology & Economics Minor Courses (Batches 2022-2025)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 25,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 7,
+    "sectionNumber": "Economics & Finance Minor Courses (Batches 2025-2026, 2022-2023)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Economics minor | 2025 batch | S6 | ECON346 – Financial Economics | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: ECON208 Microeconomics I (this minor, S3) AND ECON209  \nMacroeconomics I (this minor, S4)\n• Economics minor | 2025 batch | S7 | ECON301 – International Economics | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: ECON201 Microeconomics – NOT offered to this batch AND  \nECON202 (course not found in either workbook) \nEconomics minor – 2026 batch\n• Economics minor | 2026 batch | S3 | ECON208 – Microeconomics I | L-T-P 3-1-0 | 4 credits  \n| Prerequisite: None\n• Economics minor | 2026 batch | S4 | ECON209 – Macroeconomics I | L-T-P 3-1-0 | 4 credits  \n| Prerequisite: None\n• Economics minor | 2026 batch | S5 | ECON316 – Digital Economics | L-T-P 3-1-0 | 4 credits  \n| Prerequisite: ECON201 Microeconomics – NOT offered to this batch",
+    "metadata": {
+      "page": 7,
+      "section": "Economics & Finance Minor Courses (Batches 2025-2026, 2022-2023)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 26,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 7,
+    "sectionNumber": "Economics & Finance Minor Courses (Batches 2025-2026, 2022-2023)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Economics minor | 2026 batch | S6 | ECON315 – Indian Economy | L-T-P 3-1-0 | 4 credits |  \nPrerequisite: ECON201 Microeconomics – NOT offered to this batch AND ECON209  \nMacroeconomics I (this minor, S4)\n• Economics minor | 2026 batch | S6 | ECON346 – Financial Economics | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: ECON208 Microeconomics I (this minor, S3) AND ECON209  \nMacroeconomics I (this minor, S4)\n• Economics minor | 2026 batch | S7 | ECON301 – International Economics | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: ECON201 Microeconomics – NOT offered to this batch AND  \nECON202 (course not found in either workbook) \nFinance minor – 2022 batch\n• Finance minor | 2022 batch | S3 | (code not known) – Financial and Management  \nAccounting (FAMA) | L-T-P 2-1-0 | 3 credits | Prerequisite: None",
+    "metadata": {
+      "page": 7,
+      "section": "Economics & Finance Minor Courses (Batches 2025-2026, 2022-2023)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 27,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 7,
+    "sectionNumber": "Economics & Finance Minor Courses (Batches 2025-2026, 2022-2023)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Finance minor | 2022 batch | S4 | FINA333 – Fiancial Institutions Markets and Services | L- \nT-P 2-1-0 | 3 credits | Prerequisite: MGMT208 Introduction to Financial Accounting – NOT  \noffered to this batch [name written in sheet: \"Introduction to Financial Accounting\"]\n• Finance minor | 2022 batch | S5 | MGMT207 – Corporate Finance | L-T-P 2-1-0 | 3 credits |  \nPrerequisite: FAMA Financial and Management Accounting (FAMA) (this minor, S3) [name  \nwritten in sheet: \"Financial and management accounting\"]\n• Finance minor | 2022 batch | S6 | MGMT209 – Financial Statement Anaylsis | L-T-P 2-1-0 |  \n3 credits | Prerequisite: FINA201 (course not found in either workbook) [name written in  \nsheet: \"Introduction to Financial Accounting\"]",
+    "metadata": {
+      "page": 7,
+      "section": "Economics & Finance Minor Courses (Batches 2025-2026, 2022-2023)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 28,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 7,
+    "sectionNumber": "Economics & Finance Minor Courses (Batches 2025-2026, 2022-2023)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Finance minor | 2022 batch | S6 | MGMT210 – Basics of INVESTMENT MANAGEMENT  \n| L-T-P 2-2-0 | 4 credits | Prerequisite: FINA333 Fiancial Institutions Markets and Services  \n(this minor, S4) [name written in sheet: \"Financial Instituation, Markets and Services\"]\n• Finance minor | 2022 batch | S7 | MGMT213 – Introduction To Fintech | L-T-P 1-1-0 | 2  \ncredits | Prerequisite: FINA333 Fiancial Institutions Markets and Services (this minor, S4)  \n[name written in sheet: \"Financial Instituation, Markets and Services\"]\n• Finance minor | 2022 batch | S7 | MGMT323 – Basics of Startup Finance | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: MGMT207 Corporate Finance (this minor, S5) [name written in sheet:  \n\"Corporate Finance\"]",
+    "metadata": {
+      "page": 7,
+      "section": "Economics & Finance Minor Courses (Batches 2025-2026, 2022-2023)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 29,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 7,
+    "sectionNumber": "Economics & Finance Minor Courses (Batches 2025-2026, 2022-2023)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Finance minor | 2022 batch | S7 | MGMT203 – Business Strategy Simulation | L-T-P 0-0-0 |  \n2 credits | Prerequisite: MKMT201 (course not found in either workbook) OR MGMT207  \nCorporate Finance (this minor, S5) OR FINA201 (course not found in either workbook)  \n[name written in sheet: \"Marketing Management/ Corporate Finance/ Financial and  \nManagement Accounting\"] \nFinance minor – 2023 batch",
+    "metadata": {
+      "page": 7,
+      "section": "Economics & Finance Minor Courses (Batches 2025-2026, 2022-2023)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 30,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 8,
+    "sectionNumber": "Finance Minor Courses (Batches 2023-2025)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Finance minor | 2023 batch | S3 | MGMT208 – Introduction to Financial Accounting | L-T-P  \n2-1-0 | 3 credits | Prerequisite: None\n• Finance minor | 2023 batch | S4 | FINA333 – Fiancial Institutions Markets and Services | L- \nT-P 2-1-0 | 3 credits | Prerequisite: MGMT208 Introduction to Financial Accounting (this  \nminor, S3) [name written in sheet: \"Introduction to Financial Accounting\"]\n• Finance minor | 2023 batch | S5 | MGMT207 – Corporate Finance | L-T-P 2-1-0 | 3 credits |  \nPrerequisite: MGMT208 Introduction to Financial Accounting (this minor, S3) [name  \nwritten in sheet: \"Introduction to Financial Accounting\"]\n• Finance minor | 2023 batch | S6 | MGMT209 – Finacial Statement Analysis | L-T-P 2-1-0 | 3  \ncredits | Prerequisite: MGMT208 Introduction to Financial Accounting (this minor, S3)  \n[name written in sheet: \"Introduction to Financial Accounting\"]",
+    "metadata": {
+      "page": 8,
+      "section": "Finance Minor Courses (Batches 2023-2025)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 31,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 8,
+    "sectionNumber": "Finance Minor Courses (Batches 2023-2025)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Finance minor | 2023 batch | S6 | MGMT210 – Basics of Investment Management | L-T-P  \n2-2-0 | 4 credits | Prerequisite: FINA333 Fiancial Institutions Markets and Services (this  \nminor, S4) [name written in sheet: \"Fiancial Institutions Markets and Services\"]\n• Finance minor | 2023 batch | S6 | MGMT323 – Basics of Startup Finance | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: MGMT207 Corporate Finance (this minor, S5) [name written in sheet:  \n\"Corporate Finance\"]\n• Finance minor | 2023 batch | S7 | MGMT213 – Introduction To Fintech | L-T-P 1-1-0 | 2  \ncredits | Prerequisite: None\n• Finance minor | 2023 batch | S7 | MGMT307 – Strategy & Decision Making | L-T-P 1-1-0 |  \n2 credits | Prerequisite: None \nFinance minor – 2024 batch\n• Finance minor | 2024 batch | S3 | MGMT208 – Introduction to Financial Accounting | L-T-P  \n2-1-0 | 3 credits | Prerequisite: None",
+    "metadata": {
+      "page": 8,
+      "section": "Finance Minor Courses (Batches 2023-2025)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 32,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 8,
+    "sectionNumber": "Finance Minor Courses (Batches 2023-2025)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Finance minor | 2024 batch | S4 | FINA333 – Fiancial Institutions Markets and Services | L- \nT-P 2-1-0 | 3 credits | Prerequisite: MGMT208 Introduction to Financial Accounting (this  \nminor, S3) [name written in sheet: \"Introduction to Financial Accounting\"]\n• Finance minor | 2024 batch | S5 | MGMT207 – Corporate Finance | L-T-P 2-1-0 | 3 credits |  \nPrerequisite: None\n• Finance minor | 2024 batch | S5 | MGMT209 – Finacial Statement Analysis | L-T-P 2-1-0 | 3  \ncredits | Prerequisite: None\n• Finance minor | 2024 batch | S6 | MGMT210 – Basics of Investment Management | L-T-P  \n2-2-0 | 4 credits | Prerequisite: FINA333 Fiancial Institutions Markets and Services (this  \nminor, S4) [name written in sheet: \"Fiancial Institutions Markets and Services\"]",
+    "metadata": {
+      "page": 8,
+      "section": "Finance Minor Courses (Batches 2023-2025)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 33,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 8,
+    "sectionNumber": "Finance Minor Courses (Batches 2023-2025)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Finance minor | 2024 batch | S6 | MGMT323 – Basics of Startup Finance | L-T-P 3-1-0 | 4  \ncredits | Prerequisite: MGMT207 Corporate Finance (this minor, S5) [name written in sheet:  \n\"Corporate Finance\"]\n• Finance minor | 2024 batch | S7 | MGMT213 – Introduction To Fintech | L-T-P 1-1-0 | 2  \ncredits | Prerequisite: None\n• Finance minor | 2024 batch | S7 | MGMT307 – Strategy & Decision Making | L-T-P 1-1-0 |  \n2 credits | Prerequisite: None \nFinance minor – 2025 batch\n• Finance minor | 2025 batch | S3 | MGMT330 – Introduction to Financial Accounting (R ) |  \nL-T-P 3-1-0 | 4 credits | Prerequisite: None\n• Finance minor | 2025 batch | S4 | (new course, no code yet) – Financial Institutions Markets  \n& Services with Fintech ( fi nal name not decided) | L-T-P not given | 4 credits | Prerequisite:  \nnot given",
+    "metadata": {
+      "page": 8,
+      "section": "Finance Minor Courses (Batches 2023-2025)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 34,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 8,
+    "sectionNumber": "Finance Minor Courses (Batches 2023-2025)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Finance minor | 2025 batch | S5 | (new course, no code yet) – Corporate Finance ( fi nal name  \nnot decided) | L-T-P not given | 4 credits | Prerequisite: not given",
+    "metadata": {
+      "page": 8,
+      "section": "Finance Minor Courses (Batches 2023-2025)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 35,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 9,
+    "sectionNumber": "Finance & Marketing Minor Courses (Batches 2025-2026, 2022-2023)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Finance minor | 2025 batch | S6 | MGMT210 – Basics of Investment Management | L-T-P  \n2-2-0 | 4 credits | Prerequisite: FINA333 Fiancial Institutions Markets and Services – NOT  \noffered to this batch [name written in sheet: \"Fiancial Institutions Markets and Services\"]\n• Finance minor | 2025 batch | S6 | MGMT213 – Introduction To Fintech | L-T-P 1-1-0 | 2  \ncredits | Prerequisite: None\n• Finance minor | 2025 batch | S7 | MGMT323 – Basics of Startup Finance | L-T-P 2-2-0 | 4  \ncredits | Prerequisite: MGMT207 Corporate Finance – NOT offered to this batch [name  \nwritten in sheet: \"Corporate Finance\"]\n• Finance minor | 2025 batch | Remaining 2 credits: TBD – courses not decided yet \nFinance minor – 2026 batch\n• Finance minor | 2026 batch | S3 | MGMT330 – Introduction to Financial Accounting (R) | L- \nT-P 3-1-0 | 4 credits | Prerequisite: not given",
+    "metadata": {
+      "page": 9,
+      "section": "Finance & Marketing Minor Courses (Batches 2025-2026, 2022-2023)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 36,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 9,
+    "sectionNumber": "Finance & Marketing Minor Courses (Batches 2025-2026, 2022-2023)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Finance minor | 2026 batch | Remaining 20 credits: TBD – courses not decided yet \nMarketing minor – 2022 batch\n• Marketing minor | 2022 batch | S3 | (code not known) – Marketing Management | L-T-P  \n2-1-0 | 3 credits | Prerequisite: None\n• Marketing minor | 2022 batch | S4 | MGMT302 – Digital and Ecommerce Marketing | L-T-P  \n2-2-0 | 4 credits | Prerequisite: MKTG201 Marketing Management – NOT offered to this  \nbatch [name written in sheet: \"Introduction to digital business\"]\n• Marketing minor | 2022 batch | S5 | MGMT304 – Integrated Marketing Communications |  \nL-T-P 2-1-0 | 3 credits | Prerequisite: MKTG201 Marketing Management – NOT offered to  \nthis batch [name written in sheet: \"Marketing management\"]",
+    "metadata": {
+      "page": 9,
+      "section": "Finance & Marketing Minor Courses (Batches 2025-2026, 2022-2023)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 37,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 9,
+    "sectionNumber": "Finance & Marketing Minor Courses (Batches 2025-2026, 2022-2023)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Marketing minor | 2022 batch | S6 | MGMT314 – Sales and distribution management | L-T-P  \n2-2-0 | 4 credits | Prerequisite: MKTG201 Marketing Management – NOT offered to this  \nbatch [name written in sheet: \"Marketing management\"]\n• Marketing minor | 2022 batch | S7 | MGMT320 – Marketing Analytics | L-T-P 1-1-0 | 2  \ncredits | Prerequisite: MKTG201 Marketing Management – NOT offered to this batch [name  \nwritten in sheet: \"Introduction to digital business\"]\n• Marketing minor | 2022 batch | S7 | MGMT305 – Services Marketing | L-T-P 2-1-0 | 3  \ncredits | Prerequisite: MKTG201 Marketing Management – NOT offered to this batch [name  \nwritten in sheet: \"Introduction to digital business\"]",
+    "metadata": {
+      "page": 9,
+      "section": "Finance & Marketing Minor Courses (Batches 2025-2026, 2022-2023)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 38,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 9,
+    "sectionNumber": "Finance & Marketing Minor Courses (Batches 2025-2026, 2022-2023)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Marketing minor | 2022 batch | S7 | MGMT211 – Brand Management | L-T-P 2-1-0 | 3  \ncredits | Prerequisite: MKTG201 Marketing Management – NOT offered to this batch [name  \nwritten in sheet: \"Introduction to digital business\"]\n• Marketing minor | 2022 batch | S7 | MGMT203 – Business Strategy Simulation | L-T-P  \n0-0-0 | 2 credits | Prerequisite: MKMT201 (course not found in either workbook) OR  \nMGMT207 Corporate Finance (Finance minor, S5) OR FINA201 (course not found in  \neither workbook) [name written in sheet: \"Marketing Management/ Corporate Finance/  \nFinancial and Management Accounting\"] \nMarketing minor – 2023 batch\n• Marketing minor | 2023 batch | S3 | MKTG201 – Marketing Management | L-T-P 2-1-0 | 3  \ncredits | Prerequisite: None",
+    "metadata": {
+      "page": 9,
+      "section": "Finance & Marketing Minor Courses (Batches 2025-2026, 2022-2023)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 39,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 9,
+    "sectionNumber": "Finance & Marketing Minor Courses (Batches 2025-2026, 2022-2023)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Marketing minor | 2023 batch | S4 | MGMT302 – Digital and Ecommerce Marketing | L-T-P  \n2-2-0 | 4 credits | Prerequisite: MKTG201 Marketing Management (this minor, S3) [name  \nwritten in sheet: \"Introduction to digital business\"]\n• Marketing minor | 2023 batch | S5 | MGMT304 – Integrated Marketing Communications |  \nL-T-P 2-1-0 | 3 credits | Prerequisite: MKTG201 Marketing Management (this minor, S3)  \n[name written in sheet: \"Introduction to digital business\"]",
+    "metadata": {
+      "page": 9,
+      "section": "Finance & Marketing Minor Courses (Batches 2025-2026, 2022-2023)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 40,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 10,
+    "sectionNumber": "Marketing Minor Courses (Batches 2023-2025)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Marketing minor | 2023 batch | S6 | MGMT314 – Sales and Distribution Management | L-T- \nP 2-2-0 | 4 credits | Prerequisite: MKTG201 Marketing Management (this minor, S3) [name  \nwritten in sheet: \"Introduction to digital business\"]\n• Marketing minor | 2023 batch | S6 | MGMT305 – Services Marketing | L-T-P 2-1-0 | 3  \ncredits | Prerequisite: MKTG201 Marketing Management (this minor, S3) [name written in  \nsheet: \"Introduction to digital business\"]\n• Marketing minor | 2023 batch | S6 | MGMT211 – Brand Management | L-T-P 2-1-0 | 3  \ncredits | Prerequisite: MKTG201 Marketing Management (this minor, S3) [name written in  \nsheet: \"Introduction to digital business\"]\n• Marketing minor | 2023 batch | S7 | MGMT320 – Marketing Analytics | L-T-P 1-1-0 | 2  \ncredits | Prerequisite: None",
+    "metadata": {
+      "page": 10,
+      "section": "Marketing Minor Courses (Batches 2023-2025)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 41,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 10,
+    "sectionNumber": "Marketing Minor Courses (Batches 2023-2025)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Marketing minor | 2023 batch | S7 | MGMT307 – Strategy & Decision Making | L-T-P 1-1-0  \n| 2 credits | Prerequisite: None \nMarketing minor – 2024 batch\n• Marketing minor | 2024 batch | S3 | MKTG201 – Marketing Management | L-T-P 2-1-0 | 3  \ncredits | Prerequisite: None\n• Marketing minor | 2024 batch | S4 | MGMT302 – Digital and Ecommerce Marketing | L-T-P  \n2-2-0 | 4 credits | Prerequisite: MKTG201 Marketing Management (this minor, S3) [name  \nwritten in sheet: \"Introduction to digital business\"]\n• Marketing minor | 2024 batch | S5 | MGMT305 – Services Marketing | L-T-P 2-1-0 | 3  \ncredits | Prerequisite: None\n• Marketing minor | 2024 batch | S5 | MGMT304 – Integrated Marketing Communications |  \nL-T-P 2-1-0 | 3 credits | Prerequisite: None",
+    "metadata": {
+      "page": 10,
+      "section": "Marketing Minor Courses (Batches 2023-2025)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 42,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 10,
+    "sectionNumber": "Marketing Minor Courses (Batches 2023-2025)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Marketing minor | 2024 batch | S6 | MGMT314 – Sales and Distribution Management | L-T- \nP 2-2-0 | 4 credits | Prerequisite: MKTG201 Marketing Management (this minor, S3) [name  \nwritten in sheet: \"Introduction to digital business\"]\n• Marketing minor | 2024 batch | S6 | MGMT211 – Brand Management | L-T-P 2-1-0 | 3  \ncredits | Prerequisite: MKTG201 Marketing Management (this minor, S3) [name written in  \nsheet: \"Introduction to digital business\"]\n• Marketing minor | 2024 batch | S7 | MGMT320 – Marketing Analytics | L-T-P 1-1-0 | 2  \ncredits | Prerequisite: None\n• Marketing minor | 2024 batch | S7 | MGMT307 – Strategy & Decision Making | L-T-P 1-1-0  \n| 2 credits | Prerequisite: None \nMarketing minor – 2025 batch\n• Marketing minor | 2025 batch | S3 | MGMT328 – Foundation of Marketing Management |  \nL-T-P 2-2-0 | 4 credits | Prerequisite: None",
+    "metadata": {
+      "page": 10,
+      "section": "Marketing Minor Courses (Batches 2023-2025)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 43,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 10,
+    "sectionNumber": "Marketing Minor Courses (Batches 2023-2025)",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Marketing minor | 2025 batch | S4 | MGMT302 – Digital and Ecommerce Marketing | L-T-P  \n2-1-0 | 4 credits | Prerequisite: MKTG201 Marketing Management – NOT offered to this  \nbatch [name written in sheet: \"Introduction to digital business\"]\n• Marketing minor | 2025 batch | S5 | MGMT304 – Integrated Marketing Communications |  \nL-T-P 2-1-0 | 3 credits | Prerequisite: None\n• Marketing minor | 2025 batch | S5 | (new course, no code yet) – Services Marketing | L-T-P  \nnot given | 4 credits | Prerequisite: TBD\n• Marketing minor | 2025 batch | S6 | MGMT314 – Sales and Distribution Management | L-T- \nP 2-2-0 | 4 credits | Prerequisite: MKTG201 Marketing Management – NOT offered to this  \nbatch [name written in sheet: \"Introduction to digital business\"]\n• Marketing minor | 2025 batch | Remaining 5 credits: TBD – courses not decided yet \nMarketing minor – 2026 batch",
+    "metadata": {
+      "page": 10,
+      "section": "Marketing Minor Courses (Batches 2023-2025)",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 44,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 11,
+    "sectionNumber": "Marketing & Start-up Minor Courses and Either/Or Choices",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Marketing minor | 2026 batch | S3 | MGMT328 – Foundations of Marketing Management |  \nL-T-P 2-2-0 | 4 credits | Prerequisite: not given\n• Marketing minor | 2026 batch | Remaining 20 credits: TBD – courses not decided yet \nStart-up minor – 2024 batch\n• Start-up minor | 2024 batch | S4 | MGMT326 – Product Development | L-T-P 2-2-0 | 4  \ncredits | Prerequisite: MKTG201 Marketing Management (Marketing minor, S3) [name  \nwritten in sheet: \"Introduction to digital business\"]\n• Start-up minor | 2024 batch | S5 | MGMT336 – Design Thinking for Entrepreneurship | L-T- \nP 2-1-2 | 4 credits | Prerequisite: None\n• Start-up minor | 2024 batch | Remaining 16 credits: TBD – courses not decided yet \nStart-up minor – 2025 batch\n• Start-up minor | 2025 batch | S3 | MGMT330 – Introduction to Financial Accounting (R ) |  \nL-T-P 3-1-0 | 4 credits | Prerequisite: None",
+    "metadata": {
+      "page": 11,
+      "section": "Marketing & Start-up Minor Courses and Either/Or Choices",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 45,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 11,
+    "sectionNumber": "Marketing & Start-up Minor Courses and Either/Or Choices",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Start-up minor | 2025 batch | S3 | MGMT328 – Foundation of Marketing Management | L-T- \nP 2-2-0 | 4 credits | Prerequisite: None\n• Start-up minor | 2025 batch | S5 | MGMT336 – Design Thinking for Entrepreneurship | L-T- \nP 2-1-2 | 4 credits | Prerequisite: not given\n• Start-up minor | 2025 batch | S6 | MGMT213 – Introduction To Fintech | L-T-P 1-1-0 | 2  \ncredits | Prerequisite: None\n• Start-up minor | 2025 batch | Remaining 10 credits: TBD – courses not decided yet \nPART 3 — EITHER/OR (slash) ITEMS IN THE MINORS\n• Psychology minor | 2024, 2025, 2026 batches | S3 | PSYC201 Biological Psychology OR  \nPSYC103 Foundations of Psychology I | 3-1-0 | 4 credits | student takes ONE.",
+    "metadata": {
+      "page": 11,
+      "section": "Marketing & Start-up Minor Courses and Either/Or Choices",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 46,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 11,
+    "sectionNumber": "Marketing & Start-up Minor Courses and Either/Or Choices",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Finance & Marketing minors | 2022 batch | S7 | MGMT203 Business Strategy Simulation |  \nprerequisite: MKTG201 Marketing Management OR MGMT207 Corporate Finance OR  \nFINA201 Financial and Management Accounting (any ONE). The same course is in both  \nminors.\n• Economics minor | 2022 batch | ECON413 Industrial Economics and ECON325 Public  \nEconomics | prerequisite: ECON201 AND (ECON202 OR ECON207). \nPART 4 — DATA ISSUES FOUND (check with the university) \nPrerequisite problems:\n• Psychology minor | 2022 batch | PSYC303 Psychological Testing and Measurement:  \nMATH131 does not exist anywhere in either workbook\n• Psychology minor | 2025 batch | PSYC202 Cognitive Psychology: PSYC101 (Introduction  \nto Psychology) is not offered to the 2025 batch\n• Psychology minor | 2025 batch | PSYC241 Social Psychology: PSYC101 (Introduction to  \nPsychology) is not offered to the 2025 batch",
+    "metadata": {
+      "page": 11,
+      "section": "Marketing & Start-up Minor Courses and Either/Or Choices",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 47,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 11,
+    "sectionNumber": "Marketing & Start-up Minor Courses and Either/Or Choices",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Psychology minor | 2025 batch | PSYC306 Health Psychology: PSYC101 (Introduction to  \nPsychology) is not offered to the 2025 batch\n• Psychology minor | 2026 batch | PSYC202 Cognitive Psychology: PSYC101 (Introduction  \nto Psychology) is not offered to the 2026 batch\n• Psychology minor | 2026 batch | PSYC241 Social Psychology: PSYC101 (Introduction to  \nPsychology) is not offered to the 2026 batch\n• Psychology minor | 2026 batch | PSYC306 Health Psychology: PSYC101 (Introduction to  \nPsychology) is not offered to the 2026 batch",
+    "metadata": {
+      "page": 11,
+      "section": "Marketing & Start-up Minor Courses and Either/Or Choices",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 48,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 12,
+    "sectionNumber": "Minor Prerequisite Data Issues & Discrepancies",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Economics minor | 2022 batch | ECON413 Industrial Economics: ECON202 does not exist  \nanywhere in either workbook\n• Economics minor | 2022 batch | ECON325 Public Economics: ECON202 does not exist  \nanywhere in either workbook\n• Economics minor | 2023 batch | ECON301 International Economics: ECON202 does not  \nexist anywhere in either workbook\n• Economics minor | 2025 batch | ECON316 Digital Economics: ECON201  \n(Microeconomics) is not offered to the 2025 batch\n• Economics minor | 2025 batch | ECON315 Indian Economy: ECON201 (Microeconomics)  \nis not offered to the 2025 batch\n• Economics minor | 2025 batch | ECON301 International Economics: ECON201  \n(Microeconomics) is not offered to the 2025 batch\n• Economics minor | 2025 batch | ECON301 International Economics: ECON202 does not  \nexist anywhere in either workbook",
+    "metadata": {
+      "page": 12,
+      "section": "Minor Prerequisite Data Issues & Discrepancies",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 49,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 12,
+    "sectionNumber": "Minor Prerequisite Data Issues & Discrepancies",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Economics minor | 2026 batch | ECON316 Digital Economics: ECON201  \n(Microeconomics) is not offered to the 2026 batch\n• Economics minor | 2026 batch | ECON315 Indian Economy: ECON201 (Microeconomics)  \nis not offered to the 2026 batch\n• Economics minor | 2026 batch | ECON301 International Economics: ECON201  \n(Microeconomics) is not offered to the 2026 batch\n• Economics minor | 2026 batch | ECON301 International Economics: ECON202 does not  \nexist anywhere in either workbook\n• Finance minor | 2022 batch | FINA333 Fiancial Institutions Markets and Services:  \nMGMT208 (Introduction to Financial Accounting) is not offered to the 2022 batch\n• Finance minor | 2022 batch | MGMT209 Financial Statement Anaylsis: FINA201 does not  \nexist anywhere in either workbook\n• Finance minor | 2022 batch | MGMT203 Business Strategy Simulation: MKMT201 does not  \nexist anywhere in either workbook",
+    "metadata": {
+      "page": 12,
+      "section": "Minor Prerequisite Data Issues & Discrepancies",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 50,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 12,
+    "sectionNumber": "Minor Prerequisite Data Issues & Discrepancies",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Finance minor | 2022 batch | MGMT203 Business Strategy Simulation: FINA201 does not  \nexist anywhere in either workbook\n• Finance minor | 2025 batch | MGMT210 Basics of Investment Management: FINA333  \n(Fiancial Institutions Markets and Services) is not offered to the 2025 batch\n• Finance minor | 2025 batch | MGMT323 Basics of Startup Finance: MGMT207 (Corporate  \nFinance) is not offered to the 2025 batch\n• Marketing minor | 2022 batch | MGMT302 Digital and Ecommerce Marketing: MKTG201  \n(Marketing Management) is not offered to the 2022 batch\n• Marketing minor | 2022 batch | MGMT304 Integrated Marketing Communications:  \nMKTG201 (Marketing Management) is not offered to the 2022 batch\n• Marketing minor | 2022 batch | MGMT314 Sales and distribution management: MKTG201  \n(Marketing Management) is not offered to the 2022 batch",
+    "metadata": {
+      "page": 12,
+      "section": "Minor Prerequisite Data Issues & Discrepancies",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 51,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 12,
+    "sectionNumber": "Minor Prerequisite Data Issues & Discrepancies",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Marketing minor | 2022 batch | MGMT320 Marketing Analytics: MKTG201 (Marketing  \nManagement) is not offered to the 2022 batch\n• Marketing minor | 2022 batch | MGMT305 Services Marketing: MKTG201 (Marketing  \nManagement) is not offered to the 2022 batch\n• Marketing minor | 2022 batch | MGMT211 Brand Management: MKTG201 (Marketing  \nManagement) is not offered to the 2022 batch\n• Marketing minor | 2022 batch | MGMT203 Business Strategy Simulation: MKMT201 does  \nnot exist anywhere in either workbook\n• Marketing minor | 2022 batch | MGMT203 Business Strategy Simulation: MGMT207  \nbelongs to the Finance minor, not this one\n• Marketing minor | 2022 batch | MGMT203 Business Strategy Simulation: FINA201 does  \nnot exist anywhere in either workbook",
+    "metadata": {
+      "page": 12,
+      "section": "Minor Prerequisite Data Issues & Discrepancies",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 52,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 13,
+    "sectionNumber": "Credit Formula Exceptions, Unknown Codes & Course Typos",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Marketing minor | 2025 batch | MGMT302 Digital and Ecommerce Marketing: MKTG201  \n(Marketing Management) is not offered to the 2025 batch\n• Marketing minor | 2025 batch | MGMT314 Sales and Distribution Management: MKTG201  \n(Marketing Management) is not offered to the 2025 batch\n• Start-up minor | 2024 batch | MGMT326 Product Development: MKTG201 belongs to the  \nMarketing minor, not this one \nEither/or choice that affects a later prerequisite:\n• Psychology minor | 2024, 2025, 2026 batches | In S3 the student picks PSYC201 Biological  \nPsychology OR PSYC103 Foundations of Psychology I. PSYC306 Health Psychology (S6)  \nrequires PSYC201, so a student who picks PSYC103 may not meet that prerequisite.  \n<<CONFIRM>> \nUnknown codes that are probably the same course as a prerequisite:",
+    "metadata": {
+      "page": 13,
+      "section": "Credit Formula Exceptions, Unknown Codes & Course Typos",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 53,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 13,
+    "sectionNumber": "Credit Formula Exceptions, Unknown Codes & Course Typos",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Finance minor | 2022 batch | The S3 course \"Financial and Management Accounting  \n(FAMA)\" has no code. Later prerequisites name MGMT208 (Introduction to Financial  \nAccounting) and FINA201; both probably mean this S3 course. <<CONFIRM>>\n• Marketing minor | 2022 batch | The S3 course \"Marketing Management\" has no code. All  \nlater prerequisites name MKTG201, which is Marketing Management in 2023–24, so it is  \nprobably this S3 course. <<CONFIRM>> \nPrerequisite code vs. name mismatches (unlabelled name column):\n• MKTG201 is named \"Introduction to digital business\" in most rows but \"Marketing  \nmanagement\" in others. MKTG201 is Marketing Management in the Marketing minor list.\n• FINA201 is named \"Introduction to Financial Accounting\" (Finance 2022, MGMT209), but  \nin MGMT203 it is \"Financial and Management Accounting\". FINA201 does not appear in  \nany course list.",
+    "metadata": {
+      "page": 13,
+      "section": "Credit Formula Exceptions, Unknown Codes & Course Typos",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 54,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 13,
+    "sectionNumber": "Credit Formula Exceptions, Unknown Codes & Course Typos",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• MKMT201 (in MGMT203) is a typo for MKTG201.\n• Psychology minor prerequisites name PSYC101 (Introduction to Psychology). In the B.Tech  \nDS plan this is the S1 choice \"PSYC101/ECON101\" (2022–24); for 2025 it is PSCY102  \nand for 2026 PSYC105. <<CONFIRM: does a student who chose Economics in S1 lose  \naccess to these Psychology minor courses?>>\n• Economics minor 2025–26 prerequisites still name ECON201 (Microeconomics), though  \nthose batches have ECON208 Microeconomics I instead. \nCredit formula exceptions:\n• Design minor | 2024 batch | CDES217 Making with Reframed Media | L-T-P 2-3-0 would  \ngive 5 credits, sheet says 4 (2025 batch lists it as 2-2-0 = 4).\n• Marketing minor | 2025 batch | MGMT302 Digital and Ecommerce Marketing | L-T-P 2-1-0  \nwould give 3 credits, sheet says 4 (other batches list it as 2-2-0 = 4).",
+    "metadata": {
+      "page": 13,
+      "section": "Credit Formula Exceptions, Unknown Codes & Course Typos",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 55,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 13,
+    "sectionNumber": "Credit Formula Exceptions, Unknown Codes & Course Typos",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• MGMT203 Business Strategy Simulation (2022) | L-T-P 0-0-0, 2 credits (no regular class  \nhours). \nTypos (same course, do not treat as different):\n• \"Fiancial\" / \"Finacial\" = Financial; \"Anaylsis\" = Analysis; \"Instituation\" = Institution;  \n\"Behavourial\" = Behavioural; \"Macroeconomics and Applicants to Indian Economy\" = \"... \nApplications to Indian Economy\"; \"Foundation of Marketing Management\" = \"Foundations  \nof Marketing Management\" (MGMT328); \"Drawing and Moving Images\" (CDES216,  \n2022) and \"Drawing and Moving Image\" (CDES227, 2024) have different codes.\n• \"Designing Futures\" has two codes: CDES712 (2022, 3 credits) and CDES312 (2023, 5  \ncredits).",
+    "metadata": {
+      "page": 13,
+      "section": "Credit Formula Exceptions, Unknown Codes & Course Typos",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 56,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 14,
+    "sectionNumber": "B.Tech Data Science Open/Minor Slot Fit & Compatibility",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Finance 2025 has both MGMT213 Introduction To Fintech (S6) and a new course  \n\"Financial Institutions Markets & Services with Fintech\" (S4). \nPART 5 — DO THE MINOR SEMESTERS FIT THE  \nB.TECH DS MINOR/OPEN SLOTS? \nCredits available for Minor/Open courses in the B.Tech DS plan, per semester:\n• 2022 batch DS plan: S3: 4, S4: 4, S5: 4, S6: 8, S7: 4 (total 24)\n• 2023 batch DS plan: S3: 4, S4: 4, S5: 4, S6: 8, S7: 4 (total 24)\n• 2024 batch DS plan: S3: 4, S4: 4, S5: 4, S6: 8, S7: 4 (total 24)\n• 2025 batch DS plan: S3: 4, S4: 4, S5: 8, S6: 4, S7: 4 (total 24)\n• 2026 batch DS plan: S3: 4, S4: 4, S5: 8, S6: 8 (total 24) \nMinors whose semester-wise credits do NOT match those slots (minor credits vs. DS slot credits):\n• Law minor | 2023 batch | S3: 0 vs 4; S4: 0 vs 4; S6: 9 vs 8; S7: 6 vs 4 (plus 5 credits still  \nTBD)",
+    "metadata": {
+      "page": 14,
+      "section": "B.Tech Data Science Open/Minor Slot Fit & Compatibility",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 57,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 14,
+    "sectionNumber": "B.Tech Data Science Open/Minor Slot Fit & Compatibility",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Law minor | 2024 batch | S3: 6 vs 4; S6: 0 vs 8; S7: 0 vs 4 (plus 10 credits still TBD)\n• Law minor | 2025 batch | S2: 4 vs 0; S3: 3 vs 4; S4: 0 vs 4; S5: 0 vs 8; S6: 0 vs 4; S7: 0 vs 4  \n(plus 17 credits still TBD)\n• Design minor | 2022 batch | S3: 3 vs 4; S4: 0 vs 4; S7: 5 vs 4 (plus 4 credits still TBD)\n• Design minor | 2023 batch | S3: 3 vs 4; S7: 5 vs 4\n• Design minor | 2024 batch | S5: 8 vs 4; S6: 0 vs 8; S7: 0 vs 4 (plus 8 credits still TBD)\n• Design minor | 2025 batch | S4: 0 vs 4; S5: 0 vs 8; S6: 0 vs 4; S7: 0 vs 4 (plus 20 credits still  \nTBD)\n• Psychology minor | 2025 batch | S5: 4 vs 8; S6: 8 vs 4\n• Psychology minor | 2026 batch | S5: 4 vs 8; S7: 4 vs 0\n• Economics minor | 2025 batch | S5: 4 vs 8; S6: 8 vs 4\n• Economics minor | 2026 batch | S5: 4 vs 8; S7: 4 vs 0\n• Finance minor | 2022 batch | S3: 3 vs 4; S4: 3 vs 4; S5: 3 vs 4; S6: 7 vs 8; S7: 8 vs 4",
+    "metadata": {
+      "page": 14,
+      "section": "B.Tech Data Science Open/Minor Slot Fit & Compatibility",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 58,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 14,
+    "sectionNumber": "B.Tech Data Science Open/Minor Slot Fit & Compatibility",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Finance minor | 2023 batch | S3: 3 vs 4; S4: 3 vs 4; S5: 3 vs 4; S6: 11 vs 8\n• Finance minor | 2024 batch | S3: 3 vs 4; S4: 3 vs 4; S5: 6 vs 4\n• Finance minor | 2025 batch | S5: 4 vs 8; S6: 6 vs 4 (plus 10 credits still TBD)\n• Finance minor | 2026 batch | S4: 0 vs 4; S5: 0 vs 8; S6: 0 vs 8 (plus 20 credits still TBD)\n• Marketing minor | 2022 batch | S3: 3 vs 4; S5: 3 vs 4; S6: 4 vs 8; S7: 10 vs 4\n• Marketing minor | 2023 batch | S3: 3 vs 4; S5: 3 vs 4; S6: 10 vs 8\n• Marketing minor | 2024 batch | S3: 3 vs 4; S5: 6 vs 4; S6: 7 vs 8\n• Marketing minor | 2025 batch | S5: 7 vs 8; S7: 0 vs 4 (plus 9 credits still TBD)\n• Marketing minor | 2026 batch | S4: 0 vs 4; S5: 0 vs 8; S6: 0 vs 8 (plus 20 credits still TBD)\n• Start-up minor | 2024 batch | S3: 0 vs 4; S6: 0 vs 8; S7: 0 vs 4 (plus 16 credits still TBD)",
+    "metadata": {
+      "page": 14,
+      "section": "B.Tech Data Science Open/Minor Slot Fit & Compatibility",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
+  },
+  {
+    "chunkIndex": 59,
+    "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+    "documentTitle": "B.Tech Minor Courses",
+    "sourceType": "MINOR_COURSES",
+    "hierarchyLevel": 2,
+    "pageNumber": 14,
+    "sectionNumber": "B.Tech Data Science Open/Minor Slot Fit & Compatibility",
+    "clauseNumber": "",
+    "batchScope": [
+      "2022",
+      "2023",
+      "2024",
+      "2025",
+      "2026"
+    ],
+    "content": "• Start-up minor | 2025 batch | S3: 8 vs 4; S4: 0 vs 4; S5: 4 vs 8; S6: 2 vs 4; S7: 0 vs 4 (plus  \n10 credits still TBD)\n• Fully matching: Psychology 2022–2024, Economics 2022–2023.\n• <<CONFIRM: this sheet is for all B.Tech programmes; can a DS student take a minor  \ncourse in a semester where the DS plan has no Minor/Open slot (e.g. S7 for 2026), or more  \nminor credits in one semester than the slot allows?>>",
+    "metadata": {
+      "page": 14,
+      "section": "B.Tech Data Science Open/Minor Slot Fit & Compatibility",
+      "sourceDoc": "Minor_Courses_for_BTech_Students.xlsx"
+    }
   }
 ]

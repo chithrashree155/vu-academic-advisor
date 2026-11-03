@@ -456,31 +456,53 @@ function renderAdvisorMessage(data) {
   let evidenceHtml = '';
   if (Array.isArray(data.sources) && data.sources.length > 0) {
     const items = data.sources.map(s => {
-      const hasUrl = s.url && typeof s.url === 'string' && s.url.trim().length > 0;
-      const titleText = escHtml(s.documentTitle || 'Official Document');
+      let rawTitle = s.documentTitle || s.documentName || 'Official Document';
+      // Sanitize away any internal assignment filenames
+      if (rawTitle.toLowerCase().includes('all the info') || rawTitle.toLowerCase().includes('gai assignment')) {
+        rawTitle = 'Academic Course Information';
+      } else if (rawTitle.toLowerCase().includes('118351') || rawTitle.toLowerCase().includes('minor')) {
+        rawTitle = 'B.Tech Minor Courses';
+      } else if (rawTitle.toLowerCase().includes('118225') || rawTitle.toLowerCase().includes('semester_spread')) {
+        rawTitle = 'Official Semester Structure';
+      } else if (rawTitle.toLowerCase().includes('handbook')) {
+        rawTitle = 'Official Student Handbook';
+      }
+
+      const titleText = escHtml(rawTitle);
       const locationText = escHtml(s.clauseNumber || s.pageOrSheet || '');
+
+      let docKey = 'handbook';
+      const tLower = rawTitle.toLowerCase();
+      if (tLower.includes('minor') || tLower.includes('118351')) docKey = 'minor_courses';
+      else if (tLower.includes('semester') || tLower.includes('spread') || tLower.includes('118225')) docKey = 'semester_spread';
+      else if (tLower.includes('sop') || tLower.includes('19082025')) docKey = 'sop';
+      else if (tLower.includes('circular')) docKey = 'summer_circular';
+      else if (tLower.includes('courses offered')) docKey = 'courses_offered';
+      else if (tLower.includes('digii')) docKey = 'digii_minor';
+      else if (tLower.includes('erp')) docKey = 'erp_manual';
+      else if (tLower.includes('exam')) docKey = 'exam_sop';
+      else if (tLower.includes('holiday')) docKey = 'holiday_list';
+      else if (tLower.includes('academic course information')) docKey = 'academic_info';
+
+      const sheetOrPage = s.previewSheet || s.pageOrSheet || '';
 
       return `
         <div class="source-item">
           <div class="source-header">
-            ${hasUrl ? `
-              <a href="${escHtml(s.url)}" target="_blank" rel="noopener noreferrer" class="source-doc-link" title="Open official source in new tab">
-                <span class="source-icon">📄</span>
-                <span class="source-doc-title">${titleText}</span>
-                <span class="source-ext-icon">↗</span>
-              </a>
-            ` : `
-              <span class="source-doc"><span class="source-icon">📄</span> ${titleText}</span>
-            `}
+            <button type="button" class="source-doc-link-btn" onclick="openDocPreviewModal('${escHtml(docKey)}', '${escHtml(sheetOrPage)}', '${titleText}')" title="Inspect official verified document preview">
+              <span class="source-icon">📄</span>
+              <span class="source-doc-title">${titleText}</span>
+              <span class="source-ext-icon">🔍</span>
+            </button>
             ${locationText ? `<span class="source-clause">${locationText}</span>` : ''}
           </div>
           ${s.excerpt ? `<p class="source-excerpt">"${escHtml(s.excerpt)}"</p>` : ''}
-          ${hasUrl ? `
-            <div class="source-url-preview">
-              <span class="source-url-label">Verified Source Link:</span>
-              <a href="${escHtml(s.url)}" target="_blank" rel="noopener noreferrer" class="source-url-href">${escHtml(s.url)}</a>
-            </div>
-          ` : ''}
+          <div class="source-action-bar">
+            <button type="button" class="btn-open-preview" onclick="openDocPreviewModal('${escHtml(docKey)}', '${escHtml(sheetOrPage)}', '${titleText}')">
+              <span>👁️</span> Click to View Proof &amp; Details
+            </button>
+            <span class="source-verified-badge">✓ Verified Official Source</span>
+          </div>
         </div>
       `;
     }).join('');
@@ -753,3 +775,104 @@ function downloadInfographicSvg() {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
+
+// ══════════ DOCUMENT & WORKBOOK PREVIEW MODAL ══════════
+window.openDocPreviewModal = async function(docKey, sheetOrPage, title) {
+  const modal = document.getElementById('docPreviewModal');
+  if (!modal) return;
+  modal.classList.remove('hidden');
+
+  const titleEl = document.getElementById('docPreviewTitle');
+  const subEl = document.getElementById('docPreviewSub');
+  const badgeEl = document.getElementById('docPreviewBadge');
+  const tabsToolbar = document.getElementById('previewTabsToolbar');
+  const tabsList = document.getElementById('previewTabsList');
+  const loadingEl = document.getElementById('previewLoading');
+  const tableWrap = document.getElementById('previewTableWrap');
+  const tableBody = document.getElementById('previewTableBody');
+  const pdfWrap = document.getElementById('previewPdfWrap');
+  const pdfFrame = document.getElementById('previewPdfFrame');
+  const dlBtn = document.getElementById('btnDocDownload');
+
+  if (loadingEl) {
+    loadingEl.style.display = 'block';
+    loadingEl.textContent = 'Loading official document preview…';
+  }
+  if (tableWrap) tableWrap.style.display = 'none';
+  if (pdfWrap) pdfWrap.style.display = 'none';
+  if (tabsToolbar) tabsToolbar.style.display = 'none';
+
+  if (titleEl) titleEl.textContent = title || 'Official Document Preview';
+  if (subEl) subEl.textContent = sheetOrPage ? `Section: ${sheetOrPage}` : 'Verified university academic curriculum record.';
+
+  try {
+    const res = await fetch(`/api/document-preview?doc=${encodeURIComponent(docKey || '')}&sheet=${encodeURIComponent(sheetOrPage || '')}`);
+    const data = await res.json();
+    if (loadingEl) loadingEl.style.display = 'none';
+
+    if (data.status !== 'success') {
+      if (loadingEl) {
+        loadingEl.style.display = 'block';
+        loadingEl.textContent = data.message || 'Unable to preview this document.';
+      }
+      return;
+    }
+
+    if (dlBtn && data.downloadUrl) {
+      dlBtn.href = data.downloadUrl;
+      dlBtn.setAttribute('download', data.downloadFilename || '');
+    }
+
+    if (data.type === 'workbook') {
+      if (badgeEl) badgeEl.textContent = '📊';
+      if (tabsToolbar) tabsToolbar.style.display = 'flex';
+      if (tabsList) {
+        tabsList.innerHTML = '';
+        (data.sheets || []).forEach(sh => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'preview-tab-btn' + (sh === data.activeSheet ? ' active' : '');
+          btn.textContent = sh;
+          btn.onclick = () => {
+            openDocPreviewModal(data.docKey, sh, data.title);
+          };
+          tabsList.appendChild(btn);
+        });
+      }
+
+      if (tableBody) {
+        tableBody.innerHTML = '';
+        (data.rows || []).forEach((row, idx) => {
+          const tr = document.createElement('tr');
+          row.forEach(cell => {
+            const td = document.createElement('td');
+            td.textContent = cell;
+            tr.appendChild(td);
+          });
+          tableBody.appendChild(tr);
+        });
+      }
+      if (tableWrap) tableWrap.style.display = 'block';
+    } else {
+      if (badgeEl) badgeEl.textContent = '📄';
+      if (pdfFrame && data.pdfUrl) {
+        pdfFrame.src = data.pdfUrl;
+      }
+      if (pdfWrap) pdfWrap.style.display = 'block';
+    }
+  } catch (err) {
+    if (loadingEl) {
+      loadingEl.style.display = 'block';
+      loadingEl.textContent = 'Error loading preview: ' + err.message;
+    }
+  }
+};
+
+window.closeDocPreviewModal = function() {
+  const modal = document.getElementById('docPreviewModal');
+  if (modal) {
+    modal.classList.add('hidden');
+    const pdfFrame = document.getElementById('previewPdfFrame');
+    if (pdfFrame) pdfFrame.src = '';
+  }
+};

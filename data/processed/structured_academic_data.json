@@ -109,6 +109,16 @@
       "totalChunks": 124,
       "isNew": true,
       "version": "Academic Reading Guide Sept 2026"
+    },
+    {
+      "documentName": "118351_Minor Courses for BTech_Students.xlsx",
+      "documentTitle": "B.Tech Minor Courses",
+      "sourceType": "MINOR_COURSES",
+      "hierarchyLevel": 2,
+      "totalPages": 14,
+      "totalChunks": 60,
+      "isNew": true,
+      "version": "B.Tech Minor Courses Guide Sept 2026"
     }
   ],
   "programs": [

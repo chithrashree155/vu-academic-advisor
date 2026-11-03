@@ -20,7 +20,8 @@ const {
   parseExamEnrollmentSOP,
   parseChatbotFlowchart,
   parseHolidayList,
-  parseAcademicExplanationPDF
+  parseAcademicExplanationPDF,
+  parseMinorCoursesPDF
 } = require('./pdf-parser');
 const { 
   parseSemesterSpreadWorkbook, 
@@ -290,6 +291,24 @@ async function runIngestion(dataDir = path.join(__dirname, '../../../data')) {
       totalChunks: gaiResult.totalChunks,
       isNew: true,
       version: 'Academic Reading Guide Sept 2026'
+    });
+  }
+
+  // NEW DOCUMENT 9: Gai stuff but for minors.pdf (B.Tech Minor Courses Ingestion)
+  const minorPdfPath = path.join(dataDir, 'Gai stuff but for minors.pdf');
+  if (fs.existsSync(minorPdfPath)) {
+    console.log('[15/15] Parsing B.Tech Minor Courses Guide (Gai stuff but for minors.pdf)...');
+    const minorPdfResult = await parseMinorCoursesPDF(minorPdfPath);
+    allChunks.push(...minorPdfResult.chunks);
+    structuredData.documents.push({
+      documentName: '118351_Minor Courses for BTech_Students.xlsx',
+      documentTitle: 'B.Tech Minor Courses',
+      sourceType: 'MINOR_COURSES',
+      hierarchyLevel: 2,
+      totalPages: minorPdfResult.totalPages,
+      totalChunks: minorPdfResult.totalChunks,
+      isNew: true,
+      version: 'B.Tech Minor Courses Guide Sept 2026'
     });
   }
 

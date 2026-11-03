@@ -570,6 +570,154 @@ async function parseAcademicExplanationPDF(filePath) {
   };
 }
 
+/**
+ * Parses the new Minor Courses PDF (Gai stuff but for minors.pdf),
+ * extracted from Minor_Courses_for_BTech_Students.xlsx.
+ * Covers all 7 minors across Batches 2022 to 2026 with full data integrity.
+ */
+async function parseMinorCoursesPDF(filePath) {
+  const dataBuffer = fs.readFileSync(filePath);
+  const pageTexts = [];
+
+  const options = {
+    pagerender: function (pageData) {
+      return pageData.getTextContent().then(function (textContent) {
+        let lastY, text = '';
+        for (let item of textContent.items) {
+          if (lastY === item.transform[5] || !lastY) {
+            text += item.str + ' ';
+          } else {
+            text += '\n' + item.str + ' ';
+          }
+          lastY = item.transform[5];
+        }
+        pageTexts.push({
+          pageNumber: pageTexts.length + 1,
+          text: text.trim()
+        });
+        return text;
+      });
+    }
+  };
+
+  await pdfParse(dataBuffer, options);
+
+  const chunks = [];
+  let chunkIndex = 0;
+
+  for (const page of pageTexts) {
+    const pageNum = page.pageNumber;
+    const raw = page.text || '';
+    if (!raw || raw.length < 20) continue;
+
+    let section = 'B.Tech Minor Courses Guide';
+    let batchScope = ['2022', '2023', '2024', '2025', '2026'];
+    let minorName = null;
+
+    if (pageNum === 1) {
+      section = 'Terms Used in Minor Courses Workbook';
+    } else if (pageNum === 2) {
+      section = 'Minor Availability & Allocation by Batch (Law, Design, Psychology, Economics, Finance, Marketing, Start-up)';
+    } else if (pageNum === 3) {
+      section = 'Law & Design Minor Courses (Batches 2024-2026, 2022)';
+    } else if (pageNum === 4) {
+      section = 'Design & Psychology Minor Courses (Batches 2023-2026, 2022)';
+    } else if (pageNum === 5) {
+      section = 'Psychology Minor Courses (Batches 2023-2026)';
+    } else if (pageNum === 6) {
+      section = 'Psychology & Economics Minor Courses (Batches 2022-2025)';
+    } else if (pageNum === 7) {
+      section = 'Economics & Finance Minor Courses (Batches 2025-2026, 2022-2023)';
+    } else if (pageNum === 8) {
+      section = 'Finance Minor Courses (Batches 2023-2025)';
+    } else if (pageNum === 9) {
+      section = 'Finance & Marketing Minor Courses (Batches 2025-2026, 2022-2023)';
+    } else if (pageNum === 10) {
+      section = 'Marketing Minor Courses (Batches 2023-2025)';
+    } else if (pageNum === 11) {
+      section = 'Marketing & Start-up Minor Courses and Either/Or Choices';
+    } else if (pageNum === 12) {
+      section = 'Minor Prerequisite Data Issues & Discrepancies';
+    } else if (pageNum === 13) {
+      section = 'Credit Formula Exceptions, Unknown Codes & Course Typos';
+    } else if (pageNum === 14) {
+      section = 'B.Tech Data Science Open/Minor Slot Fit & Compatibility';
+    }
+
+    const cleaned = raw.replace(/^\d+\s*---\s*\n?\s*of\s*\d+\s*/i, '').trim();
+    const items = cleaned.split(/\n\s*•\s*/).filter(p => p.trim().length > 15);
+
+    if (items.length <= 1) {
+      chunks.push({
+        chunkIndex: chunkIndex++,
+        documentName: '118351_Minor Courses for BTech_Students.xlsx',
+        documentTitle: 'B.Tech Minor Courses',
+        sourceType: 'MINOR_COURSES',
+        hierarchyLevel: 2,
+        pageNumber: pageNum,
+        sectionNumber: section,
+        clauseNumber: '',
+        batchScope,
+        content: cleaned,
+        metadata: { page: pageNum, section, sourceDoc: 'Minor_Courses_for_BTech_Students.xlsx' }
+      });
+    } else {
+      let cur = '';
+      for (let i = 0; i < items.length; i++) {
+        const item = '• ' + items[i].trim();
+        
+        // Detect batch in bullet
+        const bMatch = item.match(/\b(202[2-6])\b/);
+        const itemBatches = bMatch ? [bMatch[1]] : batchScope;
+
+        if ((cur + '\n' + item).length > 900 && cur.length > 0) {
+          chunks.push({
+            chunkIndex: chunkIndex++,
+            documentName: '118351_Minor Courses for BTech_Students.xlsx',
+            documentTitle: 'B.Tech Minor Courses',
+            sourceType: 'MINOR_COURSES',
+            hierarchyLevel: 2,
+            pageNumber: pageNum,
+            sectionNumber: section,
+            clauseNumber: '',
+            batchScope,
+            content: cur.trim(),
+            metadata: { page: pageNum, section, sourceDoc: 'Minor_Courses_for_BTech_Students.xlsx' }
+          });
+          cur = item;
+        } else {
+          cur = cur ? cur + '\n' + item : item;
+        }
+      }
+      if (cur.trim().length > 0) {
+        chunks.push({
+          chunkIndex: chunkIndex++,
+          documentName: '118351_Minor Courses for BTech_Students.xlsx',
+          documentTitle: 'B.Tech Minor Courses',
+          sourceType: 'MINOR_COURSES',
+          hierarchyLevel: 2,
+          pageNumber: pageNum,
+          sectionNumber: section,
+          clauseNumber: '',
+          batchScope,
+          content: cur.trim(),
+          metadata: { page: pageNum, section, sourceDoc: 'Minor_Courses_for_BTech_Students.xlsx' }
+        });
+      }
+    }
+  }
+
+  return {
+    documentName: '118351_Minor Courses for BTech_Students.xlsx',
+    documentTitle: 'B.Tech Minor Courses',
+    sourceType: 'MINOR_COURSES',
+    hierarchyLevel: 2,
+    totalPages: pageTexts.length,
+    totalChunks: chunks.length,
+    chunks
+  };
+}
+
 module.exports = {
   parseHandbook,
   parseSOP,
@@ -581,6 +729,7 @@ module.exports = {
   parseExamEnrollmentSOP,
   parseChatbotFlowchart,
   parseHolidayList,
-  parseAcademicExplanationPDF
+  parseAcademicExplanationPDF,
+  parseMinorCoursesPDF
 };
 

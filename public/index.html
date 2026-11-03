@@ -724,6 +724,53 @@
     </div>
   </div>
 
+  <!-- ══════════ DOCUMENT & WORKBOOK PREVIEW MODAL ══════════ -->
+  <div class="modal-overlay hidden" id="docPreviewModal" role="dialog" aria-modal="true" aria-labelledby="docPreviewTitle">
+    <div class="modal-card modal-card-xl preview-modal-card">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-icon-badge" id="docPreviewBadge">📖</div>
+          <div>
+            <h3 class="modal-title" id="docPreviewTitle">Official Document Preview</h3>
+            <p class="modal-sub" id="docPreviewSub">Verified university academic curriculum record.</p>
+          </div>
+        </div>
+        <div class="preview-header-actions">
+          <a id="btnDocDownload" href="#" class="btn-primary-sm preview-download-btn" download target="_blank" rel="noopener noreferrer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Original
+          </a>
+          <button class="modal-close" onclick="closeDocPreviewModal()" aria-label="Close preview">✕</button>
+        </div>
+      </div>
+
+      <!-- Sheet Tabs Toolbar for Excel Workbooks -->
+      <div class="preview-tabs-toolbar" id="previewTabsToolbar" style="display: none;">
+        <span class="preview-tabs-label">Sheets:</span>
+        <div class="preview-tabs-list" id="previewTabsList"></div>
+      </div>
+
+      <!-- Preview Body Container -->
+      <div class="preview-body-container" id="previewBodyContainer">
+        <div class="preview-loading" id="previewLoading">Loading document preview…</div>
+        <div class="preview-table-wrap" id="previewTableWrap" style="display: none;">
+          <table class="preview-table" id="previewTable">
+            <tbody id="previewTableBody"></tbody>
+          </table>
+        </div>
+        <div class="preview-pdf-wrap" id="previewPdfWrap" style="display: none;">
+          <iframe id="previewPdfFrame" src="" class="preview-pdf-frame" title="PDF Document Viewer"></iframe>
+        </div>
+      </div>
+
+      <div class="preview-footer">
+        <span class="preview-footer-note" id="previewFooterNote">
+          🔒 <strong>Verified Academic Source:</strong> Displaying authenticated university records. No unauthorized modifications permitted.
+        </span>
+      </div>
+    </div>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>

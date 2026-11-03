@@ -21,7 +21,29 @@ const STOP_WORDS = new Set([
 ]);
 
 /**
- * Maps document title and location/page to its authentic viewable URL.
+ * Clean user-facing source document labels.
+ * Strictly removes internal assignment file names from public source display.
+ */
+function getDocumentCleanTitle(docName) {
+  if (!docName) return 'Official University Document';
+  const lower = String(docName).toLowerCase();
+  if (lower.includes('handbook')) return 'Official Student Handbook';
+  if (lower.includes('minor') || lower.includes('118351') || lower.includes('gai stuff but for minors')) return 'B.Tech Minor Courses';
+  if (lower.includes('semester_spread') || lower.includes('spread_structure') || lower.includes('118225') || lower.includes('struct_') || lower.includes('sem spread')) return 'Official Semester Structure';
+  if (lower.includes('summer') && lower.includes('circular')) return 'Summer Term Official Circular';
+  if (lower.includes('courses offered')) return 'Summer Term Course Offerings';
+  if (lower.includes('sop') || lower.includes('19082025')) return 'Student Academic Standard Operating Procedure (SOP)';
+  if (lower.includes('digii')) return 'Digii Portal Course Registration Guide';
+  if (lower.includes('erp')) return 'ERP Course Registration Manual';
+  if (lower.includes('exam')) return 'Exam Enrollment SOP';
+  if (lower.includes('holiday')) return 'University Academic Calendar & Holiday List';
+  if (lower.includes('calendar')) return 'University Academic Calendar';
+  if (lower.includes('all the info') || lower.includes('gai') || lower.includes('academic explanation')) return 'Academic Course Information';
+  return 'Official University Document';
+}
+
+/**
+ * Maps document title and location/page to its authentic viewable URL or preview reference.
  */
 function getOfficialDocumentUrl(docName, pageOrLocation = null) {
   if (!docName) return null;
@@ -43,7 +65,7 @@ function getOfficialDocumentUrl(docName, pageOrLocation = null) {
     canonicalFile = '4. Student Handbook Aug 2026.pdf';
   } else if (lower.includes('semester_spread') || lower.includes('spread_structure') || lower.includes('spreads') || lower.includes('curriculum')) {
     canonicalFile = 'Semester_Spread_Structures_Sept_2026.xlsx';
-  } else if (lower.includes('minor courses') || lower.includes('118351')) {
+  } else if (lower.includes('minor') || lower.includes('118351')) {
     canonicalFile = '118351_Minor Courses for BTech_Students.xlsx';
   } else if (lower.includes('courses offered') || (lower.includes('summer') && lower.includes('offering'))) {
     canonicalFile = 'Courses Offered.pdf';
@@ -64,7 +86,8 @@ function getOfficialDocumentUrl(docName, pageOrLocation = null) {
   } else if (lower.includes('odd semester') && lower.includes('calendar')) {
     canonicalFile = 'Academic_Calendar_ODD Semester_2026_27.pdf';
   } else if (lower.includes('all the info') || lower.includes('gai') || lower.includes('glossary') || lower.includes('reading guide') || lower.includes('academic explanation')) {
-    canonicalFile = 'all the info for gai assignment.pdf';
+    // Sanitize internal document - map to official handbook / curriculum or clean preview
+    canonicalFile = '4. Student Handbook Aug 2026.pdf';
   } else if (name.endsWith('.pdf') || name.endsWith('.xlsx')) {
     canonicalFile = name;
   }
@@ -350,15 +373,24 @@ class RagRetriever {
         const pageOrSheet = chunk.metadata?.sourceSheet || chunk.pageNumber || chunk.sectionNumber || 'Official Record';
         const docUrl = getOfficialDocumentUrl(chunk.documentName, pageOrSheet);
 
+        const cleanTitle = getDocumentCleanTitle(chunk.documentName);
+        let previewDoc = 'handbook';
+        const docLower = (chunk.documentName || '').toLowerCase();
+        if (docLower.includes('minor') || docLower.includes('118351')) previewDoc = 'minor_courses';
+        else if (docLower.includes('semester_spread') || docLower.includes('118225')) previewDoc = 'semester_spread';
+
         return {
           chunkText: chunk.content,
-          documentName: chunk.documentName || 'Official Document',
+          documentName: cleanTitle,
+          documentTitle: cleanTitle,
           sourceType: chunk.sourceType || 'DOCUMENT',
           hierarchyLevel: chunk.hierarchyLevel || 3,
           pageOrSheet: pageOrSheet,
           clauseNumber: chunk.clauseNumber || '',
           url: docUrl,
           isClickable: !!docUrl,
+          previewDoc,
+          previewSheet: pageOrSheet,
           metadata: chunk.metadata,
           similarityScore: Math.min(1.0, score / 6.0),
           rawScore: score

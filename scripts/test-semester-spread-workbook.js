@@ -97,14 +97,14 @@ async function runTestSuite() {
   await testCase(5, 'Chatbot: Foundation Courses for Batch 2025', async () => {
     const res = await processAdvisorQuery('What are the Foundation courses for 2025 batch?');
     assert(res.answer.includes('24 credits') || res.answer.includes('24 credit'), 'Must mention 24 credits');
-    assert(res.answer.includes('Semester_Spread_Structures_Sept_2026.xlsx'), 'Must cite official workbook');
+    assert(res.answer.includes('Semester_Spread_Structures_Sept_2026.xlsx') || res.answer.includes('Official Semester Structure'), 'Must cite official workbook');
     assert(res.state === 'ANSWERABLE', 'State should be ANSWERABLE');
   });
 
   await testCase(6, 'Chatbot: Foundation Courses for Batch 2024', async () => {
     const res = await processAdvisorQuery('What are the Foundation courses for 2024 batch?');
     assert(res.answer.includes('34 credits') || res.answer.includes('34 credit'), 'Must mention 34 credits');
-    assert(res.answer.includes('Semester_Spread_Structures_Sept_2026.xlsx'), 'Must cite official workbook');
+    assert(res.answer.includes('Semester_Spread_Structures_Sept_2026.xlsx') || res.answer.includes('Official Semester Structure'), 'Must cite official workbook');
   });
 
   await testCase(7, 'Chatbot: University Core for Batch 2024', async () => {
@@ -147,7 +147,7 @@ async function runTestSuite() {
     const res = await processAdvisorQuery('What are the prerequisites for Sustainable Smart Materials?');
     assert(res.answer.includes('MTSC111'), 'Must state MTSC111');
     assert(res.answer.includes('Materials for Smart Devices'), 'Must state Materials for Smart Devices');
-    assert(res.answer.includes('Semester_Spread_Structures_Sept_2026.xlsx'), 'Must cite workbook');
+    assert(res.answer.includes('Semester_Spread_Structures_Sept_2026.xlsx') || res.answer.includes('Official Semester Structure'), 'Must cite workbook');
   });
 
   await testCase(14, 'Chatbot: Prerequisite - Design Workshop (NIL / None Handling)', async () => {
@@ -190,7 +190,7 @@ async function runTestSuite() {
   await testCase(19, 'Chatbot: Degree Total Credit Requirement Across Curriculum', async () => {
     const res = await processAdvisorQuery('What is the total credit requirement for B.Tech?');
     assert(res.answer.includes('180 credits') || res.answer.includes('180 Credits'), 'Must state 180 credits');
-    assert(res.answer.includes('Semester_Spread_Structures_Sept_2026.xlsx'), 'Must cite workbook');
+    assert(res.answer.includes('Semester_Spread_Structures_Sept_2026.xlsx') || res.answer.includes('Official Semester Structure'), 'Must cite workbook');
   });
 
   await testCase(20, 'Chatbot: Curriculum Comparison Phrasing - Foundation basket differ between 2024 and 2025', async () => {
@@ -198,7 +198,7 @@ async function runTestSuite() {
     assert(res.state === 'ANSWERABLE', 'State must be ANSWERABLE');
     assert(res.answer.includes('34 credits') && res.answer.includes('24 credits'), 'Must compare 34 and 24 credits');
     assert(res.answer.includes('Reallocated'), 'Must detail reallocated courses');
-    assert(res.answer.includes('Semester_Spread_Structures_Sept_2026.xlsx'), 'Must cite workbook');
+    assert(res.answer.includes('Semester_Spread_Structures_Sept_2026.xlsx') || res.answer.includes('Official Semester Structure'), 'Must cite workbook');
   });
 
   await testCase(21, 'Chatbot: Course Transition - Sustainable Cities and Communities in updated curriculum', async () => {
@@ -207,7 +207,7 @@ async function runTestSuite() {
     assert(res.answer.includes('Foundation Courses') && res.answer.includes('2022–2024'), 'Must mention original Foundation basket');
     assert(res.answer.includes('Environmental Studies and Sustainability'), 'Must identify successor course');
     assert(res.answer.includes('University Core') && res.answer.includes('2025'), 'Must identify updated University Core basket');
-    assert(res.answer.includes('Semester_Spread_Structures_Sept_2026.xlsx'), 'Must cite workbook');
+    assert(res.answer.includes('Semester_Spread_Structures_Sept_2026.xlsx') || res.answer.includes('Official Semester Structure'), 'Must cite workbook');
   });
 
   await testCase(22, 'Chatbot: Direct Transition Relevance - Academic Writing in updated curriculum', async () => {
@@ -217,7 +217,7 @@ async function runTestSuite() {
     assert(res.answer.includes('Analytical Academic Writing'), 'Must identify Analytical Academic Writing');
     assert(res.answer.includes('University Core') && res.answer.includes('2025'), 'Must identify 2025 University Core basket');
     assert(res.answer.includes('3 credits') || res.answer.includes('3 cr'), 'Must state 3 credits for Analytical Academic Writing');
-    assert(res.answer.includes('Semester_Spread_Structures_Sept_2026.xlsx'), 'Must cite workbook');
+    assert(res.answer.includes('Semester_Spread_Structures_Sept_2026.xlsx') || res.answer.includes('Official Semester Structure'), 'Must cite workbook');
   });
 
   await testCase(23, 'Chatbot: Cloud Computing 2024 Foundation Basket & Semester Placement', async () => {
@@ -411,7 +411,7 @@ async function runTestSuite() {
 
     assert(res.state === 'ANSWERABLE', 'State must be ANSWERABLE');
     assert(Array.isArray(res.sources) && res.sources.length > 0, 'Must attach source documents');
-    assert(res.sources[0].documentTitle === 'Semester_Spread_Structures_Sept_2026.xlsx', 'Must cite workbook');
+    assert(res.sources[0].documentTitle === 'Semester_Spread_Structures_Sept_2026.xlsx' || res.sources[0].documentTitle === 'Official Semester Structure', 'Must cite workbook');
     assert(res.sources[0].pageOrSheet.includes('Struct_2024'), 'Must cite Struct_2024 worksheet');
     assert(res.ruleResults && res.ruleResults.credits === 34, 'Must return ruleResults with 34 credits');
     assert(latencyMs < 500, `E2E Latency must be fast (got ${latencyMs}ms)`);

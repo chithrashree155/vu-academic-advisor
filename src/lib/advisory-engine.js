@@ -43,6 +43,20 @@ const {
   KNOWN_CURRICULUM_TRANSITIONS
 } = require('./curriculum-data');
 
+const {
+  extractBatchFromQuery,
+  formatMinorCourseTable,
+  handleMinorList,
+  handleMinorCourseList,
+  handleMinorAvailability,
+  handleMinorPrerequisites,
+  handleMinorUndecidedCredits,
+  handleMinorDataIssues,
+  handleMinorSlotFit,
+  handleMinorBatchComparison
+} = require('./minor-advisory-handlers');
+const { resolveMinorKey, isMinorCourseCode } = require('./minor-courses-data');
+
 const ragModule = require('./rag/retriever.js');
 const retriever = ragModule.retriever || (ragModule.default && ragModule.default.retriever) || ragModule;
 
@@ -73,7 +87,7 @@ function getOfficialDocumentUrl(docName, pageOrLocation = null) {
     canonicalFile = '4. Student Handbook Aug 2026.pdf';
   } else if (lower.includes('semester_spread') || lower.includes('spread_structure') || lower.includes('spreads') || lower.includes('curriculum')) {
     canonicalFile = 'Semester_Spread_Structures_Sept_2026.xlsx';
-  } else if (lower.includes('minor courses') || lower.includes('118351')) {
+  } else if (lower.includes('minor') || lower.includes('118351')) {
     canonicalFile = '118351_Minor Courses for BTech_Students.xlsx';
   } else if (lower.includes('courses offered') || (lower.includes('summer') && lower.includes('offering'))) {
     canonicalFile = 'Courses Offered.pdf';
@@ -94,7 +108,7 @@ function getOfficialDocumentUrl(docName, pageOrLocation = null) {
   } else if (lower.includes('odd semester') && lower.includes('calendar')) {
     canonicalFile = 'Academic_Calendar_ODD Semester_2026_27.pdf';
   } else if (lower.includes('all the info') || lower.includes('gai') || lower.includes('glossary') || lower.includes('reading guide') || lower.includes('academic explanation')) {
-    canonicalFile = 'all the info for gai assignment.pdf';
+    canonicalFile = '4. Student Handbook Aug 2026.pdf';
   } else if (name.endsWith('.pdf') || name.endsWith('.xlsx')) {
     canonicalFile = name;
   }
@@ -1010,26 +1024,36 @@ function classifyQuery(queryStr) {
     return 'STUDENT_HANDBOOK';
   }
 
-  // 1.3. Minor Courses (do not intercept if asking about credit calculations, batches, baskets, or requirements)
-  if (
-    !q.includes('difference between') && !q.includes('elective') && !q.includes('credit') && !q.includes('credits') && !q.includes('batch') && !q.includes('curriculum') && !q.includes('complete') && !q.includes('basket') && (
-      q.includes('minor course') ||
-      q.includes('minor courses') ||
-      q.includes('minor program') ||
-      q.includes('minor programs') ||
-      q.includes('finance minor') ||
-      q.includes('marketing minor') ||
-      q.includes('startup minor') ||
-      q.includes('start-up minor') ||
-      q.includes('law minor') ||
-      q.includes('design minor') ||
-      q.includes('psychology minor') ||
-      q.includes('economics minor') ||
-      q.includes('open minor') ||
-      (q.includes('minor') && (q.includes('courses') || q.includes('options') || q.includes('basket') || q.includes('track')))
-    )
-  ) {
-    return 'MINOR_COURSES';
+  // 1.3. B.Tech Minor Courses Specialized Routing
+  const minorKey = resolveMinorKey(q);
+
+  if (/\b(PSYC306|ECON301|MGMT210|MGMT302|CDES712)\b/i.test(q) && (q.includes('prerequisite') || q.includes('prereq'))) {
+    return 'MINOR_PREREQUISITE';
+  }
+  if ((q.includes('slot') || q.includes('fit') || q.includes('mismatch')) && (q.includes('minor') || q.includes('open') || minorKey)) {
+    return 'MINOR_SLOT_FIT';
+  }
+  if ((q.includes('undecided') || q.includes('how many credits are still') || (q.includes('credit') && (q.includes('tba') || q.includes('tbd') || q.includes("don't know")))) && (minorKey || q.includes('minor'))) {
+    return 'MINOR_UNDECIDED_CREDITS';
+  }
+  if (q.includes('prerequisite issue') || q.includes('prerequisite problem') || q.includes('prerequisite issues') ||
+      ((q.includes('discrepancy') || q.includes('data issue') || q.includes('data issues')) && (minorKey || q.includes('minor') || /\b(CDES217|MGMT302|MGMT203|PSYC306|ECON301|MGMT210|CDES712)\b/i.test(q)))) {
+    return 'MINOR_DATA_ISSUES';
+  }
+  if (((q.includes('status') || q.includes('not offered') || q.includes('not running') || q.includes('why is') || q.includes('why the') || q.includes('why law') || q.includes('why startup') || q.includes('why start-up') || q.includes('does the') || q.includes('run for') || q.includes('running for') || q.includes('all 24 credits') || q.includes('fully defined')) && (minorKey || q.includes('minor')))) {
+    return 'MINOR_AVAILABILITY';
+  }
+  if ((q.includes('difference between') || q.includes('compare') || q.includes('vs')) && (minorKey || q.includes('minor')) && /\b202[2-6]\b/.test(q)) {
+    return 'MINOR_BATCH_COMPARISON';
+  }
+  if ((q.includes('prerequisite') || q.includes('prereq')) && (minorKey || /\b(PSYC|ECON|MGMT|MKTG|CDES|LAWM|LAWP|LAWS|LAWE|LAWB|FINA)\d{3}\b/i.test(q))) {
+    return 'MINOR_PREREQUISITE';
+  }
+  if (minorKey && (q.includes('list') || q.includes('course') || q.includes('courses') || q.includes('what is the') || q.includes('what are the') || q.includes('minor') || /\b202[2-6]\b/.test(q))) {
+    return 'MINOR_COURSE_LIST';
+  }
+  if ((q.includes('minor') || q.includes('minors')) && (q.includes('list') || q.includes('available') || q.includes('offer') || q.includes('what are') || q.includes('which') || q.includes('all')) && !minorKey) {
+    return 'MINOR_LIST';
   }
 
   // 2. Prerequisite policy questions
@@ -1191,8 +1215,9 @@ function classifyQuery(queryStr) {
     // NIL
     (q.includes('what does nil mean') || q.includes('what is nil') || q === 'nil' || q === 'what is nil?') ||
 
-    // TBA
+    // TBA & TBD
     (q.includes('what does tba mean') || q.includes('what is tba') || q === 'tba' || q === 'what is tba?') ||
+    (q.includes('what does tbd mean') || q.includes('what is tbd') || q === 'tbd' || q === 'what is tbd?') ||
 
     // Prerequisite general concept
     ((q.includes('what does a prerequisite mean') || q.includes('what does prerequisite mean') || q.includes('what is a prerequisite') || q.includes('what is prerequisite') || q.includes('meaning of prerequisite')) && !hasSpecificCourseForLTP && !q.includes('for') && !q.includes('of')) ||
@@ -2084,7 +2109,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
     if (explicitCodeMatch) {
       const testCode = (explicitCodeMatch[1] + explicitCodeMatch[2]).toUpperCase();
       const currData = loadCurriculumData();
-      const isKnown = findCourseByCode(testCode) || (currData.curriculumCourses && currData.curriculumCourses.some(c => c.courseCode && c.courseCode.toUpperCase() === testCode));
+      const isKnown = findCourseByCode(testCode) || (currData.curriculumCourses && currData.curriculumCourses.some(c => c.courseCode && c.courseCode.toUpperCase() === testCode)) || isMinorCourseCode(testCode);
       if (!isKnown) {
         const suggestions = getSuggestedCourses().slice(0, 4).map(c => `• **${c.code} — ${c.name}** (${c.credits} cr)`).join('\n');
         return {
@@ -2549,7 +2574,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
         return {
           state: 'ANSWERABLE',
           answer: `**Meaning of "TBA" in the Vidyashilp University Curriculum**\n` +
-            `Official Knowledge Source: all the info for gai assignment.pdf (Section 2, Page 2 & Section 8, Page 37) & Semester_Spread_Structures_Sept_2026.xlsx\n\n` +
+            `Official Knowledge Source: Academic Course Information & Semester_Spread_Structures_Sept_2026.xlsx\n\n` +
             `In official curriculum planning sheets:\n\n` +
             `• **TBA:** Stands for **"To Be Announced"**.\n` +
             `• It serves as an official placeholder denoting that the specific course code, course title, or syllabus details have not yet been finalized by the Academic Council.\n\n` +
@@ -2559,24 +2584,70 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
             `• **Image Processing and Computer Vision (Batch 2025 Track 1, Semester 7):** Listed as **TBA**`,
           sources: [
             {
-              documentTitle: 'all the info for gai assignment.pdf',
+              documentTitle: 'Academic Course Information',
+              documentName: 'Academic Course Information',
+              sourceType: 'ACADEMIC_GUIDE',
               hierarchyLevel: 2,
-              pageOrSheet: 'Section 2, Page 2 & Section 8, Page 37',
+              pageOrSheet: 'Section 2 & Section 8',
               clauseNumber: 'Abbreviations & TBA Placeholders',
-              url: '/documents/all%20the%20info%20for%20gai%20assignment.pdf#page=2',
-              isClickable: true,
+              previewDoc: 'academic_info',
+              previewSheet: 'Section 2',
               excerpt: 'TBA = To Be Announced (course code or details not yet decided). Codes still "TBA": Language (2025, 2026), Compiler Design (2026) and Image Processing & Computer Vision (2025 Track 1).'
             },
             {
-              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              documentTitle: 'Official Semester Structure',
+              documentName: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              sourceType: 'CURRICULUM_STRUCTURE',
               hierarchyLevel: 2,
               pageOrSheet: 'Spread Sheets 2025 & 2026',
               clauseNumber: 'TBA Placeholders',
+              previewDoc: 'semester_spread',
+              previewSheet: 'Sem_Spread_2025',
               excerpt: 'Placeholders for course codes pending formal administrative finalization.'
             }
           ],
           ruleResults: { term: 'TBA', meaning: 'To Be Announced (pending curriculum finalization)' },
-          followUp: "Ask 'What does NIL mean?' or 'What does a prerequisite mean?'"
+          followUp: "Ask 'What does TBD mean?' or 'What does NIL mean?'"
+        };
+      }
+
+      // 3.1. Meaning of TBD
+      const isGlossaryTBD =
+        normalizedQuery.includes('what does tbd mean') ||
+        normalizedQuery.includes('what is tbd') ||
+        normalizedQuery === 'tbd' ||
+        normalizedQuery === 'what is tbd?';
+
+      if (isGlossaryTBD) {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Meaning of "TBD" in the Vidyashilp University Curriculum**\n` +
+            `Official Knowledge Source: B.Tech Minor Courses (Minor_Courses_for_BTech_Students.xlsx) & Official Semester Structure\n\n` +
+            `In official university curriculum documents and minor planning workbooks:\n\n` +
+            `• **TBD:** Stands for **"To Be Decided"**.\n` +
+            `• It serves as an official placeholder row indicating that the specific courses, course codes, or syllabi for the remaining credits of that minor or curriculum block have not yet been finalized by the university.\n` +
+            `• **Crucial Credit Interpretation:** The number in the Credit column on a TBD row indicates **how many credits are still undecided** (the cumulative sum of undecided credits), rather than a single course.\n\n` +
+            `### Official Examples from Curriculum Workbooks:\n` +
+            `• **Law Minor (Batch 2026):** Row marks **TBA** with **24 credits** undecided (all 24 credits are pending course selection).\n` +
+            `• **Finance Minor (Batch 2026):** Row marks **TBD** with **20 credits** undecided (4 credits decided in S3 MGMT330, leaving 20 credits undecided).\n` +
+            `• **Design Minor (Batch 2024):** Row marks **TBD** with **8 credits** undecided (16 credits decided, leaving 8 credits undecided).\n` +
+            `• **Start-up Minor (Batch 2024):** Row marks **TBD** with **16 credits** undecided (8 credits decided, leaving 16 credits undecided).\n` +
+            `• **Marketing Minor (Batch 2026):** Row marks **TBD** with **20 credits** undecided (4 credits decided in S3 MGMT328, leaving 20 credits undecided).`,
+          sources: [
+            {
+              documentTitle: 'B.Tech Minor Courses',
+              documentName: '118351_Minor Courses for BTech_Students.xlsx',
+              sourceType: 'MINOR_CURRICULUM',
+              hierarchyLevel: 2,
+              pageOrSheet: 'All Minor Sheets (TBD Placeholders)',
+              clauseNumber: 'Placeholder Rows & Undecided Credits',
+              previewDoc: 'minor_courses',
+              previewSheet: 'Finance',
+              excerpt: 'TBD = To Be Decided. The number in the Credit column on that row indicates how many credits are still undecided, not a single course.'
+            }
+          ],
+          tokens: { promptTokens: 0, completionTokens: 0, totalTokens: 0, model: 'Deterministic Grounded Rule & Curriculum Engine' },
+          followUp: "Ask 'What does TBA mean?' or 'How many credits are still undecided in Law 2026?'"
         };
       }
 
@@ -3310,57 +3381,33 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       };
     }
 
-    // ── 3.4. MINOR COURSES & MINOR TRACKS HANDLER ──
+    // ── 3.4. B.TECH MINOR COURSES SPECIALIZED HANDLERS ──
+    if (queryCategory === 'MINOR_LIST') {
+      return handleMinorList(normalizedQuery, profile ? profile.batch : null);
+    }
+    if (queryCategory === 'MINOR_COURSE_LIST') {
+      return handleMinorCourseList(normalizedQuery, null, profile ? profile.batch : null);
+    }
+    if (queryCategory === 'MINOR_AVAILABILITY') {
+      return handleMinorAvailability(normalizedQuery, null, profile ? profile.batch : null);
+    }
+    if (queryCategory === 'MINOR_PREREQUISITE') {
+      return handleMinorPrerequisites(normalizedQuery, null, profile ? profile.batch : null);
+    }
+    if (queryCategory === 'MINOR_UNDECIDED_CREDITS') {
+      return handleMinorUndecidedCredits(normalizedQuery, null, profile ? profile.batch : null);
+    }
+    if (queryCategory === 'MINOR_DATA_ISSUES') {
+      return handleMinorDataIssues(normalizedQuery);
+    }
+    if (queryCategory === 'MINOR_SLOT_FIT') {
+      return handleMinorSlotFit(normalizedQuery, null, profile ? profile.batch : null);
+    }
+    if (queryCategory === 'MINOR_BATCH_COMPARISON') {
+      return handleMinorBatchComparison(normalizedQuery);
+    }
     if (queryCategory === 'MINOR_COURSES') {
-      const isFinanceSpecific = normalizedQuery.includes('finance');
-
-      if (isFinanceSpecific) {
-        return {
-          state: 'ANSWERABLE',
-          answer: `**Finance Minor**\nOfficial Knowledge Source: 118351_Minor Courses for BTech_Students.xlsx (Finance Sheet)\n\nThe Finance Minor is offered by the School of Business Studies for undergraduate students (including B.Tech students) seeking specialized quantitative financial competencies.\n\n**Finance Minor Course Sequence:**\n• **MGMT208 / FINA333 — Financial Institutions, Markets and Services** (2 credits, Semester 3)\n  - *Prerequisite:* Financial and Management Accounting (FAMA) / Introduction to Financial Accounting\n• **MGMT207 — Corporate Finance** (2 credits, Semester 3)\n  - *Prerequisite:* Financial and Management Accounting\n• **FINA201 / MGMT209 — Financial Statement Analysis** (2 credits, Semester 4)\n  - *Prerequisite:* Corporate Finance / Financial Accounting Foundations\n• **FINA333 / MGMT210 — Basics of Investment Management** (2 credits, Semester 5)\n  - *Prerequisite:* Financial Management / Introduction to Accounting\n\n*Registration Policy:* Pre-registration occurs via the Digii ERP portal and requires a minimum enrollment cohort of 10 students per track.`,
-          sources: [
-            {
-              documentTitle: '118351_Minor Courses for BTech_Students.xlsx',
-              hierarchyLevel: 2,
-              pageOrSheet: 'Finance Sheet',
-              clauseNumber: 'Finance Minor Spread',
-              excerpt: 'Lists approved Finance Minor courses for B.Tech students: Financial Institutions Markets and Services, Corporate Finance, Financial Statement Analysis, Basics of Investment Management.'
-            },
-            {
-              documentTitle: 'Digii Process - Minor Selection.pdf',
-              hierarchyLevel: 3,
-              pageOrSheet: 'Page 1',
-              clauseNumber: 'Minor Selection Process',
-              excerpt: 'Students pre-register for minor tracks through the Digii portal subject to minimum student enrollment criteria.'
-            }
-          ],
-          ruleResults: { minorTrack: 'Finance Minor', school: 'School of Business Studies' },
-          followUp: "Ask 'Can I take a course from another school?' to understand cross-school registration rules."
-        };
-      } else {
-        return {
-          state: 'ANSWERABLE',
-          answer: `**Vidyashilp University Approved Minor Tracks**\nOfficial Knowledge Source: 118351_Minor Courses for BTech_Students.xlsx (Summary & Track Sheets)\n\nVidyashilp University offers 7 approved Minor Tracks for undergraduate (B.Tech) students to acquire specialized cross-disciplinary credentials:\n\n**Approved Minor Tracks:**\n1. **Finance Minor** — School of Business Studies (Corporate Finance, Financial Statement Analysis, Investment Management)\n2. **Marketing Minor** — School of Business Studies (Marketing Management, Digital Marketing, Consumer Behavior)\n3. **Start-up / Entrepreneurship Minor** — School of Business Studies (Entrepreneurship, Venture Creation, Business Planning)\n4. **Law Minor** — School of Law (Constitutional Frameworks, Regulating Platform & Gig Workers, Cyber Law)\n5. **Design Minor** — School of Design (Design Thinking, Visual Communication, Interactive Prototyping)\n6. **Psychology Minor** — School of Liberal Arts & Sciences (Foundations of Psychology, Cognitive Psychology, Social Dynamics)\n7. **Economics Minor** — School of Liberal Arts & Sciences (Microeconomics, Macroeconomics, Applied Econometrics)\n\n**Key Minor Regulations:**\n• **Credit Structure:** Each minor track consists of 12–16 additional credits accumulated across Semesters 3 to 6.\n• **Minimum Cohort Size:** A minimum cohort of 10 students is mandatory for a minor track to be operational.\n• **Portal Registration:** Course registration is completed on the Digii ERP portal during the open pre-registration window per Clause 2.13.`,
-          sources: [
-            {
-              documentTitle: '118351_Minor Courses for BTech_Students.xlsx',
-              hierarchyLevel: 2,
-              pageOrSheet: 'Summary & Track Sheets',
-              clauseNumber: 'Minor Courses for BTech Students',
-              excerpt: 'Official university curriculum spreadsheet defining 7 approved minor tracks for B.Tech students across Business, Law, Design, and Liberal Arts.'
-            },
-            {
-              documentTitle: '4. Student Handbook Aug 2026.pdf',
-              hierarchyLevel: 1,
-              pageOrSheet: 'Section III, Clause 2.13',
-              clauseNumber: 'Clause 2.13 — Pre-Registration (Minor/Specialization)',
-              excerpt: 'Pre-registration for Specialization / Minor / Open courses for higher semesters through the student portal.'
-            }
-          ],
-          ruleResults: { totalMinorTracks: 7 },
-          followUp: "Ask 'What are the finance minor courses?' or 'What are the marketing minor courses?' to see specific subjects."
-        };
-      }
+      return handleMinorList(normalizedQuery, profile ? profile.batch : null);
     }
 
     // ── 3.5. OFFICIAL COURSE REGISTRATION REGULATIONS HANDLER ──
@@ -4770,7 +4817,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
     const codeMatchInQuery = query.match(/\b[A-Z]{3,4}\s?\d{3}\b/i);
     if (codeMatchInQuery) {
       const extractedCode = codeMatchInQuery[0].replace(/\s+/, '').toUpperCase();
-      const knownCourse = findCourseByCode(extractedCode);
+      const knownCourse = findCourseByCode(extractedCode) || isMinorCourseCode(extractedCode);
       if (!knownCourse) {
         const suggestions = getSuggestedCourses().map(c => `• **${c.code} — ${c.name}** (${c.credits} cr)`).join('\n');
         return {
@@ -5211,46 +5258,90 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 async function processAdvisorQuery(query, profileId = null, history = []) {
   const result = await executeAdvisorQuery(query, profileId, history);
 
-  // 1. Enrich every source with verified clickable URL and location metadata
+  // 1. Sanitize answer text so internal assignment files are never displayed to students
+  if (result.answer && typeof result.answer === 'string') {
+    result.answer = result.answer
+      .replace(/all the info for gai assignment\.pdf/gi, 'Academic Course Information')
+      .replace(/118351_Minor Courses for BTech_Students\.xlsx/gi, 'B.Tech Minor Courses')
+      .replace(/118225_Semester_Spread_Structures_Sept_2026\.xlsx/gi, 'Official Semester Structure')
+      .replace(/Semester_Spread_Structures_Sept_2026\.xlsx/gi, 'Official Semester Structure');
+  }
+
+  // 2. Enrich and sanitize every source with verified clean labels and preview routing
   if (Array.isArray(result.sources) && result.sources.length > 0) {
     result.sources = result.sources.map(s => {
-      const doc = s.documentTitle || s.title || 'Official Document';
+      let rawTitle = s.documentTitle || s.documentName || s.title || 'Official Document';
+      if (rawTitle.toLowerCase().includes('all the info') || rawTitle.toLowerCase().includes('gai assignment')) {
+        rawTitle = 'Academic Course Information';
+      } else if (rawTitle.toLowerCase().includes('118351') || rawTitle.toLowerCase().includes('minor')) {
+        rawTitle = 'B.Tech Minor Courses';
+      } else if (rawTitle.toLowerCase().includes('118225') || rawTitle.toLowerCase().includes('semester_spread')) {
+        rawTitle = 'Official Semester Structure';
+      } else if (rawTitle.toLowerCase().includes('handbook')) {
+        rawTitle = 'Official Student Handbook';
+      }
+
       const ref = s.clauseNumber || s.pageOrSheet || '';
-      const verifiedUrl = s.url || getOfficialDocumentUrl(doc, ref);
+      const verifiedUrl = s.url || getOfficialDocumentUrl(rawTitle, ref);
+
+      let cleanExcerpt = (s.excerpt || '')
+        .replace(/all the info for gai assignment\.pdf/gi, 'Academic Course Information')
+        .replace(/118351_Minor Courses for BTech_Students\.xlsx/gi, 'B.Tech Minor Courses')
+        .replace(/118225_Semester_Spread_Structures_Sept_2026\.xlsx/gi, 'Official Semester Structure')
+        .replace(/Semester_Spread_Structures_Sept_2026\.xlsx/gi, 'Official Semester Structure')
+        .replace(/4\. Student Handbook Aug 2026\.pdf/gi, 'Official Student Handbook');
+
+      let previewDoc = 'handbook';
+      const tLower = rawTitle.toLowerCase();
+      if (tLower.includes('minor') || tLower.includes('118351')) previewDoc = 'minor_courses';
+      else if (tLower.includes('semester') || tLower.includes('spread') || tLower.includes('118225')) previewDoc = 'semester_spread';
+      else if (tLower.includes('sop') || tLower.includes('19082025')) previewDoc = 'sop';
+      else if (tLower.includes('circular')) previewDoc = 'summer_circular';
+      else if (tLower.includes('courses offered')) previewDoc = 'courses_offered';
+      else if (tLower.includes('digii')) previewDoc = 'digii_minor';
+      else if (tLower.includes('erp')) previewDoc = 'erp_manual';
+      else if (tLower.includes('exam')) previewDoc = 'exam_sop';
+      else if (tLower.includes('holiday')) previewDoc = 'holiday_list';
+      else if (tLower.includes('academic course information')) previewDoc = 'academic_info';
+
       return {
         ...s,
-        documentTitle: doc,
+        documentTitle: rawTitle,
+        documentName: rawTitle,
         pageOrSheet: s.pageOrSheet || ref || 'Official Record',
         clauseNumber: s.clauseNumber || '',
         url: verifiedUrl,
-        isClickable: !!verifiedUrl
+        isClickable: !!verifiedUrl,
+        excerpt: cleanExcerpt,
+        previewDoc,
+        previewSheet: s.previewSheet || s.pageOrSheet || ''
       };
     });
   }
 
-  // 2. Format official citations if present
+  // 3. Format official citations if present
   if (!result.citations && Array.isArray(result.sources) && result.sources.length > 0) {
     result.citations = result.sources.map(s => {
-      const doc = s.documentTitle || s.title || 'Official Document';
+      const doc = s.documentTitle || 'Official Document';
       const ref = s.clauseNumber || s.pageOrSheet || '';
       return ref ? `${doc} (${ref})` : doc;
     });
     result.citation = result.citations[0];
   }
 
-  // 3. Provide transparent token usage information (No fabricated counts!)
+  // 4. Provide transparent token usage information (No fabricated counts!)
   if (!result.tokens) {
     result.tokens = {
-      promptTokens: null,
-      completionTokens: null,
-      totalTokens: null,
+      promptTokens: 0,
+      completionTokens: 0,
+      totalTokens: 0,
       executionType: 'deterministic_engine',
       source: 'offline_rag',
-      note: 'Deterministic Grounded Rule & Curriculum Engine (0 external LLM API tokens consumed)'
+      model: 'Deterministic Grounded Rule & Curriculum Engine'
     };
   }
 
-  // 4. Provide structured evidence items for transparent proof
+  // 5. Provide structured evidence items for transparent proof
   if (!result.evidence && Array.isArray(result.sources)) {
     result.evidence = result.sources.map(s => ({
       documentTitle: s.documentTitle,

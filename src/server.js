@@ -59,6 +59,145 @@ app.get('/documents/:filename', (req, res) => {
   });
 });
 
+// Interactive Document & Spreadsheet Preview Endpoint (Prevents unwanted auto-downloads)
+app.get('/api/document-preview', (req, res) => {
+  try {
+    const docParam = String(req.query.doc || '').trim();
+    const sheetParam = String(req.query.sheet || '').trim();
+    const pageParam = parseInt(req.query.page, 10) || 1;
+    const lower = docParam.toLowerCase();
+
+    // 1. Minor Courses Workbook
+    if (lower.includes('minor') || lower.includes('118351')) {
+      const xlsx = require('xlsx');
+      const candidatePaths = [
+        path.join(__dirname, '../data/118351_Minor Courses for BTech_Students.xlsx'),
+        path.join(process.cwd(), 'data/118351_Minor Courses for BTech_Students.xlsx'),
+        path.join(__dirname, 'data/118351_Minor Courses for BTech_Students.xlsx'),
+        path.join(__dirname, '../../data/118351_Minor Courses for BTech_Students.xlsx')
+      ];
+      const filePath = candidatePaths.find(p => fs.existsSync(p));
+      if (!filePath) {
+        return res.status(404).json({ status: 'error', message: 'Minor courses workbook not found on server.' });
+      }
+      const wb = xlsx.readFile(filePath);
+      const sheets = wb.SheetNames;
+      let activeSheet = sheets[0];
+      if (sheetParam) {
+        const exact = sheets.find(s => s.toLowerCase() === sheetParam.toLowerCase());
+        const partial = sheets.find(s => s.toLowerCase().includes(sheetParam.toLowerCase()));
+        activeSheet = exact || partial || sheets[0];
+      }
+      const ws = wb.Sheets[activeSheet];
+      const rawRows = xlsx.utils.sheet_to_json(ws, { header: 1 });
+      const cleanRows = rawRows
+        .filter(r => Array.isArray(r) && r.some(c => c !== null && c !== undefined && String(c).trim() !== ''))
+        .map(r => r.map(c => (c === null || c === undefined ? '' : String(c).trim())));
+
+      return res.json({
+        status: 'success',
+        type: 'workbook',
+        docKey: 'minor_courses',
+        title: 'B.Tech Minor Courses',
+        subtitle: `Official Minor Courses Curriculum Sheet: ${activeSheet}`,
+        sheets,
+        activeSheet,
+        rows: cleanRows,
+        totalRows: cleanRows.length,
+        downloadUrl: '/documents/118351_Minor%20Courses%20for%20BTech_Students.xlsx',
+        downloadFilename: 'Minor_Courses_for_BTech_Students.xlsx'
+      });
+    }
+
+    // 2. Semester Spread Structures Workbook
+    if (lower.includes('semester') || lower.includes('spread') || lower.includes('structure') || lower.includes('curriculum')) {
+      const xlsx = require('xlsx');
+      const candidatePaths = [
+        path.join(__dirname, '../Semester_Spread_Structures_Sept_2026.xlsx'),
+        path.join(process.cwd(), 'Semester_Spread_Structures_Sept_2026.xlsx'),
+        path.join(__dirname, '../data/Semester_Spread_Structures_Sept_2026.xlsx'),
+        path.join(process.cwd(), 'data/Semester_Spread_Structures_Sept_2026.xlsx'),
+        path.join(__dirname, '../data/118225_Semester_Spread_Structures_Sept_2026.xlsx'),
+        path.join(process.cwd(), 'data/118225_Semester_Spread_Structures_Sept_2026.xlsx')
+      ];
+      const filePath = candidatePaths.find(p => fs.existsSync(p));
+      if (!filePath) {
+        return res.status(404).json({ status: 'error', message: 'Semester spread workbook not found on server.' });
+      }
+      const wb = xlsx.readFile(filePath);
+      const sheets = wb.SheetNames;
+      let activeSheet = sheets[0];
+      if (sheetParam) {
+        const exact = sheets.find(s => s.toLowerCase() === sheetParam.toLowerCase());
+        const partial = sheets.find(s => s.toLowerCase().includes(sheetParam.toLowerCase()));
+        activeSheet = exact || partial || sheets[0];
+      }
+      const ws = wb.Sheets[activeSheet];
+      const rawRows = xlsx.utils.sheet_to_json(ws, { header: 1 });
+      const cleanRows = rawRows
+        .filter(r => Array.isArray(r) && r.some(c => c !== null && c !== undefined && String(c).trim() !== ''))
+        .map(r => r.map(c => (c === null || c === undefined ? '' : String(c).trim())));
+
+      return res.json({
+        status: 'success',
+        type: 'workbook',
+        docKey: 'semester_spread',
+        title: 'Official Semester Structure',
+        subtitle: `Curriculum Semester Spread Sheet: ${activeSheet}`,
+        sheets,
+        activeSheet,
+        rows: cleanRows,
+        totalRows: cleanRows.length,
+        downloadUrl: '/documents/Semester_Spread_Structures_Sept_2026.xlsx',
+        downloadFilename: 'Semester_Spread_Structures_Sept_2026.xlsx'
+      });
+    }
+
+    // 3. PDF Documents
+    let canonicalPdf = '4. Student Handbook Aug 2026.pdf';
+    let pdfTitle = 'Official Student Handbook';
+    if (lower.includes('sop') || lower.includes('19082025')) {
+      canonicalPdf = 'SOP STUDENT 19082025 - Final.pdf';
+      pdfTitle = 'Student Academic Standard Operating Procedure (SOP)';
+    } else if (lower.includes('courses offered') || (lower.includes('course') && lower.includes('offered'))) {
+      canonicalPdf = 'Courses Offered.pdf';
+      pdfTitle = 'Summer Term Course Offerings';
+    } else if (lower.includes('circular') && lower.includes('summer')) {
+      canonicalPdf = 'Circular - Summer Term June 2026.pdf';
+      pdfTitle = 'Summer Term Official Circular';
+    } else if (lower.includes('digii')) {
+      canonicalPdf = 'Digii Process - Minor Selection.pdf';
+      pdfTitle = 'Digii Portal Course Registration Guide';
+    } else if (lower.includes('erp')) {
+      canonicalPdf = 'ERP Course Registration Manual.pdf';
+      pdfTitle = 'ERP Course Registration Manual';
+    } else if (lower.includes('exam')) {
+      canonicalPdf = 'Exam Enrollment-SOP (1).pdf';
+      pdfTitle = 'Exam Enrollment SOP';
+    } else if (lower.includes('holiday')) {
+      canonicalPdf = 'Holiday List.pdf';
+      pdfTitle = 'University Academic Calendar & Holiday List';
+    } else if (lower.includes('academic_info') || lower.includes('all the info') || lower.includes('gai')) {
+      canonicalPdf = 'Gai stuff but for minors.pdf';
+      pdfTitle = 'Academic Course Information';
+    }
+
+    return res.json({
+      status: 'success',
+      type: 'pdf',
+      docKey: docParam,
+      title: pdfTitle,
+      page: pageParam,
+      pdfUrl: `/documents/${encodeURIComponent(canonicalPdf)}#page=${pageParam}`,
+      downloadUrl: `/documents/${encodeURIComponent(canonicalPdf)}`,
+      downloadFilename: canonicalPdf
+    });
+  } catch (err) {
+    console.error('[API /api/document-preview Error]:', err);
+    res.status(500).json({ status: 'error', message: 'Failed to generate document preview.' });
+  }
+});
+
 // Security guardrail patterns
 const SENSITIVE_PROMPT_PATTERNS = [
   {
