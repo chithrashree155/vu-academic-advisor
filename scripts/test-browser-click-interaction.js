@@ -50,6 +50,9 @@ async function runClickTest() {
       console.log(`[HTTP ${resp.status()}] ${resp.url()}`);
     }
   });
+  page.on('framenavigated', frame => {
+    console.log('[NAVIGATED]', frame.url());
+  });
   page.on('pageerror', err => consoleErrors.push(err.message));
 
   // 1. Navigate to target
@@ -124,6 +127,39 @@ async function runClickTest() {
     return m.classList.contains('hidden') || m.style.display === 'none';
   });
   report(7, 'Modal closes when close button is clicked', isModalClosed);
+
+  // 6b. Test PDF preview (Student Handbook)
+  const pdfClickResult = await page.evaluate(() => {
+    const btns = document.querySelectorAll('.chat-msg-advisor .btn-open-preview');
+    if (btns.length > 1) {
+      btns[1].click();
+      return true;
+    }
+    return false;
+  });
+  if (pdfClickResult) {
+    await page.waitForFunction(() => {
+      const frame = document.getElementById('previewPdfFrame');
+      return frame && frame.src && frame.src.includes('.pdf');
+    }, { timeout: 10000 });
+    await new Promise(r => setTimeout(r, 800));
+    const pdfData = await page.evaluate(() => {
+      const m = document.getElementById('docPreviewModal');
+      const frame = document.getElementById('previewPdfFrame');
+      const pdfWrap = document.getElementById('previewPdfWrap');
+      return {
+        isOpen: !m.classList.contains('hidden'),
+        frameSrc: frame?.src,
+        wrapVisible: pdfWrap?.style.display === 'block'
+      };
+    });
+    report('7b', 'PDF preview (Student Handbook) opens embedded viewer inside modal',
+      pdfData.isOpen && pdfData.wrapVisible && pdfData.frameSrc.includes('.pdf'),
+      `PDF Frame src: ${pdfData.frameSrc}`
+    );
+    await page.click('#docPreviewModal .modal-close');
+    await new Promise(r => setTimeout(r, 400));
+  }
 
   // 7. Verify chatbot conversation remains intact
   const msgCount = await page.evaluate(() => {
