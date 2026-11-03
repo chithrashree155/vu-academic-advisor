@@ -154,7 +154,13 @@ app.get('/api/document-preview', (req, res) => {
     }
 
     // Block access to internal assignment documents
-    if (lower.includes('all the info') || lower.includes('gai assignment') || lower.includes('academic_info')) {
+    if (
+      lower.includes('all the info') ||
+      lower.includes('gai assignment') ||
+      lower.includes('academic_info') ||
+      lower.includes('academic course information') ||
+      lower.includes('academic explanation')
+    ) {
       return res.status(403).json({
         status: 'error',
         message: 'Internal assignment documents cannot be accessed or viewed as official sources.'

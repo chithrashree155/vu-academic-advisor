@@ -5210,6 +5210,7 @@ async function processAdvisorQuery(query, profileId = null, history = []) {
       model: 'Deterministic Grounded Rule & Curriculum Engine'
     };
   }
+  result.tokenUsage = result.tokens;
 
   // 5. Provide structured evidence items for transparent proof
   if (!result.evidence && Array.isArray(result.sources)) {
