@@ -1526,25 +1526,41 @@ body {
   display: none !important;
 }
 
-.modal-backdrop, .drawer-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(11, 25, 44, 0.6);
-  backdrop-filter: blur(4px);
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.modal-backdrop, .drawer-backdrop, .modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(11, 25, 44, 0.75) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  z-index: 99999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+  box-sizing: border-box !important;
 }
 
-.modal-box {
-  background: #ffffff;
-  border-radius: var(--radius-lg);
+.modal-overlay.hidden, .modal-backdrop.hidden, .drawer-backdrop.hidden {
+  display: none !important;
+}
+
+.modal-box, .modal-card {
+  background: #ffffff !important;
+  border-radius: var(--radius-lg) !important;
   width: 90%;
   max-width: 480px;
-  box-shadow: 0 20px 40px rgba(11, 25, 44, 0.2);
-  overflow: hidden;
-  animation: modalIn 0.2s ease;
+  box-shadow: 0 25px 60px rgba(11, 25, 44, 0.45) !important;
+  overflow: hidden !important;
+  animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  position: relative !important;
+  z-index: 100000 !important;
+  pointer-events: auto !important;
 }
 
 @keyframes modalIn {
@@ -2085,11 +2101,18 @@ body {
 
 /* ══════════ DOCUMENT & SPREADSHEET PREVIEW MODAL ══════════ */
 .preview-modal-card {
-  max-width: 95vw;
-  width: 1100px;
-  height: 85vh;
-  display: flex;
-  flex-direction: column;
+  max-width: 95vw !important;
+  width: 1100px !important;
+  height: 85vh !important;
+  max-height: 90vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: #ffffff !important;
+  border-radius: 12px !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4) !important;
+  position: relative !important;
+  z-index: 100000 !important;
+  pointer-events: auto !important;
 }
 
 .preview-header-actions {
@@ -2248,60 +2271,97 @@ body {
   padding: 12px 14px;
   margin-bottom: 10px;
   transition: all 0.15s ease;
+  position: relative;
+  z-index: 1;
 }
 
 .source-item:hover {
   border-color: #0284c7;
   background: #ffffff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.source-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .source-doc-link-btn {
   background: none;
   border: none;
-  padding: 0;
+  padding: 4px 6px;
+  margin: -4px -6px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   font-weight: 600;
   color: #0284c7;
-  cursor: pointer;
+  cursor: pointer !important;
+  pointer-events: auto !important;
   text-align: left;
   font-size: 0.88rem;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.source-doc-link-btn * {
+  pointer-events: none;
 }
 
 .source-doc-link-btn:hover {
   text-decoration: underline;
   color: #0369a1;
+  background: #f0f9ff;
 }
 
 .source-action-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 8px;
-  padding-top: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
   border-top: 1px solid #e2e8f0;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .btn-open-preview {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 4px 10px;
-  font-size: 0.75rem;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
   font-weight: 600;
-  border-radius: 4px;
-  background: #e0f2fe;
-  color: #0369a1;
-  border: 1px solid #bae6fd;
-  cursor: pointer;
+  border-radius: 6px;
+  background: #0284c7;
+  color: #ffffff !important;
+  border: 1px solid #0284c7;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 5;
   transition: all 0.15s ease;
+  box-shadow: 0 1px 3px rgba(2, 132, 199, 0.25);
+  user-select: none;
+  text-decoration: none;
+}
+
+.btn-open-preview * {
+  pointer-events: none;
 }
 
 .btn-open-preview:hover {
-  background: #0284c7;
-  color: #ffffff;
+  background: #0369a1;
+  border-color: #0369a1;
+  box-shadow: 0 3px 8px rgba(3, 105, 161, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-open-preview:active {
+  transform: translateY(0);
 }
 
 .source-verified-badge {

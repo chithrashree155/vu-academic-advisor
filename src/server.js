@@ -21,6 +21,16 @@ app.use(cors());
 app.use(express.json({ limit: '50kb' }));
 app.use(express.static(path.join(__dirname, '../public')));
 
+// Favicon handler
+app.get('/favicon.ico', (req, res) => {
+  const logoPath = path.join(__dirname, '../public/assets/vu-logo.png');
+  if (fs.existsSync(logoPath)) {
+    res.setHeader('Content-Type', 'image/png');
+    return res.sendFile(logoPath);
+  }
+  return res.status(204).end();
+});
+
 // Serve official university curriculum documents (PDFs, Excel spreadsheets)
 const DATA_DIR = path.join(__dirname, '../data');
 app.use('/documents', express.static(DATA_DIR));

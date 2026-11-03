@@ -495,9 +495,9 @@ function renderAdvisorMessage(data) {
       const sheetOrPage = s.previewSheet || s.pageOrSheet || '';
 
       return `
-        <div class="source-item">
+        <div class="source-item" data-doc="${escHtml(docKey)}" data-sheet="${escHtml(sheetOrPage)}" data-title="${escHtml(rawTitle)}">
           <div class="source-header">
-            <button type="button" class="source-doc-link-btn" onclick="openDocPreviewModal('${escHtml(docKey)}', '${escHtml(sheetOrPage)}', '${titleText}')" title="Inspect official verified document preview">
+            <button type="button" class="source-doc-link-btn" data-action="preview-doc" data-doc="${escHtml(docKey)}" data-sheet="${escHtml(sheetOrPage)}" data-title="${escHtml(rawTitle)}" onclick="openDocPreviewModal(this.dataset.doc, this.dataset.sheet, this.dataset.title); return false;" title="Inspect official verified document preview">
               <span class="source-icon">📄</span>
               <span class="source-doc-title">${titleText}</span>
               <span class="source-ext-icon">🔍</span>
@@ -506,8 +506,9 @@ function renderAdvisorMessage(data) {
           </div>
           ${s.excerpt ? `<p class="source-excerpt">"${escHtml(s.excerpt)}"</p>` : ''}
           <div class="source-action-bar">
-            <button type="button" class="btn-open-preview" onclick="openDocPreviewModal('${escHtml(docKey)}', '${escHtml(sheetOrPage)}', '${titleText}')">
-              <span>👁️</span> Click to View Proof &amp; Details
+            <button type="button" class="btn-open-preview" data-action="preview-doc" data-doc="${escHtml(docKey)}" data-sheet="${escHtml(sheetOrPage)}" data-title="${escHtml(rawTitle)}" onclick="openDocPreviewModal(this.dataset.doc, this.dataset.sheet, this.dataset.title); return false;" aria-label="Preview official document ${titleText}">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:3px;"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              Preview Document
             </button>
             <span class="source-verified-badge">✓ Verified Official Source</span>
           </div>
@@ -574,6 +575,10 @@ function renderAdvisorMessage(data) {
 
   history.appendChild(msg);
   history.scrollTop = history.scrollHeight;
+  const chatBody = document.getElementById('chatBody');
+  if (chatBody) {
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
 }
 
 window.toggleEvidence = function(msgId) {
@@ -585,6 +590,15 @@ window.toggleEvidence = function(msgId) {
   drawer.style.display = isCurrentlyHidden ? 'block' : 'none';
   if (arrow) arrow.textContent = isCurrentlyHidden ? '▲' : '▼';
   if (btn) btn.setAttribute('aria-expanded', isCurrentlyHidden ? 'true' : 'false');
+
+  if (isCurrentlyHidden) {
+    const chatBody = document.getElementById('chatBody');
+    if (chatBody) {
+      setTimeout(() => {
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }, 50);
+    }
+  }
 };
 
 function escHtml(str) {
@@ -786,9 +800,17 @@ function downloadInfographicSvg() {
 
 // ══════════ DOCUMENT & WORKBOOK PREVIEW MODAL ══════════
 window.openDocPreviewModal = async function(docKey, sheetOrPage, title) {
+  console.log('[openDocPreviewModal] Opening document preview:', { docKey, sheetOrPage, title });
   const modal = document.getElementById('docPreviewModal');
-  if (!modal) return;
+  if (!modal) {
+    console.error('[openDocPreviewModal] #docPreviewModal not found in DOM');
+    return;
+  }
+
+  // Ensure modal is visible and properly displayed
   modal.classList.remove('hidden');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
 
   const titleEl = document.getElementById('docPreviewTitle');
   const subEl = document.getElementById('docPreviewSub');
@@ -811,7 +833,7 @@ window.openDocPreviewModal = async function(docKey, sheetOrPage, title) {
   if (tabsToolbar) tabsToolbar.style.display = 'none';
 
   if (titleEl) titleEl.textContent = title || 'Official Document Preview';
-  if (subEl) subEl.textContent = sheetOrPage ? `Section: ${sheetOrPage}` : 'Verified university academic curriculum record.';
+  if (subEl) subEl.textContent = sheetOrPage ? `Section / Sheet: ${sheetOrPage}` : 'Verified university academic curriculum record.';
 
   try {
     const res = await fetch(`/api/document-preview?doc=${encodeURIComponent(docKey || '')}&sheet=${encodeURIComponent(sheetOrPage || '')}`);
@@ -880,7 +902,41 @@ window.closeDocPreviewModal = function() {
   const modal = document.getElementById('docPreviewModal');
   if (modal) {
     modal.classList.add('hidden');
-    const pdfFrame = document.getElementById('previewPdfFrame');
-    if (pdfFrame) pdfFrame.src = '';
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
   }
+  const pdfFrame = document.getElementById('previewPdfFrame');
+  if (pdfFrame) pdfFrame.src = '';
 };
+
+// Global Click Delegation to guarantee all preview buttons respond
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('.btn-open-preview, .source-doc-link-btn, [data-action="preview-doc"]');
+  if (btn) {
+    e.preventDefault();
+    e.stopPropagation();
+    const docKey = btn.dataset.doc || btn.getAttribute('data-doc');
+    const sheet = btn.dataset.sheet || btn.getAttribute('data-sheet') || '';
+    const title = btn.dataset.title || btn.getAttribute('data-title') || '';
+    if (typeof window.openDocPreviewModal === 'function') {
+      window.openDocPreviewModal(docKey, sheet, title);
+    }
+    return;
+  }
+
+  // Backdrop click closes the preview modal
+  const previewModal = document.getElementById('docPreviewModal');
+  if (previewModal && !previewModal.classList.contains('hidden') && e.target === previewModal) {
+    window.closeDocPreviewModal();
+  }
+});
+
+// ESC key closes the preview modal
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const previewModal = document.getElementById('docPreviewModal');
+    if (previewModal && !previewModal.classList.contains('hidden')) {
+      window.closeDocPreviewModal();
+    }
+  }
+});
