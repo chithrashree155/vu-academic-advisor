@@ -50,7 +50,7 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--bg-page);
+  background-color: transparent;
   color: var(--text-main);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -76,35 +76,33 @@ body {
   background-size: cover;
   background-position: center 25%;
   background-repeat: no-repeat;
-  filter: saturate(1.08) brightness(1.02);
+  filter: saturate(1.12) contrast(1.04);
   transform: scale(1.01);
 }
 
 .bg-campus-overlay {
   position: absolute;
   inset: 0;
-  /* Soft translucent white overlay that keeps the red brick campus building clearly visible while ensuring text readability */
+  /* Subdued translucent overlay ensuring the Vidyashilp campus building, brickwork, and palm tree remain prominent and vivid */
   background: linear-gradient(
     180deg,
-    rgba(248, 250, 252, 0.74) 0%,
-    rgba(241, 245, 249, 0.80) 35%,
-    rgba(248, 250, 252, 0.85) 70%,
-    rgba(255, 255, 255, 0.89) 100%
+    rgba(248, 250, 252, 0.20) 0%,
+    rgba(241, 245, 249, 0.26) 35%,
+    rgba(248, 250, 252, 0.35) 70%,
+    rgba(255, 255, 255, 0.44) 100%
   );
-  backdrop-filter: blur(1.5px);
-  -webkit-backdrop-filter: blur(1.5px);
 }
 
 .bg-campus-vignette {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 28%, transparent 45%, rgba(15, 23, 42, 0.05) 100%);
+  background: radial-gradient(circle at 50% 28%, transparent 55%, rgba(15, 23, 42, 0.06) 100%);
 }
 
 .bg-grid {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(15, 41, 66, 0.035) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(15, 41, 66, 0.02) 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
@@ -342,7 +340,9 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: var(--vu-blue-light);
+  background: rgba(239, 246, 255, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: var(--vu-blue-primary);
   border: 1px solid #bfdbfe;
   padding: 6px 14px;
@@ -350,6 +350,7 @@ body {
   font-size: 0.8rem;
   font-weight: 600;
   margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(15, 41, 66, 0.06);
 }
 
 .eyebrow-dot {
@@ -366,6 +367,7 @@ body {
   color: var(--vu-blue-dark);
   line-height: 1.15;
   margin-bottom: 16px;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
 }
 
 .hero-title-accent {
@@ -376,10 +378,12 @@ body {
 
 .hero-desc {
   font-size: 1.05rem;
-  color: var(--text-muted);
+  color: #1e293b;
+  font-weight: 500;
   line-height: 1.6;
   margin-bottom: 28px;
   max-width: 580px;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
 }
 
 .hero-actions {
@@ -457,13 +461,13 @@ body {
 
 /* Hero Source Coverage Panel */
 .hero-sources-panel {
-  background: rgba(255, 255, 255, 0.90);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(203, 213, 225, 0.8);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(203, 213, 225, 0.85);
   border-radius: var(--radius-lg);
   padding: 28px;
-  box-shadow: 0 16px 36px -8px rgba(15, 41, 66, 0.08), 0 4px 12px rgba(15, 41, 66, 0.03);
+  box-shadow: 0 16px 40px -8px rgba(15, 41, 66, 0.12), 0 4px 12px rgba(15, 41, 66, 0.04);
 }
 
 .hsp-badge {
@@ -542,12 +546,12 @@ body {
 
 /* Chat Panel (Primary Center Workspace) */
 .chat-panel {
-  background: rgba(255, 255, 255, 0.93);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(203, 213, 225, 0.85);
+  border: 1px solid rgba(203, 213, 225, 0.9);
   border-radius: var(--radius-lg);
-  box-shadow: 0 20px 48px -12px rgba(11, 25, 44, 0.12), 0 4px 16px rgba(11, 25, 44, 0.04);
+  box-shadow: 0 20px 48px -10px rgba(11, 25, 44, 0.14), 0 4px 16px rgba(11, 25, 44, 0.05);
   display: flex;
   flex-direction: column;
   height: 700px;
@@ -556,10 +560,8 @@ body {
 
 .chat-header {
   padding: 18px 24px;
-  border-bottom: 1px solid rgba(226, 232, 240, 0.85);
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -663,7 +665,7 @@ body {
   flex: 1;
   padding: 24px;
   overflow-y: auto;
-  background: rgba(248, 250, 252, 0.70);
+  background: #f8fafc;
   display: flex;
   flex-direction: column;
 }
@@ -1306,13 +1308,13 @@ body {
 
 /* Quick Ask Panel (Right Sidebar) */
 .quick-panel {
-  background: rgba(255, 255, 255, 0.93);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(203, 213, 225, 0.85);
+  border: 1px solid rgba(203, 213, 225, 0.9);
   border-radius: var(--radius-lg);
   padding: 20px;
-  box-shadow: 0 16px 36px -10px rgba(15, 41, 66, 0.08);
+  box-shadow: 0 16px 36px -8px rgba(15, 41, 66, 0.12);
   display: flex;
   flex-direction: column;
 }
@@ -2033,10 +2035,10 @@ body {
   .bg-campus-overlay {
     background: linear-gradient(
       180deg,
-      rgba(248, 250, 252, 0.80) 0%,
-      rgba(241, 245, 249, 0.85) 35%,
-      rgba(248, 250, 252, 0.90) 70%,
-      rgba(255, 255, 255, 0.94) 100%
+      rgba(248, 250, 252, 0.26) 0%,
+      rgba(241, 245, 249, 0.34) 35%,
+      rgba(248, 250, 252, 0.44) 70%,
+      rgba(255, 255, 255, 0.54) 100%
     );
   }
   .chat-panel {
