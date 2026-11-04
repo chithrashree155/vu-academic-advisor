@@ -13,12 +13,12 @@
 </head>
 <body>
 
-  <!-- ══════════ BACKGROUND ══════════ -->
+  <!-- ══════════ VIDYASHILP CAMPUS BACKGROUND & OVERLAY ══════════ -->
   <div class="bg-layer" aria-hidden="true">
+    <div class="bg-campus-photo"></div>
+    <div class="bg-campus-overlay"></div>
+    <div class="bg-campus-vignette"></div>
     <div class="bg-grid"></div>
-    <div class="bg-glow bg-glow-1"></div>
-    <div class="bg-glow bg-glow-2"></div>
-    <div class="bg-glow bg-glow-3"></div>
   </div>
 
   <!-- ══════════ NAVIGATION ══════════ -->
@@ -257,13 +257,26 @@
                 placeholder="Ask about prerequisites, attendance, eligibility, registration rules…"
                 autocomplete="off"
               />
+              <button type="button" id="voiceMicBtn" class="chat-mic-btn" aria-label="Speak your question" title="Speak to VU Advisor (Voice Input)">
+                <svg class="mic-icon-idle" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                  <line x1="12" y1="19" x2="12" y2="22"/>
+                </svg>
+                <span class="mic-listening-pulse" aria-hidden="true"></span>
+              </button>
               <button type="submit" id="submitBtn" class="chat-send-btn" aria-label="Send query">
                 <svg id="btnIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                 <div class="btn-spin hidden" id="spinner"><div class="spin-ring"></div></div>
               </button>
             </div>
           </form>
-          <p class="input-sub-hint">Press <kbd>Enter</kbd> to submit &nbsp;·&nbsp; Answers cite official Vidyashilp University source documents</p>
+          <div id="voiceStatusHint" class="voice-status-hint hidden" role="status" aria-live="polite">
+            <span class="vsh-dot"></span>
+            <span id="voiceStatusText" class="vsh-text">Listening… Speak your question now</span>
+            <button type="button" id="voiceCancelBtn" class="vsh-cancel" title="Cancel listening">✕</button>
+          </div>
+          <p class="input-sub-hint">Press <kbd>Enter</kbd> to submit or click <kbd>🎙️</kbd> to speak &nbsp;·&nbsp; Answers cite official Vidyashilp University source documents</p>
         </div>
       </main>
 

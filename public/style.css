@@ -57,7 +57,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ══════════ BACKGROUND DECORATION ══════════ */
+/* ══════════ VIDYASHILP CAMPUS BACKGROUND & TRANSLUCENT OVERLAY ══════════ */
 .bg-layer {
   position: fixed;
   top: 0;
@@ -69,29 +69,43 @@ body {
   overflow: hidden;
 }
 
+.bg-campus-photo {
+  position: absolute;
+  inset: 0;
+  background-image: url('assets/vu-campus.jpg');
+  background-size: cover;
+  background-position: center 25%;
+  background-repeat: no-repeat;
+  filter: saturate(1.08) brightness(1.02);
+  transform: scale(1.01);
+}
+
+.bg-campus-overlay {
+  position: absolute;
+  inset: 0;
+  /* Soft translucent white overlay that keeps the red brick campus building clearly visible while ensuring text readability */
+  background: linear-gradient(
+    180deg,
+    rgba(248, 250, 252, 0.74) 0%,
+    rgba(241, 245, 249, 0.80) 35%,
+    rgba(248, 250, 252, 0.85) 70%,
+    rgba(255, 255, 255, 0.89) 100%
+  );
+  backdrop-filter: blur(1.5px);
+  -webkit-backdrop-filter: blur(1.5px);
+}
+
+.bg-campus-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 28%, transparent 45%, rgba(15, 23, 42, 0.05) 100%);
+}
+
 .bg-grid {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(15, 41, 66, 0.05) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(15, 41, 66, 0.035) 1px, transparent 1px);
   background-size: 32px 32px;
-}
-
-.bg-glow-1 {
-  position: absolute;
-  top: -200px;
-  right: -200px;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.05) 0%, transparent 70%);
-}
-
-.bg-glow-2 {
-  position: absolute;
-  bottom: -200px;
-  left: -200px;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(139, 0, 0, 0.04) 0%, transparent 70%);
 }
 
 /* ══════════ NAVIGATION BAR ══════════ */
@@ -443,11 +457,13 @@ body {
 
 /* Hero Source Coverage Panel */
 .hero-sources-panel {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.90);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(203, 213, 225, 0.8);
   border-radius: var(--radius-lg);
   padding: 28px;
-  box-shadow: 0 12px 32px rgba(15, 41, 66, 0.05);
+  box-shadow: 0 16px 36px -8px rgba(15, 41, 66, 0.08), 0 4px 12px rgba(15, 41, 66, 0.03);
 }
 
 .hsp-badge {
@@ -526,20 +542,24 @@ body {
 
 /* Chat Panel (Primary Center Workspace) */
 .chat-panel {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.93);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(203, 213, 225, 0.85);
   border-radius: var(--radius-lg);
-  box-shadow: 0 12px 36px rgba(15, 41, 66, 0.04);
+  box-shadow: 0 20px 48px -12px rgba(11, 25, 44, 0.12), 0 4px 16px rgba(11, 25, 44, 0.04);
   display: flex;
   flex-direction: column;
-  height: 680px;
+  height: 700px;
   overflow: hidden;
 }
 
 .chat-header {
   padding: 18px 24px;
-  border-bottom: 1px solid var(--border-subtle);
-  background: #ffffff;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.85);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -643,7 +663,7 @@ body {
   flex: 1;
   padding: 24px;
   overflow-y: auto;
-  background: var(--bg-workspace);
+  background: rgba(248, 250, 252, 0.70);
   display: flex;
   flex-direction: column;
 }
@@ -1113,6 +1133,126 @@ body {
   font-size: 0.92rem;
   color: var(--text-main);
   outline: none;
+  min-width: 0;
+}
+
+/* Voice Input Microphone Button */
+.chat-mic-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  background: #ffffff;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.chat-mic-btn:hover {
+  background: #f1f5f9;
+  color: var(--vu-blue-soft);
+  border-color: #94a3b8;
+  transform: translateY(-1px);
+}
+
+.chat-mic-btn.listening {
+  background: #fee2e2 !important;
+  color: #dc2626 !important;
+  border-color: #f87171 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+}
+
+.mic-listening-pulse {
+  display: none;
+  position: absolute;
+  inset: -4px;
+  border-radius: 10px;
+  border: 2px solid #ef4444;
+  animation: micPulse 1.4s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.chat-mic-btn.listening .mic-listening-pulse {
+  display: block;
+}
+
+@keyframes micPulse {
+  0% { transform: scale(0.95); opacity: 1; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+/* Voice Status Hint Banner */
+.voice-status-hint {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  margin-top: 10px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  color: #991b1b;
+  animation: fadeIn 0.2s ease;
+}
+
+.voice-status-hint.voice-status-info {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1e40af;
+}
+
+.voice-status-hint.voice-status-warning {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #92400e;
+}
+
+.vsh-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  animation: vshBlink 1s infinite alternate;
+  flex-shrink: 0;
+}
+
+.voice-status-info .vsh-dot {
+  background: #3b82f6;
+}
+
+.voice-status-warning .vsh-dot {
+  background: #f59e0b;
+}
+
+@keyframes vshBlink {
+  0% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+.vsh-text {
+  flex: 1;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.vsh-cancel {
+  background: none;
+  border: none;
+  font-size: 0.95rem;
+  color: currentColor;
+  cursor: pointer;
+  padding: 0 4px;
+  opacity: 0.7;
+}
+
+.vsh-cancel:hover {
+  opacity: 1;
 }
 
 .chat-send-btn {
@@ -1166,11 +1306,13 @@ body {
 
 /* Quick Ask Panel (Right Sidebar) */
 .quick-panel {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.93);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(203, 213, 225, 0.85);
   border-radius: var(--radius-lg);
   padding: 20px;
-  box-shadow: 0 12px 32px rgba(15, 41, 66, 0.03);
+  box-shadow: 0 16px 36px -10px rgba(15, 41, 66, 0.08);
   display: flex;
   flex-direction: column;
 }
@@ -1885,6 +2027,32 @@ body {
 }
 
 @media (max-width: 768px) {
+  .bg-campus-photo {
+    background-position: center 15%;
+  }
+  .bg-campus-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(248, 250, 252, 0.80) 0%,
+      rgba(241, 245, 249, 0.85) 35%,
+      rgba(248, 250, 252, 0.90) 70%,
+      rgba(255, 255, 255, 0.94) 100%
+    );
+  }
+  .chat-panel {
+    height: 600px;
+  }
+  .chat-input-wrap {
+    gap: 8px;
+    padding: 6px 6px 6px 12px;
+  }
+  .chat-input {
+    font-size: 0.88rem;
+  }
+  .chat-mic-btn, .chat-send-btn {
+    width: 38px;
+    height: 38px;
+  }
   .nav-links {
     display: none;
   }
@@ -1941,36 +2109,56 @@ body {
 .btn-audio-listen {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  background: rgba(30, 41, 59, 0.05);
-  border: 1px solid rgba(30, 41, 59, 0.15);
+  gap: 6px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
   border-radius: 20px;
-  padding: 4px 11px;
-  font-size: 0.75rem;
+  padding: 5px 12px;
+  font-size: 0.76rem;
   font-weight: 600;
-  color: var(--vu-blue);
+  color: #1e3a8a;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
 }
 
 .btn-audio-listen:hover {
-  background: rgba(136, 19, 55, 0.08);
-  border-color: var(--vu-crimson);
-  color: var(--vu-crimson);
+  background: #e0f2fe;
+  border-color: #0284c7;
+  color: #0369a1;
   transform: translateY(-1px);
 }
 
 .btn-audio-listen.audio-playing {
-  background: #fef2f2;
-  border-color: #ef4444;
-  color: #dc2626;
-  animation: audioPulse 1.2s infinite ease-in-out;
+  background: #fee2e2 !important;
+  border-color: #f87171 !important;
+  color: #b91c1c !important;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.15);
 }
 
-@keyframes audioPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.03); }
+.audio-bars-anim {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 12px;
+}
+
+.audio-bar {
+  width: 2px;
+  height: 100%;
+  background: #dc2626;
+  border-radius: 1px;
+  animation: audioBarWave 1s ease-in-out infinite alternate;
+}
+
+.audio-bar:nth-child(1) { animation-delay: 0.1s; height: 40%; }
+.audio-bar:nth-child(2) { animation-delay: 0.3s; height: 90%; }
+.audio-bar:nth-child(3) { animation-delay: 0.2s; height: 60%; }
+.audio-bar:nth-child(4) { animation-delay: 0.4s; height: 100%; }
+
+@keyframes audioBarWave {
+  0% { transform: scaleY(0.3); }
+  100% { transform: scaleY(1); }
 }
 
 /* Modality A: Course-Structure Infographic Modal */

@@ -20,6 +20,7 @@ function initApp() {
   setupNavigation();
   setupQuickAskButtons();
   setupChatForm();
+  setupVoiceInteraction();
   loadStudentIdList();
 
   // Auto-scroll to advisor if URL has #advisor
@@ -316,6 +317,8 @@ function setupChatForm() {
     if (isSubmitting) return;
     const text = input ? input.value.trim() : '';
     if (text) {
+      if (typeof stopAllAudio === 'function') stopAllAudio();
+      if (typeof stopListening === 'function') stopListening();
       input.value = '';
       sendQuery(text);
     }
@@ -649,57 +652,264 @@ function formatMarkdown(text) {
 }
 
 // ════════════════════════════════════════════════════════════
-// PHASE 8: MULTIMODAL EXTENSION — AUDIO EXPLANATIONS (TTS)
+// VOICE INTERACTION: SPEECH-TO-TEXT (STT) & TEXT-TO-SPEECH (TTS)
+// ════════════════════════════════════════════════════════════
+let recognitionInstance = null;
+let isVoiceListening = false;
+
+function setupVoiceInteraction() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const micBtn = document.getElementById('voiceMicBtn');
+  const input = document.getElementById('queryInput');
+  const statusHint = document.getElementById('voiceStatusHint');
+  const statusText = document.getElementById('voiceStatusText');
+  const cancelBtn = document.getElementById('voiceCancelBtn');
+
+  if (!micBtn || !input) return;
+
+  function showVoiceStatus(msg, type = 'info', autoDismissMs = 0) {
+    if (!statusHint || !statusText) return;
+    statusHint.className = 'voice-status-hint' + (type === 'info' ? ' voice-status-info' : (type === 'warning' ? ' voice-status-warning' : ''));
+    statusText.textContent = msg;
+    statusHint.classList.remove('hidden');
+
+    if (autoDismissMs > 0) {
+      setTimeout(() => {
+        if (statusText.textContent === msg) {
+          statusHint.classList.add('hidden');
+        }
+      }, autoDismissMs);
+    }
+  }
+
+  function hideVoiceStatus() {
+    if (statusHint) statusHint.classList.add('hidden');
+  }
+
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      stopListening();
+      hideVoiceStatus();
+    });
+  }
+
+  if (!SpeechRecognition) {
+    micBtn.addEventListener('click', () => {
+      showVoiceStatus('Voice recognition is not supported in this browser. Please use Google Chrome, Microsoft Edge, or Safari, or type your query.', 'warning', 7000);
+    });
+    return;
+  }
+
+  try {
+    recognitionInstance = new SpeechRecognition();
+    recognitionInstance.continuous = false;
+    recognitionInstance.interimResults = true;
+    recognitionInstance.lang = 'en-IN'; // Prefer Indian English for Vidyashilp University
+    recognitionInstance.maxAlternatives = 1;
+
+    let finalTranscript = '';
+    let originalPlaceholder = '';
+
+    recognitionInstance.onstart = () => {
+      isVoiceListening = true;
+      micBtn.classList.add('listening');
+      micBtn.setAttribute('aria-label', 'Stop listening');
+      originalPlaceholder = input.placeholder;
+      input.placeholder = 'Listening… Speak your question now';
+      showVoiceStatus('Listening… Speak your question clearly into the microphone.');
+    };
+
+    recognitionInstance.onresult = (event) => {
+      let interim = '';
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          finalTranscript += event.results[i][0].transcript;
+        } else {
+          interim += event.results[i][0].transcript;
+        }
+      }
+      const recognized = (finalTranscript || interim).trim();
+      if (recognized) {
+        input.value = recognized;
+      }
+    };
+
+    recognitionInstance.onerror = (event) => {
+      console.warn('[SpeechRecognition] event error:', event.error);
+      stopListening();
+      if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+        showVoiceStatus('Microphone access denied. Please click the permissions icon in your browser URL bar to allow microphone access.', 'warning', 9000);
+      } else if (event.error === 'no-speech') {
+        showVoiceStatus('No speech was detected. Click the microphone to try again.', 'warning', 5000);
+      } else {
+        showVoiceStatus(`Voice input notice (${event.error}). Please click microphone to retry.`, 'warning', 6000);
+      }
+    };
+
+    recognitionInstance.onend = () => {
+      stopListening();
+      if (input.value.trim()) {
+        showVoiceStatus('Speech captured! You can review or edit your query, then press Send or Enter.', 'info', 5000);
+        input.focus();
+      } else {
+        setTimeout(hideVoiceStatus, 2000);
+      }
+    };
+
+    function startListening() {
+      stopAllAudio(); // Prevent TTS from talking over user's speech
+      finalTranscript = '';
+      try {
+        recognitionInstance.start();
+      } catch (err) {
+        console.warn('SpeechRecognition start error:', err);
+      }
+    }
+
+    function stopListening() {
+      isVoiceListening = false;
+      micBtn.classList.remove('listening');
+      micBtn.setAttribute('aria-label', 'Speak your question');
+      if (originalPlaceholder) {
+        input.placeholder = originalPlaceholder;
+      }
+      try {
+        recognitionInstance.stop();
+      } catch (e) {}
+    }
+
+    window.stopListening = stopListening;
+
+    micBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (isVoiceListening) {
+        stopListening();
+        hideVoiceStatus();
+      } else {
+        startListening();
+      }
+    });
+
+  } catch (err) {
+    console.error('Speech recognition initialization failed:', err);
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+// VOICE OUTPUT: TEXT-TO-SPEECH (TTS) WITH ROBUST CHUNKING
 // ════════════════════════════════════════════════════════════
 const advisorResponses = {};
 let currentSpeechBtn = null;
+let speechChunksQueue = [];
+let speechChunkIdx = 0;
+
+function stopAllAudio() {
+  speechChunksQueue = [];
+  speechChunkIdx = 0;
+  if ('speechSynthesis' in window) {
+    try {
+      window.speechSynthesis.cancel();
+    } catch (e) {}
+  }
+  if (currentSpeechBtn) {
+    updateSpeechBtnState(currentSpeechBtn, false);
+    currentSpeechBtn = null;
+  }
+}
+window.stopAllAudio = stopAllAudio;
+
+function getPreferredEnglishVoice() {
+  if (!('speechSynthesis' in window)) return null;
+  const voices = window.speechSynthesis.getVoices() || [];
+  if (!voices.length) return null;
+
+  // 1. Prefer Indian English voice
+  const inVoice = voices.find(v => v.lang === 'en-IN' || (v.name && v.name.toLowerCase().includes('india')));
+  if (inVoice) return inVoice;
+
+  // 2. Prefer natural/neural English voices
+  const naturalVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Neural') || v.name.includes('Google') || v.name.includes('Online')));
+  if (naturalVoice) return naturalVoice;
+
+  // 3. Fallback to any English voice
+  const anyEn = voices.find(v => v.lang.startsWith('en'));
+  return anyEn || voices[0];
+}
 
 function toggleAudioExplanation(msgId) {
   const text = advisorResponses[msgId];
   const btn = document.getElementById(`audioBtn-${msgId}`);
 
-  // Browser Web Speech API check with graceful fallback
+  // Check browser Web Speech API support
   if (!('speechSynthesis' in window)) {
-    alert('Audio playback uses the browser-native Web Speech API. Speech synthesis is not supported on your current browser or device; the full verified text transcript is displayed above.');
+    alert('Audio playback uses the browser-native Web Speech API. Speech synthesis is not supported on your current browser or device; the verified text transcript is displayed above.');
     return;
   }
 
-  // If already speaking this message, stop
-  if (window.speechSynthesis.speaking && currentSpeechBtn === btn) {
-    window.speechSynthesis.cancel();
-    updateSpeechBtnState(btn, false);
-    currentSpeechBtn = null;
+  // If already speaking this message, toggle off / stop
+  if (currentSpeechBtn === btn) {
+    stopAllAudio();
     return;
   }
 
-  // Cancel any other running speech
-  window.speechSynthesis.cancel();
-  if (currentSpeechBtn) {
-    updateSpeechBtnState(currentSpeechBtn, false);
-  }
+  // Stop any other active speech
+  stopAllAudio();
 
   const cleanText = cleanTextForSpeech(text);
   if (!cleanText) return;
 
-  const utterance = new SpeechSynthesisUtterance(cleanText);
+  // Split into sentence chunks under 180 chars to avoid Chromium TTS 15-second hang bug
+  const rawSentences = cleanText.match(/[^.!?]+[.!?]+|\S+$/g) || [cleanText];
+  const chunks = [];
+  let curChunk = '';
+
+  for (const s of rawSentences) {
+    if ((curChunk + ' ' + s).trim().length <= 180) {
+      curChunk = (curChunk + ' ' + s).trim();
+    } else {
+      if (curChunk) chunks.push(curChunk);
+      curChunk = s.trim();
+    }
+  }
+  if (curChunk) chunks.push(curChunk);
+
+  speechChunksQueue = chunks;
+  speechChunkIdx = 0;
+  currentSpeechBtn = btn;
+  updateSpeechBtnState(btn, true);
+
+  playNextSpeechChunk();
+}
+
+function playNextSpeechChunk() {
+  if (speechChunkIdx >= speechChunksQueue.length) {
+    stopAllAudio();
+    return;
+  }
+
+  const chunkText = speechChunksQueue[speechChunkIdx];
+  const utterance = new SpeechSynthesisUtterance(chunkText);
+  const voice = getPreferredEnglishVoice();
+
+  if (voice) {
+    utterance.voice = voice;
+    utterance.lang = voice.lang || 'en-IN';
+  } else {
+    utterance.lang = 'en-IN';
+  }
+
   utterance.rate = 1.0;
   utterance.pitch = 1.0;
-  utterance.lang = 'en-US';
-
-  utterance.onstart = () => {
-    updateSpeechBtnState(btn, true);
-    currentSpeechBtn = btn;
-  };
 
   utterance.onend = () => {
-    updateSpeechBtnState(btn, false);
-    currentSpeechBtn = null;
+    speechChunkIdx++;
+    playNextSpeechChunk();
   };
 
   utterance.onerror = (e) => {
-    console.warn('SpeechSynthesis error:', e);
-    updateSpeechBtnState(btn, false);
-    currentSpeechBtn = null;
+    console.warn('[SpeechSynthesis] utterance error:', e);
+    stopAllAudio();
   };
 
   window.speechSynthesis.speak(utterance);
@@ -709,23 +919,36 @@ function updateSpeechBtnState(btn, isPlaying) {
   if (!btn) return;
   if (isPlaying) {
     btn.classList.add('audio-playing');
-    btn.innerHTML = `<span class="audio-wave">🔊</span> Stop Audio`;
+    btn.innerHTML = `<span class="audio-bars-anim"><span class="audio-bar"></span><span class="audio-bar"></span><span class="audio-bar"></span><span class="audio-bar"></span></span> Stop Audio`;
     btn.setAttribute('aria-label', 'Stop reading explanation');
+    btn.setAttribute('title', 'Stop audio playback');
   } else {
     btn.classList.remove('audio-playing');
     btn.innerHTML = `<span class="audio-icon">🎧</span> Listen to explanation`;
     btn.setAttribute('aria-label', 'Listen to explanation');
+    btn.setAttribute('title', 'Listen to browser audio explanation');
   }
 }
 
 function cleanTextForSpeech(raw) {
   if (!raw) return '';
   return raw
-    .replace(/[*#_`>]/g, '')
+    // Strip markdown links [label](url) -> label
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    // Strip bracketed citations like [Official Student Handbook] or [p. 14]
+    .replace(/\[(?:Official|Student|Semester|B\.Tech|Course|DATA|MATH|ENG|UCOR)[^\]]*\]/gi, '')
+    .replace(/\[(?:p\.\s*\d+|sheet\s*[^\]]+)\]/gi, '')
+    // Expand L-T-P patterns into clean numbers for speech (e.g. 1-0-4 -> 1, 0, 4)
+    .replace(/(\b\d+)-(\d+)-(\d+\b)/g, '$1, $2, $3')
+    // Remove markdown symbols
+    .replace(/[*#_`>~]/g, '')
+    // Convert status indicators into spoken words
     .replace(/✓/g, 'Status: Eligible. ')
     .replace(/❌/g, 'Status: Not eligible. ')
-    .replace(/⚠/g, 'Warning. ')
+    .replace(/⚠/g, 'Notice: ')
+    // Strip raw URLs
     .replace(/https?:\/\/\S+/g, '')
+    // Normalize punctuation & whitespace
     .replace(/\s+/g, ' ')
     .trim();
 }

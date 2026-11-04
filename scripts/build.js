@@ -83,11 +83,13 @@ const htmlPath = path.join(publicDir, 'index.html');
 const cssPath = path.join(publicDir, 'style.css');
 const jsPath = path.join(publicDir, 'app.js');
 const logoPath = path.join(publicDir, 'assets', 'vu-logo.png');
+const campusImgPath = path.join(publicDir, 'assets', 'vu-campus.jpg');
 
 assert(fs.existsSync(htmlPath) && fs.statSync(htmlPath).size > 500, 'public/index.html exists and is non-empty');
 assert(fs.existsSync(cssPath) && fs.statSync(cssPath).size > 500, 'public/style.css exists and is non-empty');
 assert(fs.existsSync(jsPath) && fs.statSync(jsPath).size > 500, 'public/app.js exists and is non-empty');
 assert(fs.existsSync(logoPath) && fs.statSync(logoPath).size > 0, 'public/assets/vu-logo.png exists');
+assert(fs.existsSync(campusImgPath) && fs.statSync(campusImgPath).size > 10000, 'public/assets/vu-campus.jpg exists and verified (>100KB)');
 
 // 4. Knowledge base chunks verification
 console.log('\n4. Validating RAG knowledge base data chunks...');
