@@ -9,6 +9,14 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const { processAdvisorQuery, getStudentProfileById, getStudentIdList } = require('./lib/advisory-engine');
+const {
+  authenticateStudent,
+  validateSession,
+  destroySession,
+  getStudentDashboardData,
+  getStudentHistory,
+  appendStudentHistory
+} = require('./lib/student-auth');
 const { generateCourseInfographic, getSupportedPrograms } = require('./lib/multimodal/infographic');
 const { runAgenticAdvisingWorkflow } = require('./lib/agent/workflow');
 const ragModule = require('./lib/rag/retriever.js');
@@ -243,42 +251,123 @@ const SENSITIVE_PROMPT_PATTERNS = [
   }
 ];
 
-// 1. Secure Student Login / Single Profile Fetch Endpoint
+// ── SECURE AUTHENTICATION & SESSION MIDDLEWARE ──
+function requireStudentAuth(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({
+      status: 'error',
+      message: 'Unauthorized: Missing or invalid Authorization header. Expected Bearer token.'
+    });
+  }
+  const token = authHeader.split(' ')[1];
+  const student = validateSession(token);
+  if (!student) {
+    return res.status(401).json({
+      status: 'error',
+      message: 'Unauthorized: Invalid or expired session token. Please sign in again.'
+    });
+  }
+  req.student = student;
+  req.sessionToken = token;
+  next();
+}
+
+// 1. Password-Protected Student Login Endpoint
 app.post('/api/student/login', (req, res) => {
-  const { studentId } = req.body;
-  if (!studentId || typeof studentId !== 'string') {
-    return res.status(400).json({ status: 'error', message: 'Student ID is required and must be a valid string.' });
+  const { studentId, password } = req.body;
+  if (!studentId || typeof studentId !== 'string' || !password || typeof password !== 'string') {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Student ID and password are required.'
+    });
   }
 
-  // Strict format validation for synthetic student IDs (e.g. VU-DEMO-001)
   const sanitizedId = studentId.trim().toUpperCase();
-  if (!/^VU-[A-Z0-9-]+$/.test(sanitizedId) || sanitizedId.length > 20) {
-    return res.status(400).json({ status: 'error', message: 'Invalid Student ID format. Expected format: VU-DEMO-XXX' });
-  }
-
-  const profile = getStudentProfileById(sanitizedId);
-  if (!profile) {
-    return res.status(404).json({ status: 'error', message: 'Student record not found.' });
+  const authResult = authenticateStudent(sanitizedId, password);
+  if (!authResult) {
+    return res.status(401).json({
+      status: 'error',
+      message: 'Invalid Student ID or password. Please verify your credentials and try again.'
+    });
   }
 
   res.json({
     status: 'success',
-    profile
+    token: authResult.token,
+    student: authResult.student
   });
 });
 
-// 2. Student List for ID selector ONLY (returns ID & Name only, NO private CGPA/attendance/courses)
-app.get('/api/student/list', (req, res) => {
+// 2. Protected Student Profile Endpoint
+app.get('/api/student/profile', requireStudentAuth, (req, res) => {
   res.json({
     status: 'success',
-    students: getStudentIdList()
+    student: req.student
+  });
+});
+
+// 3. Protected Student 3-Section Dashboard Endpoint
+app.get('/api/student/dashboard', requireStudentAuth, (req, res) => {
+  const dashboard = getStudentDashboardData(req.student.id);
+  if (!dashboard) {
+    return res.status(404).json({
+      status: 'error',
+      message: 'Student academic records could not be retrieved.'
+    });
+  }
+  res.json({
+    status: 'success',
+    dashboard
+  });
+});
+
+// 4. Secure Session Logout Endpoint
+app.post('/api/student/logout', (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const token = authHeader.split(' ')[1];
+    destroySession(token);
+  }
+  res.json({
+    status: 'success',
+    message: 'Session destroyed. Logged out successfully.'
+  });
+});
+
+// 5. Protected Isolated Student Chat History Endpoints
+app.get('/api/student/history', requireStudentAuth, (req, res) => {
+  const history = getStudentHistory(req.student.id);
+  res.json({
+    status: 'success',
+    studentId: req.student.id,
+    history
+  });
+});
+
+app.post('/api/student/history', requireStudentAuth, (req, res) => {
+  const { sender, text } = req.body;
+  if (text && typeof text === 'string') {
+    appendStudentHistory(req.student.id, {
+      sender: sender === 'advisor' ? 'advisor' : 'user',
+      text: text.substring(0, 2000)
+    });
+  }
+  res.json({ status: 'success' });
+});
+
+// 6. Public Profile Endpoints: Strictly Disabled for Privacy Protection
+app.get('/api/student/list', (req, res) => {
+  res.status(403).json({
+    status: 'error',
+    message: 'Public student list endpoint is disabled for privacy protection. Authentication required.'
   });
 });
 
 app.get('/api/profiles', (req, res) => {
-  res.json({
-    status: 'success',
-    profiles: getStudentIdList()
+  res.status(403).json({
+    status: 'error',
+    message: 'Public profile listing is disabled for privacy protection. Authentication required.'
   });
 });
 
@@ -360,17 +449,44 @@ app.post('/api/advisory', async (req, res) => {
       }
     }
 
+    // Extract authenticated session if Bearer token is provided
+    let authenticatedStudent = null;
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.split(' ')[1];
+      authenticatedStudent = validateSession(token);
+    }
+
+    // IDENTITY SECURITY ENFORCEMENT:
+    // If Bearer token is provided and valid, bind strictly to that student.
+    // If no Bearer token, callers cannot hijack a secure B.Tech student identity (VU-BTECH-*)
+    let effectiveProfile = null;
+    if (authenticatedStudent) {
+      effectiveProfile = authenticatedStudent;
+    } else if (profileId && !String(profileId).toUpperCase().startsWith('VU-BTECH')) {
+      // Legacy demo compatibility (e.g. VU-DEMO-*)
+      effectiveProfile = getStudentProfileById(profileId);
+    }
+
     // Check if client requested agentic mode
     if (mode === 'agentic') {
-      const result = await runAgenticAdvisingWorkflow(cleanQuery, profileId);
+      const result = await runAgenticAdvisingWorkflow(cleanQuery, effectiveProfile ? effectiveProfile.id : profileId);
       return res.json(result);
     }
 
-    console.log(`[API /api/advisory] Query: "${cleanQuery.substring(0, 80)}" | Profile: ${profileId || 'None'} | History: ${Array.isArray(history) ? history.length : 0}`);
+    console.log(`[API /api/advisory] Query: "${cleanQuery.substring(0, 80)}" | Profile: ${effectiveProfile ? effectiveProfile.id : 'None'} | History: ${Array.isArray(history) ? history.length : 0}`);
     const startTime = Date.now();
-    const result = await processAdvisorQuery(cleanQuery, profileId, history);
+    const result = await processAdvisorQuery(cleanQuery, effectiveProfile, history);
     const latencyMs = Date.now() - startTime;
     console.log(`[API /api/advisory] Success | Latency: ${latencyMs}ms | State: ${result.state} | Sources: ${result.sources ? result.sources.length : 0}`);
+
+    // Persist authenticated student chat history
+    if (authenticatedStudent) {
+      appendStudentHistory(authenticatedStudent.id, { sender: 'user', text: cleanQuery });
+      if (result.answer) {
+        appendStudentHistory(authenticatedStudent.id, { sender: 'advisor', text: result.answer });
+      }
+    }
 
     res.json({
       status: 'success',

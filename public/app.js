@@ -21,7 +21,7 @@ function initApp() {
   setupQuickAskButtons();
   setupChatForm();
   setupVoiceInteraction();
-  loadStudentIdList();
+  checkActiveSession();
 
   // Auto-scroll to advisor if URL has #advisor
   if (window.location.hash === '#advisor') {
@@ -59,31 +59,48 @@ function scrollToAdvisor() {
   if (el) el.scrollIntoView({ behavior: 'smooth' });
 }
 
-// ── STUDENT AUTHENTICATION / ACCESS SYSTEM ──
-async function loadStudentIdList() {
+// ── SECURE STUDENT AUTHENTICATION & ACCESS SYSTEM ──
+async function checkActiveSession() {
+  const token = sessionStorage.getItem('vu_advisor_session_token');
+  if (!token) {
+    updateAuthUI();
+    return;
+  }
   try {
-    const res = await fetch('/api/student/list');
-    const data = await res.json();
-    if (data.status === 'success' && Array.isArray(data.students)) {
-      const selectEl = document.getElementById('studentIdSelect');
-      if (selectEl) {
-        selectEl.innerHTML = '<option value="">-- Select Student ID --</option>';
-        data.students.forEach(st => {
-          const opt = document.createElement('option');
-          opt.value = st.id;
-          opt.textContent = `${st.id} — ${st.display_name} (${st.programName})`;
-          selectEl.appendChild(opt);
-        });
+    const res = await fetch('/api/student/profile', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.status === 'success' && data.student) {
+        activeStudentProfile = data.student;
+        updateAuthUI();
+        await loadStudentHistory();
+        return;
       }
     }
   } catch (err) {
-    console.error('Failed to load student ID list:', err);
+    console.warn('Session verification notice:', err.message);
   }
+  sessionStorage.removeItem('vu_advisor_session_token');
+  activeStudentProfile = null;
+  updateAuthUI();
 }
 
 function openStudentModal() {
   const modal = document.getElementById('studentModal');
+  const errEl = document.getElementById('loginErrorMsg');
+  if (errEl) {
+    errEl.textContent = '';
+    errEl.classList.add('hidden');
+  }
   if (modal) modal.classList.remove('hidden');
+  const idInput = document.getElementById('loginStudentId');
+  if (idInput) {
+    setTimeout(() => {
+      try { idInput.focus(); } catch (_) {}
+    }, 100);
+  }
 }
 
 function closeStudentModal() {
@@ -92,42 +109,132 @@ function closeStudentModal() {
 }
 
 async function handleStudentSignIn(e) {
-  e.preventDefault();
-  const selectVal = document.getElementById('studentIdSelect')?.value;
-  const manualVal = document.getElementById('manualStudentId')?.value?.trim();
-  const targetId = manualVal || selectVal;
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
 
-  if (!targetId) {
-    alert('Please select or enter a Student ID (e.g. VU-DEMO-001).');
+  const idInput = document.getElementById('loginStudentId');
+  const passInput = document.getElementById('loginPassword');
+  const errEl = document.getElementById('loginErrorMsg');
+  const submitBtn = document.getElementById('loginSubmitBtn');
+
+  const studentId = idInput ? idInput.value.trim() : '';
+  const password = passInput ? passInput.value.trim() : '';
+
+  if (errEl) {
+    errEl.textContent = '';
+    errEl.classList.add('hidden');
+  }
+
+  if (!studentId || !password) {
+    if (errEl) {
+      errEl.textContent = 'Please enter both your Student ID and password.';
+      errEl.classList.remove('hidden');
+    }
     return;
+  }
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Verifying credentials…';
   }
 
   try {
     const res = await fetch('/api/student/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ studentId: targetId })
+      body: JSON.stringify({ studentId, password })
     });
     const data = await res.json();
 
-    if (data.status === 'success' && data.profile) {
-      activeStudentProfile = data.profile;
+    if (res.ok && data.status === 'success' && data.token && data.student) {
+      sessionStorage.setItem('vu_advisor_session_token', data.token);
+      activeStudentProfile = data.student;
+
+      if (idInput) idInput.value = '';
+      if (passInput) passInput.value = '';
+
       updateAuthUI();
       closeStudentModal();
+      await loadStudentHistory();
       scrollToAdvisor();
     } else {
-      alert(data.message || 'Invalid Student ID. Please try again.');
+      if (errEl) {
+        errEl.textContent = data.message || 'Invalid Student ID or password. Please verify your credentials.';
+        errEl.classList.remove('hidden');
+      }
     }
   } catch (err) {
     console.error('Sign-in error:', err);
-    alert('Error connecting to server. Please try again.');
+    if (errEl) {
+      errEl.textContent = 'Error connecting to authentication service. Please check your connection and try again.';
+      errEl.classList.remove('hidden');
+    }
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Sign In as Student';
+    }
   }
 }
 
-function signOutStudent() {
+async function signOutStudent() {
+  const token = sessionStorage.getItem('vu_advisor_session_token');
+  if (token) {
+    try {
+      await fetch('/api/student/logout', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+    } catch (_) {}
+  }
+  sessionStorage.removeItem('vu_advisor_session_token');
   activeStudentProfile = null;
   updateAuthUI();
   closeProfileDrawer();
+
+  // Clear chat history UI and in-memory session for privacy isolation
+  chatHistoryStore = [];
+  const historyEl = document.getElementById('chatHistory');
+  if (historyEl) historyEl.innerHTML = '';
+  const welcome = document.getElementById('welcomeState');
+  if (welcome) welcome.classList.remove('hidden');
+}
+
+async function loadStudentHistory() {
+  const token = sessionStorage.getItem('vu_advisor_session_token');
+  if (!token) return;
+
+  try {
+    const res = await fetch('/api/student/history', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.status === 'success' && Array.isArray(data.history)) {
+        chatHistoryStore = [];
+        const historyEl = document.getElementById('chatHistory');
+        if (historyEl) historyEl.innerHTML = '';
+
+        if (data.history.length > 0) {
+          const welcome = document.getElementById('welcomeState');
+          if (welcome) welcome.classList.add('hidden');
+
+          data.history.forEach(item => {
+            chatHistoryStore.push({ sender: item.sender, text: item.text });
+            if (item.sender === 'user') {
+              renderUserMessage(item.text);
+            } else {
+              renderAdvisorMessage({ state: 'ANSWERABLE', answer: item.text, sources: [] });
+            }
+          });
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('Failed to load student history:', err);
+  }
 }
 
 function updateAuthUI() {
@@ -151,14 +258,14 @@ function updateAuthUI() {
 
     if (avatarEl) avatarEl.textContent = initials;
     if (nameEl) nameEl.textContent = activeStudentProfile.display_name;
-    if (progEl) progEl.textContent = activeStudentProfile.program_type || 'Student';
+    if (progEl) progEl.textContent = activeStudentProfile.program_type || 'B.Tech CSE';
 
     if (contextBanner) {
       contextBanner.classList.remove('hidden');
       const scbName = document.getElementById('scbName');
       const scbProg = document.getElementById('scbProg');
       if (scbName) scbName.textContent = activeStudentProfile.display_name;
-      if (scbProg) scbProg.textContent = activeStudentProfile.programName;
+      if (scbProg) scbProg.textContent = `${activeStudentProfile.programName} · Batch ${activeStudentProfile.batch} · Sem ${activeStudentProfile.semester}`;
     }
   } else {
     if (loggedOutWrap) loggedOutWrap.classList.remove('hidden');
@@ -167,8 +274,8 @@ function updateAuthUI() {
   }
 }
 
-// ── MY PROFILE DRAWER ──
-function openProfileDrawer() {
+// ── MY PROFILE DRAWER / 3-SECTION STUDENT DASHBOARD ──
+async function openProfileDrawer() {
   if (!activeStudentProfile) {
     openStudentModal();
     return;
@@ -177,59 +284,119 @@ function openProfileDrawer() {
   const drawer = document.getElementById('profileDrawer');
   if (!drawer) return;
 
-  const p = activeStudentProfile;
-  const initials = p.display_name.split(' ').map(n => n[0]).join('').toUpperCase();
+  const token = sessionStorage.getItem('vu_advisor_session_token');
+  let dash = null;
 
+  if (token) {
+    try {
+      const res = await fetch('/api/student/dashboard', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.status === 'success' && data.dashboard) {
+          dash = data.dashboard;
+        }
+      }
+    } catch (err) {
+      console.warn('Failed to fetch remote dashboard data:', err);
+    }
+  }
+
+  const p = activeStudentProfile;
+  const sInfo = (dash && dash.studentInfo) ? dash.studentInfo : {
+    name: p.display_name,
+    studentId: p.id,
+    program: p.programName,
+    school: p.school,
+    batch: p.batch,
+    semester: `Semester ${p.semester}`,
+    declaredMinor: p.declaredMinor,
+    minorSchool: p.minorSchool,
+    specialisation: p.specialisation || 'Not specified'
+  };
+
+  const aInfo = (dash && dash.academicInfo) ? dash.academicInfo : {
+    enrolledCourses: p.enrolledCourses || []
+  };
+
+  const cOverview = (dash && dash.creditOverview) ? dash.creditOverview : {
+    totalDegreeCreditsRequired: 180,
+    completedCredits: p.completedCredits || 'Not available in local records (refer to ERP)',
+    remainingCredits: p.remainingCredits || 'Not available until completed credits are recorded',
+    minorCreditStructure: p.minorCreditStructure
+  };
+
+  const initials = sInfo.name.split(' ').map(n => n[0]).join('').toUpperCase();
+
+  // Populate Section 1: Student Information
   const dAvatar = document.getElementById('drawerAvatar');
   const dName = document.getElementById('drawerName');
   const dProg = document.getElementById('drawerProg');
   const dId = document.getElementById('drawerId');
+  const dBatch = document.getElementById('drawerBatch');
   const dSem = document.getElementById('drawerSem');
-  const dCgpa = document.getElementById('drawerCgpa');
-  const dAtt = document.getElementById('drawerAtt');
-  const dFeeBadge = document.getElementById('drawerFeeBadge');
+  const dSchool = document.getElementById('drawerSchool');
+  const dMinor = document.getElementById('drawerMinor');
+  const dMinorSchool = document.getElementById('drawerMinorSchool');
+  const dSpec = document.getElementById('drawerSpec');
 
   if (dAvatar) dAvatar.textContent = initials;
-  if (dName) dName.textContent = p.display_name;
-  if (dProg) dProg.textContent = p.programName;
-  if (dId) dId.textContent = p.id;
-  if (dSem) dSem.textContent = `Semester ${p.semester}`;
-  if (dCgpa) dCgpa.textContent = p.cgpa ? p.cgpa.toFixed(2) : 'N/A';
-  if (dAtt) dAtt.textContent = `${p.attendance}%`;
+  if (dName) dName.textContent = sInfo.name;
+  if (dProg) dProg.textContent = sInfo.program;
+  if (dId) dId.textContent = sInfo.studentId;
+  if (dBatch) dBatch.textContent = `Batch ${sInfo.batch}`;
+  if (dSem) dSem.textContent = sInfo.semester;
+  if (dSchool) dSchool.textContent = sInfo.school;
+  if (dMinor) dMinor.textContent = sInfo.declaredMinor;
+  if (dMinorSchool) dMinorSchool.textContent = sInfo.minorSchool;
+  if (dSpec) dSpec.textContent = sInfo.specialisation;
 
-  if (dFeeBadge) {
-    if (p.feeCleared) {
-      dFeeBadge.className = 'status-pill status-good';
-      dFeeBadge.textContent = '✓ Fees Cleared';
-    } else {
-      dFeeBadge.className = 'status-pill status-bad';
-      dFeeBadge.textContent = '⚠ Fees Pending';
-    }
-  }
-
-  // Completed Courses
-  const completedWrap = document.getElementById('drawerCompletedCourses');
-  if (completedWrap) {
-    if (p.completedCourses && p.completedCourses.length > 0) {
-      completedWrap.innerHTML = p.completedCourses.map(c => `
-        <div class="dc-row">
-          <span class="dc-code">${escHtml(c.courseCode)}</span>
-          <span class="dc-name">${escHtml(c.courseName)}</span>
-          <span class="dc-grade">Grade: ${escHtml(c.grade)} (${c.credits} cr)</span>
-        </div>
+  // Populate Section 2: Academic Information (Courses Table)
+  const tbody = document.getElementById('drawerCoursesTableBody');
+  if (tbody) {
+    if (aInfo.enrolledCourses && aInfo.enrolledCourses.length > 0) {
+      tbody.innerHTML = aInfo.enrolledCourses.map(c => `
+        <tr>
+          <td class="dct-code"><strong>${escHtml(c.code)}</strong></td>
+          <td class="dct-title">${escHtml(c.title || c.name)}</td>
+          <td class="dct-ltp"><code>${escHtml(c.ltp)}</code></td>
+          <td class="dct-credits"><span class="badge-credit">${c.credits} cr</span></td>
+          <td class="dct-prereq">${escHtml(c.prerequisite || 'None')}</td>
+        </tr>
       `).join('');
     } else {
-      completedWrap.innerHTML = '<p class="dc-empty">No completed courses recorded.</p>';
+      tbody.innerHTML = '<tr><td colspan="5" class="dct-empty">Standard semester basket enrollment.</td></tr>';
     }
   }
 
-  // Current Courses
-  const currentWrap = document.getElementById('drawerCurrentCourses');
-  if (currentWrap) {
-    if (p.currentCourses && p.currentCourses.length > 0) {
-      currentWrap.innerHTML = p.currentCourses.map(c => `<span class="dc-chip">${escHtml(c)}</span>`).join('');
+  // Populate Section 3: Credit Overview
+  const dCompleted = document.getElementById('drawerCompletedCreds');
+  const dRemaining = document.getElementById('drawerRemainingCreds');
+  const dMinorBadge = document.getElementById('drawerMinorCreditsBadge');
+  const dMinorStatus = document.getElementById('drawerMinorStatusText');
+  const dMinorList = document.getElementById('drawerMinorCoursesList');
+
+  if (dCompleted) dCompleted.textContent = cOverview.completedCredits;
+  if (dRemaining) dRemaining.textContent = cOverview.remainingCredits;
+
+  const mStructure = cOverview.minorCreditStructure;
+  if (dMinorBadge) {
+    dMinorBadge.textContent = `${mStructure ? (mStructure.requiredCredits || mStructure.totalCredits || 24) : 24} Credits`;
+  }
+  if (dMinorStatus) {
+    dMinorStatus.textContent = `${sInfo.declaredMinor} (${sInfo.minorSchool}) · Grounded in Minor_Courses_for_BTech_Students.xlsx`;
+  }
+  if (dMinorList) {
+    const courses = (mStructure && (mStructure.curriculumCourses || mStructure.coursesOffered)) || [];
+    if (courses.length > 0) {
+      dMinorList.innerHTML = courses.map(c => `
+        <span class="msb-course-chip" title="${escHtml(c.name)}">
+          <strong>${escHtml(c.code)}</strong>: ${escHtml(c.name)} (${c.credits} cr)
+        </span>
+      `).join('');
     } else {
-      currentWrap.innerHTML = '<p class="dc-empty">Enrolled in standard semester basket.</p>';
+      dMinorList.innerHTML = '<span class="msb-course-chip">Standard minor basket courses</span>';
     }
   }
 
@@ -239,6 +406,18 @@ function openProfileDrawer() {
 function closeProfileDrawer() {
   const drawer = document.getElementById('profileDrawer');
   if (drawer) drawer.classList.add('hidden');
+}
+
+function askAboutMyCourses() {
+  closeProfileDrawer();
+  scrollToAdvisor();
+  sendQuery('What courses do I have this semester?');
+}
+
+function askAboutMyMinor() {
+  closeProfileDrawer();
+  scrollToAdvisor();
+  sendQuery('What are my minor requirements?');
 }
 
 function askAboutMyEligibility() {
@@ -361,15 +540,20 @@ async function sendQuery(queryText) {
   if (history) history.scrollTop = history.scrollHeight;
 
   try {
+    const token = sessionStorage.getItem('vu_advisor_session_token');
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     const payload = {
       query: queryText,
-      profileId: activeStudentProfile ? activeStudentProfile.id : null,
       history: chatHistoryStore.slice(-6)
     };
 
     const res = await fetch('/api/advisory', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify(payload)
     });
 

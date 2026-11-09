@@ -675,11 +675,29 @@ function getAcademicYear(semester) {
 }
 
 /**
- * Retrieves a single student profile by ID
+ * Retrieves a single student profile by ID or object
  */
 function getStudentProfileById(id) {
   if (!id) return null;
-  const profile = SYNTHETIC_PROFILES.find(p => p.id === id);
+  if (typeof id === 'object' && id.id) {
+    return {
+      ...id,
+      academicYear: id.academicYear || getAcademicYear(id.semester)
+    };
+  }
+  const cleanId = String(id).trim().toUpperCase();
+  try {
+    const { getStudentProfileById: getAuthProfile } = require('./student-auth');
+    const authProfile = getAuthProfile(cleanId);
+    if (authProfile) {
+      return {
+        ...authProfile,
+        academicYear: getAcademicYear(authProfile.semester)
+      };
+    }
+  } catch (err) {}
+
+  const profile = SYNTHETIC_PROFILES.find(p => p.id === cleanId);
   if (!profile) return null;
   return {
     ...profile,
@@ -688,9 +706,20 @@ function getStudentProfileById(id) {
 }
 
 /**
- * Retrieves list of student IDs for sign-in dropdown
+ * Retrieves list of sanitized student profiles (ID, Name, Program only)
  */
 function getStudentIdList() {
+  try {
+    const { ALL_PROFILES } = require('./student-auth');
+    if (Array.isArray(ALL_PROFILES) && ALL_PROFILES.length > 0) {
+      return ALL_PROFILES.map(p => ({
+        id: p.id,
+        display_name: p.display_name,
+        programName: p.programName
+      }));
+    }
+  } catch (err) {}
+
   return SYNTHETIC_PROFILES.map(p => ({
     id: p.id,
     display_name: p.display_name,
@@ -1053,7 +1082,23 @@ function classifyQuery(queryStr) {
   if (minorKey && (q.includes('list') || q.includes('course') || q.includes('courses') || q.includes('what is the') || q.includes('what are the') || q.includes('minor') || /\b202[2-6]\b/.test(q))) {
     return 'MINOR_COURSE_LIST';
   }
-  if ((q.includes('minor') || q.includes('minors')) && (q.includes('list') || q.includes('available') || q.includes('offer') || q.includes('what are') || q.includes('which') || q.includes('all')) && !minorKey) {
+  if (
+    !extractBatchFromQuery(q) && !minorKey && (
+      q.includes('what are my minor requirements') ||
+      q.includes('my minor requirements') ||
+      q.includes('what minor am i taking') ||
+      q.includes('what is my minor') ||
+      q.includes('what minor did i choose') ||
+      q.includes('what minor did i take') ||
+      q.includes('which minor am i doing') ||
+      q.includes('which minor am i taking') ||
+      q.includes('my declared minor') ||
+      q.includes('my minor courses')
+    )
+  ) {
+    return 'MY_MINOR_INFO';
+  }
+  if ((q.includes('minor') || q.includes('minors')) && (q.includes('list') || q.includes('available') || q.includes('offer') || q.includes('what are') || q.includes('which') || q.includes('all')) && !minorKey && !q.includes('my minor') && !q.includes('am i taking') && !q.includes('my declared minor')) {
     return 'MINOR_LIST';
   }
 
@@ -1127,6 +1172,75 @@ function classifyQuery(queryStr) {
     q.includes('courses can i take in summer')
   ) {
     return 'SUMMER_SELECTION';
+  }
+
+  // 8.1. Personal Academic Enrolled Courses Query
+  if (
+    !extractBatchFromQuery(q) && (
+      q.includes('what courses do i have this semester') ||
+      q.includes('what courses do i have') ||
+      q.includes('what are my courses') ||
+      q.includes('my courses this semester') ||
+      q.includes('what courses am i taking') ||
+      q.includes('what courses am i enrolled in') ||
+      q.includes('what am i enrolled in') ||
+      q.includes('my enrolled courses') ||
+      q.includes('my current courses') ||
+      q.includes('my semester courses') ||
+      q.includes('courses for my current semester') ||
+      (q.includes('my courses') && !q.includes('minor'))
+    )
+  ) {
+    return 'MY_CURRENT_COURSES';
+  }
+
+  // 8.2. Personal Minor Information & Requirements Query
+  if (
+    !extractBatchFromQuery(q) && !resolveMinorKey(q) && (
+      q.includes('what are my minor requirements') ||
+      q.includes('my minor requirements') ||
+      q.includes('what minor am i taking') ||
+      q.includes('what is my minor') ||
+      q.includes('what minor did i choose') ||
+      q.includes('what minor did i take') ||
+      q.includes('which minor am i doing') ||
+      q.includes('which minor am i taking') ||
+      q.includes('my declared minor') ||
+      q.includes('my minor courses')
+    )
+  ) {
+    return 'MY_MINOR_INFO';
+  }
+
+  // 8.3. Personal Next Semester Courses Suggestion Query
+  if (
+    !extractBatchFromQuery(q) && (
+      q.includes('what should i take next semester') ||
+      q.includes('what courses should i take next semester') ||
+      q.includes('what to take next semester') ||
+      q.includes('suggest courses for next semester') ||
+      q.includes('my next semester courses') ||
+      q.includes('my next semester') ||
+      q.includes('what do i take next semester')
+    )
+  ) {
+    return 'MY_NEXT_SEMESTER_COURSES';
+  }
+
+  // 8.4. Personal Remaining Credits Query
+  if (
+    !extractBatchFromQuery(q) && (
+      q.includes('how many credits do i still need') ||
+      q.includes('how many credits do i need to graduate') ||
+      q.includes('how many credits remain for me') ||
+      q.includes('how many credits do i have left') ||
+      q.includes('my remaining credits') ||
+      q.includes('how many credits do i still have') ||
+      q.includes('how many more credits do i need') ||
+      q.includes('credits needed for my degree')
+    )
+  ) {
+    return 'MY_CREDITS_NEEDED';
   }
 
   // 9. Prerequisite for a specific course
@@ -3137,11 +3251,151 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
     // ── 3. CLASSIFY QUERY (already initialized) ──
 
+    // ── 3.A. PERSONALISED STUDENT QUERY HANDLERS (AUTHENTICATED SESSION GROUNDED) ──
+    if (queryCategory === 'MY_CURRENT_COURSES') {
+      if (!profile) {
+        return {
+          state: 'NEEDS_CLARIFICATION',
+          answer: "To view your personalized enrolled courses for this semester, please sign in with your Student ID and password using the **Student Sign In** button at the top.",
+          sources: [],
+          ruleResults: { authenticated: false },
+          followUp: "Click 'Student Sign In' to view your current semester courses."
+        };
+      }
+
+      const courses = profile.enrolledCourses || [];
+      const courseRows = courses.map((c, i) =>
+        `${i + 1}. **${c.code} — ${c.name}**\n   • L-T-P: **${c.ltp}** | Credits: **${c.credits} cr** | Prerequisite: **${c.prerequisite}**`
+      ).join('\n\n');
+      const totalCredits = courses.reduce((sum, c) => sum + (c.credits || 0), 0);
+      const sheetName = `Struct_${profile.batch === '2026' ? '2026_DS' : profile.batch}`;
+
+      return {
+        state: 'ANSWERABLE',
+        answer: `**Current Semester Enrolled Courses for ${profile.display_name} (${profile.programName})**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${sheetName})\n\nAccording to your official curriculum schedule (Batch ${profile.batch}, Semester ${profile.semester}), you are registered for **${courses.length} courses** totaling **${totalCredits} credits**:\n\n${courseRows}\n\n• **Declared Minor:** **${profile.declaredMinor}** (${profile.minorSchool})\n• **Specialisation:** ${profile.specialisation || 'Not specified'}\n• **Total Degree Credits Requirement:** **180 credits**\n\n*(Note: Official course-wise attendance and earned grades are maintained in the Digii ERP portal.)*`,
+        sources: [
+          {
+            documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+            hierarchyLevel: 2,
+            pageOrSheet: sheetName,
+            clauseNumber: `Semester ${profile.semester} Schedule`,
+            excerpt: `Curriculum semester spread for B.Tech (Hons.) Computer Science and Engineering, Batch ${profile.batch}, Semester ${profile.semester}. Total enrolled: ${totalCredits} credits.`
+          }
+        ],
+        ruleResults: { studentId: profile.id, batch: profile.batch, semester: profile.semester, courseCount: courses.length, totalCredits },
+        followUp: "Ask 'What should I take next semester?' or 'What are my minor requirements?'"
+      };
+    }
+
+    if (queryCategory === 'MY_MINOR_INFO') {
+      if (!profile) {
+        return {
+          state: 'NEEDS_CLARIFICATION',
+          answer: "To view your declared minor and minor requirements, please sign in with your Student ID and password using the **Student Sign In** button at the top.",
+          sources: [],
+          ruleResults: { authenticated: false },
+          followUp: "Click 'Student Sign In' to view your minor details."
+        };
+      }
+
+      const m = profile.minorCreditStructure;
+      const coursesStr = (m && m.coursesOffered)
+        ? m.coursesOffered.map((c, i) => `${i + 1}. **${c.code} — ${c.name}** (${c.credits} cr)`).join('\n')
+        : '• Course list maintained in official minor curriculum';
+
+      return {
+        state: 'ANSWERABLE',
+        answer: `**Minor Program Information for ${profile.display_name} (Batch ${profile.batch})**\nOfficial Knowledge Source: Minor_Courses_for_BTech_Students.xlsx (Sheet: ${profile.declaredMinor})\n\n• **Declared Minor:** **${profile.declaredMinor}**\n• **Offering School:** **${profile.minorSchool}**\n• **Curriculum Status:** ${profile.minorStatus}\n• **Required Minor Credits:** **${m ? m.totalCredits : 24} credits**\n\n**Official Minor Curriculum Courses (${profile.declaredMinor}):**\n${coursesStr}\n\nUnder Vidyashilp University regulations (*Minor_Courses_for_BTech_Students.xlsx*), B.Tech students complete a total of **${m ? m.totalCredits : 24} credits** in their declared minor across Semesters 3 through 8. Course registration for minor slots is conducted through the Digii ERP portal.`,
+        sources: [
+          {
+            documentTitle: '118351_Minor Courses for BTech_Students.xlsx',
+            hierarchyLevel: 2,
+            pageOrSheet: profile.declaredMinor,
+            clauseNumber: 'Minor Basket Curriculum',
+            excerpt: `Official minor course structure in ${profile.declaredMinor} (${profile.minorSchool}) for Batch ${profile.batch}. Total minor credits: ${m ? m.totalCredits : 24}.`
+          }
+        ],
+        ruleResults: { studentId: profile.id, minor: profile.declaredMinor, school: profile.minorSchool, totalCredits: m ? m.totalCredits : 24 },
+        followUp: `Ask 'What courses do I have this semester?' or 'Am I eligible for DATA302?'`
+      };
+    }
+
+    if (queryCategory === 'MY_NEXT_SEMESTER_COURSES') {
+      if (!profile) {
+        return {
+          state: 'NEEDS_CLARIFICATION',
+          answer: "To view suggested courses for your next semester, please sign in with your Student ID and password using the **Student Sign In** button at the top.",
+          sources: [],
+          ruleResults: { authenticated: false },
+          followUp: "Click 'Student Sign In' to view your upcoming curriculum pathway."
+        };
+      }
+
+      const nextSem = profile.semester + 1;
+      const nextCourses = profile.nextSemesterCourses || [];
+      const nextRows = nextCourses.map((c, i) =>
+        `${i + 1}. **${c.code} — ${c.name}**\n   • L-T-P: **${c.ltp}** | Credits: **${c.credits} cr** | Prerequisite: **${c.prerequisite}**`
+      ).join('\n\n');
+      const nextTotalCredits = nextCourses.reduce((sum, c) => sum + (c.credits || 0), 0);
+      const sheetName = `Struct_${profile.batch === '2026' ? '2026_DS' : profile.batch}`;
+
+      return {
+        state: 'ANSWERABLE',
+        answer: `**Upcoming Semester ${nextSem} Course Curriculum for ${profile.display_name} (Batch ${profile.batch})**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${sheetName})\n\nBased on your official B.Tech CSE semester spread structure, the planned courses for **Semester ${nextSem}** are:\n\n${nextRows}\n\n• **Planned Semester Credits:** **${nextTotalCredits} credits**\n• **Recommendation:** Review prerequisites for these courses and consult your Faculty Mentor during the pre-registration window on Digii ERP.`,
+        sources: [
+          {
+            documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+            hierarchyLevel: 2,
+            pageOrSheet: sheetName,
+            clauseNumber: `Semester ${nextSem} Schedule`,
+            excerpt: `Planned course structure for B.Tech (Hons.) Computer Science and Engineering, Batch ${profile.batch}, Semester ${nextSem}.`
+          }
+        ],
+        ruleResults: { studentId: profile.id, nextSemester: nextSem, plannedCredits: nextTotalCredits },
+        followUp: "Ask 'How many credits do I still need?' or 'What are my minor requirements?'"
+      };
+    }
+
+    if (queryCategory === 'MY_CREDITS_NEEDED') {
+      if (!profile) {
+        return {
+          state: 'NEEDS_CLARIFICATION',
+          answer: "To check your degree credit requirements and credit status, please sign in with your Student ID and password using the **Student Sign In** button at the top.",
+          sources: [],
+          ruleResults: { authenticated: false },
+          followUp: "Click 'Student Sign In' to check your credits."
+        };
+      }
+
+      return {
+        state: 'ANSWERABLE',
+        answer: `**Degree Credit Progress for ${profile.display_name} (Batch ${profile.batch})**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx & 4. Student Handbook Aug 2026.pdf\n\n• **Total Degree Credits Required:** Exactly **180 credits** for B.Tech (Hons.) Computer Science and Engineering (mandatory Vidyashilp University graduation requirement across all Batches 2022–2026).\n• **Completed Credits:** **Not available in local records (refer to ERP)**. Official transcripts, grades, and earned credits are maintained securely in the university Digii ERP portal.\n• **Remaining Credits:** **Not available until completed credits are recorded**. Once your cumulative passed credits are retrieved from your official transcript in Digii ERP, your remaining credits will equal: 180 − (Completed Credits).\n• **Declared Minor Allocation:** **${profile.minorCreditStructure ? profile.minorCreditStructure.totalCredits : 24} credits** in **${profile.declaredMinor}** count toward your multidisciplinary degree requirement.\n\n*(Note: For an official degree audit, consult your Faculty Mentor or the Office of the Registrar.)*`,
+        sources: [
+          {
+            documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+            hierarchyLevel: 2,
+            pageOrSheet: 'Curriculum Structures (2022-2026)',
+            clauseNumber: 'Total Degree Credit Requirement',
+            excerpt: 'Total Credits for B.Tech (Hons.) Computer Science and Engineering: 180 credits across all curriculum batches.'
+          },
+          {
+            documentTitle: '4. Student Handbook Aug 2026.pdf',
+            hierarchyLevel: 1,
+            pageOrSheet: 'Section III, Clause 8 & 12',
+            clauseNumber: 'Clause 8 — Academic Evaluation & Progression',
+            excerpt: 'Student academic transcripts, SGPA/CGPA, and cumulative earned credits are recorded and maintained in the university ERP system.'
+          }
+        ],
+        ruleResults: { totalDegreeCredits: 180, completedCredits: 'Not available', remainingCredits: 'Not available' },
+        followUp: "Ask 'What courses do I have this semester?' or 'Am I eligible for DATA302?'"
+      };
+    }
+
     // ── 3.0. STUDENT PROFILE HELP ──
     if (queryCategory === 'STUDENT_PROFILE_HELP') {
       return {
         state: 'ANSWERABLE',
-        answer: `**Student Profile and Academic Records Guidance**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 2.4)\n\nIf your student profile does not contain the required academic information or exhibits discrepancies, follow these official procedures:\n\n1. **Consult Your Faculty Mentor (Student Handbook, Section III, Clause 2.4):** Every student is assigned an official Faculty Advisor [Mentor]. Consult your mentor to verify your registered courses, academic standing, and degree pathway.\n2. **Contact the Office of the Registrar:** For formal updates to your student profile, personal particulars, or degree program registration, submit an official verification request to the Registrar's Office.\n3. **Synchronize via Digii ERP:** Ensure your semester registration and fee clearance records are updated in the Digii ERP portal.\n4. **Advisor Portal Demo Profiles:** If exploring scenarios in this advisory system, use the profile selector in the top bar to switch between the 24 pre-configured synthetic student profiles covering Batches 2022–2026.`,
+        answer: `**Student Profile and Academic Records Guidance**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 2.4)\n\nIf your student profile does not contain the required academic information or exhibits discrepancies, follow these official procedures:\n\n1. **Consult Your Faculty Mentor (Student Handbook, Section III, Clause 2.4):** Every student is assigned an official Faculty Advisor [Mentor]. Consult your mentor to verify your registered courses, academic standing, and degree pathway.\n2. **Contact the Office of the Registrar:** For formal updates to your student profile, personal particulars, or degree program registration, submit an official verification request to the Registrar's Office.\n3. **Synchronize via Digii ERP:** Ensure your semester registration and fee clearance records are updated in the Digii ERP portal.\n4. **Student Access Portal:** Sign in with your official Student ID and password to access your personalized academic record and enrolled courses.`,
         sources: [
           {
             documentTitle: '4. Student Handbook Aug 2026.pdf',
@@ -3152,7 +3406,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
           }
         ],
         ruleResults: { category: 'STUDENT_PROFILE_HELP' },
-        followUp: 'You can select a demo student profile from the top bar to test personalized course eligibility and attendance checks.'
+        followUp: "Click 'Student Sign In' to log in to your student profile."
       };
     }
 
@@ -3161,12 +3415,16 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       const studentName = profile ? profile.display_name : null;
       let personalizedSection = '';
       if (profile) {
-        const statusText = profile.attendance >= 75.0
-          ? `✓ Your current recorded attendance is **${profile.attendance}%**, which satisfies the university's 75% attendance criterion.`
-          : profile.attendance >= 65.0
-            ? `⚠ Your current recorded attendance is **${profile.attendance}%**, which is between 65% and 75%. You require approved medical relaxation (submitted within 3 working days of rejoining) to write end-semester exams.`
-            : `❌ Your current recorded attendance is **${profile.attendance}%**, which is below 65%. Attendance below 65% results in strict exam debarment per Clause 7.2.`;
-        personalizedSection = `\n\n**Your Attendance Standing (${studentName} — ${profile.programName}):**\n${statusText}`;
+        if (typeof profile.attendance === 'number') {
+          const statusText = profile.attendance >= 75.0
+            ? `✓ Your current recorded attendance is **${profile.attendance}%**, which satisfies the university's 75% attendance criterion.`
+            : profile.attendance >= 65.0
+              ? `⚠ Your current recorded attendance is **${profile.attendance}%**, which is between 65% and 75%. You require approved medical relaxation (submitted within 3 working days of rejoining) to write end-semester exams.`
+              : `❌ Your current recorded attendance is **${profile.attendance}%**, which is below 65%. Attendance below 65% results in strict exam debarment per Clause 7.2.`;
+          personalizedSection = `\n\n**Your Attendance Standing (${studentName} — ${profile.programName}):**\n${statusText}`;
+        } else {
+          personalizedSection = `\n\n**Your Attendance Standing (${studentName} — ${profile.programName}):**\nAttendance status: **${profile.attendance}**. Individual course-wise attendance percentages are tracked in real time in the university Digii ERP portal. Per Clause 7.1, a minimum of 75% attendance is required in each course to avoid examination debarment.`;
+        }
       }
 
       return {
@@ -4419,8 +4677,79 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
           activeProfile = SYNTHETIC_PROFILES.find(p => p.program === 'BDES_CD');
         }
 
+        if (activeProfile && targetCourse.code === 'DATA302') {
+          const isEnrolledInPrereq = activeProfile.enrolledCourses && activeProfile.enrolledCourses.some(c => c.code === 'DATA301');
+          if (isEnrolledInPrereq) {
+            return {
+              state: 'ANSWERABLE',
+              answer: `**Course Eligibility for DATA302 — Deep Learning (4 credits)**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx\n\n• **Course Requirement:** DATA302 (Deep Learning, 4 credits) has a mandatory prerequisite of **DATA301 (Machine Learning, 4 credits)**.\n• **Student Status (${activeProfile.display_name} — Batch ${activeProfile.batch}, Semester ${activeProfile.semester}):** You are currently enrolled in **DATA301 — Machine Learning** this semester.\n• **Eligibility Decision:** **PENDING PREREQUISITE COMPLETION**. You will be fully eligible to register for DATA302 in Semester 6 once you successfully pass DATA301 at the end of this semester.\n• **Official Records:** Final passing grades and prerequisite verification are recorded in the university Digii ERP portal (recorded as 'Not available' in local cache).`,
+              sources: [
+                {
+                  documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+                  hierarchyLevel: 2,
+                  pageOrSheet: `Struct_${activeProfile.batch === '2026' ? '2026_DS' : activeProfile.batch}`,
+                  clauseNumber: 'Course Code: DATA302',
+                  excerpt: 'DATA302 (Deep Learning): 4 credits. Mandatory prerequisite: DATA301 (Machine Learning).'
+                }
+              ],
+              ruleResults: { targetCourse: 'DATA302', prerequisite: 'DATA301', status: 'PENDING_PREREQUISITE_COMPLETION' },
+              followUp: "Ask 'What should I take next semester?' or 'What courses do I have this semester?'"
+            };
+          } else if (activeProfile.semester < 5) {
+            return {
+              state: 'ANSWERABLE',
+              answer: `**Course Eligibility for DATA302 — Deep Learning (4 credits)**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx\n\n• **Course Requirement:** DATA302 (Deep Learning, 4 credits) requires mandatory prerequisite **DATA301 (Machine Learning, 4 credits)**.\n• **Student Status (${activeProfile.display_name} — Batch ${activeProfile.batch}, Semester ${activeProfile.semester}):** You are currently in **Semester ${activeProfile.semester}**. In your official B.Tech CSE curriculum structure, DATA301 is scheduled in Semester 5 and DATA302 in Semester 6.\n• **Eligibility Decision:** **NOT YET ELIGIBLE**. You must first reach Semester 5 and complete DATA301 before you can register for DATA302.\n• **Official Records:** Academic progression and course registrations are validated via the Digii ERP portal.`,
+              sources: [
+                {
+                  documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+                  hierarchyLevel: 2,
+                  pageOrSheet: `Struct_${activeProfile.batch === '2026' ? '2026_DS' : activeProfile.batch}`,
+                  clauseNumber: 'Course Code: DATA302',
+                  excerpt: 'DATA302 (Deep Learning): 4 credits. Mandatory prerequisite: DATA301 (Machine Learning).'
+                }
+              ],
+              ruleResults: { targetCourse: 'DATA302', prerequisite: 'DATA301', status: 'NOT_YET_ELIGIBLE' },
+              followUp: "Ask 'What courses do I have this semester?' or 'What should I take next semester?'"
+            };
+          } else if (activeProfile.semester >= 6) {
+            return {
+              state: 'ANSWERABLE',
+              answer: `**Course Eligibility for DATA302 — Deep Learning (4 credits)**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx\n\n• **Course Requirement:** DATA302 (Deep Learning, 4 credits) was scheduled in Semester 6 with mandatory prerequisite **DATA301 (Machine Learning)**.\n• **Student Status (${activeProfile.display_name} — Batch ${activeProfile.batch}, Semester ${activeProfile.semester}):** You are currently in **Semester ${activeProfile.semester}**. Official transcript passing grades are maintained in the Digii ERP portal (recorded as 'Not available' in local records). If you have satisfied DATA301 and DATA302, your enrollment is cleared in the university ERP.`,
+              sources: [
+                {
+                  documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+                  hierarchyLevel: 2,
+                  pageOrSheet: `Struct_${activeProfile.batch === '2026' ? '2026_DS' : activeProfile.batch}`,
+                  clauseNumber: 'Course Code: DATA302',
+                  excerpt: 'DATA302 (Deep Learning): 4 credits. Mandatory prerequisite: DATA301 (Machine Learning).'
+                }
+              ],
+              ruleResults: { targetCourse: 'DATA302', prerequisite: 'DATA301', status: 'SENIOR_STATUS' },
+              followUp: "Ask 'How many credits do I still need?' or 'What should I take next semester?'"
+            };
+          }
+        }
+
         if (!activeProfile && !profileId) {
-          activeProfile = getStudentProfileById('VU-DEMO-008'); // Default Meera Krishnan
+          const prereqs = getCoursePrerequisites(targetCourse.code);
+          const prereqStr = prereqs.length > 0
+            ? `requires mandatory prerequisite **${prereqs.join(', ')}**`
+            : `has no mandatory prerequisites`;
+          return {
+            state: 'ANSWERABLE',
+            answer: `**Course Eligibility for ${targetCourse.code} — ${targetCourse.name}**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx\n\nUnder official Vidyashilp University curriculum structures, **${targetCourse.code} (${targetCourse.credits} credits)** ${prereqStr}.\n\nTo check your individual academic standing and eligibility based on your enrolled courses and degree program, please sign in with your **Student ID and password** using the Student Access Portal.`,
+            sources: [
+              {
+                documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+                hierarchyLevel: 2,
+                pageOrSheet: 'Curriculum Structures',
+                clauseNumber: `Course Code: ${targetCourse.code}`,
+                excerpt: `${targetCourse.code} (${targetCourse.name}): ${targetCourse.credits} credits. Prerequisite: ${prereqs.join(', ') || 'NIL'}.`
+              }
+            ],
+            ruleResults: { targetCourse: targetCourse.code, prereqs, authenticated: false },
+            followUp: "Please sign in with your Student ID and password to verify your personalized course eligibility."
+          };
         }
 
         const decision = evaluateEligibility(activeProfile, targetCourse);

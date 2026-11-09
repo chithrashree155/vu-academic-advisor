@@ -7,6 +7,8 @@
     "build": "node scripts/build.js",
     "start": "node src/server.js",
     "dev": "node src/server.js",
+    "test": "node scripts/test-secure-profiles.js",
+    "test:profiles": "node scripts/test-secure-profiles.js",
     "test:phase2": "node scripts/test-phase2.js",
     "test:challenge": "node scripts/test-phase2-challenge.js",
     "test:agentic": "node scripts/test-agentic-workflow.js",
