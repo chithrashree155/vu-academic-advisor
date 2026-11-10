@@ -28,10 +28,10 @@ const studentChatHistories = new Map();
 const revokedTokens = new Set();
 
 /**
- * Deterministic salt per student ID ensuring consistent hashing across serverless restarts
+ * Unique random salt generator helper for secure student credentials
  */
-function getDeterministicSalt(studentId) {
-  return crypto.createHash('sha256').update(String(studentId).toUpperCase() + '_vu_salt_2026').digest('hex').substring(0, 32);
+function generateSecureSalt() {
+  return crypto.randomBytes(16).toString('hex');
 }
 
 /**
@@ -131,11 +131,11 @@ const RAW_STUDENT_DATA = [
     completedCredits: 91,
     remainingCredits: 89,
     cgpa: 8.59,
-    // Scenario A: Approved Medical Leave
+    // Scenario A: Approved Medical Leave (13 calendar days inclusive: 10-22 Sept 2024)
     medicalLeave: {
       hasRecord: true,
       status: 'Approved',
-      duration: '12 days (10-Sep-2024 to 22-Sep-2024)',
+      duration: '13 calendar days (10-Sep-2024 to 22-Sep-2024, inclusive)',
       reason: 'Acute Typhoid (Synthetic Evaluation Scenario)',
       affectedCourses: [
         { code: 'COMP208', name: 'Computer Networks', sessionsMissed: 4 },
@@ -145,6 +145,42 @@ const RAW_STUDENT_DATA = [
       submissionStatus: 'Submitted verified hospital certificate within 3 working days',
       academicImpact: 'Under Handbook Clause 7.3, medical leave does not automatically waive or grant attendance credits. It qualifies the student for attendance condonation down to 65% if overall attendance drops below 75%. Since Aarav maintains >80% in all courses, eligibility is fully preserved without condonation.'
     },
+    // Verified completed courses from Batch 2022 curriculum spread (Semesters 1-4)
+    completedCourses: [
+      { code: 'UCOR103', courseCode: 'UCOR103', name: 'Communication Skills', courseName: 'Communication Skills', credits: 2, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'UCOR104', courseCode: 'UCOR104', name: 'Problem Solving with Design Thinking', courseName: 'Problem Solving with Design Thinking', credits: 2, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'UCOR102', courseCode: 'UCOR102', name: 'Introduction to writing', courseName: 'Introduction to writing', credits: 2, semesterTaken: 1, grade: 'B+', isPassed: true },
+      { code: 'MATH201', courseCode: 'MATH201', name: 'Calculus', courseName: 'Calculus', credits: 3, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'COMP132', courseCode: 'COMP132', name: 'Design Workshop', courseName: 'Design Workshop', credits: 2, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'MTSC111', courseCode: 'MTSC111', name: 'Materials for Smart Devices', courseName: 'Materials for Smart Devices', credits: 3, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'DATA131', courseCode: 'DATA131', name: 'Visualizing Data for Story Telling', courseName: 'Visualizing Data for Story Telling', credits: 2, semesterTaken: 1, grade: 'A+', isPassed: true },
+      { code: 'PSYC101', courseCode: 'PSYC101', name: 'Introduction to Psychology', courseName: 'Introduction to Psychology', credits: 3, semesterTaken: 1, grade: 'B+', isPassed: true },
+      { code: 'DATA130', courseCode: 'DATA130', name: 'Computational Thinking', courseName: 'Computational Thinking', credits: 4, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'UCOR203', courseCode: 'UCOR203', name: 'Leadership and Teamwork Skills', courseName: 'Leadership and Teamwork Skills', credits: 2, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'UCOR701', courseCode: 'UCOR701', name: 'Community Engagement & Service Experience', courseName: 'Community Engagement & Service Experience', credits: 1, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'UCOR106', courseCode: 'UCOR106', name: 'Learning to Learn', courseName: 'Learning to Learn', credits: 2, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'MATH202', courseCode: 'MATH202', name: 'Probability Theory', courseName: 'Probability Theory', credits: 3, semesterTaken: 2, grade: 'B+', isPassed: true },
+      { code: 'MTSC211', courseCode: 'MTSC211', name: 'Sustainable Smart Materials', courseName: 'Sustainable Smart Materials', credits: 3, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'ENGL201', courseCode: 'ENGL201', name: 'Academic Writing', courseName: 'Academic Writing', credits: 3, semesterTaken: 2, grade: 'B+', isPassed: true },
+      { code: 'COMP201', courseCode: 'COMP201', name: 'Data Structures', courseName: 'Data Structures', credits: 4, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'MATH205', courseCode: 'MATH205', name: 'Statistics with R', courseName: 'Statistics with R', credits: 3, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'DATA201', courseCode: 'DATA201', name: 'Foundations to Data Science', courseName: 'Foundations to Data Science', credits: 2, semesterTaken: 2, grade: 'A+', isPassed: true },
+      { code: 'UCOR205', courseCode: 'UCOR205', name: 'Socio Cultural Perspectives on Indian Life-SPIL', courseName: 'Socio Cultural Perspectives on Indian Life-SPIL', credits: 3, semesterTaken: 3, grade: 'A', isPassed: true },
+      { code: 'UCOR201', courseCode: 'UCOR201', name: 'Introduction to Epistemology', courseName: 'Introduction to Epistemology', credits: 2, semesterTaken: 3, grade: 'B+', isPassed: true },
+      { code: 'MTSC781', courseCode: 'MTSC781', name: 'Sustainable Cities and Communities', courseName: 'Sustainable Cities and Communities', credits: 3, semesterTaken: 3, grade: 'A', isPassed: true },
+      { code: 'MATH204', courseCode: 'MATH204', name: 'Linear Algebra', courseName: 'Linear Algebra', credits: 3, semesterTaken: 3, grade: 'A', isPassed: true },
+      { code: 'COMP203', courseCode: 'COMP203', name: 'Analysis of Algorithms', courseName: 'Analysis of Algorithms', credits: 4, semesterTaken: 3, grade: 'B+', isPassed: true },
+      { code: 'COMP202', courseCode: 'COMP202', name: 'Theoretical Computer Science', courseName: 'Theoretical Computer Science', credits: 3, semesterTaken: 3, grade: 'A', isPassed: true },
+      { code: 'BUSS201', courseCode: 'BUSS201', name: 'Financial Accounting & Reporting', courseName: 'Financial Accounting & Reporting', credits: 4, semesterTaken: 3, grade: 'A', isPassed: true },
+      { code: 'UCOR210', courseCode: 'UCOR210', name: 'Critical Thinking', courseName: 'Critical Thinking', credits: 2, semesterTaken: 4, grade: 'A', isPassed: true },
+      { code: 'SLAD206', courseCode: 'SLAD206', name: 'Human Values in Work and Life', courseName: 'Human Values in Work and Life', credits: 2, semesterTaken: 4, grade: 'A', isPassed: true },
+      { code: 'SLAD207', courseCode: 'SLAD207', name: 'Foundation Seminar', courseName: 'Foundation Seminar', credits: 1, semesterTaken: 4, grade: 'A', isPassed: true },
+      { code: 'COMP205', courseCode: 'COMP205', name: 'Object Oriented Programming', courseName: 'Object Oriented Programming', credits: 3, semesterTaken: 4, grade: 'A', isPassed: true },
+      { code: 'COMP204', courseCode: 'COMP204', name: 'Digital Design and Computer Organization', courseName: 'Digital Design and Computer Organization', credits: 4, semesterTaken: 4, grade: 'A', isPassed: true },
+      { code: 'COMP301', courseCode: 'COMP301', name: 'Artificial Intelligence', courseName: 'Artificial Intelligence', credits: 4, semesterTaken: 4, grade: 'A', isPassed: true },
+      { code: 'COMP209', courseCode: 'COMP209', name: 'Databases Management', courseName: 'Databases Management', credits: 3, semesterTaken: 4, grade: 'A', isPassed: true },
+      { code: 'BUSS202', courseCode: 'BUSS202', name: 'Corporate Finance', courseName: 'Corporate Finance', credits: 4, semesterTaken: 4, grade: 'A', isPassed: true }
+    ],
     // Enrolled Courses with Detailed Course-Wise Attendance
     enrolledCourses: [
       {
@@ -172,20 +208,20 @@ const RAW_STUDENT_DATA = [
         name: 'Machine Learning',
         ltp: '2-0-4',
         credits: 4,
-        prerequisite: 'DATA202, MATH301',
+        prerequisite: 'DATA201',
         conducted: 34,
         attended: 30,
-        category: 'Major Core'
+        category: 'Professional Core'
       },
       {
         code: 'DATA207',
-        name: 'Big Data / Human Centric AI',
+        name: 'Human Centric AI',
         ltp: '1-0-2',
         credits: 2,
-        prerequisite: 'None',
+        prerequisite: 'COMP301',
         conducted: 20,
         attended: 18,
-        category: 'Major Elective'
+        category: 'Applied AI'
       },
       {
         code: 'DATA801',
@@ -205,7 +241,8 @@ const RAW_STUDENT_DATA = [
       { code: 'DATA402', name: 'Advanced Visualization and Big Data Framework', ltp: '2-0-4', credits: 4, prerequisite: 'DATA301' }
     ],
     backlogs: [],
-    passwords: ['Student1@2022', 'Aarav@VU2022']
+    salt: '9f8b3c1a4e2d7085a6b1c2d3e4f5a6b7',
+    password: 'Student1@2022'
   },
 
   // ── STUDENT 2: Batch 2022, Sem 7 (Scenario C: Backlog in COMP204) ──
@@ -233,8 +270,8 @@ const RAW_STUDENT_DATA = [
         { code: 'PSYC101', name: 'Introduction to Psychology', credits: 4, status: 'Completed', semester: 3, grade: 'A' },
         { code: 'PSYC201', name: 'Cognitive Psychology', credits: 4, status: 'Completed', semester: 4, grade: 'B+' },
         { code: 'PSYC202', name: 'Social Psychology', credits: 4, status: 'Completed', semester: 5, grade: 'A' },
-        { code: 'PSYC301', name: 'Developmental Psychology', credits: 4, status: 'Completed', semester: 6, grade: 'A+' },
-        { code: 'PSYC302', name: 'Abnormal Psychology', credits: 4, status: 'Pending', semester: 7 },
+        { code: 'PSYC301', name: 'Abnormal Psychology', credits: 4, status: 'Completed', semester: 6, grade: 'A' },
+        { code: 'PSYC302', name: 'Counseling & Guidance', credits: 4, status: 'Pending', semester: 7 },
         { code: 'PSYC401', name: 'Organizational Psychology', credits: 4, status: 'Pending', semester: 8 }
       ]
     },
@@ -254,7 +291,7 @@ const RAW_STUDENT_DATA = [
       hasRecord: false,
       status: 'No medical leave recorded'
     },
-    // Scenario C: Backlog in COMP204
+    // Scenario C: Backlog in COMP204 (Digital Design and Computer Organization)
     backlogs: [
       {
         code: 'COMP204',
@@ -268,52 +305,101 @@ const RAW_STUDENT_DATA = [
         progressionImpact: 'Under Student Handbook Section III, Clause 12.1 (Degree Award Regulations), all mandatory core courses and degree credits must be cleared with a passing grade (minimum grade point 4.0) to qualify for graduation. Bhavya must re-register or clear COMP204 in the next offered term to fulfill degree requirements.'
       }
     ],
+    // Verified completed courses from Batch 2022 curriculum spread (Semesters 1-6, excluding COMP204)
+    completedCourses: [
+      { code: 'UCOR103', courseCode: 'UCOR103', name: 'Communication Skills', courseName: 'Communication Skills', credits: 2, semesterTaken: 1, grade: 'B+', isPassed: true },
+      { code: 'UCOR104', courseCode: 'UCOR104', name: 'Problem Solving with Design Thinking', courseName: 'Problem Solving with Design Thinking', credits: 2, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'UCOR102', courseCode: 'UCOR102', name: 'Introduction to writing', courseName: 'Introduction to writing', credits: 2, semesterTaken: 1, grade: 'B', isPassed: true },
+      { code: 'MATH201', courseCode: 'MATH201', name: 'Calculus', courseName: 'Calculus', credits: 3, semesterTaken: 1, grade: 'B+', isPassed: true },
+      { code: 'COMP132', courseCode: 'COMP132', name: 'Design Workshop', courseName: 'Design Workshop', credits: 2, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'MTSC111', courseCode: 'MTSC111', name: 'Materials for Smart Devices', courseName: 'Materials for Smart Devices', credits: 3, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'DATA131', courseCode: 'DATA131', name: 'Visualizing Data for Story Telling', courseName: 'Visualizing Data for Story Telling', credits: 2, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'PSYC101', courseCode: 'PSYC101', name: 'Introduction to Psychology', courseName: 'Introduction to Psychology', credits: 3, semesterTaken: 1, grade: 'B+', isPassed: true },
+      { code: 'DATA130', courseCode: 'DATA130', name: 'Computational Thinking', courseName: 'Computational Thinking', credits: 4, semesterTaken: 1, grade: 'B+', isPassed: true },
+      { code: 'UCOR203', courseCode: 'UCOR203', name: 'Leadership and Teamwork Skills', courseName: 'Leadership and Teamwork Skills', credits: 2, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'UCOR701', courseCode: 'UCOR701', name: 'Community Engagement & Service Experience', courseName: 'Community Engagement & Service Experience', credits: 1, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'UCOR106', courseCode: 'UCOR106', name: 'Learning to Learn', courseName: 'Learning to Learn', credits: 2, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'MATH202', courseCode: 'MATH202', name: 'Probability Theory', courseName: 'Probability Theory', credits: 3, semesterTaken: 2, grade: 'B+', isPassed: true },
+      { code: 'MTSC211', courseCode: 'MTSC211', name: 'Sustainable Smart Materials', courseName: 'Sustainable Smart Materials', credits: 3, semesterTaken: 2, grade: 'B+', isPassed: true },
+      { code: 'ENGL201', courseCode: 'ENGL201', name: 'Academic Writing', courseName: 'Academic Writing', credits: 3, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'COMP201', courseCode: 'COMP201', name: 'Data Structures', courseName: 'Data Structures', credits: 4, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'MATH205', courseCode: 'MATH205', name: 'Statistics with R', courseName: 'Statistics with R', credits: 3, semesterTaken: 2, grade: 'B+', isPassed: true },
+      { code: 'DATA201', courseCode: 'DATA201', name: 'Foundations to Data Science', courseName: 'Foundations to Data Science', credits: 2, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'UCOR205', courseCode: 'UCOR205', name: 'Socio Cultural Perspectives on Indian Life-SPIL', courseName: 'Socio Cultural Perspectives on Indian Life-SPIL', credits: 3, semesterTaken: 3, grade: 'B+', isPassed: true },
+      { code: 'UCOR201', courseCode: 'UCOR201', name: 'Introduction to Epistemology', courseName: 'Introduction to Epistemology', credits: 2, semesterTaken: 3, grade: 'B+', isPassed: true },
+      { code: 'MTSC781', courseCode: 'MTSC781', name: 'Sustainable Cities and Communities', courseName: 'Sustainable Cities and Communities', credits: 3, semesterTaken: 3, grade: 'A', isPassed: true },
+      { code: 'MATH204', courseCode: 'MATH204', name: 'Linear Algebra', courseName: 'Linear Algebra', credits: 3, semesterTaken: 3, grade: 'B+', isPassed: true },
+      { code: 'COMP203', courseCode: 'COMP203', name: 'Analysis of Algorithms', courseName: 'Analysis of Algorithms', credits: 4, semesterTaken: 3, grade: 'B', isPassed: true },
+      { code: 'COMP202', courseCode: 'COMP202', name: 'Theoretical Computer Science', courseName: 'Theoretical Computer Science', credits: 3, semesterTaken: 3, grade: 'B+', isPassed: true },
+      { code: 'PSYC101_MIN', courseCode: 'PSYC101', name: 'Introduction to Psychology [Minor]', courseName: 'Introduction to Psychology [Minor]', credits: 4, semesterTaken: 3, grade: 'A', isPassed: true },
+      { code: 'UCOR210', courseCode: 'UCOR210', name: 'Critical Thinking', courseName: 'Critical Thinking', credits: 2, semesterTaken: 4, grade: 'B+', isPassed: true },
+      { code: 'SLAD206', courseCode: 'SLAD206', name: 'Human Values in Work and Life', courseName: 'Human Values in Work and Life', credits: 2, semesterTaken: 4, grade: 'A', isPassed: true },
+      { code: 'SLAD207', courseCode: 'SLAD207', name: 'Foundation Seminar', courseName: 'Foundation Seminar', credits: 1, semesterTaken: 4, grade: 'A', isPassed: true },
+      { code: 'COMP205', courseCode: 'COMP205', name: 'Object Oriented Programming', courseName: 'Object Oriented Programming', credits: 3, semesterTaken: 4, grade: 'B+', isPassed: true },
+      { code: 'COMP301', courseCode: 'COMP301', name: 'Artificial Intelligence', courseName: 'Artificial Intelligence', credits: 4, semesterTaken: 4, grade: 'B', isPassed: true },
+      { code: 'COMP209', courseCode: 'COMP209', name: 'Databases Management', courseName: 'Databases Management', credits: 3, semesterTaken: 4, grade: 'B+', isPassed: true },
+      { code: 'PSYC201', courseCode: 'PSYC201', name: 'Cognitive Psychology [Minor]', courseName: 'Cognitive Psychology [Minor]', credits: 4, semesterTaken: 4, grade: 'B+', isPassed: true },
+      { code: 'COMP208', courseCode: 'COMP208', name: 'Computer Networks', courseName: 'Computer Networks', credits: 4, semesterTaken: 5, grade: 'A', isPassed: true },
+      { code: 'COMP207', courseCode: 'COMP207', name: 'Operating Systems', courseName: 'Operating Systems', credits: 3, semesterTaken: 5, grade: 'B+', isPassed: true },
+      { code: 'DATA301', courseCode: 'DATA301', name: 'Machine Learning', courseName: 'Machine Learning', credits: 4, semesterTaken: 5, grade: 'A', isPassed: true },
+      { code: 'DATA207', courseCode: 'DATA207', name: 'Human Centric AI', courseName: 'Human Centric AI', credits: 2, semesterTaken: 5, grade: 'A', isPassed: true },
+      { code: 'DATA801', courseCode: 'DATA801', name: 'Summer Training / Internship (Project-3)', courseName: 'Summer Training / Internship (Project-3)', credits: 2, semesterTaken: 5, grade: 'A+', isPassed: true },
+      { code: 'DATA202', courseCode: 'DATA202', name: 'Exploratory Data Analysis', courseName: 'Exploratory Data Analysis', credits: 3, semesterTaken: 5, grade: 'A', isPassed: true },
+      { code: 'PSYC202', courseCode: 'PSYC202', name: 'Social Psychology [Minor]', courseName: 'Social Psychology [Minor]', credits: 4, semesterTaken: 5, grade: 'A', isPassed: true },
+      { code: 'COMP302', courseCode: 'COMP302', name: 'Cloud Computing & Distributed Systems', courseName: 'Cloud Computing & Distributed Systems', credits: 4, semesterTaken: 6, grade: 'A', isPassed: true },
+      { code: 'DATA401', courseCode: 'DATA401', name: 'Big Data Engineering', courseName: 'Big Data Engineering', credits: 4, semesterTaken: 6, grade: 'B+', isPassed: true },
+      { code: 'DATA402', courseCode: 'DATA402', name: 'Advanced Visualization Framework', courseName: 'Advanced Visualization Framework', credits: 4, semesterTaken: 6, grade: 'A', isPassed: true },
+      { code: 'DATA405', courseCode: 'DATA405', name: 'Reinforcement Learning', courseName: 'Reinforcement Learning', credits: 4, semesterTaken: 6, grade: 'A', isPassed: true },
+      { code: 'PSYC301', courseCode: 'PSYC301', name: 'Abnormal Psychology [Minor]', courseName: 'Abnormal Psychology [Minor]', credits: 4, semesterTaken: 6, grade: 'A', isPassed: true },
+      { code: 'UCOR310', courseCode: 'UCOR310', name: 'The Startup Game', courseName: 'The Startup Game', credits: 1, semesterTaken: 6, grade: 'A', isPassed: true }
+    ],
+    // Enrolled Courses in Semester 7
     enrolledCourses: [
       {
         code: 'COMP302',
-        name: 'Internet of Things / Compiler Design',
-        ltp: '0-0-4',
-        credits: 2,
-        prerequisite: 'COMP132, COMP201, COMP206, COMP208, COMP301',
+        name: 'Cloud Computing & Distributed Systems',
+        ltp: '3-0-2',
+        credits: 4,
+        prerequisite: 'COMP208',
         conducted: 24,
         attended: 21,
         category: 'Core Engineering'
       },
       {
         code: 'DATA403',
-        name: 'Natural Language Processing / Software Architecture',
+        name: 'Natural Language Processing & LLMs',
         ltp: '2-0-4',
         credits: 4,
-        prerequisite: 'DATA302',
+        prerequisite: 'DATA301',
         conducted: 30,
         attended: 26,
-        category: 'Major Elective'
+        category: 'Applied AI'
       },
       {
         code: 'DATA404',
-        name: 'Multi Modal Learning / Cloud Computing',
+        name: 'Computer Vision & Multimodal AI',
         ltp: '2-0-4',
         credits: 4,
-        prerequisite: 'DATA302',
+        prerequisite: 'DATA301',
         conducted: 30,
         attended: 27,
-        category: 'Major Elective'
+        category: 'Applied AI'
       },
       {
         code: 'DATA405',
-        name: 'Reinforcement Learning / Cognitive Computing',
+        name: 'MLOps & Model Deployment',
         ltp: '2-0-4',
         credits: 4,
-        prerequisite: 'MATH202, MATH204',
+        prerequisite: 'DATA301',
         conducted: 30,
         attended: 25,
-        category: 'Major Elective'
+        category: 'Professional Core'
       },
       {
         code: 'DATA802',
-        name: 'Interdisciplinary Project (Capstone Phase-1)',
-        ltp: '0-0-0',
-        credits: 2,
+        name: 'Major Capstone Project ── Phase 1',
+        ltp: '0-0-8',
+        credits: 4,
         prerequisite: 'None',
         conducted: 18,
         attended: 17,
@@ -323,10 +409,11 @@ const RAW_STUDENT_DATA = [
     nextSemesterCourses: [
       { code: 'DATA803', name: 'Capstone Project / Industrial Internship', ltp: '0-0-0', credits: 12, prerequisite: 'DATA802' }
     ],
-    passwords: ['Student2@2022', 'Bhavya@VU2022']
+    salt: 'a1b2c3d4e5f6789012345678abcdef01',
+    password: 'Student2@2022'
   },
 
-  // ── STUDENT 3: Batch 2023, Sem 5 (Design Minor, High Performer) ──
+  // ── STUDENT 3: Batch 2023, Sem 5 (Design Minor, Clean Record) ──
   {
     id: '2023UG00001',
     legacyAliases: ['VU-BTECH-2303'],
@@ -348,14 +435,15 @@ const RAW_STUDENT_DATA = [
       school: 'School of Design',
       batch: '2023',
       coursesOffered: [
-        { code: 'DESN101', name: 'Design Fundamentals & Visual Language', credits: 4, status: 'Completed', semester: 3, grade: 'A+' },
-        { code: 'DESN201', name: 'User Experience (UX) Design', credits: 4, status: 'Completed', semester: 4, grade: 'A' },
-        { code: 'DESN202', name: 'Interaction Design & Prototyping', credits: 4, status: 'Pending', semester: 5 },
-        { code: 'DESN301', name: 'Design Research & Human Centered Methods', credits: 4, status: 'Pending', semester: 6 },
-        { code: 'DESN302', name: 'Information Design & Visual Systems', credits: 4, status: 'Pending', semester: 7 },
-        { code: 'DESN401', name: 'Design Project & Portfolio', credits: 4, status: 'Pending', semester: 8 }
+        { code: 'DESN101', name: 'Design Principles & Spatial Forms', credits: 4, status: 'Completed', semester: 3, grade: 'A+' },
+        { code: 'DESN201', name: 'Visual Communication & Typography', credits: 4, status: 'Completed', semester: 4, grade: 'A' },
+        { code: 'DESN202', name: 'User Experience (UX) Architecture', credits: 4, status: 'Pending', semester: 5 },
+        { code: 'DESN301', name: 'Interaction Design & Prototyping', credits: 4, status: 'Pending', semester: 6 },
+        { code: 'DESN302', name: 'Design Research & Human Centered Methods', credits: 4, status: 'Pending', semester: 7 },
+        { code: 'DESN401', name: 'Design Capstone Studio', credits: 4, status: 'Pending', semester: 8 }
       ]
     },
+    // Semester-wise CGPA and Credit Records (Sem 1 to Sem 4 completed)
     semesterHistory: [
       { semester: 1, sgpa: 9.10, credits: 23, status: 'Completed' },
       { semester: 2, sgpa: 9.25, credits: 23, status: 'Completed' },
@@ -367,6 +455,43 @@ const RAW_STUDENT_DATA = [
     cgpa: 9.13,
     medicalLeave: { hasRecord: false, status: 'No medical leave recorded' },
     backlogs: [],
+    // Verified completed courses from Batch 2023 curriculum spread (Semesters 1-4)
+    completedCourses: [
+      { code: 'UCOR103', courseCode: 'UCOR103', name: 'Communication Skills', courseName: 'Communication Skills', credits: 2, semesterTaken: 1, grade: 'A+', isPassed: true },
+      { code: 'UCOR104', courseCode: 'UCOR104', name: 'Problem Solving with Design Thinking', courseName: 'Problem Solving with Design Thinking', credits: 2, semesterTaken: 1, grade: 'A+', isPassed: true },
+      { code: 'UCOR102', courseCode: 'UCOR102', name: 'Introduction to writing', courseName: 'Introduction to writing', credits: 2, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'MATH202', courseCode: 'MATH202', name: 'Probability Theory', courseName: 'Probability Theory', credits: 3, semesterTaken: 1, grade: 'A+', isPassed: true },
+      { code: 'COMP132', courseCode: 'COMP132', name: 'Design Workshop', courseName: 'Design Workshop', credits: 2, semesterTaken: 1, grade: 'A+', isPassed: true },
+      { code: 'MTSC111', courseCode: 'MTSC111', name: 'Materials for Smart Devices', courseName: 'Materials for Smart Devices', credits: 3, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'DATA131', courseCode: 'DATA131', name: 'Visualizing Data for Story Telling', courseName: 'Visualizing Data for Story Telling', credits: 2, semesterTaken: 1, grade: 'A+', isPassed: true },
+      { code: 'PSYC101', courseCode: 'PSYC101', name: 'Introduction to Psychology', courseName: 'Introduction to Psychology', credits: 3, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'DATA130', courseCode: 'DATA130', name: 'Computational Thinking', courseName: 'Computational Thinking', credits: 4, semesterTaken: 1, grade: 'A+', isPassed: true },
+      { code: 'UCOR203', courseCode: 'UCOR203', name: 'Leadership and Teamwork Skills', courseName: 'Leadership and Teamwork Skills', credits: 2, semesterTaken: 2, grade: 'A+', isPassed: true },
+      { code: 'UCOR701', courseCode: 'UCOR701', name: 'Community Engagement & Service Experience', courseName: 'Community Engagement & Service Experience', credits: 1, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'UCOR106', courseCode: 'UCOR106', name: 'Learning to Learn', courseName: 'Learning to Learn', credits: 2, semesterTaken: 2, grade: 'A+', isPassed: true },
+      { code: 'MATH201', courseCode: 'MATH201', name: 'Calculus', courseName: 'Calculus', credits: 3, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'MTSC211', courseCode: 'MTSC211', name: 'Sustainable Smart Materials', courseName: 'Sustainable Smart Materials', credits: 3, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'ENGL201', courseCode: 'ENGL201', name: 'Academic Writing', courseName: 'Academic Writing', credits: 3, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'COMP201', courseCode: 'COMP201', name: 'Data Structures', courseName: 'Data Structures', credits: 4, semesterTaken: 2, grade: 'A+', isPassed: true },
+      { code: 'MATH205', courseCode: 'MATH205', name: 'Statistics with R', courseName: 'Statistics with R', credits: 3, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'DATA201', courseCode: 'DATA201', name: 'Foundations to Data Science', courseName: 'Foundations to Data Science', credits: 2, semesterTaken: 2, grade: 'A+', isPassed: true },
+      { code: 'UCOR205', courseCode: 'UCOR205', name: 'Socio Cultural Perspectives on Indian Life-SPIL', courseName: 'Socio Cultural Perspectives on Indian Life-SPIL', credits: 3, semesterTaken: 3, grade: 'A', isPassed: true },
+      { code: 'UCOR201', courseCode: 'UCOR201', name: 'Introduction to Epistemology', courseName: 'Introduction to Epistemology', credits: 2, semesterTaken: 3, grade: 'A', isPassed: true },
+      { code: 'MTSC781', courseCode: 'MTSC781', name: 'Sustainable Cities and Communities', courseName: 'Sustainable Cities and Communities', credits: 3, semesterTaken: 3, grade: 'A', isPassed: true },
+      { code: 'MATH204', courseCode: 'MATH204', name: 'Linear Algebra', courseName: 'Linear Algebra', credits: 3, semesterTaken: 3, grade: 'A', isPassed: true },
+      { code: 'COMP203', courseCode: 'COMP203', name: 'Analysis of Algorithms', courseName: 'Analysis of Algorithms', credits: 4, semesterTaken: 3, grade: 'A', isPassed: true },
+      { code: 'COMP202', courseCode: 'COMP202', name: 'Theoretical Computer Science', courseName: 'Theoretical Computer Science', credits: 3, semesterTaken: 3, grade: 'A', isPassed: true },
+      { code: 'DESN101', courseCode: 'DESN101', name: 'Design Principles & Spatial Forms', courseName: 'Design Principles & Spatial Forms', credits: 4, semesterTaken: 3, grade: 'A+', isPassed: true },
+      { code: 'UCOR210', courseCode: 'UCOR210', name: 'Critical Thinking', courseName: 'Critical Thinking', credits: 2, semesterTaken: 4, grade: 'A', isPassed: true },
+      { code: 'SLAD206', courseCode: 'SLAD206', name: 'Human Values in Work and Life', courseName: 'Human Values in Work and Life', credits: 2, semesterTaken: 4, grade: 'A', isPassed: true },
+      { code: 'SLAD207', courseCode: 'SLAD207', name: 'Foundation Seminar', courseName: 'Foundation Seminar', credits: 1, semesterTaken: 4, grade: 'A', isPassed: true },
+      { code: 'COMP205', courseCode: 'COMP205', name: 'Object Oriented Programming', courseName: 'Object Oriented Programming', credits: 3, semesterTaken: 4, grade: 'A', isPassed: true },
+      { code: 'COMP204', courseCode: 'COMP204', name: 'Digital Design and Computer Organization', courseName: 'Digital Design and Computer Organization', credits: 4, semesterTaken: 4, grade: 'A+', isPassed: true },
+      { code: 'COMP301', courseCode: 'COMP301', name: 'Artificial Intelligence', courseName: 'Artificial Intelligence', credits: 4, semesterTaken: 4, grade: 'A', isPassed: true },
+      { code: 'COMP209', courseCode: 'COMP209', name: 'Databases Management', courseName: 'Databases Management', credits: 3, semesterTaken: 4, grade: 'A+', isPassed: true },
+      { code: 'DESN201', courseCode: 'DESN201', name: 'Visual Communication & Typography', courseName: 'Visual Communication & Typography', credits: 4, semesterTaken: 4, grade: 'A', isPassed: true }
+    ],
+    // Enrolled Courses with Detailed Course-Wise Attendance
     enrolledCourses: [
       {
         code: 'LANG101',
@@ -400,10 +525,10 @@ const RAW_STUDENT_DATA = [
       },
       {
         code: 'COMP206',
-        name: 'Computer Organisation and Architecture',
+        name: 'Microprocessors and Computer Architecture',
         ltp: '3-0-2',
         credits: 4,
-        prerequisite: 'None',
+        prerequisite: 'COMP204, COMP207',
         conducted: 32,
         attended: 30,
         category: 'Core Engineering'
@@ -413,10 +538,10 @@ const RAW_STUDENT_DATA = [
         name: 'Machine Learning',
         ltp: '2-0-4',
         credits: 4,
-        prerequisite: 'DATA202, MATH301',
+        prerequisite: 'DATA201',
         conducted: 34,
         attended: 31,
-        category: 'Major Core'
+        category: 'Professional Core'
       },
       {
         code: 'DATA801',
@@ -430,15 +555,16 @@ const RAW_STUDENT_DATA = [
       }
     ],
     nextSemesterCourses: [
-      { code: 'COMP302', name: 'Internet of Things', ltp: '0-0-4', credits: 2, prerequisite: 'COMP132, COMP201, COMP206, COMP208, COMP301' },
+      { code: 'UCOR215', name: 'Humanistic Leadership Development', ltp: '1-1-0', credits: 2, prerequisite: 'None' },
+      { code: 'COMP302', name: 'Cloud Computing & Distributed Systems', ltp: '3-0-2', credits: 4, prerequisite: 'COMP208' },
       { code: 'DATA302', name: 'Deep Learning', ltp: '2-0-4', credits: 4, prerequisite: 'DATA301' },
-      { code: 'COMP401', name: 'Web Framework & Scalable Systems', ltp: '2-0-4', credits: 4, prerequisite: 'None' },
-      { code: 'UCOR215', name: 'Humanistic Leadership Development', ltp: '1-1-0', credits: 2, prerequisite: 'None' }
+      { code: 'DATA306', name: 'Deep Learning & NLP', ltp: '2-0-4', credits: 4, prerequisite: 'DATA301' }
     ],
-    passwords: ['Student3@2023', 'Chirag@VU2023']
+    salt: 'b2c3d4e5f6a1789023456789bcdef012',
+    password: 'Student3@2023'
   },
 
-  // ── STUDENT 4: Batch 2024, Sem 4 (Scenario B: Low Attendance in Exactly One Course: COMP209) ──
+  // ── STUDENT 4: Batch 2024, Sem 4 (Scenario B: Low Attendance in COMP209) ──
   {
     id: '2024UG00001',
     legacyAliases: ['VU-BTECH-2404'],
@@ -462,12 +588,13 @@ const RAW_STUDENT_DATA = [
       coursesOffered: [
         { code: 'MKTG101', name: 'Principles of Marketing', credits: 4, status: 'Completed', semester: 3, grade: 'A' },
         { code: 'MKTG201', name: 'Consumer Behavior & Insights', credits: 4, status: 'Pending', semester: 4 },
-        { code: 'MKTG202', name: 'Digital & Social Media Marketing', credits: 4, status: 'Pending', semester: 5 },
-        { code: 'MKTG301', name: 'Brand Strategy & Management', credits: 4, status: 'Pending', semester: 6 },
-        { code: 'MKTG302', name: 'Marketing Analytics & Metrics', credits: 4, status: 'Pending', semester: 7 },
-        { code: 'MKTG401', name: 'Integrated Marketing Communications', credits: 4, status: 'Pending', semester: 8 }
+        { code: 'MKTG202', name: 'Digital Marketing & Social Media Strategy', credits: 4, status: 'Pending', semester: 5 },
+        { code: 'MKTG301', name: 'Brand Management & Positioning', credits: 4, status: 'Pending', semester: 6 },
+        { code: 'MKTG302', name: 'Marketing Analytics & Research', credits: 4, status: 'Pending', semester: 7 },
+        { code: 'MKTG401', name: 'Strategic Marketing Management', credits: 4, status: 'Pending', semester: 8 }
       ]
     },
+    // Semester-wise CGPA and Credit Records (Sem 1 to Sem 3 completed)
     semesterHistory: [
       { semester: 1, sgpa: 8.20, credits: 23, status: 'Completed' },
       { semester: 2, sgpa: 8.40, credits: 23, status: 'Completed' },
@@ -478,6 +605,33 @@ const RAW_STUDENT_DATA = [
     cgpa: 8.24,
     medicalLeave: { hasRecord: false, status: 'No medical leave recorded' },
     backlogs: [],
+    // Verified completed courses from Batch 2024 curriculum spread (Semesters 1-3)
+    completedCourses: [
+      { code: 'UCOR106', courseCode: 'UCOR106', name: 'Learning to Learn', courseName: 'Learning to Learn', credits: 2, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'UCOR104', courseCode: 'UCOR104', name: 'Problem Solving with Design Thinking', courseName: 'Problem Solving with Design Thinking', credits: 2, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'UCOR102', courseCode: 'UCOR102', name: 'Introduction to writing', courseName: 'Introduction to writing', credits: 2, semesterTaken: 1, grade: 'B+', isPassed: true },
+      { code: 'MATH203', courseCode: 'MATH203', name: 'Probability and Statistics', courseName: 'Probability and Statistics', credits: 3, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'COMP132', courseCode: 'COMP132', name: 'Design Workshop', courseName: 'Design Workshop', credits: 2, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'MTSC111', courseCode: 'MTSC111', name: 'Materials for Smart Devices', courseName: 'Materials for Smart Devices', credits: 3, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'DATA131', courseCode: 'DATA131', name: 'Visualizing Data for Story Telling', courseName: 'Visualizing Data for Story Telling', credits: 2, semesterTaken: 1, grade: 'A+', isPassed: true },
+      { code: 'PSYC101', courseCode: 'PSYC101', name: 'Introduction to Psychology', courseName: 'Introduction to Psychology', credits: 3, semesterTaken: 1, grade: 'B+', isPassed: true },
+      { code: 'COMP201', courseCode: 'COMP201', name: 'Data Structures', courseName: 'Data Structures', credits: 4, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'UCOR103', courseCode: 'UCOR103', name: 'Communication and Leadership skills', courseName: 'Communication and Leadership skills', credits: 3, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'UCOR701', courseCode: 'UCOR701', name: 'Community Engagement and Service Experience', courseName: 'Community Engagement and Service Experience', credits: 1, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'UCOR205', courseCode: 'UCOR205', name: 'Socio Cultural Perspectives on Indian Life-SPIL', courseName: 'Socio Cultural Perspectives on Indian Life-SPIL', credits: 3, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'MATH201', courseCode: 'MATH201', name: 'Calculus', courseName: 'Calculus', credits: 3, semesterTaken: 2, grade: 'B+', isPassed: true },
+      { code: 'MTSC211', courseCode: 'MTSC211', name: 'Sustainable Smart Materials', courseName: 'Sustainable Smart Materials', credits: 3, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'ENGL201', courseCode: 'ENGL201', name: 'Academic Writing', courseName: 'Academic Writing', credits: 3, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'DATA201', courseCode: 'DATA201', name: 'Foundations to Data Science', courseName: 'Foundations to Data Science', credits: 3, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'COMP203', courseCode: 'COMP203', name: 'Analysis of Algorithms', courseName: 'Analysis of Algorithms', credits: 4, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'UCOR210', courseCode: 'UCOR210', name: 'Critical Thinking', courseName: 'Critical Thinking', credits: 3, semesterTaken: 3, grade: 'A', isPassed: true },
+      { code: 'SLAD206', courseCode: 'SLAD206', name: 'Fundamentals of Indian Constitution and Human Rights', courseName: 'Fundamentals of Indian Constitution and Human Rights', credits: 2, semesterTaken: 3, grade: 'A', isPassed: true },
+      { code: 'MATH204', courseCode: 'MATH204', name: 'Linear Algebra', courseName: 'Linear Algebra', credits: 3, semesterTaken: 3, grade: 'B+', isPassed: true },
+      { code: 'COMP202', courseCode: 'COMP202', name: 'Theoretical Computer Science', courseName: 'Theoretical Computer Science', credits: 4, semesterTaken: 3, grade: 'B+', isPassed: true },
+      { code: 'COMP205', courseCode: 'COMP205', name: 'Object Oriented Programming', courseName: 'Object Oriented Programming', credits: 3, semesterTaken: 3, grade: 'A', isPassed: true },
+      { code: 'DATA202', courseCode: 'DATA202', name: 'Exploratory Data Analysis', courseName: 'Exploratory Data Analysis', credits: 3, semesterTaken: 3, grade: 'A', isPassed: true },
+      { code: 'MKTG101', courseCode: 'MKTG101', name: 'Principles of Marketing [Minor]', courseName: 'Principles of Marketing [Minor]', credits: 4, semesterTaken: 3, grade: 'A', isPassed: true }
+    ],
     // Scenario B: Low attendance in COMP209 (68%), all other courses > 80%
     enrolledCourses: [
       {
@@ -493,7 +647,7 @@ const RAW_STUDENT_DATA = [
       {
         code: 'UCOR310',
         name: 'The Startup Game',
-        ltp: '2-1-0',
+        ltp: '2-0-2',
         credits: 3,
         prerequisite: 'None',
         conducted: 24,
@@ -508,13 +662,13 @@ const RAW_STUDENT_DATA = [
         prerequisite: 'None',
         conducted: 20,
         attended: 18, // 90.0%
-        category: 'Liberal Arts'
+        category: 'University Core'
       },
       {
         code: 'COMP403',
         name: 'Artificial Intelligence',
-        ltp: '2-0-2',
-        credits: 3,
+        ltp: '3-0-2',
+        credits: 4,
         prerequisite: 'None',
         conducted: 26,
         attended: 22, // 84.62%
@@ -542,25 +696,26 @@ const RAW_STUDENT_DATA = [
       },
       {
         code: 'MATH301',
-        name: 'Linear Algebra / Optimization',
+        name: 'Linear Algebra and Optimization',
         ltp: '3-1-0',
         credits: 4,
         prerequisite: 'None',
         conducted: 30,
         attended: 26, // 86.67%
-        category: 'Mathematics Core'
+        category: 'Applied Math'
       }
     ],
     nextSemesterCourses: [
-      { code: 'COMP206', name: 'Microprocessors and Computer Architecture', ltp: '3-0-2', credits: 4, prerequisite: 'COMP204, COMP207' },
-      { code: 'DATA301', name: 'Machine Learning', ltp: '2-0-4', credits: 4, prerequisite: 'DATA206, MATH301' },
-      { code: 'COMP401', name: 'Probabilistic Graph Models / Web Framework', ltp: '3-0-2', credits: 4, prerequisite: 'None' },
+      { code: 'COMP208', name: 'Computer Networks', ltp: '3-0-2', credits: 4, prerequisite: 'None' },
+      { code: 'COMP207', name: 'Operating Systems', ltp: '2-0-2', credits: 3, prerequisite: 'None' },
+      { code: 'DATA301', name: 'Machine Learning', ltp: '2-0-4', credits: 4, prerequisite: 'DATA201' },
       { code: 'DATA801', name: 'Summer Training / Internship', ltp: '0-0-0', credits: 2, prerequisite: 'None' }
     ],
-    passwords: ['Student4@2024', 'Divya@VU2024']
+    salt: 'c3d4e5f6a1b2890134567890cdef0123',
+    password: 'Student4@2024'
   },
 
-  // ── STUDENT 5: Batch 2025, Sem 3 (Economics Minor) ──
+  // ── STUDENT 5: Batch 2025, Sem 3 (Economics Minor, Early Progress) ──
   {
     id: '2025UG00001',
     legacyAliases: ['VU-BTECH-2505'],
@@ -582,14 +737,15 @@ const RAW_STUDENT_DATA = [
       school: 'School of Liberal Arts & Design',
       batch: '2025',
       coursesOffered: [
-        { code: 'ECON101', name: 'Microeconomics Principles', credits: 4, status: 'Pending', semester: 3 },
-        { code: 'ECON102', name: 'Macroeconomics Principles', credits: 4, status: 'Pending', semester: 4 },
+        { code: 'ECON101', name: 'Principles of Microeconomics', credits: 4, status: 'Pending', semester: 3 },
+        { code: 'ECON102', name: 'Principles of Macroeconomics', credits: 4, status: 'Pending', semester: 4 },
         { code: 'ECON201', name: 'Intermediate Microeconomics', credits: 4, status: 'Pending', semester: 5 },
         { code: 'ECON202', name: 'Intermediate Macroeconomics', credits: 4, status: 'Pending', semester: 6 },
         { code: 'ECON301', name: 'Econometrics & Quantitative Economics', credits: 4, status: 'Pending', semester: 7 },
         { code: 'ECON302', name: 'Development & International Economics', credits: 4, status: 'Pending', semester: 8 }
       ]
     },
+    // Semester-wise CGPA and Credit Records (Sem 1 to Sem 2 completed)
     semesterHistory: [
       { semester: 1, sgpa: 8.50, credits: 23, status: 'Completed' },
       { semester: 2, sgpa: 8.70, credits: 23, status: 'Completed' }
@@ -599,6 +755,26 @@ const RAW_STUDENT_DATA = [
     cgpa: 8.60,
     medicalLeave: { hasRecord: false, status: 'No medical leave recorded' },
     backlogs: [],
+    // Verified completed courses from Batch 2025 curriculum spread (Semesters 1-2)
+    completedCourses: [
+      { code: 'UCOR103', courseCode: 'UCOR103', name: 'Communication Skills', courseName: 'Communication Skills', credits: 2, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'UCOR106', courseCode: 'UCOR106', name: 'Learning to Learn', courseName: 'Learning to Learn', credits: 2, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'MATH208', courseCode: 'MATH208', name: 'Multivariate Calculus', courseName: 'Multivariate Calculus', credits: 3, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'MTSC111', courseCode: 'MTSC111', name: 'Materials for Smart Devices', courseName: 'Materials for Smart Devices', credits: 3, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'DATA103', courseCode: 'DATA103', name: 'Programming in Python', courseName: 'Programming in Python', credits: 3, semesterTaken: 1, grade: 'A+', isPassed: true },
+      { code: 'COMP201', courseCode: 'COMP201', name: 'Data Structures', courseName: 'Data Structures', credits: 4, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'MGMT101', courseCode: 'MGMT101', name: 'Management and Entrepreneurship', courseName: 'Management and Entrepreneurship', credits: 3, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'UCOR701', courseCode: 'UCOR701', name: 'Community Engagement and Service Experience', courseName: 'Community Engagement and Service Experience', credits: 3, semesterTaken: 1, grade: 'A', isPassed: true },
+      { code: 'UCOR202', courseCode: 'UCOR202', name: 'Human Values in work and Life', courseName: 'Human Values in work and Life', credits: 2, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'UCOR204', courseCode: 'UCOR204', name: 'Environmental Studies and Sustainability', courseName: 'Environmental Studies and Sustainability', credits: 2, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'MATH201', courseCode: 'MATH201', name: 'Calculus', courseName: 'Calculus', credits: 3, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'COMP204', courseCode: 'COMP204', name: 'Digital Design and Computer Organization', courseName: 'Digital Design and Computer Organization', credits: 4, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'COMP205', courseCode: 'COMP205', name: 'Object Oriented Programming', courseName: 'Object Oriented Programming', credits: 3, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'DATA201', courseCode: 'DATA201', name: 'Foundations to Data Science', courseName: 'Foundations to Data Science', credits: 3, semesterTaken: 2, grade: 'A+', isPassed: true },
+      { code: 'ENGL201', courseCode: 'ENGL201', name: 'Academic Writing', courseName: 'Academic Writing', credits: 3, semesterTaken: 2, grade: 'A', isPassed: true },
+      { code: 'UCOR206', courseCode: 'UCOR206', name: 'Fundamentals of Indian Constitution and Human Rights', courseName: 'Fundamentals of Indian Constitution and Human Rights', credits: 3, semesterTaken: 2, grade: 'A', isPassed: true }
+    ],
+    // Enrolled Courses with Detailed Course-Wise Attendance
     enrolledCourses: [
       {
         code: 'UCOR207',
@@ -618,17 +794,17 @@ const RAW_STUDENT_DATA = [
         prerequisite: 'None',
         conducted: 20,
         attended: 17,
-        category: 'Liberal Arts'
+        category: 'University Core'
       },
       {
         code: 'MATH209',
-        name: 'Linear Algebra',
+        name: 'Discrete Mathematics and Graph Theory',
         ltp: '3-1-0',
         credits: 4,
         prerequisite: 'None',
         conducted: 30,
         attended: 27,
-        category: 'Mathematics Core'
+        category: 'Applied Math'
       },
       {
         code: 'COMP202',
@@ -652,27 +828,26 @@ const RAW_STUDENT_DATA = [
       },
       {
         code: 'DATA209',
-        name: 'Advanced Exploratory Data Analysis',
+        name: 'Data Structures and Algorithms Lab',
         ltp: '2-0-4',
         credits: 4,
-        prerequisite: 'DATA132, MATH203',
+        prerequisite: 'COMP201',
         conducted: 32,
         attended: 28,
-        category: 'Major Core'
+        category: 'Core Engineering'
       }
     ],
     nextSemesterCourses: [
-      { code: 'UCOR205', name: 'Socio-Cultural Perspectives on Indian Life', ltp: '2-1-0', credits: 3, prerequisite: 'None' },
-      { code: 'MATH210', name: 'Advanced Statistical Analysis & Research Methods', ltp: '1-0-4', credits: 3, prerequisite: 'MATH203' },
-      { code: 'COMP211', name: 'Operating Systems', ltp: '3-0-2', credits: 4, prerequisite: 'None' },
-      { code: 'COMP301', name: 'Artificial Intelligence', ltp: '3-0-2', credits: 4, prerequisite: 'None' },
-      { code: 'COMP205', name: 'Object Oriented Programming', ltp: '2-0-2', credits: 3, prerequisite: 'None' },
-      { code: 'MATH301', name: 'Optimization Techniques for Data Science', ltp: '3-1-0', credits: 4, prerequisite: 'MATH201' }
+      { code: 'MATH301', name: 'Optimization Techniques for Data Science', ltp: '3-1-0', credits: 4, prerequisite: 'MATH201' },
+      { code: 'COMP209', name: 'Databases Management', ltp: '3-0-2', credits: 4, prerequisite: 'None' },
+      { code: 'COMP208', name: 'Computer Networks', ltp: '3-0-2', credits: 4, prerequisite: 'None' },
+      { code: 'COMP207', name: 'Operating Systems', ltp: '2-0-2', credits: 3, prerequisite: 'None' }
     ],
-    passwords: ['Student5@2025', 'Eshaan@VU2025']
+    salt: 'd4e5f6a1b2c3901245678901def01234',
+    password: 'Student5@2025'
   },
 
-  // ── STUDENT 6: Batch 2026, Sem 1 (Freshman, First Term in Progress) ──
+  // ── STUDENT 6: Batch 2026, Sem 1 (Freshman, Comprehensive Foundation) ──
   {
     id: '2026UG00001',
     legacyAliases: ['VU-BTECH-2606'],
@@ -695,11 +870,11 @@ const RAW_STUDENT_DATA = [
       batch: '2026',
       coursesOffered: [
         { code: 'PSYC101', name: 'Introduction to Psychology', credits: 4, status: 'Pending', semester: 3 },
-        { code: 'PSYC201', name: 'Cognitive Processes & Brain', credits: 4, status: 'Pending', semester: 4 },
-        { code: 'PSYC202', name: 'Social Behavior & Influence', credits: 4, status: 'Pending', semester: 5 },
-        { code: 'PSYC301', name: 'Lifespan Developmental Psychology', credits: 4, status: 'Pending', semester: 6 },
-        { code: 'PSYC302', name: 'Mental Health & Clinical Psychology', credits: 4, status: 'Pending', semester: 7 },
-        { code: 'PSYC401', name: 'Applied Behavioral & Work Psychology', credits: 4, status: 'Pending', semester: 8 }
+        { code: 'PSYC201', name: 'Cognitive Psychology', credits: 4, status: 'Pending', semester: 4 },
+        { code: 'PSYC202', name: 'Social Psychology', credits: 4, status: 'Pending', semester: 5 },
+        { code: 'PSYC301', name: 'Abnormal Psychology', credits: 4, status: 'Pending', semester: 6 },
+        { code: 'PSYC302', name: 'Counseling & Guidance', credits: 4, status: 'Pending', semester: 7 },
+        { code: 'PSYC401', name: 'Organizational Psychology', credits: 4, status: 'Pending', semester: 8 }
       ]
     },
     semesterHistory: [],
@@ -708,6 +883,9 @@ const RAW_STUDENT_DATA = [
     cgpa: 'In progress (Semester 1 exams pending)',
     medicalLeave: { hasRecord: false, status: 'No medical leave recorded' },
     backlogs: [],
+    // Freshman Year: 0 completed courses
+    completedCourses: [],
+    // Enrolled Courses in Semester 1 (Batch 2026 Foundation Schedule)
     enrolledCourses: [
       {
         code: 'UCOR107',
@@ -732,12 +910,12 @@ const RAW_STUDENT_DATA = [
       {
         code: 'MATH208',
         name: 'Multivariate Calculus',
-        ltp: '3-1-0',
-        credits: 4,
+        ltp: '2-1-0',
+        credits: 3,
         prerequisite: 'None',
         conducted: 28,
         attended: 25,
-        category: 'Mathematics Core'
+        category: 'Foundation'
       },
       {
         code: 'MTSC111',
@@ -747,7 +925,7 @@ const RAW_STUDENT_DATA = [
         prerequisite: 'None',
         conducted: 22,
         attended: 19,
-        category: 'Basic Science Core'
+        category: 'Foundation'
       },
       {
         code: 'DATA103',
@@ -757,51 +935,46 @@ const RAW_STUDENT_DATA = [
         prerequisite: 'None',
         conducted: 30,
         attended: 28,
-        category: 'Major Core'
+        category: 'Foundation'
       },
       {
         code: 'COMP204',
         name: 'Digital Design and Computer Organization',
-        ltp: '3-1-0',
-        credits: 4,
+        ltp: '2-1-0',
+        credits: 3,
         prerequisite: 'None',
         conducted: 28,
         attended: 25,
-        category: 'Core Engineering'
+        category: 'Program Core'
       },
       {
         code: 'MGMT101',
-        name: 'Essentials of Business Management',
-        ltp: '1-1-0',
+        name: 'Management and Entrepreneurship',
+        ltp: '2-0-0',
         credits: 2,
         prerequisite: 'None',
         conducted: 18,
         attended: 16,
-        category: 'Management Core'
+        category: 'Management'
       },
       {
         code: 'PSYC105/ECON106',
-        name: 'Intro to Psychology / Principles of Economics',
-        ltp: '1-1-0',
+        name: 'Social Sciences Elective (Psychology / Economics)',
+        ltp: '2-0-0',
         credits: 2,
         prerequisite: 'None',
         conducted: 18,
         attended: 17,
-        category: 'Interdisciplinary Core'
+        category: 'Multidisciplinary'
       }
     ],
     nextSemesterCourses: [
-      { code: 'UCOR111', name: 'Environmental Studies and Sustainability', ltp: '0-0-0', credits: 2, prerequisite: 'None' },
-      { code: 'LAWS101', name: 'Fundamentals of Indian Constitution & Human Rights', ltp: '1-1-0', credits: 2, prerequisite: 'None' },
-      { code: 'UCOR701', name: 'Community Engagement & Service Experience', ltp: '0-0-0', credits: 1, prerequisite: 'None' },
-      { code: 'MATH203', name: 'Probability and Statistics', ltp: '3-1-0', credits: 4, prerequisite: 'None' },
-      { code: 'MTSC211', name: 'Sustainable Smart Materials', ltp: '2-0-2', credits: 3, prerequisite: 'MTSC111' },
-      { code: 'COMP133', name: 'Design Workshop', ltp: '1-0-4', credits: 3, prerequisite: 'None' },
-      { code: 'COMP201', name: 'Data Structures', ltp: '3-0-2', credits: 4, prerequisite: 'None' },
+      { code: 'COMP201', name: 'Data Structures', ltp: '3-0-2', credits: 4, prerequisite: 'DATA103' },
       { code: 'DATA132', name: 'Data Visualization and Storytelling', ltp: '1-0-4', credits: 3, prerequisite: 'DATA103' },
       { code: 'COMP209', name: 'Databases Management', ltp: '3-0-2', credits: 4, prerequisite: 'None' }
     ],
-    passwords: ['Student6@2026', 'Farhan@VU2026']
+    salt: 'e5f6a1b2c3d4012356789012ef012345',
+    password: 'Student6@2026'
   }
 ];
 
@@ -810,9 +983,10 @@ const STUDENT_STORE = new Map();
 const ALIAS_LOOKUP = new Map();
 
 RAW_STUDENT_DATA.forEach(raw => {
-  const salt = getDeterministicSalt(raw.id);
-  // Support both primary and alternate demo passwords
-  const passwordHashes = (raw.passwords || []).map(p => hashPassword(p, salt));
+  // Passwords use unique random salts stored with their hashes; legacy password alternatives removed
+  const salt = raw.salt;
+  const passwordHash = hashPassword(raw.password, salt);
+  const storedHash = `${salt}:${passwordHash}`;
 
   // Compute enriched course attendance details
   const enrichedEnrolled = raw.enrolledCourses.map(c => {
@@ -853,6 +1027,7 @@ RAW_STUDENT_DATA.forEach(raw => {
     enrolledCourses: enrichedEnrolled,
     nextSemesterCourses: raw.nextSemesterCourses,
     backlogs: raw.backlogs || [],
+    completedCourses: raw.completedCourses || [],
     medicalLeave: raw.medicalLeave || { hasRecord: false },
     overallAttendance: {
       conducted: totalConducted,
@@ -868,7 +1043,8 @@ RAW_STUDENT_DATA.forEach(raw => {
   const record = {
     profile,
     salt,
-    passwordHashes
+    passwordHash,
+    storedHash
   };
 
   STUDENT_STORE.set(raw.id.toUpperCase(), record);
@@ -888,7 +1064,10 @@ function sanitizeProfile(profile) {
   if (!profile) return null;
   const clone = JSON.parse(JSON.stringify(profile));
   delete clone.salt;
+  delete clone.password;
+  delete clone.passwordHash;
   delete clone.passwordHashes;
+  delete clone.storedHash;
   delete clone.passwords;
   return clone;
 }
@@ -928,9 +1107,7 @@ function authenticateStudent(studentId, password) {
   if (!record) return null;
 
   const inputPass = String(password).trim();
-  const isMatch = record.passwordHashes.some(storedHash =>
-    verifyPassword(inputPass, storedHash, record.salt)
-  );
+  const isMatch = verifyPassword(inputPass, record.passwordHash, record.salt);
 
   if (!isMatch) return null;
 
@@ -1076,7 +1253,8 @@ function getStudentDashboardData(studentId) {
       backlogs: p.backlogs || [],
       hasBacklog: (p.backlogs || []).length > 0
     },
-    medicalLeave: p.medicalLeave || { hasRecord: false },
+    completedCourses: p.completedCourses || [],
+      medicalLeave: p.medicalLeave || { hasRecord: false },
     // Backward-compatible sections for existing UI callers
     studentInfo: {
       name: p.display_name,

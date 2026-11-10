@@ -458,14 +458,20 @@ app.post('/api/advisory', async (req, res) => {
     }
 
     // IDENTITY SECURITY ENFORCEMENT:
-    // If Bearer token is provided and valid, bind strictly to that student.
-    // If no Bearer token, callers cannot hijack a secure B.Tech student identity (VU-BTECH-*)
+    // Student identity for all 6 university student profiles (2022UG00001-2026UG00001 and legacy VU-BTECH-*)
+    // is obtained STRICTLY from the verified cryptographically-signed Bearer session token.
+    // Unauthenticated callers cannot pass a student ID in the payload to access protected student records.
     let effectiveProfile = null;
     if (authenticatedStudent) {
       effectiveProfile = authenticatedStudent;
-    } else if (profileId && !String(profileId).toUpperCase().startsWith('VU-BTECH')) {
-      // Legacy demo compatibility (e.g. VU-DEMO-*)
-      effectiveProfile = getStudentProfileById(profileId);
+    } else if (profileId) {
+      const cleanPid = String(profileId).trim().toUpperCase();
+      // Block any attempt to claim a secure student identity without an authenticated session
+      const isSecureStudent = /^(VU-BTECH|202[0-9]UG)/i.test(cleanPid);
+      if (!isSecureStudent) {
+        // Legacy non-sensitive demo compatibility only (e.g. VU-DEMO-*)
+        effectiveProfile = getStudentProfileById(profileId);
+      }
     }
 
     // Check if client requested agentic mode

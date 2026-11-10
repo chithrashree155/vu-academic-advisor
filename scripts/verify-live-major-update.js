@@ -89,17 +89,25 @@ async function run() {
     }
   }
 
-  // 3.1 Legacy alias login verification
+  // 3.1 Legacy alias login verification (using official password)
   for (const acc of PRIMARY_ACCOUNTS) {
     const res = await fetchLive('/api/student/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ studentId: acc.legacyId, password: acc.aliasPass })
+      body: JSON.stringify({ studentId: acc.legacyId, password: acc.pass })
     });
     verify(res.status === 200 && res.json?.status === 'success',
       `Live Legacy Alias Login: ${acc.legacyId}`
     );
   }
+
+  // 3.2 Verify retired legacy alternative passwords are rejected
+  const retiredRes = await fetchLive('/api/student/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ studentId: '2022UG00001', password: 'Aarav@VU2022' })
+  });
+  verify(retiredRes.status === 401, 'Live Retired legacy alternative passwords rejected (HTTP 401)');
 
   // 4. Live Dashboard Verification
   console.log('\n--- 4. LIVE DASHBOARD FOR ALL 6 STUDENTS ---');
@@ -128,8 +136,8 @@ async function run() {
       body: JSON.stringify({ query: 'How many medical leave days do I have?' })
     });
     const ansMed = qMed.json?.answer || '';
-    verify(ansMed.includes('12') && ansMed.includes('Approved'),
-      'Live Scenario A: Aarav Sharma has approved 12-day medical leave'
+    verify(ansMed.includes('13') && ansMed.includes('Approved'),
+      'Live Scenario A: Aarav Sharma has approved 13 calendar days medical leave'
     );
   }
 

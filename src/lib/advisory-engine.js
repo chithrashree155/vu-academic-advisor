@@ -1694,7 +1694,7 @@ function evaluateEligibility(studentProfile, targetCourse) {
   // 1. Prerequisite Check
   const reqPrereqs = getCoursePrerequisites(targetCourse.code);
   const completedCodes = studentProfile && Array.isArray(studentProfile.completedCourses)
-    ? studentProfile.completedCourses.map(c => c.courseCode.toUpperCase())
+    ? studentProfile.completedCourses.map(c => ((c.courseCode || c.code) || '').toUpperCase())
     : [];
 
   const missingPrereqs = reqPrereqs.filter(code => !completedCodes.includes(code.toUpperCase()));
@@ -1720,12 +1720,16 @@ function evaluateEligibility(studentProfile, targetCourse) {
   const courseSchool = targetCourse.school;
   const isCommonCore = courseSchool === SCHOOL_TAXONOMY.UNIVERSITY_CORE;
 
+  const isCSSchool = (s) => typeof s === 'string' && (s === SCHOOL_TAXONOMY.CS_DATA_AI || /comput|computer\s*science|data\s*science/i.test(s));
+
   let schoolCompatible = false;
   if (isCommonCore) {
     schoolCompatible = true;
-  } else if (studentSchool === courseSchool) {
+  } else if (studentSchool === courseSchool || (isCSSchool(studentSchool) && isCSSchool(courseSchool))) {
     schoolCompatible = true;
   } else if (targetCourse.cross_school_allowed) {
+    schoolCompatible = true;
+  } else if (Array.isArray(targetCourse.allowed_programs) && studentProfile && targetCourse.allowed_programs.includes(studentProfile.program)) {
     schoolCompatible = true;
   }
 
@@ -1733,8 +1737,8 @@ function evaluateEligibility(studentProfile, targetCourse) {
   // CS/Data/AI and Quantitative courses from School of Computer Science / Data / AI
   // are NOT automatically eligible for BA Economics / BMS / BA Psychology / Law / Design students
   // unless their specific degree program is explicitly included in allowed_programs.
-  const isCSOrMathSchool = courseSchool === SCHOOL_TAXONOMY.CS_DATA_AI;
-  const isNonCSStudent = studentSchool !== SCHOOL_TAXONOMY.CS_DATA_AI;
+  const isCSOrMathSchool = isCSSchool(courseSchool);
+  const isNonCSStudent = !isCSSchool(studentSchool);
 
   if (isCSOrMathSchool && isNonCSStudent) {
     const isProgramExplicitlyAllowed = Array.isArray(targetCourse.allowed_programs) &&
@@ -1763,6 +1767,9 @@ function evaluateEligibility(studentProfile, targetCourse) {
   }
 
   if (missingPrereqs.length > 0) {
+    const prereqDisplay = missingPrereqObjects.length > 0
+      ? missingPrereqObjects.map(p => `${p.code} (${p.name})`).join(', ')
+      : (missingPrereqs.join(', ') || 'the prerequisite course(s)');
     return {
       status: 'PREREQUISITE_NOT_MET',
       statusLabel: 'STATUS: NOT ELIGIBLE (PREREQUISITE NOT MET)',
@@ -1774,7 +1781,7 @@ function evaluateEligibility(studentProfile, targetCourse) {
       isSyntheticRule: false,
       reason: `You have not completed the mandatory prerequisite course required for enrollment.`,
       missingPrereqs: missingPrereqObjects,
-      nextStep: `Enroll in and pass ${missingPrereqObjects.map(p => `${p.code} (${p.name})`).join(', ')} before attempting to register for ${targetCourse.code}.`
+      nextStep: `Enroll in and pass ${prereqDisplay} before attempting to register for ${targetCourse.code}.`
     };
   }
 

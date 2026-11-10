@@ -99,17 +99,25 @@ async function runSuite() {
       }
     }
 
-    // 1.2 Backward-compatible login with legacy aliases (VU-BTECH-2201 format)
+    // 1.2 Backward-compatible login with legacy aliases (VU-BTECH-2201 format with primary password)
     for (const acc of PRIMARY_TEST_ACCOUNTS) {
       const res = await request('/api/student/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ studentId: acc.legacyId, password: acc.aliasPass })
+        body: JSON.stringify({ studentId: acc.legacyId, password: acc.pass })
       });
       assert(res.status === 200 && res.json?.status === 'success',
-        `Legacy Alias Login: ${acc.legacyId} (${acc.aliasPass})`
+        `Legacy Alias Login: ${acc.legacyId} (${acc.pass})`
       );
     }
+
+    // 1.2b Retired legacy alternative passwords are now rejected
+    const retiredPassRes = await request('/api/student/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ studentId: '2022UG00001', password: 'Aarav@VU2022' })
+    });
+    assert(retiredPassRes.status === 401, 'Retired legacy password alternatives correctly rejected (HTTP 401)');
 
     // 1.3 Whitespace trimming and case-insensitivity
     const whitespaceRes = await request('/api/student/login', {
@@ -231,8 +239,8 @@ async function runSuite() {
       body: JSON.stringify({ query: 'How many medical leave days do I have?' })
     });
     const ansMedDays = qMedDays.json?.answer || '';
-    assert(ansMedDays.includes('12') && ansMedDays.includes('Approved') && ansMedDays.includes('Typhoid'),
-      'Scenario A (Medical Leave): 12 days approved for Typhoid'
+    assert(ansMedDays.includes('13') && ansMedDays.includes('Approved') && ansMedDays.includes('Typhoid'),
+      'Scenario A (Medical Leave): 13 calendar days approved for Typhoid'
     );
 
     const qMedAtt = await request('/api/advisory', {

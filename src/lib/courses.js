@@ -130,6 +130,7 @@ const COURSE_PREREQUISITES = {
   'COMP201': ['DATA103'],
   'COMP202': ['COMP201'],
   'COMP203': ['COMP201'],
+  'COMP206': ['COMP204'],
   'COMP208': ['COMP204'],
   'COMP209': ['DATA103'],
   'COMP210': ['DATA103'],
@@ -362,21 +363,36 @@ function getCoursesByCredits(credits) {
  */
 function getCoursePrerequisites(courseCode) {
   const clean = courseCode ? courseCode.replace(/\s+/, '').toUpperCase() : '';
-  if (COURSE_PREREQUISITES[clean]) return COURSE_PREREQUISITES[clean];
-  const c = findCourseByCode(clean);
-  if (c && Array.isArray(c.prerequisites) && c.prerequisites.length > 0) return c.prerequisites;
-
-  // Check workbook prerequisites
-  try {
-    const { loadCurriculumData } = require('./curriculum-data');
-    const { prerequisites } = loadCurriculumData();
-    const prereq = prerequisites.find(p => p.courseCode.toUpperCase() === clean);
-    if (prereq && prereq.rawPrerequisiteText && !['NIL', 'Nil', 'None', 'N/A', '-'].includes(prereq.rawPrerequisiteText)) {
-      return [prereq.rawPrerequisiteText];
+  let rawPrereqs = [];
+  if (COURSE_PREREQUISITES[clean]) {
+    rawPrereqs = COURSE_PREREQUISITES[clean];
+  } else {
+    const c = findCourseByCode(clean);
+    if (c && Array.isArray(c.prerequisites) && c.prerequisites.length > 0) {
+      rawPrereqs = c.prerequisites;
+    } else {
+      // Check workbook prerequisites
+      try {
+        const { loadCurriculumData } = require('./curriculum-data');
+        const { prerequisites } = loadCurriculumData();
+        const prereq = prerequisites.find(p => p.courseCode.toUpperCase() === clean);
+        if (prereq && prereq.rawPrerequisiteText && !['NIL', 'Nil', 'None', 'N/A', '-'].includes(prereq.rawPrerequisiteText)) {
+          rawPrereqs = [prereq.rawPrerequisiteText];
+        }
+      } catch (e) {}
     }
-  } catch (e) {}
+  }
 
-  return [];
+  // Flatten and split any comma/slash separated codes e.g. "COMP204, COMP207" -> ["COMP204", "COMP207"]
+  const result = [];
+  for (const item of rawPrereqs) {
+    if (!item) continue;
+    const parts = String(item).split(/[,/&]+|\band\b/i).map(s => s.trim().toUpperCase()).filter(s => s && !['NIL', 'NONE', 'N/A', '-'].includes(s));
+    for (const p of parts) {
+      if (!result.includes(p)) result.push(p);
+    }
+  }
+  return result;
 }
 
 module.exports = {
