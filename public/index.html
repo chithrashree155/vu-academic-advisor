@@ -593,23 +593,38 @@
               type="text"
               id="loginStudentId"
               class="form-input"
-              placeholder="e.g. VU-BTECH-2201"
+              placeholder="e.g. 2022UG00001"
               required
               autocomplete="username"
             />
-            <span class="form-hint">Enter your assigned Vidyashilp University Student ID</span>
+            <span class="form-hint">Enter your assigned Vidyashilp University Student ID (e.g. 2022UG00001)</span>
           </div>
 
           <div class="form-group">
             <label class="form-label" for="loginPassword">Password</label>
-            <input
-              type="password"
-              id="loginPassword"
-              class="form-input"
-              placeholder="Enter your student password"
-              required
-              autocomplete="current-password"
-            />
+            <div class="password-input-wrapper">
+              <input
+                type="password"
+                id="loginPassword"
+                class="form-input"
+                placeholder="Enter your student password"
+                required
+                autocomplete="current-password"
+              />
+              <button
+                type="button"
+                id="togglePasswordBtn"
+                class="btn-toggle-password"
+                aria-label="Show password"
+                title="Show password"
+                onclick="togglePasswordVisibility()"
+              >
+                <svg id="eyeIcon" class="eye-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
             <span class="form-hint">Secured with cryptographic scrypt authentication</span>
           </div>
 
@@ -647,7 +662,7 @@
           <div class="drawer-stats-grid">
             <div class="ds-card">
               <span class="ds-label">Student ID</span>
-              <span class="ds-val" id="drawerId">VU-BTECH-2201</span>
+              <span class="ds-val" id="drawerId">2022UG00001</span>
             </div>
             <div class="ds-card">
               <span class="ds-label">Batch</span>
@@ -662,6 +677,10 @@
               <span class="ds-val ds-val-sm" id="drawerSchool">School of Computational and Data Sciences</span>
             </div>
             <div class="ds-card">
+              <span class="ds-label">Major</span>
+              <span class="ds-val" id="drawerMajor">Computer Science &amp; Engineering</span>
+            </div>
+            <div class="ds-card">
               <span class="ds-label">Declared Minor</span>
               <span class="ds-val" id="drawerMinor">Finance</span>
             </div>
@@ -673,20 +692,84 @@
               <span class="ds-label">Specialisation</span>
               <span class="ds-val" id="drawerSpec">Not specified</span>
             </div>
-            <div class="ds-card">
-              <span class="ds-label">Degree Norm</span>
-              <span class="ds-val" id="drawerDegreeNorm">180 Total Credits</span>
+          </div>
+        </div>
+
+        <!-- SECTION 2: ACADEMIC SUMMARY & PERFORMANCE (CGPA) -->
+        <div class="dash-section">
+          <div class="dash-sec-header">
+            <span class="dash-sec-badge">SECTION 2</span>
+            <h4 class="dash-sec-title">Academic Performance &amp; CGPA Summary</h4>
+          </div>
+          <div class="credit-overview-grid">
+            <div class="co-card co-card-primary">
+              <span class="co-label">Cumulative GPA (CGPA)</span>
+              <span class="co-val" id="drawerCgpaVal">8.59</span>
+              <span class="co-sub">Credit-weighted average across all completed semesters</span>
+            </div>
+            <div class="co-card">
+              <span class="co-label">Credits Completed</span>
+              <span class="co-val" id="drawerCompletedCreds">91 cr</span>
+              <span class="co-sub">Total earned credits toward graduation</span>
+            </div>
+            <div class="co-card">
+              <span class="co-label">Remaining Credits</span>
+              <span class="co-val" id="drawerRemainingCreds">89 cr</span>
+              <span class="co-sub">180 total degree credits required</span>
+            </div>
+            <div class="co-card">
+              <span class="co-label">Degree Pathway</span>
+              <span class="co-val" id="drawerMajorMinorPct">Major: 58% | Minor: 33%</span>
+              <span class="co-sub">156 Major credits + 24 Minor credits</span>
+            </div>
+          </div>
+
+          <!-- Semester Performance Breakdown Grid -->
+          <div class="semester-cgpa-container" id="drawerSemesterCgpaWrap">
+            <h5 class="sub-sec-title">Semester-Wise Performance (SGPA)</h5>
+            <div class="semester-cards-grid" id="drawerSemesterCardsGrid">
+              <!-- Dynamically populated -->
             </div>
           </div>
         </div>
 
-        <!-- SECTION 2: ACADEMIC INFORMATION (ENROLLED COURSES) -->
+        <!-- SECTION 3: COURSE-WISE ATTENDANCE ENGINE & RISK AUDIT -->
         <div class="dash-section">
           <div class="dash-sec-header">
-            <span class="dash-sec-badge">SECTION 2</span>
-            <h4 class="dash-sec-title">Academic Information — Current Enrolled Courses</h4>
+            <span class="dash-sec-badge">SECTION 3</span>
+            <h4 class="dash-sec-title">Course-Wise Attendance &amp; Eligibility Audit</h4>
           </div>
-          <p class="dash-sec-sub">Official courses for current semester grounded strictly in <em>Semester_Spread_Structures_Sept_2026.xlsx</em>.</p>
+          <div id="drawerAttendanceAlertBox" class="attendance-alert-container hidden"></div>
+          <div class="table-responsive">
+            <table class="dash-courses-table dash-attendance-table">
+              <thead>
+                <tr>
+                  <th>Course Code</th>
+                  <th>Course Title</th>
+                  <th>Conducted</th>
+                  <th>Attended</th>
+                  <th>Percentage</th>
+                  <th>Status</th>
+                  <th>Attendance Buffer / Recovery</th>
+                </tr>
+              </thead>
+              <tbody id="drawerAttendanceTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SECTION 4: ACADEMIC PROGRESS & ALERTS (BACKLOGS / MEDICAL LEAVE) -->
+        <div class="dash-section">
+          <div class="dash-sec-header">
+            <span class="dash-sec-badge">SECTION 4</span>
+            <h4 class="dash-sec-title">Academic Progress &amp; Official Records</h4>
+          </div>
+          <div id="drawerBacklogAlertBox" class="backlog-alert-container hidden"></div>
+          <div id="drawerMedicalLeaveBox" class="medical-leave-container hidden"></div>
+
+          <h5 class="sub-sec-title">Enrolled Courses — Semester Curriculum Schedule</h5>
           <div class="table-responsive">
             <table class="dash-courses-table">
               <thead>
@@ -695,6 +778,7 @@
                   <th>Course Title</th>
                   <th>L-T-P</th>
                   <th>Credits</th>
+                  <th>Category</th>
                   <th>Prerequisites</th>
                 </tr>
               </thead>
@@ -705,38 +789,15 @@
           </div>
         </div>
 
-        <!-- SECTION 3: CREDIT OVERVIEW -->
+        <!-- SECTION 5: MINOR CREDIT STRUCTURE -->
         <div class="dash-section">
           <div class="dash-sec-header">
-            <span class="dash-sec-badge">SECTION 3</span>
-            <h4 class="dash-sec-title">Credit Overview &amp; Multidisciplinary Progress</h4>
+            <span class="dash-sec-badge">SECTION 5</span>
+            <h4 class="dash-sec-title">Declared Minor Curriculum Structure</h4>
           </div>
-          <div class="credit-overview-grid">
-            <div class="co-card co-card-primary">
-              <span class="co-label">Total Degree Credits Required</span>
-              <span class="co-val">180 Credits</span>
-              <span class="co-sub">Official Vidyashilp University B.Tech (Hons.) CSE norm across all curriculum batches (2022–2026)</span>
-            </div>
-            <div class="co-card">
-              <span class="co-label">Completed Credits</span>
-              <span class="co-val co-val-muted" id="drawerCompletedCreds">Not available</span>
-              <span class="co-sub">Official earned credits are maintained in the university ERP (Digii Portal)</span>
-            </div>
-            <div class="co-card">
-              <span class="co-label">Remaining Credits</span>
-              <span class="co-val co-val-muted" id="drawerRemainingCreds">Not available</span>
-              <span class="co-sub">Cannot be calculated until official transcript credits are recorded in Digii ERP</span>
-            </div>
-            <div class="co-card">
-              <span class="co-label">Cumulative GPA / Attendance</span>
-              <span class="co-val co-val-muted">Not available</span>
-              <span class="co-sub">Maintained in university ERP; min 75% attendance mandatory for exam eligibility</span>
-            </div>
-          </div>
-
           <div class="minor-structure-box">
             <div class="msb-header">
-              <span class="msb-title">Declared Minor Credit Structure</span>
+              <span class="msb-title" id="drawerMinorTitleHeading">Declared Minor Curriculum</span>
               <span class="msb-badge" id="drawerMinorCreditsBadge">24 Credits</span>
             </div>
             <p class="msb-desc" id="drawerMinorStatusText">Offered under Minor_Courses_for_BTech_Students.xlsx</p>
@@ -748,8 +809,10 @@
 
       <div class="drawer-footer">
         <button class="btn-drawer-ask" onclick="askAboutMyCourses()">What courses do I have this semester?</button>
+        <button class="btn-drawer-ask" onclick="askAboutMyAttendance()">What is my attendance in each course?</button>
+        <button class="btn-drawer-ask" onclick="askAboutMyLowestAttendance()">Which course has my lowest attendance?</button>
+        <button class="btn-drawer-ask" onclick="askAboutMyCgpa()">What is my semester-wise CGPA?</button>
         <button class="btn-drawer-ask" onclick="askAboutMyMinor()">What are my minor requirements?</button>
-        <button class="btn-drawer-ask" onclick="askAboutMyEligibility()">Can I take DATA302?</button>
         <button class="btn-drawer-signout" onclick="signOutStudent()">Sign Out</button>
       </div>
     </div>

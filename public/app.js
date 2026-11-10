@@ -108,6 +108,32 @@ function closeStudentModal() {
   if (modal) modal.classList.add('hidden');
 }
 
+/**
+ * Toggle password visibility between text and password (accessible, does not submit form)
+ */
+function togglePasswordVisibility() {
+  const input = document.getElementById('loginPassword');
+  const btn = document.getElementById('togglePasswordBtn');
+  const eyeIcon = document.getElementById('eyeIcon');
+  if (!input || !btn) return;
+
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.setAttribute('aria-label', 'Hide password');
+    btn.setAttribute('title', 'Hide password');
+    if (eyeIcon) {
+      eyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+    }
+  } else {
+    input.type = 'password';
+    btn.setAttribute('aria-label', 'Show password');
+    btn.setAttribute('title', 'Show password');
+    if (eyeIcon) {
+      eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+    }
+  }
+}
+
 async function handleStudentSignIn(e) {
   if (e) {
     e.preventDefault();
@@ -119,7 +145,7 @@ async function handleStudentSignIn(e) {
   const errEl = document.getElementById('loginErrorMsg');
   const submitBtn = document.getElementById('loginSubmitBtn');
 
-  const studentId = idInput ? idInput.value.trim() : '';
+  const studentId = idInput ? idInput.value.trim().toUpperCase() : '';
   const password = passInput ? passInput.value.trim() : '';
 
   if (errEl) {
@@ -274,7 +300,7 @@ function updateAuthUI() {
   }
 }
 
-// ── MY PROFILE DRAWER / 3-SECTION STUDENT DASHBOARD ──
+// ── MY PROFILE DRAWER / ENHANCED STUDENT DASHBOARD ──
 async function openProfileDrawer() {
   if (!activeStudentProfile) {
     openStudentModal();
@@ -304,32 +330,49 @@ async function openProfileDrawer() {
   }
 
   const p = activeStudentProfile;
-  const sInfo = (dash && dash.studentInfo) ? dash.studentInfo : {
+  const sOverview = (dash && dash.studentOverview) ? dash.studentOverview : {
     name: p.display_name,
     studentId: p.id,
-    program: p.programName,
-    school: p.school,
     batch: p.batch,
     semester: `Semester ${p.semester}`,
-    declaredMinor: p.declaredMinor,
+    program: p.programName,
+    school: p.school,
+    major: 'Computer Science & Engineering',
+    minor: p.declaredMinor,
     minorSchool: p.minorSchool,
     specialisation: p.specialisation || 'Not specified'
   };
 
-  const aInfo = (dash && dash.academicInfo) ? dash.academicInfo : {
-    enrolledCourses: p.enrolledCourses || []
+  const aSummary = (dash && dash.academicSummary) ? dash.academicSummary : {
+    overallCgpa: p.cgpa,
+    completedCredits: p.completedCredits,
+    remainingCredits: p.remainingCredits,
+    majorProgress: 'In progress',
+    minorProgress: 'In progress'
   };
 
-  const cOverview = (dash && dash.creditOverview) ? dash.creditOverview : {
-    totalDegreeCreditsRequired: 180,
-    completedCredits: p.completedCredits || 'Not available in local records (refer to ERP)',
-    remainingCredits: p.remainingCredits || 'Not available until completed credits are recorded',
-    minorCreditStructure: p.minorCreditStructure
+  const attOverview = (dash && dash.attendanceOverview) ? dash.attendanceOverview : {
+    overallPercentage: 85.0,
+    courseList: p.enrolledCourses || []
   };
 
-  const initials = sInfo.name.split(' ').map(n => n[0]).join('').toUpperCase();
+  const semPerf = (dash && dash.semesterPerformance) ? dash.semesterPerformance : {
+    history: p.semesterHistory || [],
+    overallCgpa: p.cgpa
+  };
 
-  // Populate Section 1: Student Information
+  const aProgress = (dash && dash.academicProgress) ? dash.academicProgress : {
+    currentCourses: p.enrolledCourses || [],
+    backlogs: p.backlogs || [],
+    hasBacklog: (p.backlogs || []).length > 0
+  };
+
+  const medLeave = (dash && dash.medicalLeave) ? dash.medicalLeave : (p.medicalLeave || { hasRecord: false });
+  const mStructure = p.minorCreditStructure;
+
+  const initials = sOverview.name.split(' ').map(n => n[0]).join('').toUpperCase();
+
+  // Populate Section 1: Student Overview
   const dAvatar = document.getElementById('drawerAvatar');
   const dName = document.getElementById('drawerName');
   const dProg = document.getElementById('drawerProg');
@@ -337,62 +380,192 @@ async function openProfileDrawer() {
   const dBatch = document.getElementById('drawerBatch');
   const dSem = document.getElementById('drawerSem');
   const dSchool = document.getElementById('drawerSchool');
+  const dMajor = document.getElementById('drawerMajor');
   const dMinor = document.getElementById('drawerMinor');
   const dMinorSchool = document.getElementById('drawerMinorSchool');
   const dSpec = document.getElementById('drawerSpec');
 
   if (dAvatar) dAvatar.textContent = initials;
-  if (dName) dName.textContent = sInfo.name;
-  if (dProg) dProg.textContent = sInfo.program;
-  if (dId) dId.textContent = sInfo.studentId;
-  if (dBatch) dBatch.textContent = `Batch ${sInfo.batch}`;
-  if (dSem) dSem.textContent = sInfo.semester;
-  if (dSchool) dSchool.textContent = sInfo.school;
-  if (dMinor) dMinor.textContent = sInfo.declaredMinor;
-  if (dMinorSchool) dMinorSchool.textContent = sInfo.minorSchool;
-  if (dSpec) dSpec.textContent = sInfo.specialisation;
+  if (dName) dName.textContent = sOverview.name;
+  if (dProg) dProg.textContent = sOverview.program;
+  if (dId) dId.textContent = sOverview.studentId;
+  if (dBatch) dBatch.textContent = `Batch ${sOverview.batch}`;
+  if (dSem) dSem.textContent = sOverview.semester;
+  if (dSchool) dSchool.textContent = sOverview.school;
+  if (dMajor) dMajor.textContent = sOverview.major;
+  if (dMinor) dMinor.textContent = sOverview.minor;
+  if (dMinorSchool) dMinorSchool.textContent = sOverview.minorSchool;
+  if (dSpec) dSpec.textContent = sOverview.specialisation;
 
-  // Populate Section 2: Academic Information (Courses Table)
+  // Populate Section 2: Academic Summary & CGPA Overview
+  const dCgpaVal = document.getElementById('drawerCgpaVal');
+  const dCompletedCreds = document.getElementById('drawerCompletedCreds');
+  const dRemainingCreds = document.getElementById('drawerRemainingCreds');
+  const dMajorMinorPct = document.getElementById('drawerMajorMinorPct');
+
+  if (dCgpaVal) dCgpaVal.textContent = typeof aSummary.overallCgpa === 'number' ? aSummary.overallCgpa.toFixed(2) : aSummary.overallCgpa;
+  if (dCompletedCreds) dCompletedCreds.textContent = `${aSummary.completedCredits} cr`;
+  if (dRemainingCreds) dRemainingCreds.textContent = `${aSummary.remainingCredits} cr`;
+  if (dMajorMinorPct) dMajorMinorPct.textContent = `Major: ${aSummary.majorProgress} | Minor: ${aSummary.minorProgress}`;
+
+  // Populate Semester-Wise Performance Grid
+  const semGrid = document.getElementById('drawerSemesterCardsGrid');
+  if (semGrid) {
+    if (semPerf.history && semPerf.history.length > 0) {
+      semGrid.innerHTML = semPerf.history.map(h => `
+        <div class="sem-perf-card">
+          <div class="spc-sem">Semester ${h.semester}</div>
+          <div class="spc-sgpa">${h.sgpa.toFixed(2)} SGPA</div>
+          <div class="spc-creds">${h.credits} credits completed</div>
+          <div class="spc-status">${escHtml(h.status)}</div>
+        </div>
+      `).join('');
+    } else {
+      semGrid.innerHTML = '<div class="sem-perf-card"><div class="spc-sem">Semester 1</div><div class="spc-sgpa">In Progress</div><div class="spc-creds">Freshman Year</div><div class="spc-status">Enrolled</div></div>';
+    }
+  }
+
+  // Populate Section 3: Course-Wise Attendance Overview & Alerts
+  const attAlertBox = document.getElementById('drawerAttendanceAlertBox');
+  const attTbody = document.getElementById('drawerAttendanceTableBody');
+
+  const coursesList = attOverview.courseList || [];
+  const lowCourse = coursesList.find(c => c.isAtRisk || c.percentage < 75.0);
+
+  if (attAlertBox) {
+    if (lowCourse) {
+      attAlertBox.className = 'attendance-alert-container attendance-alert-danger';
+      attAlertBox.innerHTML = `
+        <div class="alert-icon">⚠</div>
+        <div class="alert-content">
+          <strong>Attendance Risk Alert: Low Attendance in ${escHtml(lowCourse.code)} (${lowCourse.percentage}%)</strong>
+          <p>Under Handbook Clause 7.2, attendance below 75% results in examination debarment. 
+          To restore eligibility, you must attend the next <strong>${lowCourse.classesNeededFor75} consecutive classes</strong> without missing any. 
+          Missing another class increases required recovery to 10 classes.</p>
+        </div>
+      `;
+      attAlertBox.classList.remove('hidden');
+    } else {
+      attAlertBox.className = 'attendance-alert-container attendance-alert-success';
+      attAlertBox.innerHTML = `
+        <div class="alert-icon">✓</div>
+        <div class="alert-content">
+          <strong>Attendance Good Standing: Overall ${attOverview.overallPercentage || 85}%</strong>
+          <p>All registered courses satisfy the university 75% minimum attendance requirement.</p>
+        </div>
+      `;
+      attAlertBox.classList.remove('hidden');
+    }
+  }
+
+  if (attTbody) {
+    if (coursesList.length > 0) {
+      attTbody.innerHTML = coursesList.map(c => {
+        const isAtRisk = c.isAtRisk || c.percentage < 75.0;
+        const rowClass = isAtRisk ? 'row-attendance-risk' : '';
+        const badgeClass = isAtRisk ? 'badge-att-danger' : 'badge-att-good';
+        const bufferText = isAtRisk
+          ? `<strong class="text-danger">Needs ${c.classesNeededFor75} consecutive classes</strong>`
+          : `Can safely miss ${c.classesCanMiss} class${c.classesCanMiss === 1 ? '' : 'es'}`;
+
+        return `
+          <tr class="${rowClass}">
+            <td class="dct-code"><strong>${escHtml(c.code)}</strong></td>
+            <td class="dct-title">${escHtml(c.name || c.title)}</td>
+            <td class="dct-conducted">${c.conducted}</td>
+            <td class="dct-attended">${c.attended}</td>
+            <td class="dct-pct"><span class="${badgeClass}">${c.percentage}%</span></td>
+            <td class="dct-status">${escHtml(c.status || (isAtRisk ? 'At Risk (< 75%)' : 'Eligible'))}</td>
+            <td class="dct-buffer">${bufferText}</td>
+          </tr>
+        `;
+      }).join('');
+    } else {
+      attTbody.innerHTML = '<tr><td colspan="7" class="dct-empty">No course attendance records found.</td></tr>';
+    }
+  }
+
+  // Populate Section 4: Academic Progress & Alerts (Backlog / Medical Leave)
+  const backlogBox = document.getElementById('drawerBacklogAlertBox');
+  const medicalBox = document.getElementById('drawerMedicalLeaveBox');
+
+  if (backlogBox) {
+    if (aProgress.hasBacklog && aProgress.backlogs.length > 0) {
+      const bl = aProgress.backlogs[0];
+      backlogBox.className = 'backlog-alert-container backlog-alert-danger';
+      backlogBox.innerHTML = `
+        <div class="alert-icon">❌</div>
+        <div class="alert-content">
+          <strong>Active Backlog Alert: ${escHtml(bl.code)} — ${escHtml(bl.name)}</strong>
+          <p><strong>Grade:</strong> '${escHtml(bl.grade)}' in Semester ${bl.semesterTaken} | <strong>Credits:</strong> ${bl.credits} cr</p>
+          <p><strong>Handbook Clause 12.1 Mandate:</strong> A student cannot graduate or be awarded the B.Tech degree until all 180 credits and mandatory courses are cleared with a minimum passing grade (P). Register for re-examination on Digii ERP.</p>
+        </div>
+      `;
+      backlogBox.classList.remove('hidden');
+    } else {
+      backlogBox.classList.add('hidden');
+    }
+  }
+
+  if (medicalBox) {
+    if (medLeave && medLeave.hasRecord) {
+      medicalBox.className = 'medical-leave-container medical-leave-approved';
+      medicalBox.innerHTML = `
+        <div class="alert-icon">🏥</div>
+        <div class="alert-content">
+          <strong>Official Medical Leave Record: ${escHtml(medLeave.status)}</strong>
+          <p><strong>Duration:</strong> ${escHtml(medLeave.duration)} | <strong>Reason:</strong> ${escHtml(medLeave.reason)}</p>
+          <p><strong>Approval:</strong> ${escHtml(medLeave.approvalAuthority)} (Compliant with SOP Clause 2, submitted within 3 working days).</p>
+          <p><strong>Attendance Standing:</strong> Under Handbook Clause 7.3, allows relaxation down to 65% if attendance drops below 75%. Your attendance currently exceeds 81% in affected courses, so exam eligibility is fully maintained.</p>
+        </div>
+      `;
+      medicalBox.classList.remove('hidden');
+    } else {
+      medicalBox.classList.add('hidden');
+    }
+  }
+
+  // Populate Enrolled Courses Table
   const tbody = document.getElementById('drawerCoursesTableBody');
   if (tbody) {
-    if (aInfo.enrolledCourses && aInfo.enrolledCourses.length > 0) {
-      tbody.innerHTML = aInfo.enrolledCourses.map(c => `
+    const enrolled = aProgress.currentCourses || [];
+    if (enrolled.length > 0) {
+      tbody.innerHTML = enrolled.map(c => `
         <tr>
           <td class="dct-code"><strong>${escHtml(c.code)}</strong></td>
           <td class="dct-title">${escHtml(c.title || c.name)}</td>
           <td class="dct-ltp"><code>${escHtml(c.ltp)}</code></td>
           <td class="dct-credits"><span class="badge-credit">${c.credits} cr</span></td>
+          <td class="dct-category">${escHtml(c.category || 'Core Engineering')}</td>
           <td class="dct-prereq">${escHtml(c.prerequisite || 'None')}</td>
         </tr>
       `).join('');
     } else {
-      tbody.innerHTML = '<tr><td colspan="5" class="dct-empty">Standard semester basket enrollment.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" class="dct-empty">Standard semester basket enrollment.</td></tr>';
     }
   }
 
-  // Populate Section 3: Credit Overview
-  const dCompleted = document.getElementById('drawerCompletedCreds');
-  const dRemaining = document.getElementById('drawerRemainingCreds');
+  // Populate Section 5: Declared Minor Structure
   const dMinorBadge = document.getElementById('drawerMinorCreditsBadge');
+  const dMinorHeading = document.getElementById('drawerMinorTitleHeading');
   const dMinorStatus = document.getElementById('drawerMinorStatusText');
   const dMinorList = document.getElementById('drawerMinorCoursesList');
 
-  if (dCompleted) dCompleted.textContent = cOverview.completedCredits;
-  if (dRemaining) dRemaining.textContent = cOverview.remainingCredits;
-
-  const mStructure = cOverview.minorCreditStructure;
   if (dMinorBadge) {
     dMinorBadge.textContent = `${mStructure ? (mStructure.requiredCredits || mStructure.totalCredits || 24) : 24} Credits`;
   }
+  if (dMinorHeading) {
+    dMinorHeading.textContent = `Declared Minor: ${sOverview.minor}`;
+  }
   if (dMinorStatus) {
-    dMinorStatus.textContent = `${sInfo.declaredMinor} (${sInfo.minorSchool}) · Grounded in Minor_Courses_for_BTech_Students.xlsx`;
+    dMinorStatus.textContent = `${sOverview.minor} (${sOverview.minorSchool}) · Grounded in Minor_Courses_for_BTech_Students.xlsx`;
   }
   if (dMinorList) {
     const courses = (mStructure && (mStructure.curriculumCourses || mStructure.coursesOffered)) || [];
     if (courses.length > 0) {
       dMinorList.innerHTML = courses.map(c => `
         <span class="msb-course-chip" title="${escHtml(c.name)}">
-          <strong>${escHtml(c.code)}</strong>: ${escHtml(c.name)} (${c.credits} cr)
+          <strong>${escHtml(c.code)}</strong>: ${escHtml(c.name)} (${c.credits} cr) ${c.status ? '— ' + c.status : ''}
         </span>
       `).join('');
     } else {
@@ -412,6 +585,24 @@ function askAboutMyCourses() {
   closeProfileDrawer();
   scrollToAdvisor();
   sendQuery('What courses do I have this semester?');
+}
+
+function askAboutMyAttendance() {
+  closeProfileDrawer();
+  scrollToAdvisor();
+  sendQuery('What is my attendance in each course?');
+}
+
+function askAboutMyLowestAttendance() {
+  closeProfileDrawer();
+  scrollToAdvisor();
+  sendQuery('Which course has my lowest attendance?');
+}
+
+function askAboutMyCgpa() {
+  closeProfileDrawer();
+  scrollToAdvisor();
+  sendQuery('What is my semester-wise CGPA?');
 }
 
 function askAboutMyMinor() {

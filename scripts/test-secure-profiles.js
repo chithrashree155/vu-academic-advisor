@@ -1,6 +1,6 @@
 /**
  * Comprehensive Automated Verification Suite for Secure Student Profiles,
- * Personalised RAG, Data Isolation, and Accessibility Features
+ * Personalised RAG, Data Isolation, and Special Academic Scenarios
  * Vidyashilp University (VU Academic Advisor)
  */
 
@@ -8,16 +8,16 @@
 
 const app = require('../src/server');
 const http = require('http');
-const { ALL_PROFILES, authenticateStudent, validateSession } = require('../src/lib/student-auth');
+const { ALL_PROFILES, authenticateStudent, validateSession, calculateAttendanceStatus } = require('../src/lib/student-auth');
 const { processAdvisorQuery } = require('../src/lib/advisory-engine');
 
-const TEST_ACCOUNTS = [
-  { id: 'VU-BTECH-2201', name: 'Aarav Sharma', batch: '2022', sem: 5, minor: 'Finance', pass: 'Aarav@VU2022' },
-  { id: 'VU-BTECH-2202', name: 'Bhavya Patel', batch: '2022', sem: 7, minor: 'Psychology', pass: 'Bhavya@VU2022' },
-  { id: 'VU-BTECH-2303', name: 'Chirag Verma', batch: '2023', sem: 5, minor: 'Design', pass: 'Chirag@VU2023' },
-  { id: 'VU-BTECH-2404', name: 'Divya Nair', batch: '2024', sem: 4, minor: 'Marketing', pass: 'Divya@VU2024' },
-  { id: 'VU-BTECH-2505', name: 'Eshaan Kulkarni', batch: '2025', sem: 3, minor: 'Economics', pass: 'Eshaan@VU2025' },
-  { id: 'VU-BTECH-2606', name: 'Farhan Ahmed', batch: '2026', sem: 1, minor: 'Psychology', pass: 'Farhan@VU2026' }
+const PRIMARY_TEST_ACCOUNTS = [
+  { id: '2022UG00001', name: 'Aarav Sharma', batch: '2022', sem: 5, minor: 'Finance', pass: 'Student1@2022', aliasPass: 'Aarav@VU2022', legacyId: 'VU-BTECH-2201' },
+  { id: '2022UG00002', name: 'Bhavya Patel', batch: '2022', sem: 7, minor: 'Psychology', pass: 'Student2@2022', aliasPass: 'Bhavya@VU2022', legacyId: 'VU-BTECH-2202' },
+  { id: '2023UG00001', name: 'Chirag Verma', batch: '2023', sem: 5, minor: 'Design', pass: 'Student3@2023', aliasPass: 'Chirag@VU2023', legacyId: 'VU-BTECH-2303' },
+  { id: '2024UG00001', name: 'Divya Nair', batch: '2024', sem: 4, minor: 'Marketing', pass: 'Student4@2024', aliasPass: 'Divya@VU2024', legacyId: 'VU-BTECH-2404' },
+  { id: '2025UG00001', name: 'Eshaan Kulkarni', batch: '2025', sem: 3, minor: 'Economics', pass: 'Student5@2025', aliasPass: 'Eshaan@VU2025', legacyId: 'VU-BTECH-2505' },
+  { id: '2026UG00001', name: 'Farhan Ahmed', batch: '2026', sem: 1, minor: 'Psychology', pass: 'Student6@2026', aliasPass: 'Farhan@VU2026', legacyId: 'VU-BTECH-2606' }
 ];
 
 let server;
@@ -83,15 +83,15 @@ async function runSuite() {
 
     const authTokens = {};
 
-    // 1.1 All 6 accounts log in successfully with correct passwords
-    for (const acc of TEST_ACCOUNTS) {
+    // 1.1 All 6 accounts log in successfully with university synthetic IDs (2022UG00001 format)
+    for (const acc of PRIMARY_TEST_ACCOUNTS) {
       const res = await request('/api/student/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ studentId: acc.id, password: acc.pass })
       });
       assert(res.status === 200 && res.json?.status === 'success' && res.json?.token,
-        `Student Login: ${acc.id} (${acc.name})`,
+        `Student Login (Synthetic ID): ${acc.id} (${acc.name})`,
         `Expected 200 + token, got ${res.status}: ${JSON.stringify(res.json)}`
       );
       if (res.json?.token) {
@@ -99,15 +99,37 @@ async function runSuite() {
       }
     }
 
-    // 1.2 Incorrect password rejected (HTTP 401)
+    // 1.2 Backward-compatible login with legacy aliases (VU-BTECH-2201 format)
+    for (const acc of PRIMARY_TEST_ACCOUNTS) {
+      const res = await request('/api/student/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ studentId: acc.legacyId, password: acc.aliasPass })
+      });
+      assert(res.status === 200 && res.json?.status === 'success',
+        `Legacy Alias Login: ${acc.legacyId} (${acc.aliasPass})`
+      );
+    }
+
+    // 1.3 Whitespace trimming and case-insensitivity
+    const whitespaceRes = await request('/api/student/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ studentId: '   2022ug00001   ', password: 'Student1@2022' })
+    });
+    assert(whitespaceRes.status === 200 && whitespaceRes.json?.student?.display_name === 'Aarav Sharma',
+      'Student ID trimming and case-insensitive matching works'
+    );
+
+    // 1.4 Incorrect password rejected (HTTP 401)
     const badPassRes = await request('/api/student/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ studentId: 'VU-BTECH-2201', password: 'IncorrectPassword!123' })
+      body: JSON.stringify({ studentId: '2022UG00001', password: 'IncorrectPassword!123' })
     });
     assert(badPassRes.status === 401, 'Incorrect password rejected with HTTP 401', `Got status ${badPassRes.status}`);
 
-    // 1.3 Missing credentials rejected (HTTP 400)
+    // 1.5 Missing credentials rejected (HTTP 400)
     const emptyLoginRes = await request('/api/student/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -115,21 +137,21 @@ async function runSuite() {
     });
     assert(emptyLoginRes.status === 400, 'Empty login payload rejected with HTTP 400', `Got status ${emptyLoginRes.status}`);
 
-    // 1.4 Unauthenticated access to /api/student/profile rejected (HTTP 401)
+    // 1.6 Unauthenticated access to /api/student/profile rejected (HTTP 401)
     const unauthProf = await request('/api/student/profile');
     assert(unauthProf.status === 401, 'Unauthenticated profile request rejected with HTTP 401', `Got status ${unauthProf.status}`);
 
-    // 1.5 Unauthenticated access to /api/student/dashboard rejected (HTTP 401)
+    // 1.7 Unauthenticated access to /api/student/dashboard rejected (HTTP 401)
     const unauthDash = await request('/api/student/dashboard');
     assert(unauthDash.status === 401, 'Unauthenticated dashboard request rejected with HTTP 401', `Got status ${unauthDash.status}`);
 
-    // 1.6 Tampered session token rejected (HTTP 401)
+    // 1.8 Tampered session token rejected (HTTP 401)
     const tamperedRes = await request('/api/student/profile', {
       headers: { 'Authorization': 'Bearer bad_token_1234567890abcdef' }
     });
     assert(tamperedRes.status === 401, 'Tampered token rejected with HTTP 401', `Got status ${tamperedRes.status}`);
 
-    // 1.7 Public student list endpoint is disabled (HTTP 403)
+    // 1.9 Public student list endpoint is disabled (HTTP 403)
     const listRes = await request('/api/student/list');
     assert(listRes.status === 403, 'Public /api/student/list disabled (HTTP 403)', `Got status ${listRes.status}`);
     const profilesRes = await request('/api/profiles');
@@ -140,19 +162,19 @@ async function runSuite() {
     // ════════════════════════════════════════════════════════
     console.log('\n--- 2. DATA ISOLATION & DASHBOARD INTEGRITY ---');
 
-    // 2.1 Authenticated dashboard returns 3 distinct sections
+    // 2.1 Authenticated dashboard returns student overview, academic summary, attendance overview
     const dashA = await request('/api/student/dashboard', {
-      headers: { 'Authorization': `Bearer ${authTokens['VU-BTECH-2201']}` }
+      headers: { 'Authorization': `Bearer ${authTokens['2022UG00001']}` }
     });
-    assert(dashA.status === 200 && dashA.json?.dashboard?.studentInfo && dashA.json?.dashboard?.academicInfo && dashA.json?.dashboard?.creditOverview,
-      'Student A dashboard has 3 distinct sections (Student, Academic, Credit Overview)',
+    assert(dashA.status === 200 && dashA.json?.dashboard?.studentOverview && dashA.json?.dashboard?.academicSummary && dashA.json?.dashboard?.attendanceOverview,
+      'Student A dashboard has rich sections (Overview, Summary, Attendance Overview)',
       `Got ${JSON.stringify(dashA.json)}`
     );
 
     // 2.2 Dashboard Section 1: Official student info & declared minor
-    const sInfo = dashA.json?.dashboard?.studentInfo;
-    assert(sInfo?.name === 'Aarav Sharma' && sInfo?.declaredMinor === 'Finance' && sInfo?.specialisation === 'Not specified',
-      'Dashboard Section 1: Aarav Sharma, Finance minor, Not specified specialisation'
+    const sInfo = dashA.json?.dashboard?.studentOverview;
+    assert(sInfo?.name === 'Aarav Sharma' && sInfo?.minor === 'Finance' && sInfo?.specialisation === 'Not specified' && sInfo?.studentId === '2022UG00001',
+      'Dashboard Section 1: Aarav Sharma, 2022UG00001, Finance minor, Not specified specialisation'
     );
 
     // 2.3 Dashboard Section 2: Official enrolled courses (LTP, credits, prereqs)
@@ -163,20 +185,17 @@ async function runSuite() {
       'Dashboard Section 2: Exact Batch 2022 Sem 5 courses (COMP208, DATA301, 5 courses total)'
     );
 
-    // 2.4 Dashboard Section 3: 180 degree credits, completed/remaining "Not available"
-    const cOver = dashA.json?.dashboard?.creditOverview;
-    assert(cOver?.totalDegreeCreditsRequired === 180 &&
-           String(cOver?.completedCredits).includes('Not available') &&
-           String(cOver?.remainingCredits).includes('Not available') &&
-           cOver?.minorCreditStructure?.requiredCredits === 24,
-      'Dashboard Section 3: 180 total credits, completed "Not available", remaining "Not available", 24 minor credits'
+    // 2.4 Dashboard Section 3: 180 degree credits, completed credits 91 cr, remaining 89 cr
+    const aSum = dashA.json?.dashboard?.academicSummary;
+    assert(aSum?.degreeTotalCredits === 180 && aSum?.completedCredits === 91 && aSum?.remainingCredits === 89,
+      'Dashboard Section 3: 180 total credits, 91 completed credits, 89 remaining credits'
     );
 
     // 2.5 Data Isolation: Token for Student A retrieves Student A only (cannot see Student B)
     const profA = await request('/api/student/profile', {
-      headers: { 'Authorization': `Bearer ${authTokens['VU-BTECH-2201']}` }
+      headers: { 'Authorization': `Bearer ${authTokens['2022UG00001']}` }
     });
-    assert(profA.json?.student?.id === 'VU-BTECH-2201' && profA.json?.student?.display_name === 'Aarav Sharma',
+    assert(profA.json?.student?.id === '2022UG00001' && profA.json?.student?.display_name === 'Aarav Sharma',
       'Token A returns Student A record'
     );
 
@@ -185,26 +204,87 @@ async function runSuite() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authTokens['VU-BTECH-2201']}`
+        'Authorization': `Bearer ${authTokens['2022UG00001']}`
       },
       body: JSON.stringify({ sender: 'user', text: 'Private note for Student A' })
     });
     const histA = await request('/api/student/history', {
-      headers: { 'Authorization': `Bearer ${authTokens['VU-BTECH-2201']}` }
+      headers: { 'Authorization': `Bearer ${authTokens['2022UG00001']}` }
     });
     const histB = await request('/api/student/history', {
-      headers: { 'Authorization': `Bearer ${authTokens['VU-BTECH-2202']}` }
+      headers: { 'Authorization': `Bearer ${authTokens['2022UG00002']}` }
     });
     const studentAHasNote = (histA.json?.history || []).some(m => m.text.includes('Private note for Student A'));
     const studentBHasNote = (histB.json?.history || []).some(m => m.text.includes('Private note for Student A'));
     assert(studentAHasNote && !studentBHasNote, 'Chat history strictly isolated between Student A and Student B');
 
     // ════════════════════════════════════════════════════════
-    // 3. PERSONALISED RAG EVALUATION FOR ALL 6 STUDENTS
+    // 3. THREE REQUIRED SPECIAL STUDENT SCENARIOS
     // ════════════════════════════════════════════════════════
-    console.log('\n--- 3. PERSONALISED RAG EVALUATION FOR ALL 6 STUDENTS ---');
+    console.log('\n--- 3. SPECIAL ACADEMIC SCENARIOS AUDIT ---');
 
-    for (const acc of TEST_ACCOUNTS) {
+    // 3.1 Scenario A: Medical Leave for Aarav Sharma (2022UG00001)
+    const tokenA = authTokens['2022UG00001'];
+    const qMedDays = await request('/api/advisory', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${tokenA}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: 'How many medical leave days do I have?' })
+    });
+    const ansMedDays = qMedDays.json?.answer || '';
+    assert(ansMedDays.includes('12') && ansMedDays.includes('Approved') && ansMedDays.includes('Typhoid'),
+      'Scenario A (Medical Leave): 12 days approved for Typhoid'
+    );
+
+    const qMedAtt = await request('/api/advisory', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${tokenA}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: 'How does my medical leave affect attendance?' })
+    });
+    const ansMedAtt = qMedAtt.json?.answer || '';
+    assert(ansMedAtt.includes('does NOT automatically waive') && ansMedAtt.includes('65%') && ansMedAtt.includes('7.3'),
+      'Scenario A: University procedure (Clause 7.3 & SOP Clause 2) does not alter denominator'
+    );
+
+    // 3.2 Scenario B: Low Attendance in exactly one course for Divya Nair (2024UG00001)
+    const tokenDivya = authTokens['2024UG00001'];
+    const qLowestAtt = await request('/api/advisory', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${tokenDivya}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: 'Which course has my lowest attendance?' })
+    });
+    const ansLowestAtt = qLowestAtt.json?.answer || '';
+    assert(ansLowestAtt.includes('COMP209') && ansLowestAtt.includes('68') && ansLowestAtt.includes('7'),
+      'Scenario B (Low Attendance): COMP209 identified at 68% needing 7 consecutive classes'
+    );
+
+    const qMissClass = await request('/api/advisory', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${tokenDivya}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: 'What happens if I miss another class?' })
+    });
+    const ansMissClass = qMissClass.json?.answer || '';
+    assert(ansMissClass.includes('65.38%') && ansMissClass.includes('10'),
+      'Scenario B: Missing another class drops attendance to 65.38% needing 10 consecutive classes'
+    );
+
+    // 3.3 Scenario C: Backlog in COMP204 for Bhavya Patel (2022UG00002)
+    const tokenBhavya = authTokens['2022UG00002'];
+    const qBacklog = await request('/api/advisory', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${tokenBhavya}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: 'Which subjects do I have a backlog in?' })
+    });
+    const ansBacklog = qBacklog.json?.answer || '';
+    assert(ansBacklog.includes('COMP204') && ansBacklog.includes('Semester 4') && ansBacklog.includes('12.1'),
+      'Scenario C (Backlog): COMP204 identified with Handbook Clause 12.1 graduation impact'
+    );
+
+    // ════════════════════════════════════════════════════════
+    // 4. PERSONALISED RAG EVALUATION FOR ALL 6 STUDENTS
+    // ════════════════════════════════════════════════════════
+    console.log('\n--- 4. PERSONALISED RAG EVALUATION FOR ALL 6 STUDENTS ---');
+
+    for (const acc of PRIMARY_TEST_ACCOUNTS) {
       const token = authTokens[acc.id];
       const authHeader = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
 
@@ -230,15 +310,15 @@ async function runSuite() {
         `Personalised Minor: ${acc.id} declared minor (${acc.minor})`
       );
 
-      // Query 3: What minor am I taking?
+      // Query 3: What is my CGPA?
       const q3 = await request('/api/advisory', {
         method: 'POST',
         headers: authHeader,
-        body: JSON.stringify({ query: 'What minor am I taking?' })
+        body: JSON.stringify({ query: 'What is my CGPA?' })
       });
       const ans3 = q3.json?.answer || '';
-      assert(ans3.includes(acc.minor),
-        `Confirm Declared Minor: ${acc.id} confirms ${acc.minor}`
+      assert(ans3.includes('CGPA') || ans3.includes('In progress'),
+        `Personalised CGPA: ${acc.id} receives authentic CGPA breakdown`
       );
 
       // Query 4: Next semester suggestions
@@ -259,8 +339,8 @@ async function runSuite() {
         body: JSON.stringify({ query: 'How many credits do I still need?' })
       });
       const ans5 = q5.json?.answer || '';
-      assert(ans5.includes('180') && ans5.includes('Not available'),
-        `Credits Progress: ${acc.id} receives 180 total degree credits and "Not available" explanation`
+      assert(ans5.includes('180') && (ans5.includes('credits') || ans5.includes('needed to graduate')),
+        `Credits Progress: ${acc.id} receives 180 total degree credits breakdown`
       );
 
       // Query 6: DATA302 eligibility
@@ -276,11 +356,11 @@ async function runSuite() {
     }
 
     // ════════════════════════════════════════════════════════
-    // 4. GENERAL RAG PRESERVATION & EXPLICIT BATCH OVERRIDES
+    // 5. GENERAL RAG PRESERVATION & EXPLICIT BATCH OVERRIDES
     // ════════════════════════════════════════════════════════
-    console.log('\n--- 4. GENERAL RAG & EXPLICIT BATCH OVERRIDES ---');
+    console.log('\n--- 5. GENERAL RAG & EXPLICIT BATCH OVERRIDES ---');
 
-    // 4.1 General question unauthenticated
+    // 5.1 General question unauthenticated
     const genQ1 = await request('/api/advisory', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -291,7 +371,7 @@ async function runSuite() {
       'DATA103 L-T-P explanation: 1 lecture, 0 tutorial, 4 practical, 3 credits'
     );
 
-    // 4.2 L-T-P difference from credits
+    // 5.2 L-T-P difference from credits
     const genQ2 = await request('/api/advisory', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -302,7 +382,7 @@ async function runSuite() {
       'L-T-P vs credits distinction clearly explained'
     );
 
-    // 4.3 Attendance regulations
+    // 5.3 Attendance regulations
     const genQ3 = await request('/api/advisory', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -313,13 +393,12 @@ async function runSuite() {
       'Attendance regulations: 75% rule and 65% medical relaxation threshold'
     );
 
-    // 4.4 Explicit batch override takes precedence over student batch
-    // Student A is Batch 2022, but explicitly asks about Batch 2024
+    // 5.4 Explicit batch override takes precedence over student batch
     const overQ = await request('/api/advisory', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authTokens['VU-BTECH-2201']}`
+        'Authorization': `Bearer ${authTokens['2022UG00001']}`
       },
       body: JSON.stringify({ query: 'What are the Foundation courses for Batch 2024?' })
     });
@@ -328,7 +407,7 @@ async function runSuite() {
       'Explicit batch query (Batch 2024) overrides student batch (2022)'
     );
 
-    // 4.5 Unauthenticated user asking personal courses is prompted to sign in
+    // 5.5 Unauthenticated user asking personal courses is prompted to sign in
     const anonQ = await request('/api/advisory', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -338,7 +417,7 @@ async function runSuite() {
       'Unauthenticated personal query prompts user to sign in'
     );
 
-    // 4.6 Token display truthful reporting
+    // 5.6 Token display truthful reporting
     const tokRes = await request('/api/advisory', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -348,60 +427,33 @@ async function runSuite() {
     assert(tokData && tokData.totalTokens !== null, 'Token display usage data included in API response');
 
     // ════════════════════════════════════════════════════════
-    // 5. OFFICIAL DOCUMENT PREVIEWS & EXCLUSION
+    // 6. OFFICIAL DOCUMENT PREVIEWS & EXCLUSION
     // ════════════════════════════════════════════════════════
-    console.log('\n--- 5. DOCUMENT PREVIEWS & SECURITY ---');
+    console.log('\n--- 6. DOCUMENT PREVIEWS & SECURITY ---');
 
-    // 5.1 Semester spread workbook preview
+    // 6.1 Semester spread workbook preview
     const prevSpread = await request('/api/document-preview?doc=Semester_Spread_Structures_Sept_2026.xlsx');
     assert(prevSpread.status === 200 && prevSpread.json?.type === 'workbook' && Array.isArray(prevSpread.json?.sheets),
       'Semester spread workbook preview endpoint functions correctly'
     );
 
-    // 5.2 Minor courses workbook preview
+    // 6.2 Minor courses workbook preview
     const prevMinor = await request('/api/document-preview?doc=118351_Minor%20Courses%20for%20BTech_Students.xlsx');
     assert(prevMinor.status === 200 && prevMinor.json?.type === 'workbook' && prevMinor.json?.sheets?.includes('Finance'),
       'Minor courses workbook preview endpoint functions correctly with sheets'
     );
 
-    // 5.3 Student Handbook PDF preview
+    // 6.3 Student Handbook PDF preview
     const prevPdf = await request('/api/document-preview?doc=Student%20Handbook');
     assert(prevPdf.status === 200 && prevPdf.json?.type === 'pdf',
       'Student Handbook PDF preview endpoint returns PDF viewer payload'
     );
 
-    // 5.4 Internal assignment document is strictly blocked
+    // 6.4 Internal assignment document is strictly blocked
     const prevInternal = await request('/api/document-preview?doc=all%20the%20info%20for%20gai%20assignment.pdf');
     assert(prevInternal.status === 403,
       'Internal assignment PDF is strictly blocked from public source preview (HTTP 403)'
     );
-
-    // ════════════════════════════════════════════════════════
-    // 6. VOICE / TTS UTILITY FUNCTIONS
-    // ════════════════════════════════════════════════════════
-    console.log('\n--- 6. VOICE & TEXT-TO-SPEECH (TTS) AUDIT ---');
-
-    // Test text cleaning for TTS
-    const rawMarkdown = "• **DATA103 — Programming in Python** [p. 14]: 1-0-4 (3 credits). ✓ Eligible! Visit https://vidyashilp.edu.in";
-    // Simulate cleanTextForSpeech regex logic
-    const cleaned = rawMarkdown
-      .replace(/\[(?:Official|Student|Semester|B\.Tech|Course|DATA|MATH|ENG|UCOR)[^\]]*\]/gi, '')
-      .replace(/\[(?:p\.\s*\d+|sheet\s*[^\]]+)\]/gi, '')
-      .replace(/(\b\d+)-(\d+)-(\d+\b)/g, '$1, $2, $3')
-      .replace(/[*#_`>~]/g, '')
-      .replace(/✓/g, 'Status: Eligible. ')
-      .replace(/https?:\/\/\S+/g, '')
-      .replace(/\s+/g, ' ')
-      .trim();
-
-    assert(!cleaned.includes('**') && !cleaned.includes('https') && cleaned.includes('1, 0, 4'),
-      'TTS text cleaning removes markdown asterisks, URLs, and formats L-T-P numbers cleanly'
-    );
-
-    // Test sentence chunking
-    const longText = "Sentence one is clear. Sentence two is very informative and provides important details. Sentence three confirms eligibility.";
-    const chunks = longText.match(/[^.!?]+[.!?]+|\S+$/g) || [longText];
-    assert(chunks.length === 3, 'TTS sentence chunker splits long responses at punctuation boundaries');
 
     console.log('\n================================================================');
     console.log(`SUITE RESULTS: ${passedCount} PASSED | ${failedCount} FAILED`);

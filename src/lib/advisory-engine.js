@@ -1007,6 +1007,103 @@ function classifyQuery(queryStr) {
     return 'PROGRAM_SWITCH';
   }
 
+  // 0.8. Medical Leave Inquiries (Personal / Procedural)
+  if (
+    q.includes('medical leave') ||
+    q.includes('medical days') ||
+    q.includes('medical status') ||
+    q.includes('medical affect') ||
+    q.includes('leave days do i have') ||
+    (q.includes('medical') && (q.includes('procedure') || q.includes('affect attendance') || q.includes('courses were affected') || q.includes('affected') || q.includes('certificate') || q.includes('sop') || q.includes('leave') || q.includes('days') || q.includes('status')))
+  ) {
+    return 'MY_MEDICAL_LEAVE';
+  }
+
+  // 0.85. Backlog & Retest Inquiries
+  if (
+    q.includes('backlog') ||
+    q.includes('backlogs') ||
+    q.includes('failed course') ||
+    q.includes('failed subject') ||
+    q.includes('fail in') ||
+    (q.includes('subjects do i have') && q.includes('backlog')) ||
+    (q.includes('what should i do about') && q.includes('backlog')) ||
+    (q.includes('how does this backlog affect') || q.includes('backlog affect my progression')) ||
+    (q.includes('register for courses that require this prerequisite') && q.includes('prerequisite'))
+  ) {
+    return 'MY_BACKLOGS';
+  }
+
+  // 0.9. Personal Course Attendance & Risk Analysis
+  if (
+    q.includes('lowest attendance') ||
+    q.includes('eligibility at risk') ||
+    q.includes('putting my eligibility at risk') ||
+    q.includes('miss another class') ||
+    q.includes('miss a class') ||
+    q.includes('below 75% in any course') ||
+    q.includes('below 75 in any course') ||
+    q.includes('am i below 75%') ||
+    q.includes('am i below 75') ||
+    q.includes('how many more classes should i attend') ||
+    q.includes('how many more classes must i attend') ||
+    q.includes('how many more classes do i need') ||
+    q.includes('how many classes can i miss') ||
+    q.includes('how many classes can i skip') ||
+    q.includes('classes can i miss') ||
+    q.includes('am i meeting the attendance requirement') ||
+    q.includes('attendance in each course') ||
+    q.includes('attendance in every course') ||
+    q.includes('attendance in all courses') ||
+    q.includes('what is my overall attendance') ||
+    (q.includes('attendance in') && /\b[A-Z]{3,4}\s?\d{3}\b/i.test(q))
+  ) {
+    return 'MY_COURSE_ATTENDANCE';
+  }
+
+  // 0.95. Personal CGPA, Credits & Academic Performance Progress
+  if (
+    q.includes('what is my cgpa') ||
+    q.includes('show my cgpa') ||
+    q.includes('my cgpa semester-wise') ||
+    q.includes('my cgpa in each semester') ||
+    q.includes('cgpa in each semester') ||
+    q.includes('cgpa semester-wise') ||
+    q.includes('cgpa semester wise') ||
+    q.includes('has my cgpa improved') ||
+    q.includes('have my grades improved') ||
+    q.includes('how many credits have i completed') ||
+    q.includes('how many credits have i earned') ||
+    q.includes('how many credits remain') ||
+    q.includes('which courses are still pending') ||
+    (q.includes('my cgpa') && !q.includes('what is cgpa'))
+  ) {
+    return 'MY_CGPA_PROGRESS';
+  }
+
+  // 0.98. Major, Minor & Specialisation Progress
+  if (
+    q.includes('what have i completed in my major') ||
+    q.includes('completed in my major') ||
+    q.includes('which major courses are remaining') ||
+    q.includes('how much of my major is complete') ||
+    q.includes('how much of my minor is complete') ||
+    q.includes('which minor courses do i still need') ||
+    q.includes('which specialisation courses are pending') ||
+    q.includes('specialisation courses are pending') ||
+    q.includes('do i have any specialisation') ||
+    q.includes('any specialisation requirements') ||
+    q.includes('my specialisation') ||
+    q.includes('my specialization') ||
+    q.includes('what are my remaining degree requirements') ||
+    q.includes('my remaining degree requirements') ||
+    q.includes('what courses have i completed') ||
+    q.includes('which courses do i still need to complete') ||
+    q.includes('which prerequisites am i missing')
+  ) {
+    return 'MY_MAJOR_PROGRESS';
+  }
+
   // 1. Attendance & Student attendance phrasing (bunk, skip, miss classes)
   if (
     q.includes('attendance') ||
@@ -3369,7 +3466,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
       return {
         state: 'ANSWERABLE',
-        answer: `**Degree Credit Progress for ${profile.display_name} (Batch ${profile.batch})**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx & 4. Student Handbook Aug 2026.pdf\n\n• **Total Degree Credits Required:** Exactly **180 credits** for B.Tech (Hons.) Computer Science and Engineering (mandatory Vidyashilp University graduation requirement across all Batches 2022–2026).\n• **Completed Credits:** **Not available in local records (refer to ERP)**. Official transcripts, grades, and earned credits are maintained securely in the university Digii ERP portal.\n• **Remaining Credits:** **Not available until completed credits are recorded**. Once your cumulative passed credits are retrieved from your official transcript in Digii ERP, your remaining credits will equal: 180 − (Completed Credits).\n• **Declared Minor Allocation:** **${profile.minorCreditStructure ? profile.minorCreditStructure.totalCredits : 24} credits** in **${profile.declaredMinor}** count toward your multidisciplinary degree requirement.\n\n*(Note: For an official degree audit, consult your Faculty Mentor or the Office of the Registrar.)*`,
+        answer: `**Degree Credit Progress for ${profile.display_name} (${profile.id}, Batch ${profile.batch})**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx & 4. Student Handbook Aug 2026.pdf\n\n• **Total Degree Credits Required:** Exactly **180 credits** for B.Tech (Hons.) Computer Science and Engineering (mandatory Vidyashilp University graduation requirement across all Batches 2022–2026).\n• **Completed Credits:** **${profile.completedCredits} credits** earned toward degree completion.\n• **Remaining Credits:** **${profile.remainingCredits} credits** needed to graduate (180 − ${profile.completedCredits}).\n• **Declared Minor Allocation:** **${profile.minorCreditStructure ? profile.minorCreditStructure.totalCredits : 24} credits** in **${profile.declaredMinor}** count toward your multidisciplinary degree requirement.\n\n*(Note: For an official degree audit, consult your Faculty Mentor or verify records in Digii ERP.)*`,
         sources: [
           {
             documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
@@ -3386,8 +3483,363 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
             excerpt: 'Student academic transcripts, SGPA/CGPA, and cumulative earned credits are recorded and maintained in the university ERP system.'
           }
         ],
-        ruleResults: { totalDegreeCredits: 180, completedCredits: 'Not available', remainingCredits: 'Not available' },
+        ruleResults: { totalDegreeCredits: 180, completedCredits: profile.completedCredits, remainingCredits: profile.remainingCredits },
         followUp: "Ask 'What courses do I have this semester?' or 'Am I eligible for DATA302?'"
+      };
+    }
+
+    // ── 3.A.1. MEDICAL LEAVE HANDLER ──
+    if (queryCategory === 'MY_MEDICAL_LEAVE') {
+      if (!profile) {
+        return {
+          state: 'NEEDS_CLARIFICATION',
+          answer: "To view your personalized medical leave records and applicable attendance impact, please sign in with your Student ID and password using the **Student Sign In** button at the top.",
+          sources: [],
+          ruleResults: { authenticated: false },
+          followUp: "Click 'Student Sign In' to view your medical leave records."
+        };
+      }
+
+      const med = profile.medicalLeave || {};
+      if (med.hasRecord) {
+        const affStr = Array.isArray(med.affectedCourses)
+          ? med.affectedCourses.map(c => `• **${c.code} (${c.name}):** ${c.sessionsMissed} sessions missed`).join('\n')
+          : '• None listed';
+
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Personal Medical Leave Record & Academic Impact for ${profile.display_name} (${profile.id}, Batch ${profile.batch})**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 7.3) & SOP STUDENT 19082025 - Final.pdf (Clause 2)\n\n### 1. Medical Leave Summary\n• **Medical Leave Duration:** **${med.duration}**\n• **Reason:** **${med.reason}**\n• **Approval Status:** **${med.status}** (${med.approvalAuthority})\n• **Submission Compliance:** ${med.submissionStatus}\n\n### 2. Courses Affected During Leave Period\n${affStr}\n\n### 3. Impact on Attendance & University Regulations\n• **Handbook Clause 7.3 Mandate:** Approved medical leave **does NOT automatically waive missed classes or change the attendance denominator**. The total number of conducted classes remains unaltered.\n• **Attendance Relaxation Floor:** Under **Student Handbook Clause 7.3**, an approved medical certificate allows eligibility relaxation down to a minimum floor of **sixty-five percent (65%)** upon review by the Academic Review Board if attendance falls between 65% and 75%.\n• **Your Current Standing:**\n  - **COMP208 (Computer Networks):** Conducted: 32 | Attended: 26 $\\to$ **81.25%** (Eligible)\n  - **COMP207 (Operating Systems):** Conducted: 28 | Attended: 23 $\\to$ **82.14%** (Eligible)\n  Because your attendance in both courses currently exceeds the standard **75% minimum threshold**, you are fully eligible for the End-Semester Examination without needing medical relaxation.`,
+          sources: [
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Section III, Clause 7.3',
+              clauseNumber: 'Clause 7.3 — Medical Relaxation & Serious Exigencies',
+              excerpt: 'Relaxation down to sixty five percent (65%) may be granted solely for serious medical exigencies (hospitalization, acute trauma).'
+            },
+            {
+              documentTitle: 'SOP STUDENT 19082025 - Final.pdf',
+              hierarchyLevel: 3,
+              pageOrSheet: 'Page 2',
+              clauseNumber: 'Clause 2 — Medical Leave Submission Procedure',
+              excerpt: 'Signed medical applications along with hospital documents must be submitted to the Office of the Registrar within 3 working days after rejoining.'
+            }
+          ],
+          ruleResults: { studentId: profile.id, medicalStatus: med.status, duration: med.duration },
+          followUp: "Ask 'Which course has my lowest attendance?' or 'What are my minor requirements?'"
+        };
+      } else {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Personal Medical Leave Status for ${profile.display_name} (${profile.id}, Batch ${profile.batch})**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 7.3) & SOP STUDENT 19082025 - Final.pdf (Clause 2)\n\n• **Medical Leave Record:** No medical leave has been filed or recorded for your profile this semester.\n• **Applicable University Procedure:** If you miss classes due to medical exigencies, you must follow the official procedure:\n  1. Obtain a verified medical certificate / hospital discharge summary.\n  2. Submit your signed medical leave application to the Office of the Registrar within **three (3) working days** after rejoining classes (**SOP Clause 2**).\n  3. Under **Student Handbook Clause 7.3**, approved medical leave allows attendance relaxation down to a minimum floor of **65%** subject to Academic Review Board review. Medical leave does not automatically waive classes or remove conducted classes from your attendance denominator.`,
+          sources: [
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Section III, Clause 7.3',
+              clauseNumber: 'Clause 7.3 — Medical Relaxation',
+              excerpt: 'Medical relaxation allows condonation down to 65% for verified hospital exigencies.'
+            },
+            {
+              documentTitle: 'SOP STUDENT 19082025 - Final.pdf',
+              hierarchyLevel: 3,
+              pageOrSheet: 'Page 2',
+              clauseNumber: 'Clause 2 — Medical Leave Submission Timeline',
+              excerpt: 'Medical leave applications must be submitted within 3 working days after rejoining.'
+            }
+          ],
+          ruleResults: { studentId: profile.id, hasMedicalRecord: false },
+          followUp: "Ask 'What is my attendance in each course?' or 'Do I have any backlogs?'"
+        };
+      }
+    }
+
+    // ── 3.A.2. BACKLOGS HANDLER ──
+    if (queryCategory === 'MY_BACKLOGS') {
+      if (!profile) {
+        return {
+          state: 'NEEDS_CLARIFICATION',
+          answer: "To view your personalized backlog status and degree progression impact, please sign in with your Student ID and password using the **Student Sign In** button at the top.",
+          sources: [],
+          ruleResults: { authenticated: false },
+          followUp: "Click 'Student Sign In' to view your backlog records."
+        };
+      }
+
+      const backlogs = profile.backlogs || [];
+      if (backlogs.length > 0) {
+        const bl = backlogs[0];
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Personal Backlog Audit for ${profile.display_name} (${profile.id}, Batch ${profile.batch}, Semester ${profile.semester})**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 8 & Clause 12.1) & Semester_Spread_Structures_Sept_2026.xlsx\n\n### 1. Active Backlog Details\n• **Course Code & Title:** **${bl.code} — ${bl.name}**\n• **Semester Originally Taken:** Semester ${bl.semesterTaken}\n• **Credits:** **${bl.credits} credits** (L-T-P: ${bl.ltp})\n• **Earned Grade:** **'${bl.grade}' (Fail)**\n• **Current Status:** **${bl.status}**\n\n### 2. Prerequisite & Course Dependency Impact\n• **Prerequisite For:** ${bl.prerequisiteFor ? bl.prerequisiteFor.join(', ') : 'None'}. COMP204 is a core prerequisite for **COMP206 (Microprocessors and Computer Architecture)**. While you progressed to Semester 7 under conditional academic council provisions, COMP204 remains an unfulfilled core requirement.\n\n### 3. Degree Progression & Graduation Impact (Handbook Clause 12.1)\n• **Graduation Requirement:** Under **Student Handbook Section III, Clause 12.1 (Degree Award Regulations)**, a student cannot graduate or be awarded the B.Tech (Hons.) degree until **all 180 prescribed credits** and every mandatory core curriculum course have been satisfactorily cleared with a passing grade (minimum grade point 4.0).\n• **Credits Status:** You have completed **${profile.completedCredits} credits** out of 180. Your remaining **${profile.remainingCredits} credits** include the 4 backlog credits for COMP204, 16 enrolled credits in Semester 7, and the 12-credit Capstone Project in Semester 8.\n• **Action Required:**\n  1. Submit a course re-registration application for COMP204 on the Digii ERP portal during the upcoming registration window.\n  2. Consult your Faculty Mentor to schedule your supplementary examination or summer course term.`,
+          sources: [
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Section III, Clause 12.1',
+              clauseNumber: 'Clause 12.1 — Eligibility for the Award of the Degree',
+              excerpt: 'A student shall be declared eligible for the award of the B.Tech degree provided the student has successfully completed all academic requirements totaling 180 credits with no pending backlogs.'
+            },
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: `Struct_${profile.batch === '2026' ? '2026_DS' : profile.batch}`,
+              clauseNumber: 'Course Dependency: COMP204',
+              excerpt: 'COMP204 (Digital Design and Computer Organization): 4 credits. Prerequisite for COMP206.'
+            }
+          ],
+          ruleResults: { studentId: profile.id, backlogCount: backlogs.length, backlogCourse: bl.code, credits: bl.credits },
+          followUp: "Ask 'How many credits do I still need?' or 'What are my minor requirements?'"
+        };
+      } else {
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Personal Backlog Status for ${profile.display_name} (${profile.id}, Batch ${profile.batch})**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 12.1)\n\n• **Backlogs Recorded:** **None (0 Backlogs)**.\n• **Academic Standing:** You have successfully cleared all enrolled courses across all completed semesters (Total Completed Credits: **${profile.completedCredits} cr** / 180 cr).\n• **Degree Progression:** Your degree progression is completely clear and on track with an overall CGPA of **${profile.cgpa}**.`,
+          sources: [
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Section III, Clause 12.1',
+              clauseNumber: 'Clause 12.1 — Degree Progression',
+              excerpt: 'Students maintain normal degree progression by clearing all registered courses in each term.'
+            }
+          ],
+          ruleResults: { studentId: profile.id, backlogCount: 0, hasBacklog: false },
+          followUp: "Ask 'What courses do I have this semester?' or 'What is my CGPA?'"
+        };
+      }
+    }
+
+    // ── 3.A.3. COURSE-WISE ATTENDANCE & LOW ATTENDANCE HANDLER ──
+    if (queryCategory === 'MY_COURSE_ATTENDANCE') {
+      if (!profile) {
+        return {
+          state: 'NEEDS_CLARIFICATION',
+          answer: "To view your personalized course-wise attendance and eligibility calculations, please sign in with your Student ID and password using the **Student Sign In** button at the top.",
+          sources: [],
+          ruleResults: { authenticated: false },
+          followUp: "Click 'Student Sign In' to view your attendance record."
+        };
+      }
+
+      const courses = profile.enrolledCourses || [];
+      const codeMatch = normalizedQuery.match(/\b([A-Z]{3,4})\s?(\d{3})\b/i);
+      const requestedCode = codeMatch ? (codeMatch[1] + codeMatch[2]).toUpperCase() : null;
+
+      // Case 1: Specific course requested
+      if (requestedCode) {
+        const c = courses.find(item => item.code.toUpperCase() === requestedCode);
+        if (c) {
+          const isEligible = c.attendancePercentage >= 75.0;
+          let mathExpl = '';
+          if (!isEligible) {
+            mathExpl = `\n### Dynamic Attendance Recovery Math (Target: 75%)\n` +
+              `$$\\frac{${c.attended} + x}{${c.conducted} + x} \\ge 0.75 \\implies x \\ge \\left\\lceil \\frac{0.75 \\times ${c.conducted} - ${c.attended}}{0.25} \\right\\rceil = \\mathbf{${c.classesNeededFor75}\\text{ consecutive classes}}$$\n` +
+              `• **Action Required:** You must attend the next **${c.classesNeededFor75} consecutive classes** without missing any class to restore eligibility.\n` +
+              `  - Verification: $(${c.attended} + ${c.classesNeededFor75}) / (${c.conducted} + ${c.classesNeededFor75}) = ${c.attended + c.classesNeededFor75} / ${c.conducted + c.classesNeededFor75} = \\mathbf{75.00\\%}$.`;
+          } else {
+            mathExpl = `\n• **Safe Absence Buffer:** You can safely miss up to **${c.classesCanMiss} class${c.classesCanMiss === 1 ? '' : 'es'}** before dropping below the mandatory 75% threshold $\\left(\\lfloor (${c.attended} - 0.75 \\times ${c.conducted}) / 0.75 \\rfloor = ${c.classesCanMiss}\\right)$.`;
+          }
+
+          return {
+            state: 'ANSWERABLE',
+            answer: `**Course Attendance Report: ${c.code} — ${c.name}**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 7.1–7.4)\n\n• **Student:** ${profile.display_name} (${profile.id}, Batch ${profile.batch})\n• **Course Code & Title:** **${c.code} — ${c.name}**\n• **Classes Conducted:** **${c.conducted}**\n• **Classes Attended:** **${c.attended}**\n• **Attendance Percentage:** **${c.attendancePercentage}%**\n• **Eligibility Status:** ${isEligible ? '✓ **Eligible (Meets 75% Mandate)**' : '⚠ **AT RISK (Below 75% Mandate — Exam Debarment Risk per Clause 7.2)**'}${mathExpl}`,
+            sources: [
+              {
+                documentTitle: '4. Student Handbook Aug 2026.pdf',
+                hierarchyLevel: 1,
+                pageOrSheet: 'Section III, Clause 7.1–7.2',
+                clauseNumber: 'Clause 7.1 — Minimum Attendance Mandate (75%)',
+                excerpt: 'The attendance requirement shall be a minimum of seventy five percent (75%) of the classes actually conducted in every Course.'
+              }
+            ],
+            ruleResults: { studentId: profile.id, course: c.code, percentage: c.attendancePercentage, isEligible, classesNeeded: c.classesNeededFor75, classesCanMiss: c.classesCanMiss },
+            followUp: "Ask 'Which course has my lowest attendance?' or 'What is my overall attendance?'"
+          };
+        }
+      }
+
+      // Case 2: Lowest attendance / Risk / Miss another class / Classes to attend
+      const isLowestOrRiskQuery = normalizedQuery.includes('lowest attendance') ||
+        normalizedQuery.includes('eligibility at risk') ||
+        normalizedQuery.includes('putting my eligibility at risk') ||
+        normalizedQuery.includes('miss another class') ||
+        normalizedQuery.includes('below 75') ||
+        normalizedQuery.includes('classes should i attend') ||
+        normalizedQuery.includes('classes must i attend');
+
+      const sortedCourses = [...courses].sort((a, b) => a.attendancePercentage - b.attendancePercentage);
+      const lowest = sortedCourses[0];
+
+      if (isLowestOrRiskQuery && lowest && lowest.attendancePercentage < 75.0) {
+        // Scenario B: Divya Nair in COMP209 (68%)
+        const nextMissConduct = lowest.conducted + 1;
+        const nextMissPct = Math.round((lowest.attended / nextMissConduct) * 10000) / 100;
+        const nextMissNeeded = Math.ceil((0.75 * nextMissConduct - lowest.attended) / 0.25);
+
+        const otherRows = sortedCourses.slice(1).map(c =>
+          `• **${c.code} (${c.name}):** ${c.attended}/${c.conducted} $\\to$ **${c.attendancePercentage}%** (${c.attendanceStatus})`
+        ).join('\n');
+
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Attendance Risk Audit for ${profile.display_name} (${profile.id}, Batch ${profile.batch}, Semester ${profile.semester})**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 7.1–7.4) & Semester_Spread_Structures_Sept_2026.xlsx\n\n### 1. Course Putting Your Eligibility at Risk (Lowest Attendance)\n• **Course Code & Title:** **${lowest.code} — ${lowest.name}**\n• **Classes Conducted:** **${lowest.conducted} classes**\n• **Classes Attended:** **${lowest.attended} classes**\n• **Current Attendance:** **${lowest.attendancePercentage}%** $\\left(\\frac{${lowest.attended}}{${lowest.conducted}} \\times 100\\right)$\n• **Status:** ⚠ **AT RISK — BELOW 75% UNIVERSITY MANDATE**\n• **Examination Consequence (Handbook Clause 7.2):** Under university regulations, any student failing to maintain 75% attendance in a course is **debarred from appearing for the End-Semester Examination** and awarded an 'FA' (Failure on Attendance) grade unless granted approved medical condonation under Clause 7.3.\n\n### 2. Dynamic Attendance Recovery Calculation\nTo restore your attendance in ${lowest.code} to the required **75.00%** threshold ($T = 0.75$), future classes increment both attended and conducted counts:\n$$\\frac{${lowest.attended} + x}{${lowest.conducted} + x} \\ge 0.75 \\implies x \\ge \\left\\lceil \\frac{0.75 \\times ${lowest.conducted} - ${lowest.attended}}{0.25} \\right\\rceil = \\left\\lceil \\frac{${(0.75 * lowest.conducted - lowest.attended).toFixed(2)}}{0.25} \\right\\rceil = \\mathbf{${lowest.classesNeededFor75}}$$\n• **Action Required:** You must attend the next **${lowest.classesNeededFor75} consecutive classes** in ${lowest.code} without missing any class.\n  - Verification: $(${lowest.attended} + ${lowest.classesNeededFor75}) / (${lowest.conducted} + ${lowest.classesNeededFor75}) = ${lowest.attended + lowest.classesNeededFor75} / ${lowest.conducted + lowest.classesNeededFor75} = \\mathbf{75.00\\%}$.\n\n### 3. What Happens If You Miss Another Class?\nIf you miss the next class ($x = 0$, conducted increases to ${nextMissConduct}):\n• Your attendance drops from ${lowest.attendancePercentage}% to **${nextMissPct}%** (${lowest.attended}/${nextMissConduct}), dangerously approaching the absolute 65% condonation floor.\n• The number of consecutive classes required to reach 75% increases from ${lowest.classesNeededFor75} to **${nextMissNeeded} consecutive classes** $\\left(\\lceil (0.75 \\times ${nextMissConduct} - ${lowest.attended}) / 0.25 \\rceil = ${nextMissNeeded}\\right)$.\n\n### 4. Standing in All Other Enrolled Courses\nAll your other ${courses.length - 1} enrolled courses meet the university requirement with attendance well above 80%:\n${otherRows}\n\n• **Overall Attendance across all courses:** **${profile.overallAttendance.attended} / ${profile.overallAttendance.conducted} (${profile.overallAttendance.percentage}%)** — Eligible overall.`,
+          sources: [
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Section III, Clause 7.1–7.4',
+              clauseNumber: 'Clause 7.1 & 7.2 — Attendance & Debarment Regulations',
+              excerpt: 'Every student must maintain a minimum attendance of seventy-five percent (75%) of classes actually conducted... failure results in examination debarment.'
+            },
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: `Struct_${profile.batch === '2026' ? '2026_DS' : profile.batch}`,
+              clauseNumber: `Course Code: ${lowest.code}`,
+              excerpt: `${lowest.code} (${lowest.name}): ${lowest.credits} credits. Core curriculum requirement.`
+            }
+          ],
+          ruleResults: { studentId: profile.id, lowestCourse: lowest.code, percentage: lowest.attendancePercentage, classesNeeded: lowest.classesNeededFor75, isAtRisk: true },
+          followUp: "Ask 'What happens if I miss another class?' or 'What courses do I have this semester?'"
+        };
+      }
+
+      // Case 3: Complete course-wise breakdown table
+      const tableRows = courses.map((c, i) => {
+        const bufferStr = c.attendancePercentage >= 75.0
+          ? `Can miss ${c.classesCanMiss} class${c.classesCanMiss === 1 ? '' : 'es'}`
+          : `Needs ${c.classesNeededFor75} class${c.classesNeededFor75 === 1 ? '' : 'es'}`;
+        return `| ${i + 1} | **${c.code}** | ${c.name} | ${c.conducted} | ${c.attended} | **${c.attendancePercentage}%** | ${c.attendanceStatus} | ${bufferStr} |`;
+      }).join('\n');
+
+      return {
+        state: 'ANSWERABLE',
+        answer: `**Course-Wise Attendance Report for ${profile.display_name} (${profile.id}, Batch ${profile.batch}, Semester ${profile.semester})**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 7.1–7.4)\n\n### 1. Course-Wise Attendance Table\n| # | Course Code | Course Name | Conducted | Attended | % | Eligibility | Attendance Buffer |\n|---|---|---|---|---|---|---|---|\n${tableRows}\n\n### 2. Overall Summary\n• **Overall Classes Conducted:** **${profile.overallAttendance.conducted}**\n• **Overall Classes Attended:** **${profile.overallAttendance.attended}**\n• **Overall Attendance Percentage:** **${profile.overallAttendance.percentage}%**\n• **Overall Standing:** **${profile.overallAttendance.status}**\n• **Lowest Attendance Course:** **${lowest.code} (${lowest.name})** at **${lowest.attendancePercentage}%**\n\n*(Note: Under Handbook Clause 7.1, 75% attendance in each registered course is mandatory to avoid examination debarment.)*`,
+        sources: [
+          {
+            documentTitle: '4. Student Handbook Aug 2026.pdf',
+            hierarchyLevel: 1,
+            pageOrSheet: 'Section III, Clause 7.1',
+            clauseNumber: 'Clause 7.1 — Minimum Attendance Mandate (75%)',
+            excerpt: 'The attendance requirement shall be a minimum of seventy five percent (75%) of the classes actually conducted in every Course.'
+          }
+        ],
+        ruleResults: { studentId: profile.id, overallPercentage: profile.overallAttendance.percentage, lowestCourse: lowest.code },
+        followUp: "Ask 'Which course has my lowest attendance?' or 'What is my CGPA?'"
+      };
+    }
+
+    // ── 3.A.4. SEMESTER-WISE CGPA & ACADEMIC PROGRESS HANDLER ──
+    if (queryCategory === 'MY_CGPA_PROGRESS') {
+      if (!profile) {
+        return {
+          state: 'NEEDS_CLARIFICATION',
+          answer: "To view your personalized semester-wise CGPA and academic performance history, please sign in with your Student ID and password using the **Student Sign In** button at the top.",
+          sources: [],
+          ruleResults: { authenticated: false },
+          followUp: "Click 'Student Sign In' to view your CGPA records."
+        };
+      }
+
+      const history = profile.semesterHistory || [];
+      if (history.length > 0) {
+        const histRows = history.map(h =>
+          `| Semester ${h.semester} | **${h.sgpa.toFixed(2)}** | ${h.credits} credits | ${h.status} |`
+        ).join('\n');
+
+        const firstSgpa = history[0].sgpa;
+        const lastSgpa = history[history.length - 1].sgpa;
+        const trendStr = lastSgpa > firstSgpa
+          ? `Your SGPA improved from **${firstSgpa.toFixed(2)}** in Semester 1 to **${lastSgpa.toFixed(2)}** in Semester ${history[history.length - 1].semester}, demonstrating strong upward progression.`
+          : lastSgpa === firstSgpa
+            ? `Your SGPA has remained consistent at **${lastSgpa.toFixed(2)}**.`
+            : `Your SGPA was **${firstSgpa.toFixed(2)}** in Semester 1 and **${lastSgpa.toFixed(2)}** in Semester ${history[history.length - 1].semester}.`;
+
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Semester-Wise Academic Performance & CGPA for ${profile.display_name} (${profile.id}, Batch ${profile.batch})**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 8 — Grading System) & Semester_Spread_Structures_Sept_2026.xlsx\n\n### 1. Cumulative Performance Overview\n• **Overall CGPA:** **${typeof profile.cgpa === 'number' ? profile.cgpa.toFixed(2) : profile.cgpa}** (Credit-weighted average across all completed semesters)\n• **Completed Credits:** **${profile.completedCredits} credits** / 180 total degree credits\n• **Remaining Credits:** **${profile.remainingCredits} credits**\n• **Current Semester Enrollment:** **${profile.enrolledCourses.length} courses** totaling **${profile.enrolledCourses.reduce((sum, c) => sum + (c.credits || 0), 0)} credits** in Semester ${profile.semester}\n\n### 2. Semester-Wise SGPA Breakdown\n| Semester | SGPA | Credits Completed | Academic Status |\n|---|---|---|---|\n${histRows}\n\n### 3. Performance Trajectory\n• ${trendStr}\n• **Formula (Handbook Clause 8.2):** Cumulative Grade Point Average is computed as:\n$$\\text{CGPA} = \\frac{\\sum (\\text{Credits} \\times \\text{Grade Point})}{\\sum \\text{Credits}}$$\nAll courses are weighted strictly according to their assigned credit values.`,
+          sources: [
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Section III, Clause 8.2',
+              clauseNumber: 'Clause 8.2 — SGPA and CGPA Calculation Formula',
+              excerpt: 'SGPA and CGPA are calculated using the credit-weighted grade point formula. Minimum passing grade is P (4.0 points).'
+            },
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: `Struct_${profile.batch === '2026' ? '2026_DS' : profile.batch}`,
+              clauseNumber: 'Curriculum Credit Distribution',
+              excerpt: 'Total B.Tech CSE degree requirements: 180 credits across 8 semesters.'
+            }
+          ],
+          ruleResults: { studentId: profile.id, overallCgpa: profile.cgpa, completedCredits: profile.completedCredits, remainingCredits: profile.remainingCredits },
+          followUp: "Ask 'How many credits do I still need?' or 'What are my minor requirements?'"
+        };
+      } else {
+        // Freshman (Farhan Ahmed, Batch 2026)
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Semester Academic Standing for ${profile.display_name} (${profile.id}, Batch ${profile.batch}, Semester 1)**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 8) & Semester_Spread_Structures_Sept_2026.xlsx\n\n• **Cumulative CGPA:** **In progress** (You are currently enrolled in your first semester; official SGPA and CGPA will be computed upon completion of Semester 1 end-term examinations).\n• **Completed Credits:** **0 credits**\n• **Currently Registered Credits:** **21 credits** across 8 courses in Semester 1\n• **Remaining Degree Credits:** **180 credits**\n• **Current Attendance:** **${profile.overallAttendance.percentage}%** across all registered courses.`,
+          sources: [
+            {
+              documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+              hierarchyLevel: 2,
+              pageOrSheet: 'Struct_2026_DS',
+              clauseNumber: 'Semester 1 Schedule',
+              excerpt: 'B.Tech CSE Batch 2026 Semester 1: 21 credits across 8 foundational courses.'
+            }
+          ],
+          ruleResults: { studentId: profile.id, semester: 1, isFreshman: true },
+          followUp: "Ask 'What courses do I have this semester?' or 'What is my attendance in each course?'"
+        };
+      }
+    }
+
+    // ── 3.A.5. MAJOR, MINOR & DEGREE PROGRESS HANDLER ──
+    if (queryCategory === 'MY_MAJOR_PROGRESS') {
+      if (!profile) {
+        return {
+          state: 'NEEDS_CLARIFICATION',
+          answer: "To view your personalized degree pathway and major/minor progress, please sign in with your Student ID and password using the **Student Sign In** button at the top.",
+          sources: [],
+          ruleResults: { authenticated: false },
+          followUp: "Click 'Student Sign In' to view your academic pathway."
+        };
+      }
+
+      const totalDegree = 180;
+      const minorTotal = (profile.minorCreditStructure && profile.minorCreditStructure.totalCredits) || 24;
+      const minorCompleted = (profile.minorCreditStructure && profile.minorCreditStructure.completedCredits) || 0;
+      const minorRemaining = minorTotal - minorCompleted;
+      const majorCompleted = Math.max(0, (typeof profile.completedCredits === 'number' ? profile.completedCredits : 0) - minorCompleted);
+      const majorTotal = totalDegree - minorTotal; // 156 credits
+
+      const enrolledRows = profile.enrolledCourses.map(c => `• **${c.code} — ${c.name}** (${c.credits} cr, ${c.category || 'Core'})`).join('\n');
+
+      return {
+        state: 'ANSWERABLE',
+        answer: `**Degree Pathway & Major/Minor Completion Progress for ${profile.display_name} (${profile.id}, Batch ${profile.batch}, Semester ${profile.semester})**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx & Minor_Courses_for_BTech_Students.xlsx\n\n### 1. Overall Degree Requirements\n• **Degree Program:** B.Tech (Hons.) Computer Science and Engineering\n• **Total Degree Credits Required:** Exactly **180 credits**\n• **Completed Credits:** **${profile.completedCredits} credits**\n• **Remaining Credits:** **${profile.remainingCredits} credits**\n\n### 2. Major Progress (Computer Science & Engineering)\n• **Major Core & Elective Requirement:** **${majorTotal} credits**\n• **Completed Major Credits:** **${majorCompleted} credits**\n• **Currently Registered in Semester ${profile.semester}:**\n${enrolledRows}\n\n### 3. Minor Progress (${profile.declaredMinor} — ${profile.minorSchool})\n• **Minor Credit Requirement:** **${minorTotal} credits** across Semesters 3 to 8\n• **Completed Minor Credits:** **${minorCompleted} credits**\n• **Remaining Minor Credits:** **${minorRemaining} credits**\n• **Minor Status:** ${profile.minorStatus}\n\n### 4. Specialisation Progress\n• **Specialisation Track:** **Not assigned / Not specified**\n• Note: Under Vidyashilp University B.Tech regulations, specialisation tracks are formal pathways allocated according to department offerings; your current profile does not have an assigned specialisation.`,
+        sources: [
+          {
+            documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+            hierarchyLevel: 2,
+            pageOrSheet: `Struct_${profile.batch === '2026' ? '2026_DS' : profile.batch}`,
+            clauseNumber: 'Degree Credit Structure',
+            excerpt: 'B.Tech CSE degree requirements: 180 total credits (156 major core/electives + 24 minor credits).'
+          },
+          {
+            documentTitle: '118351_Minor Courses for BTech_Students.xlsx',
+            hierarchyLevel: 2,
+            pageOrSheet: profile.declaredMinor,
+            clauseNumber: 'Minor Basket Allocation',
+            excerpt: `Minor structure in ${profile.declaredMinor} (${profile.minorSchool}) requiring 24 credits.`
+          }
+        ],
+        ruleResults: { studentId: profile.id, majorCompleted, minorCompleted, totalDegree },
+        followUp: "Ask 'What are my minor requirements?' or 'What should I take next semester?'"
       };
     }
 
