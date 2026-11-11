@@ -175,6 +175,7 @@ app.get('/api/document-preview', (req, res) => {
     if (
       lower.includes('all the info') ||
       lower.includes('gai assignment') ||
+      /\bgai\b/i.test(lower) ||
       lower.includes('academic_info') ||
       lower.includes('academic course information') ||
       lower.includes('academic explanation')
@@ -402,16 +403,33 @@ app.get('/api/curriculum/infographic', (req, res) => {
   }
 });
 
-// 4. Agentic Extension: 5-Stage Auditable Workflow Endpoint
+// 4. Agentic Extension: 5-Stage Auditable Workflow Endpoint (protected identity isolation)
 app.post('/api/advising-workflow', async (req, res) => {
   try {
-    const { query, profileId } = req.body;
+    const { query, profileId, studentId } = req.body;
     if (!query || typeof query !== 'string' || query.trim() === '') {
       return res.status(400).json({ error: 'Query is required.' });
     }
 
+    let authenticatedStudent = null;
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      authenticatedStudent = validateSession(authHeader.split(' ')[1]);
+    }
+    const cleanPid = (profileId || studentId) ? String(profileId || studentId).trim().toUpperCase() : null;
+    const isProtectedStudentId = cleanPid && /^(VU-BTECH|202[0-9]UG)/i.test(cleanPid);
+    if (!authenticatedStudent && isProtectedStudentId) {
+      return res.status(403).json({
+        status: 'error',
+        error: 'Authentication required to access personalized student advising workflows.'
+      });
+    }
+    const safeProfileId = authenticatedStudent
+      ? authenticatedStudent.id
+      : profileId;
+
     const cleanQuery = query.trim().substring(0, 1000);
-    const result = await runAgenticAdvisingWorkflow(cleanQuery, profileId);
+    const result = await runAgenticAdvisingWorkflow(cleanQuery, safeProfileId);
     res.json(result);
   } catch (err) {
     console.error('[API /api/advising-workflow Error]:', err.message);
@@ -476,7 +494,7 @@ app.post('/api/advisory', async (req, res) => {
 
     // Check if client requested agentic mode
     if (mode === 'agentic') {
-      const result = await runAgenticAdvisingWorkflow(cleanQuery, effectiveProfile ? effectiveProfile.id : profileId);
+      const result = await runAgenticAdvisingWorkflow(cleanQuery, effectiveProfile ? effectiveProfile.id : null);
       return res.json(result);
     }
 

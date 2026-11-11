@@ -51,10 +51,10 @@
         <!-- Authenticated state -->
         <div id="navAuthLoggedIn" class="nav-auth-wrap hidden">
           <div class="nav-user-chip" onclick="openProfileDrawer()">
-            <div class="nuc-avatar" id="navAvatar">AM</div>
+            <div class="nuc-avatar" id="navAvatar">—</div>
             <div class="nuc-info">
-              <span class="nuc-name" id="navUserName">Aarav Mehta</span>
-              <span class="nuc-prog" id="navUserProg">B.Tech DS</span>
+              <span class="nuc-name" id="navUserName">—</span>
+              <span class="nuc-prog" id="navUserProg">—</span>
             </div>
           </div>
           <button class="nav-btn-profile" onclick="openProfileDrawer()">My Profile</button>
@@ -191,7 +191,7 @@
         <div id="studentContextBanner" class="student-context-banner hidden">
           <div class="scb-info">
             <span class="scb-icon">👤</span>
-            <span>Active Student: <strong id="scbName">Aarav Mehta</strong> (<span id="scbProg">B.Tech DS</span>)</span>
+            <span>Active Student: <strong id="scbName">—</strong> (<span id="scbProg">—</span>)</span>
           </div>
           <button class="scb-btn-profile" onclick="openProfileDrawer()">View Record</button>
         </div>
@@ -642,16 +642,18 @@
     <div class="drawer-panel drawer-panel-wide">
       <div class="drawer-header">
         <div class="drawer-title-wrap">
-          <div class="drawer-avatar" id="drawerAvatar">AS</div>
+          <div class="drawer-avatar" id="drawerAvatar">—</div>
           <div>
-            <h3 class="drawer-name" id="drawerName">Aarav Sharma</h3>
-            <p class="drawer-prog" id="drawerProg">B.Tech (Hons.) Computer Science and Engineering</p>
+            <h3 class="drawer-name" id="drawerName">Student Profile</h3>
+            <p class="drawer-prog" id="drawerProg">Sign in to load verified academic record</p>
           </div>
         </div>
         <button class="drawer-close" onclick="closeProfileDrawer()" aria-label="Close profile">✕</button>
       </div>
 
       <div class="drawer-body">
+
+        <div id="drawerSyntheticNotice" class="eval-record-banner hidden"></div>
 
         <!-- SECTION 1: STUDENT INFORMATION -->
         <div class="dash-section">
@@ -662,35 +664,35 @@
           <div class="drawer-stats-grid">
             <div class="ds-card">
               <span class="ds-label">Student ID</span>
-              <span class="ds-val" id="drawerId">2022UG00001</span>
+              <span class="ds-val" id="drawerId">—</span>
             </div>
             <div class="ds-card">
               <span class="ds-label">Batch</span>
-              <span class="ds-val" id="drawerBatch">Batch 2022</span>
+              <span class="ds-val" id="drawerBatch">—</span>
             </div>
             <div class="ds-card">
               <span class="ds-label">Current Semester</span>
-              <span class="ds-val" id="drawerSem">Semester 5</span>
+              <span class="ds-val" id="drawerSem">—</span>
             </div>
             <div class="ds-card">
               <span class="ds-label">School</span>
-              <span class="ds-val ds-val-sm" id="drawerSchool">School of Computational and Data Sciences</span>
+              <span class="ds-val ds-val-sm" id="drawerSchool">—</span>
             </div>
             <div class="ds-card">
               <span class="ds-label">Major</span>
-              <span class="ds-val" id="drawerMajor">Computer Science &amp; Engineering</span>
+              <span class="ds-val" id="drawerMajor">—</span>
             </div>
             <div class="ds-card">
               <span class="ds-label">Declared Minor</span>
-              <span class="ds-val" id="drawerMinor">Finance</span>
+              <span class="ds-val" id="drawerMinor">—</span>
             </div>
             <div class="ds-card">
               <span class="ds-label">Minor Offering School</span>
-              <span class="ds-val ds-val-sm" id="drawerMinorSchool">School of Business Studies</span>
+              <span class="ds-val ds-val-sm" id="drawerMinorSchool">—</span>
             </div>
             <div class="ds-card">
               <span class="ds-label">Specialisation</span>
-              <span class="ds-val" id="drawerSpec">Not specified</span>
+              <span class="ds-val" id="drawerSpec">—</span>
             </div>
           </div>
         </div>
@@ -704,23 +706,23 @@
           <div class="credit-overview-grid">
             <div class="co-card co-card-primary">
               <span class="co-label">Cumulative GPA (CGPA)</span>
-              <span class="co-val" id="drawerCgpaVal">8.59</span>
+              <span class="co-val" id="drawerCgpaVal">—</span>
               <span class="co-sub">Credit-weighted average across all completed semesters</span>
             </div>
             <div class="co-card">
               <span class="co-label">Credits Completed</span>
-              <span class="co-val" id="drawerCompletedCreds">91 cr</span>
+              <span class="co-val" id="drawerCompletedCreds">—</span>
               <span class="co-sub">Total earned credits toward graduation</span>
             </div>
             <div class="co-card">
               <span class="co-label">Remaining Credits</span>
-              <span class="co-val" id="drawerRemainingCreds">89 cr</span>
+              <span class="co-val" id="drawerRemainingCreds">—</span>
               <span class="co-sub">180 total degree credits required</span>
             </div>
             <div class="co-card">
               <span class="co-label">Degree Pathway</span>
-              <span class="co-val" id="drawerMajorMinorPct">Major: 58% | Minor: 33%</span>
-              <span class="co-sub">156 Major credits + 24 Minor credits</span>
+              <span class="co-val" id="drawerMajorMinorPct">—</span>
+              <span class="co-sub">156 Major &amp; Specialisation credits + 24 Minor credits</span>
             </div>
           </div>
 
@@ -789,11 +791,11 @@
           </div>
         </div>
 
-        <!-- SECTION 5: MINOR CREDIT STRUCTURE -->
+        <!-- SECTION 5: MINOR & SPECIALISATION CURRICULUM STRUCTURES -->
         <div class="dash-section">
           <div class="dash-sec-header">
             <span class="dash-sec-badge">SECTION 5</span>
-            <h4 class="dash-sec-title">Declared Minor Curriculum Structure</h4>
+            <h4 class="dash-sec-title">Minor &amp; Specialisation Curriculum Tracks</h4>
           </div>
           <div class="minor-structure-box">
             <div class="msb-header">
@@ -803,16 +805,27 @@
             <p class="msb-desc" id="drawerMinorStatusText">Offered under Minor_Courses_for_BTech_Students.xlsx</p>
             <div id="drawerMinorCoursesList" class="msb-courses-chips"></div>
           </div>
+          <div class="minor-structure-box" id="drawerSpecBox">
+            <div class="msb-header">
+              <span class="msb-title" id="drawerSpecTitleHeading">Specialisation Track</span>
+              <span class="msb-badge" id="drawerSpecCreditsBadge">20 Credits</span>
+            </div>
+            <p class="msb-desc" id="drawerSpecStatusText">Available from Semester 5 under Semester_Spread_Structures_Sept_2026.xlsx</p>
+            <div id="drawerSpecCoursesList" class="msb-courses-chips"></div>
+          </div>
         </div>
 
       </div>
 
       <div class="drawer-footer">
+        <button class="btn-drawer-ask" onclick="askAboutMyIdentity()">What is my student ID and batch?</button>
         <button class="btn-drawer-ask" onclick="askAboutMyCourses()">What courses do I have this semester?</button>
+        <button class="btn-drawer-ask" onclick="askAboutMyRemaining()">What courses are remaining?</button>
         <button class="btn-drawer-ask" onclick="askAboutMyAttendance()">What is my attendance in each course?</button>
         <button class="btn-drawer-ask" onclick="askAboutMyLowestAttendance()">Which course has my lowest attendance?</button>
         <button class="btn-drawer-ask" onclick="askAboutMyCgpa()">What is my semester-wise CGPA?</button>
         <button class="btn-drawer-ask" onclick="askAboutMyMinor()">What are my minor requirements?</button>
+        <button class="btn-drawer-ask" onclick="askAboutMySpecialisation()">What specialisation am I pursuing?</button>
         <button class="btn-drawer-signout" onclick="signOutStudent()">Sign Out</button>
       </div>
     </div>

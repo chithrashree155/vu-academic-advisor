@@ -172,6 +172,10 @@ function canonicalizeQueryText(rawQuery) {
        .replace(/\bhons\b/g, 'honors')
        .replace(/\bspec\s+track\b/g, 'specialization track')
        .replace(/\bspecialisation\b/g, 'specialization')
+       .replace(/\bnext[-\s]+semester\b/g, 'next semester')
+       .replace(/\bsemester[-\s]+wise\b/g, 'semester wise')
+       .replace(/\bdegree\s+programme\b/g, 'degree program')
+       .replace(/\bprogramme\b/g, 'program')
        .replace(/\bl\s*[-–—/]\s*t\s*[-–—/]\s*p\b/g, 'l-t-p')
        .replace(/\bltp\b/g, 'l-t-p');
 
@@ -954,6 +958,175 @@ function detectSubjectFilter(queryStr) {
 }
 
 /**
+ * Normalizes a course code for deterministic set comparisons (handles split/slash codes like MATH401/COMP401)
+ */
+function extractCodeTokens(rawCode) {
+  if (!rawCode) return [];
+  return String(rawCode)
+    .toUpperCase()
+    .split('/')
+    .map(p => p.replace(/\s+/g, '').replace(/_MIN$/, '').trim())
+    .filter(p => /^[A-Z]{3,5}\d{3}$/.test(p) || p === 'FAMA' || p === 'TBA');
+}
+
+/**
+ * Finds an enrolled course in profile matching either a course code or course title in query
+ */
+function findEnrolledCourseFromQuery(queryStr, enrolledCourses = []) {
+  if (!Array.isArray(enrolledCourses) || enrolledCourses.length === 0) return null;
+  const q = String(queryStr || '').toLowerCase();
+  const codeMatch = q.match(/\b([a-z]{3,4})\s?(\d{3})\b/i);
+  if (codeMatch) {
+    const requested = `${codeMatch[1]}${codeMatch[2]}`.toUpperCase();
+    const byCode = enrolledCourses.find(c => extractCodeTokens(c.code).includes(requested));
+    if (byCode) return { requestedCode: requested, course: byCode, codeRequestedNotEnrolled: false };
+    return { requestedCode: requested, course: null, codeRequestedNotEnrolled: true };
+  }
+
+  // Match by distinctive course title phrase (longest match wins)
+  const candidates = [...enrolledCourses].sort((a, b) => (b.name || '').length - (a.name || '').length);
+  for (const c of candidates) {
+    const cleanTitle = String(c.name || '').replace(/\[.*?\]/g, '').trim().toLowerCase();
+    if (cleanTitle.length >= 6 && q.includes(cleanTitle)) {
+      return { requestedCode: c.code, course: c, codeRequestedNotEnrolled: false };
+    }
+    // Check partial multi-word phrase or single unique keyword like Networks, Operating Systems, Machine Learning, Databases
+    const words = cleanTitle.split(/\s+/).filter(w => w.length >= 5 && !['course', 'management', 'computer', 'design', 'skills', 'learning'].includes(w));
+    if (cleanTitle === 'machine learning' && q.includes('machine learning')) return { requestedCode: c.code, course: c, codeRequestedNotEnrolled: false };
+    if (cleanTitle === 'operating systems' && q.includes('operating systems')) return { requestedCode: c.code, course: c, codeRequestedNotEnrolled: false };
+    if (cleanTitle === 'computer networks' || cleanTitle === 'networks') {
+      if (q.includes('computer networks') || q.includes('networks')) return { requestedCode: c.code, course: c, codeRequestedNotEnrolled: false };
+    }
+    if (cleanTitle.includes('databases') && (q.includes('databases') || q.includes('database'))) return { requestedCode: c.code, course: c, codeRequestedNotEnrolled: false };
+    if (cleanTitle === 'deep learning' && q.includes('deep learning')) return { requestedCode: c.code, course: c, codeRequestedNotEnrolled: false };
+    if (words.some(w => q.includes(w))) {
+      return { requestedCode: c.code, course: c, codeRequestedNotEnrolled: false };
+    }
+  }
+  return null;
+}
+
+/**
+ * Computes completed, enrolled, remaining major/core, minor, and specialisation courses
+ * directly from official curriculum data (Semester_Spread_Structures_Sept_2026.xlsx & minor-courses-data.js).
+ */
+function getRemainingCurriculumPlan(profile) {
+  if (!profile) return null;
+  const completedList = profile.completedCourses || [];
+  const enrolledList = profile.enrolledCourses || [];
+  const backlogsList = profile.backlogs || [];
+
+  const completedCodes = new Set();
+  completedList.forEach(c => extractCodeTokens(c.courseCode || c.code).forEach(t => completedCodes.add(t)));
+  const enrolledCodes = new Set();
+  enrolledList.forEach(c => extractCodeTokens(c.code).forEach(t => enrolledCodes.add(t)));
+  const backlogCodes = new Set();
+  backlogsList.forEach(b => extractCodeTokens(b.code).forEach(t => backlogCodes.add(t)));
+
+  let spreadCourses = [];
+  try {
+    const { loadCurriculumData } = require('./curriculum-data');
+    const data = loadCurriculumData();
+    spreadCourses = (data.curriculumCourses || []).filter(c => String(c.batch) === String(profile.batch));
+  } catch (_) {}
+
+  const specStatus = profile.specialisationTracking && profile.specialisationTracking.status;
+  const specTrackName = profile.specialisationTracking && profile.specialisationTracking.trackName;
+  const fullStackOnlyCodes = new Set(['COMP401', 'DATA406', 'COMP402', 'COMP405']);
+  const dlOnlyCodes = new Set(['MATH401', 'DATA402', 'DATA403', 'DATA404', 'DATA408']);
+
+  const remainingMajorCourses = [];
+  const seenKey = new Set();
+  for (const c of spreadCourses) {
+    if (!c.credits && /^COMP401$/i.test(String(c.courseCode || '').trim())) continue;
+    const rawCode = String(c.courseCode || '').replace(/\s+/g, ' ').trim();
+    const tokens = extractCodeTokens(rawCode);
+    const isCompleted = tokens.length > 0 && tokens.some(t => completedCodes.has(t));
+    const isEnrolled = tokens.length > 0 && tokens.some(t => enrolledCodes.has(t));
+    const isBacklog = tokens.length > 0 && tokens.some(t => backlogCodes.has(t));
+    if (isCompleted || isEnrolled) continue;
+
+    // If student has a declared specialisation track, omit the non-selected track's duplicate SPT entries
+    if (specTrackName === 'Applied Deep Learning' && tokens.length === 1 && fullStackOnlyCodes.has(tokens[0])) continue;
+    if (specTrackName === 'Full Stack Development' && tokens.length === 1 && dlOnlyCodes.has(tokens[0])) continue;
+
+    const dedup = `${c.semesterNum}:${rawCode}:${c.courseName}`;
+    if (seenKey.has(dedup)) continue;
+    seenKey.add(dedup);
+
+    const statusTag = isBacklog
+      ? 'Active Backlog (Must clear)'
+      : (c.semesterNum < profile.semester ? 'Deferred / Pending Core' : `Planned (Semester ${c.semesterNum})`);
+
+    remainingMajorCourses.push({
+      code: rawCode || 'TBA',
+      name: String(c.courseName || '').replace(/\s+/g, ' ').trim(),
+      credits: c.credits || 0,
+      semester: c.semesterNum,
+      basket: c.basketName || 'Core',
+      prerequisite: c.prerequisite || 'NIL',
+      statusTag
+    });
+  }
+
+  const minorCourses = (profile.minorCreditStructure && profile.minorCreditStructure.coursesOffered) || [];
+  const minorCompleted = minorCourses.filter(c => c.status === 'Completed');
+  const minorRemaining = minorCourses.filter(c => c.status !== 'Completed');
+
+  const specCourses = (profile.specialisationTracking && profile.specialisationTracking.courses) || [];
+  const specCompleted = specCourses.filter(c => c.status === 'Completed');
+  const specInProgress = specCourses.filter(c => c.status === 'In Progress');
+  const specPending = specCourses.filter(c => c.status === 'Pending');
+
+  // Evaluate prerequisite readiness for upcoming / next-semester courses
+  const nextCourses = profile.nextSemesterCourses || [];
+  const missingPrerequisites = [];
+  backlogsList.forEach(bl => {
+    missingPrerequisites.push({
+      course: bl.prerequisiteFor ? bl.prerequisiteFor.join(', ') : 'Dependent core courses',
+      missingPrereq: `${bl.code} (${bl.name})`,
+      status: 'Active Backlog — must be cleared before dependent course registration'
+    });
+  });
+
+  for (const nc of nextCourses) {
+    const rawPre = String(nc.prerequisite || '').trim();
+    if (!rawPre || ['NONE', 'NIL', 'N/A', '-'].includes(rawPre.toUpperCase())) continue;
+    const preTokens = rawPre.split(/[,/]/).map(s => s.replace(/\s+/g, '').trim()).filter(s => /^[A-Z]{3,5}\d{3}$/i.test(s));
+    if (preTokens.length === 0) continue;
+    // Handle "/" as OR and "," as AND cleanly
+    const clauses = rawPre.split(',').map(part => part.trim()).filter(Boolean);
+    for (const clause of clauses) {
+      const options = clause.split('/').map(s => s.replace(/\s+/g, '').toUpperCase().trim()).filter(s => /^[A-Z]{3,5}\d{3}$/.test(s));
+      if (options.length === 0) continue;
+      const anyDone = options.some(o => completedCodes.has(o));
+      const anyInProgress = options.some(o => enrolledCodes.has(o));
+      if (!anyDone) {
+        missingPrerequisites.push({
+          course: `${nc.code} — ${nc.name}`,
+          missingPrereq: options.join(' or '),
+          status: anyInProgress
+            ? `Currently in progress in Semester ${profile.semester} (eligible once passed)`
+            : `Not yet completed (${backlogCodes.has(options[0]) ? 'Active Backlog' : 'Pending Prerequisite'})`
+        });
+      }
+    }
+  }
+
+  return {
+    remainingMajorCourses,
+    minorCompleted,
+    minorRemaining,
+    specStatus,
+    specTrackName,
+    specCompleted,
+    specInProgress,
+    specPending,
+    missingPrerequisites
+  };
+}
+
+/**
  * Query Classification Engine
  */
 function classifyQuery(queryStr) {
@@ -1007,6 +1180,27 @@ function classifyQuery(queryStr) {
     return 'PROGRAM_SWITCH';
   }
 
+  // 0.7. Authenticated Student Identity & Academic Profile Overview (Priority over generic rules)
+  const isProfileHelpAsk = q.includes('does not contain') || q.includes('incomplete') || (q.includes('student profile') && q.includes('what should i do'));
+  if (
+    !isProfileHelpAsk && !extractBatchFromQuery(q) && (
+      /\bwhat(?:'s| is)\s+my\s+(?:full\s+)?name\b/i.test(q) ||
+      /\bwho\s+am\s+i\b/i.test(q) ||
+      /\bwhat(?:'s| is)\s+my\s+(?:student\s*)?id\b/i.test(q) ||
+      /\bmy\s+student\s+id\b/i.test(q) ||
+      /\b(?:which|what)\s+batch\s+(?:am\s+i|do\s+i\s+belong|is\s+mine)\b/i.test(q) ||
+      /\bmy\s+batch\b/i.test(q) ||
+      /\b(?:which|what)\s+semester\s+(?:am\s+i|am\s+i\s+currently)\b/i.test(q) ||
+      /\bmy\s+current\s+semester\b/i.test(q) ||
+      /\b(?:what(?:'s| is)|which)\s+(?:is\s+)?my\s+(?:degree\s+)?program\b/i.test(q) ||
+      /\b(?:which|what)\s+degree\s+am\s+i\b/i.test(q) ||
+      /\bmy\s+degree\s+program\b/i.test(q) ||
+      /\b(?:show|tell\s+me\s+about|what\s+is)\s+my\s+(?:academic\s+)?profile\b/i.test(q)
+    )
+  ) {
+    return 'MY_IDENTITY';
+  }
+
   // 0.8. Medical Leave Inquiries (Personal / Procedural)
   if (
     q.includes('medical leave') ||
@@ -1034,7 +1228,7 @@ function classifyQuery(queryStr) {
     return 'MY_BACKLOGS';
   }
 
-  // 0.9. Personal Course Attendance & Risk Analysis
+  // 0.9. Personal Course Attendance & Risk Analysis (Must execute before generic ATTENDANCE!)
   if (
     q.includes('lowest attendance') ||
     q.includes('eligibility at risk') ||
@@ -1043,6 +1237,9 @@ function classifyQuery(queryStr) {
     q.includes('miss a class') ||
     q.includes('below 75% in any course') ||
     q.includes('below 75 in any course') ||
+    /\bwhich\s+courses?\s+(?:have|has|are)\s+(?:my\s+)?attendance\s+(?:below|under|less\s+than)\s+75/i.test(q) ||
+    /\bcourses?\s+(?:have|with)\s+attendance\s+(?:below|under|less\s+than)\s+75/i.test(q) ||
+    /\bwhat\s+happens\s+if\s+my\s+attendance\b/i.test(q) ||
     q.includes('am i below 75%') ||
     q.includes('am i below 75') ||
     q.includes('how many more classes should i attend') ||
@@ -1051,12 +1248,18 @@ function classifyQuery(queryStr) {
     q.includes('how many classes can i miss') ||
     q.includes('how many classes can i skip') ||
     q.includes('classes can i miss') ||
+    q.includes('classes can i skip') ||
     q.includes('am i meeting the attendance requirement') ||
     q.includes('attendance in each course') ||
     q.includes('attendance in every course') ||
     q.includes('attendance in all courses') ||
+    q.includes('attendance for all courses') ||
+    q.includes('show my attendance') ||
     q.includes('what is my overall attendance') ||
-    (q.includes('attendance in') && /\b[A-Z]{3,4}\s?\d{3}\b/i.test(q))
+    /\bwhat(?:'s| is)\s+my\s+attendance\b/i.test(q) ||
+    (q.includes('my attendance') && !q.includes('policy')) ||
+    (q.includes('attendance in') && /\b[A-Z]{3,4}\s?\d{3}\b/i.test(q)) ||
+    (q.includes('attendance in') && q.includes('my '))
   ) {
     return 'MY_COURSE_ATTENDANCE';
   }
@@ -1065,41 +1268,61 @@ function classifyQuery(queryStr) {
   if (
     q.includes('what is my cgpa') ||
     q.includes('show my cgpa') ||
-    q.includes('my cgpa semester-wise') ||
+    q.includes('my cgpa semester wise') ||
+    q.includes('semester wise cgpa') ||
+    q.includes('semester wise sgpa') ||
     q.includes('my cgpa in each semester') ||
     q.includes('cgpa in each semester') ||
-    q.includes('cgpa semester-wise') ||
     q.includes('cgpa semester wise') ||
+    q.includes('show my sgpa') ||
+    q.includes('what is my sgpa') ||
     q.includes('has my cgpa improved') ||
     q.includes('have my grades improved') ||
     q.includes('how many credits have i completed') ||
     q.includes('how many credits have i earned') ||
     q.includes('how many credits remain') ||
     q.includes('which courses are still pending') ||
-    (q.includes('my cgpa') && !q.includes('what is cgpa'))
+    ((q.includes('cgpa') || q.includes('sgpa')) && /\b(?:my|i)\b/i.test(q) && !q.includes('what is cgpa'))
   ) {
     return 'MY_CGPA_PROGRESS';
   }
 
-  // 0.98. Major, Minor & Specialisation Progress
+  // 0.97. Personal Specialisation (and combined Specialisation + Minor) Queries — MUST run before CURRICULUM_BASKET!
   if (
-    q.includes('what have i completed in my major') ||
-    q.includes('completed in my major') ||
-    q.includes('which major courses are remaining') ||
-    q.includes('how much of my major is complete') ||
-    q.includes('how much of my minor is complete') ||
-    q.includes('which minor courses do i still need') ||
-    q.includes('which specialisation courses are pending') ||
-    q.includes('specialisation courses are pending') ||
-    q.includes('do i have any specialisation') ||
-    q.includes('any specialisation requirements') ||
-    q.includes('my specialisation') ||
-    q.includes('my specialization') ||
-    q.includes('what are my remaining degree requirements') ||
-    q.includes('my remaining degree requirements') ||
-    q.includes('what courses have i completed') ||
-    q.includes('which courses do i still need to complete') ||
-    q.includes('which prerequisites am i missing')
+    !extractBatchFromQuery(q) &&
+    !q.includes('compare') &&
+    !q.includes('difference between') &&
+    (q.includes('specialization') || q.includes('specialisation')) &&
+    /\b(?:my|i|am i|do i|have i|did i)\b/i.test(q)
+  ) {
+    return 'MY_SPECIALISATION_INFO';
+  }
+
+  // 0.98. Major, Completed Courses, Remaining Courses & Degree Progress
+  if (
+    !extractBatchFromQuery(q) && (
+      q.includes('what have i completed in my major') ||
+      q.includes('completed in my major') ||
+      q.includes('which major courses are remaining') ||
+      q.includes('what major courses are remaining') ||
+      q.includes('remaining major courses') ||
+      q.includes('how much of my major is complete') ||
+      q.includes('how much of my minor is complete') ||
+      q.includes('what are my remaining degree requirements') ||
+      q.includes('my remaining degree requirements') ||
+      q.includes('what courses have i completed') ||
+      q.includes('which courses have i completed') ||
+      q.includes('my completed courses') ||
+      q.includes('which courses are remaining') ||
+      q.includes('what courses are remaining') ||
+      q.includes('my remaining courses') ||
+      q.includes('which courses remain') ||
+      q.includes('what courses remain') ||
+      q.includes('which courses do i still need to complete') ||
+      q.includes('which prerequisites am i missing') ||
+      q.includes('what prerequisites am i missing') ||
+      q.includes('prerequisites am i missing')
+    )
   ) {
     return 'MY_MAJOR_PROGRESS';
   }
@@ -1184,18 +1407,22 @@ function classifyQuery(queryStr) {
       q.includes('what are my minor requirements') ||
       q.includes('my minor requirements') ||
       q.includes('what minor am i taking') ||
+      q.includes('what minor am i pursuing') ||
       q.includes('what is my minor') ||
       q.includes('what minor did i choose') ||
       q.includes('what minor did i take') ||
       q.includes('which minor am i doing') ||
       q.includes('which minor am i taking') ||
+      q.includes('which minor am i pursuing') ||
       q.includes('my declared minor') ||
-      q.includes('my minor courses')
+      q.includes('my minor courses') ||
+      (q.includes('minor') && /\b(?:have i completed|did i complete|do i still need|are remaining|remain)\b/i.test(q)) ||
+      (q.includes('minor') && /\b(?:am i eligible|status of my minor)\b/i.test(q))
     )
   ) {
     return 'MY_MINOR_INFO';
   }
-  if ((q.includes('minor') || q.includes('minors')) && (q.includes('list') || q.includes('available') || q.includes('offer') || q.includes('what are') || q.includes('which') || q.includes('all')) && !minorKey && !q.includes('my minor') && !q.includes('am i taking') && !q.includes('my declared minor')) {
+  if ((q.includes('minor') || q.includes('minors')) && (q.includes('list') || q.includes('available') || q.includes('offer') || q.includes('what are') || q.includes('which') || q.includes('all')) && !minorKey && !/\b(?:my|have i|did i|do i|am i)\b/i.test(q)) {
     return 'MINOR_LIST';
   }
 
@@ -1297,11 +1524,13 @@ function classifyQuery(queryStr) {
       q.includes('what are my minor requirements') ||
       q.includes('my minor requirements') ||
       q.includes('what minor am i taking') ||
+      q.includes('what minor am i pursuing') ||
       q.includes('what is my minor') ||
       q.includes('what minor did i choose') ||
       q.includes('what minor did i take') ||
       q.includes('which minor am i doing') ||
       q.includes('which minor am i taking') ||
+      q.includes('which minor am i pursuing') ||
       q.includes('my declared minor') ||
       q.includes('my minor courses')
     )
@@ -1309,16 +1538,21 @@ function classifyQuery(queryStr) {
     return 'MY_MINOR_INFO';
   }
 
-  // 8.3. Personal Next Semester Courses Suggestion Query
+  // 8.3. Personal Next Semester Courses Suggestion Query (does not steal course-specific eligibility questions)
   if (
-    !extractBatchFromQuery(q) && (
+    !extractBatchFromQuery(q) &&
+    !/\b[A-Z]{3,4}\s?\d{3}\b/i.test(q) &&
+    (
       q.includes('what should i take next semester') ||
       q.includes('what courses should i take next semester') ||
       q.includes('what to take next semester') ||
       q.includes('suggest courses for next semester') ||
+      q.includes('what are my next semester courses') ||
+      q.includes('which courses are in my next semester') ||
       q.includes('my next semester courses') ||
       q.includes('my next semester') ||
-      q.includes('what do i take next semester')
+      q.includes('what do i take next semester') ||
+      (q.includes('next semester') && /\b(?:courses?|subjects?|upcoming|planned)\b/i.test(q) && /\b(?:my|i|take|have|will|should)\b/i.test(q))
     )
   ) {
     return 'MY_NEXT_SEMESTER_COURSES';
@@ -3356,6 +3590,60 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
     // ── 3. CLASSIFY QUERY (already initialized) ──
 
     // ── 3.A. PERSONALISED STUDENT QUERY HANDLERS (AUTHENTICATED SESSION GROUNDED) ──
+    // ── 3.0A. AUTHENTICATED STUDENT IDENTITY & ACADEMIC PROFILE ──
+    if (queryCategory === 'MY_IDENTITY') {
+      if (!profile) {
+        return {
+          state: 'NEEDS_CLARIFICATION',
+          answer: "To view your student identity, batch, semester, and degree details, please sign in with your Student ID and password using the **Student Sign In** button at the top.",
+          sources: [],
+          ruleResults: { authenticated: false },
+          followUp: "Click 'Student Sign In' to authenticate your profile."
+        };
+      }
+
+      const specTrack = profile.specialisationTracking || {};
+      const minorTrack = profile.minorTracking || {};
+      const sheetName = `Struct_${profile.batch === '2026' ? '2026_DS' : profile.batch}`;
+      const medSummary = profile.medicalLeave && profile.medicalLeave.hasRecord
+        ? `${profile.medicalLeave.status} (${profile.medicalLeave.duration})`
+        : 'None recorded';
+      const backlogSummary = (profile.backlogs && profile.backlogs.length > 0)
+        ? `${profile.backlogs.length} active (${profile.backlogs.map(b => b.code).join(', ')})`
+        : 'None (0 active backlogs)';
+
+      return {
+        state: 'ANSWERABLE',
+        answer: `**Verified Student Identity & Academic Profile**\nOfficial Knowledge Source: ${sheetName} (Semester_Spread_Structures_Sept_2026.xlsx) & Minor_Courses_for_BTech_Students.xlsx\n\n• **Full Name:** Your name is **${profile.display_name}**\n• **Student ID:** **${profile.id}**\n• **Batch:** You belong to **Batch ${profile.batch}**\n• **Current Semester:** You are currently studying in **Semester ${profile.semester}**\n• **Degree Programme:** **${profile.programName}**\n• **School:** **${profile.school}**\n• **Declared Minor:** **${profile.declaredMinor}** (${profile.minorSchool}) — *${minorTrack.status || profile.minorStatus}*\n• **Specialisation Track:** **${profile.specialisation || 'Not specified'}** — *${specTrack.status || 'Not assigned'}*\n• **Academic Standing:** Completed **${profile.completedCredits} / 180 credits** (Remaining: **${profile.remainingCredits} cr**) | CGPA: **${profile.cgpa}**\n• **Overall Attendance:** **${profile.overallAttendance ? profile.overallAttendance.percentage + '%' : profile.attendance}**\n• **Medical Leave:** ${medSummary} | **Backlogs:** ${backlogSummary}\n\n*(Note: This portal uses synthetic student academic records grounded strictly in Vidyashilp University official curriculum workbooks for academic advising evaluation.)*`,
+        sources: [
+          {
+            documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+            hierarchyLevel: 2,
+            pageOrSheet: sheetName,
+            clauseNumber: `Batch ${profile.batch} — Semester ${profile.semester}`,
+            excerpt: `Curriculum structure for ${profile.programName}, Batch ${profile.batch}, Semester ${profile.semester} (180 total credits).`
+          },
+          {
+            documentTitle: '118351_Minor Courses for BTech_Students.xlsx',
+            hierarchyLevel: 2,
+            pageOrSheet: profile.declaredMinor,
+            clauseNumber: 'Minor Allocation',
+            excerpt: `Declared minor: ${profile.declaredMinor} (${profile.minorSchool}) requiring 24 credits.`
+          }
+        ],
+        ruleResults: {
+          studentId: profile.id,
+          name: profile.display_name,
+          batch: profile.batch,
+          semester: profile.semester,
+          program: profile.programName,
+          minor: profile.declaredMinor,
+          specialisation: profile.specialisation
+        },
+        followUp: "Ask 'What courses do I have this semester?', 'What is my attendance in all courses?', or 'Which courses are remaining?'"
+      };
+    }
+
     if (queryCategory === 'MY_CURRENT_COURSES') {
       if (!profile) {
         return {
@@ -3391,6 +3679,74 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       };
     }
 
+    // ── 3.0B. PERSONAL SPECIALISATION (AND COMBINED MINOR + SPECIALISATION) HANDLER ──
+    if (queryCategory === 'MY_SPECIALISATION_INFO') {
+      if (!profile) {
+        return {
+          state: 'NEEDS_CLARIFICATION',
+          answer: "To view your specialisation track and completed/remaining specialisation courses, please sign in with your Student ID and password using the **Student Sign In** button at the top.",
+          sources: [],
+          ruleResults: { authenticated: false },
+          followUp: "Click 'Student Sign In' to view your specialisation status."
+        };
+      }
+
+      const spec = profile.specialisationTracking || {
+        status: 'Not assigned',
+        trackName: profile.specialisation || 'Not specified',
+        availableTracks: ['Applied Deep Learning', 'Full Stack Development'],
+        totalCredits: 20,
+        completedCredits: 0,
+        remainingCredits: 20,
+        courses: []
+      };
+      const sheetName = `Struct_${profile.batch === '2026' ? '2026_DS' : profile.batch}`;
+      const specCourses = Array.isArray(spec.courses) ? spec.courses : [];
+      const specCompleted = specCourses.filter(c => c.status === 'Completed');
+      const specInProgress = specCourses.filter(c => c.status === 'In Progress');
+      const specPending = specCourses.filter(c => c.status === 'Pending');
+
+      const completedStr = specCompleted.length > 0
+        ? specCompleted.map((c, i) => `${i + 1}. **${c.code} — ${c.name}** (${c.credits} cr, Semester ${c.semester}, Grade: **${c.grade}**) — *Completed*`).join('\n')
+        : '• **None completed yet (0 / 20 credits)**.';
+      const remainingList = [...specInProgress, ...specPending];
+      const remainingStr = remainingList.length > 0
+        ? remainingList.map((c, i) => `${i + 1}. **${c.code} — ${c.name}** (${c.credits} cr, Semester ${c.semester}) — *${c.status}*`).join('\n')
+        : '• **All specialisation courses completed.**';
+
+      let minorAddendum = '';
+      if (normalizedQuery.includes('minor')) {
+        const m = profile.minorCreditStructure || {};
+        const minorTrack = profile.minorTracking || {};
+        const mCourses = m.coursesOffered || [];
+        const mDone = mCourses.filter(c => c.status === 'Completed');
+        const mRem = mCourses.filter(c => c.status !== 'Completed');
+        minorAddendum = `\n\n### Declared Minor Track (${profile.declaredMinor} — ${profile.minorSchool})\n• **Minor Status:** **${minorTrack.status || profile.minorStatus}**\n• **Minor Progress:** **${m.completedCredits || 0} / ${m.totalCredits || 24} credits completed** (**${m.remainingCredits ?? 24} cr remaining**)\n• **Completed Minor Courses:** ${mDone.length > 0 ? mDone.map(c => `${c.code} (${c.name}, ${c.credits} cr, Grade ${c.grade})`).join('; ') : 'None completed yet'}\n• **Remaining Minor Courses:** ${mRem.length > 0 ? mRem.map(c => `${c.code} (${c.name}, Sem ${c.semester}, ${c.credits} cr)`).join('; ') : 'None'}`;
+      }
+
+      return {
+        state: 'ANSWERABLE',
+        answer: `**Specialisation Track Progress for ${profile.display_name} (${profile.id}, Batch ${profile.batch}, Semester ${profile.semester})**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${sheetName})\n\n• **Specialisation Selection Status:** **${spec.status}**\n• **Selected Specialisation Track:** **${spec.trackName}**\n• **Available Curriculum Tracks (Batch ${profile.batch}):** ${Array.isArray(spec.availableTracks) ? spec.availableTracks.join(', ') : 'Applied Deep Learning, Full Stack Development'}\n• **Specialisation Credits:** **${spec.completedCredits || 0} completed / ${spec.totalCredits || 20} total** (**${spec.remainingCredits ?? 20} credits remaining**)\n• **Policy Note:** ${spec.note || 'Specialization Track courses (20 credits across 5 courses) run in Semesters 5 to 7.'}\n\n### Completed Specialisation Courses\n${completedStr}\n\n### Currently Pursuing / Remaining Specialisation Courses\n${remainingStr}${minorAddendum}`,
+        sources: [
+          {
+            documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+            hierarchyLevel: 2,
+            pageOrSheet: sheetName,
+            clauseNumber: 'Specialization Tracks Basket (20 Credits)',
+            excerpt: `Official specialization tracks (${Array.isArray(spec.availableTracks) ? spec.availableTracks.join(' / ') : 'Applied Deep Learning / Full Stack Development'}) for Batch ${profile.batch}.`
+          }
+        ],
+        ruleResults: {
+          studentId: profile.id,
+          specialisationStatus: spec.status,
+          trackName: spec.trackName,
+          completedCredits: spec.completedCredits || 0,
+          remainingCredits: spec.remainingCredits ?? 20
+        },
+        followUp: "Ask 'What are my minor requirements?' or 'Which courses are remaining?'"
+      };
+    }
+
     if (queryCategory === 'MY_MINOR_INFO') {
       if (!profile) {
         return {
@@ -3402,25 +3758,41 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
         };
       }
 
-      const m = profile.minorCreditStructure;
-      const coursesStr = (m && m.coursesOffered)
-        ? m.coursesOffered.map((c, i) => `${i + 1}. **${c.code} — ${c.name}** (${c.credits} cr)`).join('\n')
-        : '• Course list maintained in official minor curriculum';
+      const m = profile.minorCreditStructure || {};
+      const minorTrack = profile.minorTracking || {};
+      const mCourses = m.coursesOffered || [];
+      const doneCourses = mCourses.filter(c => c.status === 'Completed');
+      const remCourses = mCourses.filter(c => c.status !== 'Completed');
+
+      const doneStr = doneCourses.length > 0
+        ? doneCourses.map((c, i) => `${i + 1}. **${c.code} — ${c.name}** (${c.credits} cr, Semester ${c.semester}, Grade: **${c.grade}**) — *Completed*`).join('\n')
+        : '• **None completed yet (0 credits).**';
+      const remStr = remCourses.length > 0
+        ? remCourses.map((c, i) => `${i + 1}. **${c.code} — ${c.name}** (${c.credits} cr, L-T-P: ${c.ltp || 'N/A'}, Scheduled: Semester ${c.semester}, Prereq: ${c.prerequisites || 'Nil'}) — *${c.status}*`).join('\n')
+        : '• **All 24 minor credits completed!**';
 
       return {
         state: 'ANSWERABLE',
-        answer: `**Minor Program Information for ${profile.display_name} (Batch ${profile.batch})**\nOfficial Knowledge Source: Minor_Courses_for_BTech_Students.xlsx (Sheet: ${profile.declaredMinor})\n\n• **Declared Minor:** **${profile.declaredMinor}**\n• **Offering School:** **${profile.minorSchool}**\n• **Curriculum Status:** ${profile.minorStatus}\n• **Required Minor Credits:** **${m ? m.totalCredits : 24} credits**\n\n**Official Minor Curriculum Courses (${profile.declaredMinor}):**\n${coursesStr}\n\nUnder Vidyashilp University regulations (*Minor_Courses_for_BTech_Students.xlsx*), B.Tech students complete a total of **${m ? m.totalCredits : 24} credits** in their declared minor across Semesters 3 through 8. Course registration for minor slots is conducted through the Digii ERP portal.`,
+        answer: `**Minor Program Information & Progress for ${profile.display_name} (${profile.id}, Batch ${profile.batch}, Semester ${profile.semester})**\nOfficial Knowledge Source: Minor_Courses_for_BTech_Students.xlsx (Sheet: ${profile.declaredMinor})\n\n• **Minor Tracking Status:** **${minorTrack.status || profile.minorStatus}**\n• **Declared / Intended Minor:** **${profile.declaredMinor}**\n• **Offering School:** **${profile.minorSchool}**\n• **Eligibility Note:** ${minorTrack.eligibilityNote || profile.minorStatus}\n• **Minor Credit Progress:** **${m.completedCredits || 0} completed / ${m.totalCredits || 24} total credits** (**${m.remainingCredits ?? 24} credits remaining**)\n\n### Completed Minor Courses (${doneCourses.length})\n${doneStr}\n\n### Remaining Minor Courses (${remCourses.length})\n${remStr}\n\nUnder Vidyashilp University regulations (*Minor_Courses_for_BTech_Students.xlsx*), B.Tech students complete **${m.totalCredits || 24} credits** in their declared minor across Semesters 3 through 7/8. Course registration is finalized through Digii ERP.`,
         sources: [
           {
             documentTitle: '118351_Minor Courses for BTech_Students.xlsx',
             hierarchyLevel: 2,
             pageOrSheet: profile.declaredMinor,
             clauseNumber: 'Minor Basket Curriculum',
-            excerpt: `Official minor course structure in ${profile.declaredMinor} (${profile.minorSchool}) for Batch ${profile.batch}. Total minor credits: ${m ? m.totalCredits : 24}.`
+            excerpt: `Official minor course structure in ${profile.declaredMinor} (${profile.minorSchool}) for Batch ${profile.batch}. Total minor credits: ${m.totalCredits || 24}.`
           }
         ],
-        ruleResults: { studentId: profile.id, minor: profile.declaredMinor, school: profile.minorSchool, totalCredits: m ? m.totalCredits : 24 },
-        followUp: `Ask 'What courses do I have this semester?' or 'Am I eligible for DATA302?'`
+        ruleResults: {
+          studentId: profile.id,
+          minor: profile.declaredMinor,
+          trackingStatus: minorTrack.status || profile.minorStatus,
+          school: profile.minorSchool,
+          totalCredits: m.totalCredits || 24,
+          completedCredits: m.completedCredits || 0,
+          remainingCredits: m.remainingCredits ?? 24
+        },
+        followUp: "Ask 'What specialisation am I pursuing?' or 'Which courses are remaining?'"
       };
     }
 
@@ -3438,14 +3810,18 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       const nextSem = profile.semester + 1;
       const nextCourses = profile.nextSemesterCourses || [];
       const nextRows = nextCourses.map((c, i) =>
-        `${i + 1}. **${c.code} — ${c.name}**\n   • L-T-P: **${c.ltp}** | Credits: **${c.credits} cr** | Prerequisite: **${c.prerequisite}**`
+        `${i + 1}. **${c.code} — ${c.name}**${c.basket ? ` [${c.basket}]` : ''}\n   • L-T-P: **${c.ltp}** | Credits: **${c.credits} cr** | Prerequisite: **${c.prerequisite}**`
       ).join('\n\n');
       const nextTotalCredits = nextCourses.reduce((sum, c) => sum + (c.credits || 0), 0);
       const sheetName = `Struct_${profile.batch === '2026' ? '2026_DS' : profile.batch}`;
+      const plan = getRemainingCurriculumPlan(profile);
+      const prereqAlertStr = (plan && plan.missingPrerequisites && plan.missingPrerequisites.length > 0)
+        ? `\n\n### Prerequisite & Eligibility Alerts for Next Semester\n` + plan.missingPrerequisites.map(p => `• **${p.course}** (Requires **${p.missingPrereq}**): *${p.status}*`).join('\n')
+        : '';
 
       return {
         state: 'ANSWERABLE',
-        answer: `**Upcoming Semester ${nextSem} Course Curriculum for ${profile.display_name} (Batch ${profile.batch})**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${sheetName})\n\nBased on your official B.Tech CSE semester spread structure, the planned courses for **Semester ${nextSem}** are:\n\n${nextRows}\n\n• **Planned Semester Credits:** **${nextTotalCredits} credits**\n• **Recommendation:** Review prerequisites for these courses and consult your Faculty Mentor during the pre-registration window on Digii ERP.`,
+        answer: `**Upcoming Semester ${nextSem} Course Curriculum for ${profile.display_name} (${profile.id}, Batch ${profile.batch})**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${sheetName})\n\nBased on your official B.Tech curriculum spread, the **planned Semester ${nextSem} courses** are:\n\n${nextRows}\n\n• **Planned Curriculum Credits Shown:** **${nextTotalCredits} credits**${prereqAlertStr}\n• **Planned vs Confirmed Status:** These courses reflect the official university **curriculum spread** (*Semester_Spread_Structures_Sept_2026.xlsx*). Formal course enrollment is confirmed only once pre-registration opens on the **Digii ERP** portal in consultation with your Faculty Mentor.`,
         sources: [
           {
             documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
@@ -3456,7 +3832,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
           }
         ],
         ruleResults: { studentId: profile.id, nextSemester: nextSem, plannedCredits: nextTotalCredits },
-        followUp: "Ask 'How many credits do I still need?' or 'What are my minor requirements?'"
+        followUp: "Ask 'Which prerequisites am I missing?' or 'How many credits do I still need?'"
       };
     }
 
@@ -3509,13 +3885,20 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
       const med = profile.medicalLeave || {};
       if (med.hasRecord) {
-        const affStr = Array.isArray(med.affectedCourses)
-          ? med.affectedCourses.map(c => `• **${c.code} (${c.name}):** ${c.sessionsMissed} sessions missed`).join('\n')
+        const affList = Array.isArray(med.affectedCourses) ? med.affectedCourses : [];
+        const affStr = affList.length > 0
+          ? affList.map(c => `• **${c.code} (${c.name}):** ${c.sessionsMissed} sessions missed`).join('\n')
           : '• None listed';
+
+        const enrolledStandingLines = affList.map(aff => {
+          const match = (profile.enrolledCourses || []).find(ec => ec.code.toUpperCase() === aff.code.toUpperCase());
+          if (!match) return `  - **${aff.code} (${aff.name}):** Recorded in previous/completed term ledger`;
+          return `  - **${match.code} (${match.name}):** Conducted: ${match.conducted} | Attended: ${match.attended} $\\to$ **${match.attendancePercentage}%** (${match.attendancePercentage >= 75 ? 'Eligible' : 'Below 75%'})`;
+        }).join('\n');
 
         return {
           state: 'ANSWERABLE',
-          answer: `**Personal Medical Leave Record & Academic Impact for ${profile.display_name} (${profile.id}, Batch ${profile.batch})**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 7.3) & SOP STUDENT 19082025 - Final.pdf (Clause 2)\n\n### 1. Medical Leave Summary\n• **Medical Leave Duration:** **${med.duration}**\n• **Reason:** **${med.reason}**\n• **Approval Status:** **${med.status}** (${med.approvalAuthority})\n• **Submission Compliance:** ${med.submissionStatus}\n\n### 2. Courses Affected During Leave Period\n${affStr}\n\n### 3. Impact on Attendance & University Regulations\n• **Handbook Clause 7.3 Mandate:** Approved medical leave **does NOT automatically waive missed classes or change the attendance denominator**. The total number of conducted classes remains unaltered.\n• **Attendance Relaxation Floor:** Under **Student Handbook Clause 7.3**, an approved medical certificate allows eligibility relaxation down to a minimum floor of **sixty-five percent (65%)** upon review by the Academic Review Board if attendance falls between 65% and 75%.\n• **Your Current Standing:**\n  - **COMP208 (Computer Networks):** Conducted: 32 | Attended: 26 $\\to$ **81.25%** (Eligible)\n  - **COMP207 (Operating Systems):** Conducted: 28 | Attended: 23 $\\to$ **82.14%** (Eligible)\n  Because your attendance in both courses currently exceeds the standard **75% minimum threshold**, you are fully eligible for the End-Semester Examination without needing medical relaxation.`,
+          answer: `**Personal Medical Leave Record & Academic Impact for ${profile.display_name} (${profile.id}, Batch ${profile.batch})**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 7.3) & SOP STUDENT 19082025 - Final.pdf (Clause 2)\n\n### 1. Medical Leave Summary\n• **Medical Leave Duration:** **${med.duration}**\n• **Reason:** **${med.reason}**\n• **Approval Status:** **${med.status}** (${med.approvalAuthority})\n• **Submission Compliance:** ${med.submissionStatus}\n\n### 2. Courses Affected During Leave Period\n${affStr}\n\n### 3. Impact on Attendance & University Regulations\n• **Handbook Clause 7.3 Mandate:** Approved medical leave **does NOT automatically waive missed classes or change the attendance denominator**. The total number of conducted classes remains unaltered.\n• **Attendance Relaxation Floor:** Under **Student Handbook Clause 7.3**, an approved medical certificate allows eligibility relaxation down to a minimum floor of **sixty-five percent (65%)** upon review by the Academic Review Board if attendance falls between 65% and 75%.\n• **Your Current Standing:**\n${enrolledStandingLines}\n  Because your attendance in these courses currently exceeds the standard **75% minimum threshold**, you are fully eligible for the End-Semester Examination without needing medical relaxation.`,
           sources: [
             {
               documentTitle: '4. Student Handbook Aug 2026.pdf',
@@ -3576,9 +3959,13 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       const backlogs = profile.backlogs || [];
       if (backlogs.length > 0) {
         const bl = backlogs[0];
+        const currentEnrolledCredits = (profile.enrolledCourses || []).reduce((sum, c) => sum + (c.credits || 0), 0);
+        const blockedListStr = (bl.prerequisiteFor && bl.prerequisiteFor.length > 0)
+          ? bl.prerequisiteFor.join(', ')
+          : 'Dependent core courses';
         return {
           state: 'ANSWERABLE',
-          answer: `**Personal Backlog Audit for ${profile.display_name} (${profile.id}, Batch ${profile.batch}, Semester ${profile.semester})**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 8 & Clause 12.1) & Semester_Spread_Structures_Sept_2026.xlsx\n\n### 1. Active Backlog Details\n• **Course Code & Title:** **${bl.code} — ${bl.name}**\n• **Semester Originally Taken:** Semester ${bl.semesterTaken}\n• **Credits:** **${bl.credits} credits** (L-T-P: ${bl.ltp})\n• **Earned Grade:** **'${bl.grade}' (Fail)**\n• **Current Status:** **${bl.status}**\n\n### 2. Prerequisite & Course Dependency Impact\n• **Prerequisite For:** ${bl.prerequisiteFor ? bl.prerequisiteFor.join(', ') : 'None'}. COMP204 is a core prerequisite for **COMP206 (Microprocessors and Computer Architecture)**. While you progressed to Semester 7 under conditional academic council provisions, COMP204 remains an unfulfilled core requirement.\n\n### 3. Degree Progression & Graduation Impact (Handbook Clause 12.1)\n• **Graduation Requirement:** Under **Student Handbook Section III, Clause 12.1 (Degree Award Regulations)**, a student cannot graduate or be awarded the B.Tech (Hons.) degree until **all 180 prescribed credits** and every mandatory core curriculum course have been satisfactorily cleared with a passing grade (minimum grade point 4.0).\n• **Credits Status:** You have completed **${profile.completedCredits} credits** out of 180. Your remaining **${profile.remainingCredits} credits** include the 4 backlog credits for COMP204, 16 enrolled credits in Semester 7, and the 12-credit Capstone Project in Semester 8.\n• **Action Required:**\n  1. Submit a course re-registration application for COMP204 on the Digii ERP portal during the upcoming registration window.\n  2. Consult your Faculty Mentor to schedule your supplementary examination or summer course term.`,
+          answer: `**Personal Backlog Audit for ${profile.display_name} (${profile.id}, Batch ${profile.batch}, Semester ${profile.semester})**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 8 & Clause 12.1) & Semester_Spread_Structures_Sept_2026.xlsx\n\n### 1. Active Backlog Details\n• **Course Code & Title:** **${bl.code} — ${bl.name}**\n• **Semester Originally Taken:** Semester ${bl.semesterTaken}\n• **Credits:** **${bl.credits} credits** (L-T-P: ${bl.ltp})\n• **Earned Grade:** **'${bl.grade}' (Fail)**\n• **Current Status:** **${bl.status}**\n\n### 2. Prerequisite & Course Dependency Impact\n• **Blocked Dependent Course(s):** **${blockedListStr}**. **${bl.code}** is a mandatory prerequisite before you can register for **${blockedListStr}**. You cannot take courses requiring **${bl.code}** until you clear this backlog with a passing grade (minimum grade point 4.0).\n\n### 3. Degree Progression & Graduation Impact (Handbook Clause 12.1)\n• **Graduation Requirement:** Under **Student Handbook Section III, Clause 12.1 (Degree Award Regulations)**, a student cannot graduate or be awarded the B.Tech (Hons.) degree until **all 180 prescribed credits** and every mandatory core curriculum course have been satisfactorily cleared with a passing grade.\n• **Credits Status:** You have completed **${profile.completedCredits} credits** out of 180, leaving **${profile.remainingCredits} remaining credits** (including the **${bl.credits}-credit** backlog recovery for **${bl.code}**, **${currentEnrolledCredits} enrolled credits** in Semester ${profile.semester}, and your remaining Semester 8 graduation/capstone requirements).\n• **Action Required:**\n  1. Register to clear **${bl.code} — ${bl.name}** during the upcoming re-registration / supplementary examination or summer term window on Digii ERP.\n  2. Consult your Faculty Mentor before registering for any dependent course (**${blockedListStr}**).`,
           sources: [
             {
               documentTitle: '4. Student Handbook Aug 2026.pdf',
@@ -3620,6 +4007,32 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
     // ── 3.A.3. COURSE-WISE ATTENDANCE & LOW ATTENDANCE HANDLER ──
     if (queryCategory === 'MY_COURSE_ATTENDANCE') {
       if (!profile) {
+        const isPolicyQuestionOnly = /\bwhat happens if\b|\bconsequence/i.test(normalizedQuery) && /(?:below|under|less than)\s*75/i.test(normalizedQuery);
+        if (isPolicyQuestionOnly) {
+          return {
+            state: 'ANSWERABLE',
+            answer: `**Attendance Below 75% Policy & Consequences (Student Handbook, Section III, Clause 7.1–7.4 & SOP Clause 2)**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 7.1–7.4)\n\n• **Mandatory Threshold (Clause 7.1):** Minimum **75%** attendance of classes actually conducted is mandatory in every registered course.\n• **Examination Debarment & 'FA' Grade (Clause 7.2):** If your attendance stays below 75% without approved relaxation, you are **debarred from appearing in the End-Semester Examination** for that course and awarded an **'FA' (Failure on Attendance)** grade, requiring you to re-register and repeat the course.\n• **Medical / Special Relaxation Floor (Clause 7.3 & SOP Clause 2):** Relaxation down to **65%** may be considered only for serious medical exigencies or approved university representation, provided signed medical documents are submitted to the Office of the Registrar within **3 working days** after rejoining.\n• **Absolute Floor:** Attendance **below 65%** cannot be condoned under any circumstances.\n\n*(To check your personal course-wise attendance and exact recovery classes needed, please click **Student Sign In** at the top.)*`,
+            sources: [
+              {
+                documentTitle: '4. Student Handbook Aug 2026.pdf',
+                hierarchyLevel: 1,
+                pageOrSheet: 'Section III, Clause 7.1–7.4',
+                clauseNumber: 'Clause 7.1 & 7.2 — Attendance & Debarment',
+                excerpt: 'Minimum 75% attendance required in every course; failure results in examination debarment and FA grade. Relaxation down to 65% solely for serious medical exigencies.'
+              },
+              {
+                documentTitle: 'SOP STUDENT 19082025 - Final.pdf',
+                hierarchyLevel: 3,
+                pageOrSheet: 'Page 2',
+                clauseNumber: 'Clause 2 — Medical Leave Procedure',
+                excerpt: 'Signed medical applications along with specified documents to be submitted to the Office of Registrar within three working days after rejoining.'
+              }
+            ],
+            ruleResults: { authenticated: false, policyOnly: true, threshold: 75, medicalFloor: 65 },
+            followUp: "Click 'Student Sign In' to check your personal course attendance."
+          };
+        }
+
         return {
           state: 'NEEDS_CLARIFICATION',
           answer: "To view your personalized course-wise attendance and eligibility calculations, please sign in with your Student ID and password using the **Student Sign In** button at the top.",
@@ -3630,85 +4043,156 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       }
 
       const courses = profile.enrolledCourses || [];
-      const codeMatch = normalizedQuery.match(/\b([A-Z]{3,4})\s?(\d{3})\b/i);
-      const requestedCode = codeMatch ? (codeMatch[1] + codeMatch[2]).toUpperCase() : null;
+      const matched = findEnrolledCourseFromQuery(query, courses);
 
-      // Case 1: Specific course requested
-      if (requestedCode) {
-        const c = courses.find(item => item.code.toUpperCase() === requestedCode);
-        if (c) {
-          const isEligible = c.attendancePercentage >= 75.0;
-          let mathExpl = '';
-          if (!isEligible) {
-            mathExpl = `\n### Dynamic Attendance Recovery Math (Target: 75%)\n` +
-              `$$\\frac{${c.attended} + x}{${c.conducted} + x} \\ge 0.75 \\implies x \\ge \\left\\lceil \\frac{0.75 \\times ${c.conducted} - ${c.attended}}{0.25} \\right\\rceil = \\mathbf{${c.classesNeededFor75}\\text{ consecutive classes}}$$\n` +
-              `• **Action Required:** You must attend the next **${c.classesNeededFor75} consecutive classes** without missing any class to restore eligibility.\n` +
-              `  - Verification: $(${c.attended} + ${c.classesNeededFor75}) / (${c.conducted} + ${c.classesNeededFor75}) = ${c.attended + c.classesNeededFor75} / ${c.conducted + c.classesNeededFor75} = \\mathbf{75.00\\%}$.`;
-          } else {
-            mathExpl = `\n• **Safe Absence Buffer:** You can safely miss up to **${c.classesCanMiss} class${c.classesCanMiss === 1 ? '' : 'es'}** before dropping below the mandatory 75% threshold $\\left(\\lfloor (${c.attended} - 0.75 \\times ${c.conducted}) / 0.75 \\rfloor = ${c.classesCanMiss}\\right)$.`;
-          }
+      // Case 1A: User asked for a specific course code not currently enrolled
+      if (matched && matched.codeRequestedNotEnrolled) {
+        const reqCode = matched.requestedCode;
+        const doneMatch = (profile.completedCourses || []).find(item => extractCodeTokens(item.courseCode || item.code).includes(reqCode));
+        const blMatch = (profile.backlogs || []).find(item => extractCodeTokens(item.code).includes(reqCode));
+        const extraNote = doneMatch
+          ? `Note: **${reqCode} (${doneMatch.courseName})** was already completed in Semester ${doneMatch.semester || 'prior'} (Grade: **${doneMatch.grade}**).`
+          : blMatch
+            ? `Note: **${reqCode} (${blMatch.name})** is currently listed as an active backlog from Semester ${blMatch.semesterTaken}.`
+            : `It is not part of your current Semester ${profile.semester} registration.`;
 
-          return {
-            state: 'ANSWERABLE',
-            answer: `**Course Attendance Report: ${c.code} — ${c.name}**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 7.1–7.4)\n\n• **Student:** ${profile.display_name} (${profile.id}, Batch ${profile.batch})\n• **Course Code & Title:** **${c.code} — ${c.name}**\n• **Classes Conducted:** **${c.conducted}**\n• **Classes Attended:** **${c.attended}**\n• **Attendance Percentage:** **${c.attendancePercentage}%**\n• **Eligibility Status:** ${isEligible ? '✓ **Eligible (Meets 75% Mandate)**' : '⚠ **AT RISK (Below 75% Mandate — Exam Debarment Risk per Clause 7.2)**'}${mathExpl}`,
-            sources: [
-              {
-                documentTitle: '4. Student Handbook Aug 2026.pdf',
-                hierarchyLevel: 1,
-                pageOrSheet: 'Section III, Clause 7.1–7.2',
-                clauseNumber: 'Clause 7.1 — Minimum Attendance Mandate (75%)',
-                excerpt: 'The attendance requirement shall be a minimum of seventy five percent (75%) of the classes actually conducted in every Course.'
-              }
-            ],
-            ruleResults: { studentId: profile.id, course: c.code, percentage: c.attendancePercentage, isEligible, classesNeeded: c.classesNeededFor75, classesCanMiss: c.classesCanMiss },
-            followUp: "Ask 'Which course has my lowest attendance?' or 'What is my overall attendance?'"
-          };
-        }
+        const fallbackRows = courses.map((c, i) => {
+          const bufferStr = c.attendancePercentage >= 75.0
+            ? `Can miss ${c.classesCanMiss} class${c.classesCanMiss === 1 ? '' : 'es'}`
+            : `Needs ${c.classesNeededFor75} class${c.classesNeededFor75 === 1 ? '' : 'es'}`;
+          return `| ${i + 1} | **${c.code}** | ${c.name} | ${c.conducted} | ${c.attended} | **${c.attendancePercentage}%** | ${c.attendanceStatus} | ${bufferStr} |`;
+        }).join('\n');
+
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Course Attendance Lookup: ${reqCode} — Not Enrolled in Semester ${profile.semester}**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 7.1–7.4)\n\n• **Student:** ${profile.display_name} (${profile.id}, Batch ${profile.batch}, Semester ${profile.semester})\n• You are not currently enrolled in **${reqCode}** this semester. ${extraNote}\n\n### Your Current Semester ${profile.semester} Course-Wise Attendance\n| # | Course Code | Course Name | Conducted | Attended | % | Eligibility | Attendance Buffer |\n|---|---|---|---|---|---|---|---|\n${fallbackRows}\n\n• **Overall Attendance:** **${profile.overallAttendance.attended}/${profile.overallAttendance.conducted} (${profile.overallAttendance.percentage}%)**`,
+          sources: [
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Section III, Clause 7.1–7.2',
+              clauseNumber: 'Clause 7.1 — Minimum Attendance Mandate (75%)',
+              excerpt: 'Attendance is tracked course-wise across currently registered courses each semester.'
+            }
+          ],
+          ruleResults: { studentId: profile.id, requestedCode: reqCode, enrolled: false },
+          followUp: "Ask about one of your currently enrolled course codes above."
+        };
       }
 
-      // Case 2: Lowest attendance / Risk / Miss another class / Classes to attend
+      // Case 1B: Specific enrolled course matched by code or title
+      if (matched && matched.course) {
+        const c = matched.course;
+        const isEligible = c.attendancePercentage >= 75.0;
+        const medAff = profile.medicalLeave && profile.medicalLeave.hasRecord && Array.isArray(profile.medicalLeave.affectedCourses)
+          ? profile.medicalLeave.affectedCourses.find(m => m.code.toUpperCase() === c.code.toUpperCase())
+          : null;
+        const medNote = medAff
+          ? `\n• **Medical Leave Note:** Although ${medAff.sessionsMissed} sessions were missed during approved medical leave (${profile.medicalLeave.duration}), Handbook Clause 7.3 does not waive conducted sessions from the denominator.`
+          : '';
+
+        let mathExpl = '';
+        if (!isEligible) {
+          mathExpl = `\n### Dynamic Attendance Recovery Math (Target: 75%)\n` +
+            `$$\\frac{${c.attended} + x}{${c.conducted} + x} \\ge 0.75 \\implies x \\ge \\left\\lceil \\frac{0.75 \\times ${c.conducted} - ${c.attended}}{0.25} \\right\\rceil = \\mathbf{${c.classesNeededFor75}\\text{ consecutive classes}}$$\n` +
+            `• **Action Required:** You must attend the next **${c.classesNeededFor75} consecutive classes** without missing any class to restore eligibility.\n` +
+            `  - Verification: $(${c.attended} + ${c.classesNeededFor75}) / (${c.conducted} + ${c.classesNeededFor75}) = ${c.attended + c.classesNeededFor75} / ${c.conducted + c.classesNeededFor75} = \\mathbf{${Math.round(((c.attended + c.classesNeededFor75) / (c.conducted + c.classesNeededFor75)) * 10000) / 100}\\%}$.\n` +
+            `• **Debarment Warning (Clause 7.2):** Remaining below 75% without approved medical relaxation (65% floor under Clause 7.3) leads to End-Semester Examination debarment and an **'FA'** grade.`;
+        } else {
+          mathExpl = `\n• **Safe Absence Buffer:** You can safely miss up to **${c.classesCanMiss} class${c.classesCanMiss === 1 ? '' : 'es'}** before dropping below the mandatory 75% threshold $\\left(\\lfloor (${c.attended} - 0.75 \\times ${c.conducted}) / 0.75 \\rfloor = ${c.classesCanMiss}\\right)$.`;
+        }
+
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Course Attendance Report: ${c.code} — ${c.name}**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 7.1–7.4)\n\n• **Student:** ${profile.display_name} (${profile.id}, Batch ${profile.batch})\n• **Course Code & Title:** **${c.code} — ${c.name}**\n• **Classes Conducted:** **${c.conducted}**\n• **Classes Attended:** **${c.attended}**\n• **Attendance Percentage:** **${c.attendancePercentage}%**\n• **Eligibility Status:** ${isEligible ? '✓ **Eligible (Meets 75% Mandate)**' : '⚠ **AT RISK (Below 75% Mandate — Exam Debarment & FA Risk per Clause 7.2)**'}${mathExpl}${medNote}`,
+          sources: [
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Section III, Clause 7.1–7.2',
+              clauseNumber: 'Clause 7.1 — Minimum Attendance Mandate (75%)',
+              excerpt: 'The attendance requirement shall be a minimum of seventy five percent (75%) of the classes actually conducted in every Course.'
+            }
+          ],
+          ruleResults: { studentId: profile.id, course: c.code, percentage: c.attendancePercentage, isEligible, classesNeeded: c.classesNeededFor75, classesCanMiss: c.classesCanMiss },
+          followUp: "Ask 'Which course has my lowest attendance?' or 'What is my overall attendance?'"
+        };
+      }
+
+      // Case 2: Lowest attendance / Risk / Below 75% / Consequences / Miss another class
       const isLowestOrRiskQuery = normalizedQuery.includes('lowest attendance') ||
         normalizedQuery.includes('eligibility at risk') ||
         normalizedQuery.includes('putting my eligibility at risk') ||
         normalizedQuery.includes('miss another class') ||
         normalizedQuery.includes('below 75') ||
+        normalizedQuery.includes('under 75') ||
+        normalizedQuery.includes('less than 75') ||
+        normalizedQuery.includes('what happens if my attendance') ||
         normalizedQuery.includes('classes should i attend') ||
         normalizedQuery.includes('classes must i attend');
 
       const sortedCourses = [...courses].sort((a, b) => a.attendancePercentage - b.attendancePercentage);
       const lowest = sortedCourses[0];
+      const atRiskCourses = sortedCourses.filter(c => c.attendancePercentage < 75.0);
 
-      if (isLowestOrRiskQuery && lowest && lowest.attendancePercentage < 75.0) {
-        // Scenario B: Divya Nair in COMP209 (68%)
+      if (isLowestOrRiskQuery && atRiskCourses.length > 0 && lowest) {
         const nextMissConduct = lowest.conducted + 1;
         const nextMissPct = Math.round((lowest.attended / nextMissConduct) * 10000) / 100;
         const nextMissNeeded = Math.ceil((0.75 * nextMissConduct - lowest.attended) / 0.25);
+        const recovPct = Math.round(((lowest.attended + lowest.classesNeededFor75) / (lowest.conducted + lowest.classesNeededFor75)) * 10000) / 100;
 
-        const otherRows = sortedCourses.slice(1).map(c =>
+        const atRiskSection = atRiskCourses.map(c =>
+          `• **${c.code} — ${c.name}:** **${c.attended}/${c.conducted} (${c.attendancePercentage}%)** — Needs **${c.classesNeededFor75} consecutive classes** to reach 75%`
+        ).join('\n');
+
+        const safeCourses = sortedCourses.filter(c => c.attendancePercentage >= 75.0);
+        const otherRows = safeCourses.map(c =>
           `• **${c.code} (${c.name}):** ${c.attended}/${c.conducted} $\\to$ **${c.attendancePercentage}%** (${c.attendanceStatus})`
         ).join('\n');
 
         return {
           state: 'ANSWERABLE',
-          answer: `**Attendance Risk Audit for ${profile.display_name} (${profile.id}, Batch ${profile.batch}, Semester ${profile.semester})**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 7.1–7.4) & Semester_Spread_Structures_Sept_2026.xlsx\n\n### 1. Course Putting Your Eligibility at Risk (Lowest Attendance)\n• **Course Code & Title:** **${lowest.code} — ${lowest.name}**\n• **Classes Conducted:** **${lowest.conducted} classes**\n• **Classes Attended:** **${lowest.attended} classes**\n• **Current Attendance:** **${lowest.attendancePercentage}%** $\\left(\\frac{${lowest.attended}}{${lowest.conducted}} \\times 100\\right)$\n• **Status:** ⚠ **AT RISK — BELOW 75% UNIVERSITY MANDATE**\n• **Examination Consequence (Handbook Clause 7.2):** Under university regulations, any student failing to maintain 75% attendance in a course is **debarred from appearing for the End-Semester Examination** and awarded an 'FA' (Failure on Attendance) grade unless granted approved medical condonation under Clause 7.3.\n\n### 2. Dynamic Attendance Recovery Calculation\nTo restore your attendance in ${lowest.code} to the required **75.00%** threshold ($T = 0.75$), future classes increment both attended and conducted counts:\n$$\\frac{${lowest.attended} + x}{${lowest.conducted} + x} \\ge 0.75 \\implies x \\ge \\left\\lceil \\frac{0.75 \\times ${lowest.conducted} - ${lowest.attended}}{0.25} \\right\\rceil = \\left\\lceil \\frac{${(0.75 * lowest.conducted - lowest.attended).toFixed(2)}}{0.25} \\right\\rceil = \\mathbf{${lowest.classesNeededFor75}}$$\n• **Action Required:** You must attend the next **${lowest.classesNeededFor75} consecutive classes** in ${lowest.code} without missing any class.\n  - Verification: $(${lowest.attended} + ${lowest.classesNeededFor75}) / (${lowest.conducted} + ${lowest.classesNeededFor75}) = ${lowest.attended + lowest.classesNeededFor75} / ${lowest.conducted + lowest.classesNeededFor75} = \\mathbf{75.00\\%}$.\n\n### 3. What Happens If You Miss Another Class?\nIf you miss the next class ($x = 0$, conducted increases to ${nextMissConduct}):\n• Your attendance drops from ${lowest.attendancePercentage}% to **${nextMissPct}%** (${lowest.attended}/${nextMissConduct}), dangerously approaching the absolute 65% condonation floor.\n• The number of consecutive classes required to reach 75% increases from ${lowest.classesNeededFor75} to **${nextMissNeeded} consecutive classes** $\\left(\\lceil (0.75 \\times ${nextMissConduct} - ${lowest.attended}) / 0.25 \\rceil = ${nextMissNeeded}\\right)$.\n\n### 4. Standing in All Other Enrolled Courses\nAll your other ${courses.length - 1} enrolled courses meet the university requirement with attendance well above 80%:\n${otherRows}\n\n• **Overall Attendance across all courses:** **${profile.overallAttendance.attended} / ${profile.overallAttendance.conducted} (${profile.overallAttendance.percentage}%)** — Eligible overall.`,
+          answer: `**Attendance Risk Audit for ${profile.display_name} (${profile.id}, Batch ${profile.batch}, Semester ${profile.semester})**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 7.1–7.4) & Semester_Spread_Structures_Sept_2026.xlsx\n\n### 1. Course(s) Below 75% (At Risk)\n${atRiskSection}\n• **Primary At-Risk Course:** **${lowest.code} — ${lowest.name}** (**${lowest.attended}/${lowest.conducted} = ${lowest.attendancePercentage}%**)\n• **Examination Consequence (Handbook Clause 7.2):** Under university regulations, if your attendance stays below 75% in a course without approved relaxation, you are **debarred from appearing for the End-Semester Examination** and awarded an **'FA' (Failure on Attendance)** grade (requiring course re-registration). Medical relaxation down to **65%** applies solely to verified hospital/exigency grounds submitted within **3 working days** per SOP Clause 2.\n\n### 2. Dynamic Attendance Recovery Calculation\nTo restore your attendance in ${lowest.code} to the required **75.00%** threshold ($T = 0.75$), future classes increment both attended and conducted counts:\n$$\\frac{${lowest.attended} + x}{${lowest.conducted} + x} \\ge 0.75 \\implies x \\ge \\left\\lceil \\frac{0.75 \\times ${lowest.conducted} - ${lowest.attended}}{0.25} \\right\\rceil = \\left\\lceil \\frac{${(0.75 * lowest.conducted - lowest.attended).toFixed(2)}}{0.25} \\right\\rceil = \\mathbf{${lowest.classesNeededFor75}}$$\n• **Action Required:** You must attend the next **${lowest.classesNeededFor75} consecutive classes** in ${lowest.code} without missing any class.\n  - Verification: $(${lowest.attended} + ${lowest.classesNeededFor75}) / (${lowest.conducted} + ${lowest.classesNeededFor75}) = ${lowest.attended + lowest.classesNeededFor75} / ${lowest.conducted + lowest.classesNeededFor75} = \\mathbf{${recovPct.toFixed(2)}\\%}$.\n\n### 3. What Happens If You Miss Another Class?\nIf you miss the next class ($x = 0$, conducted increases to ${nextMissConduct}):\n• Your attendance drops from ${lowest.attendancePercentage}% to **${nextMissPct}%** (${lowest.attended}/${nextMissConduct}), dangerously approaching the absolute 65% condonation floor.\n• Consecutive classes needed to recover increases from ${lowest.classesNeededFor75} to **${nextMissNeeded} consecutive classes**.\n\n### 4. Standing in All Other Enrolled Courses\n${otherRows || '• All other courses cleared.'}\n\n• **Overall Attendance across all courses:** **${profile.overallAttendance.attended} / ${profile.overallAttendance.conducted} (${profile.overallAttendance.percentage}%)** — ${profile.overallAttendance.status}.`,
           sources: [
             {
               documentTitle: '4. Student Handbook Aug 2026.pdf',
               hierarchyLevel: 1,
               pageOrSheet: 'Section III, Clause 7.1–7.4',
               clauseNumber: 'Clause 7.1 & 7.2 — Attendance & Debarment Regulations',
-              excerpt: 'Every student must maintain a minimum attendance of seventy-five percent (75%) of classes actually conducted... failure results in examination debarment.'
+              excerpt: 'Every student must maintain a minimum attendance of seventy-five percent (75%) of classes actually conducted... failure results in examination debarment and FA grade.'
             },
             {
               documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
               hierarchyLevel: 2,
               pageOrSheet: `Struct_${profile.batch === '2026' ? '2026_DS' : profile.batch}`,
               clauseNumber: `Course Code: ${lowest.code}`,
-              excerpt: `${lowest.code} (${lowest.name}): ${lowest.credits} credits. Core curriculum requirement.`
+              excerpt: `${lowest.code} (${lowest.name}): ${lowest.credits} credits. Curriculum requirement.`
             }
           ],
-          ruleResults: { studentId: profile.id, lowestCourse: lowest.code, percentage: lowest.attendancePercentage, classesNeeded: lowest.classesNeededFor75, isAtRisk: true },
+          ruleResults: { studentId: profile.id, lowestCourse: lowest.code, percentage: lowest.attendancePercentage, classesNeeded: lowest.classesNeededFor75, atRiskCount: atRiskCourses.length, isAtRisk: true },
           followUp: "Ask 'What happens if I miss another class?' or 'What courses do I have this semester?'"
+        };
+      }
+
+      if (isLowestOrRiskQuery && atRiskCourses.length === 0 && lowest) {
+        const safeTableRows = courses.map((c, i) =>
+          `| ${i + 1} | **${c.code}** | ${c.name} | ${c.conducted} | ${c.attended} | **${c.attendancePercentage}%** | ${c.attendanceStatus} | Can miss ${c.classesCanMiss} class${c.classesCanMiss === 1 ? '' : 'es'} |`
+        ).join('\n');
+
+        return {
+          state: 'ANSWERABLE',
+          answer: `**Attendance Compliance & Policy Audit for ${profile.display_name} (${profile.id}, Batch ${profile.batch}, Semester ${profile.semester})**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 7.1–7.4)\n\n• **Courses Below 75%:** **None (0 courses below 75%)** — All **${courses.length}** enrolled courses currently meet the mandatory 75% minimum attendance threshold.\n• **Lowest Attendance Course:** **${lowest.code} — ${lowest.name}** at **${lowest.attendancePercentage}%** (${lowest.attended}/${lowest.conducted}), with a safe absence buffer of **${lowest.classesCanMiss} class${lowest.classesCanMiss === 1 ? '' : 'es'}**.\n\n### What Happens If Attendance Drops Below 75% (Handbook Clause 7.2 & 7.3)\n• **Examination Debarment & 'FA' Grade (Clause 7.2):** Any course below **75%** without approved relaxation results in **debarment from the End-Semester Examination** and an **'FA' (Failure on Attendance)** grade.\n• **Medical Relaxation Floor (Clause 7.3 & SOP Clause 2):** Condonation down to **65%** is permitted solely for verified medical exigencies (hospitalization/acute illness) or official university representation submitted to the Registrar within **3 working days** of rejoining.\n\n### Current Course-Wise Attendance Standing\n| # | Course Code | Course Name | Conducted | Attended | % | Eligibility | Attendance Buffer |\n|---|---|---|---|---|---|---|---|\n${safeTableRows}\n\n• **Overall Attendance:** **${profile.overallAttendance.attended}/${profile.overallAttendance.conducted} (${profile.overallAttendance.percentage}%)** — **${profile.overallAttendance.status}**`,
+          sources: [
+            {
+              documentTitle: '4. Student Handbook Aug 2026.pdf',
+              hierarchyLevel: 1,
+              pageOrSheet: 'Section III, Clause 7.1–7.4',
+              clauseNumber: 'Clause 7.1 & 7.2 — Attendance & Debarment Regulations',
+              excerpt: 'Minimum 75% attendance required in every course; failure results in examination debarment and FA grade.'
+            }
+          ],
+          ruleResults: { studentId: profile.id, lowestCourse: lowest.code, percentage: lowest.attendancePercentage, atRiskCount: 0, isAtRisk: false },
+          followUp: "Ask 'What is my overall attendance?' or 'What is my CGPA?'"
         };
       }
 
@@ -3720,9 +4204,15 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
         return `| ${i + 1} | **${c.code}** | ${c.name} | ${c.conducted} | ${c.attended} | **${c.attendancePercentage}%** | ${c.attendanceStatus} | ${bufferStr} |`;
       }).join('\n');
 
+      const lowestActionNote = lowest
+        ? (lowest.attendancePercentage < 75.0
+            ? `Needs **${lowest.classesNeededFor75} consecutive classes** to recover to 75%`
+            : `Can safely miss up to **${lowest.classesCanMiss} class${lowest.classesCanMiss === 1 ? '' : 'es'}**`)
+        : '';
+
       return {
         state: 'ANSWERABLE',
-        answer: `**Course-Wise Attendance Report for ${profile.display_name} (${profile.id}, Batch ${profile.batch}, Semester ${profile.semester})**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 7.1–7.4)\n\n### 1. Course-Wise Attendance Table\n| # | Course Code | Course Name | Conducted | Attended | % | Eligibility | Attendance Buffer |\n|---|---|---|---|---|---|---|---|\n${tableRows}\n\n### 2. Overall Summary\n• **Overall Classes Conducted:** **${profile.overallAttendance.conducted}**\n• **Overall Classes Attended:** **${profile.overallAttendance.attended}**\n• **Overall Attendance Percentage:** **${profile.overallAttendance.percentage}%**\n• **Overall Standing:** **${profile.overallAttendance.status}**\n• **Lowest Attendance Course:** **${lowest.code} (${lowest.name})** at **${lowest.attendancePercentage}%**\n\n*(Note: Under Handbook Clause 7.1, 75% attendance in each registered course is mandatory to avoid examination debarment.)*`,
+        answer: `**Course-Wise Attendance Report for ${profile.display_name} (${profile.id}, Batch ${profile.batch}, Semester ${profile.semester})**\nOfficial Knowledge Source: 4. Student Handbook Aug 2026.pdf (Section III, Clause 7.1–7.4)\n\n### 1. Course-Wise Attendance Table\n| # | Course Code | Course Name | Conducted | Attended | % | Eligibility | Attendance Buffer |\n|---|---|---|---|---|---|---|---|\n${tableRows}\n\n### 2. Overall Summary\n• **Overall Classes Conducted:** **${profile.overallAttendance.conducted}**\n• **Overall Classes Attended:** **${profile.overallAttendance.attended}**\n• **Overall Attendance Percentage:** **${profile.overallAttendance.percentage}%**\n• **Overall Standing:** **${profile.overallAttendance.status}**\n• **Lowest Attendance Course:** **${lowest.code} (${lowest.name})** at **${lowest.attendancePercentage}%** (${lowestActionNote})\n\n*(Note: Under Handbook Clause 7.1, 75% attendance in each registered course is mandatory to avoid examination debarment.)*`,
         sources: [
           {
             documentTitle: '4. Student Handbook Aug 2026.pdf',
@@ -3805,18 +4295,19 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       }
     }
 
-    // ── 3.A.5. MAJOR, MINOR & DEGREE PROGRESS HANDLER ──
+    // ── 3.A.5. MAJOR, COMPLETED, REMAINING, PREREQUISITES & DEGREE PROGRESS HANDLER ──
     if (queryCategory === 'MY_MAJOR_PROGRESS') {
       if (!profile) {
         return {
           state: 'NEEDS_CLARIFICATION',
-          answer: "To view your personalized degree pathway and major/minor progress, please sign in with your Student ID and password using the **Student Sign In** button at the top.",
+          answer: "To view your personalized degree pathway, completed courses, remaining requirements, and missing prerequisites, please sign in with your Student ID and password using the **Student Sign In** button at the top.",
           sources: [],
           ruleResults: { authenticated: false },
           followUp: "Click 'Student Sign In' to view your academic pathway."
         };
       }
 
+      const plan = getRemainingCurriculumPlan(profile);
       const totalDegree = 180;
       const minorTotal = (profile.minorCreditStructure && profile.minorCreditStructure.totalCredits) || 24;
       const minorCompleted = (profile.minorCreditStructure && profile.minorCreditStructure.completedCredits) || 0;
@@ -3824,29 +4315,110 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       const majorCompleted = Math.max(0, (typeof profile.completedCredits === 'number' ? profile.completedCredits : 0) - minorCompleted);
       const majorTotal = totalDegree - minorTotal; // 156 credits
 
-      const enrolledRows = profile.enrolledCourses.map(c => `• **${c.code} — ${c.name}** (${c.credits} cr, ${c.category || 'Core'})`).join('\n');
+      const completedCourses = profile.completedCourses || [];
+      const enrolledCourses = profile.enrolledCourses || [];
+      const enrolledRows = enrolledCourses.map(c => `• **${c.code} — ${c.name}** (${c.credits} cr, ${c.category || 'Core'})`).join('\n');
+
+      // Group completed courses by semester
+      let completedSection = '';
+      if (completedCourses.length === 0) {
+        completedSection = `• **No completed courses recorded yet** — You are currently in Semester ${profile.semester} (Semester 1 exams pending).`;
+      } else {
+        const semMap = new Map();
+        for (const c of completedCourses) {
+          const s = c.semester || 0;
+          if (!semMap.has(s)) semMap.set(s, []);
+          semMap.get(s).push(c);
+        }
+        completedSection = [...semMap.entries()]
+          .sort((a, b) => a[0] - b[0])
+          .map(([sem, list]) => {
+            const semCr = list.reduce((acc, item) => acc + (item.credits || 0), 0);
+            const items = list.map(item => `  - **${item.courseCode} — ${item.courseName}** (${item.credits} cr, Grade: **${item.grade}**)`);
+            return `• **Semester ${sem}** (${list.length} courses, ${semCr} credits):\n${items.join('\n')}`;
+          })
+          .join('\n');
+      }
+
+      // Format remaining major/core courses (including backlogs & planned future semesters)
+      const remMajor = (plan && plan.remainingMajorCourses) || [];
+      const remMajorRows = remMajor.length > 0
+        ? remMajor.map(c => `• **Sem ${c.semester}: ${c.code} — ${c.name}** (${c.credits} cr, ${c.basket})${c.prerequisite && c.prerequisite !== 'NIL' ? ` — *Prereq: ${c.prerequisite}*` : ''} — *${c.statusTag}*`).join('\n')
+        : '• All prescribed curriculum spread courses are either completed or currently enrolled.';
+
+      const minorRemRows = (plan && plan.minorRemaining && plan.minorRemaining.length > 0)
+        ? plan.minorRemaining.map(mc => `• **${mc.code || 'ELECTIVE'} — ${mc.name || mc.title}** (${mc.credits} cr)`).join('\n')
+        : '• All declared minor credits completed.';
+
+      const specTrack = profile.specialisationTracking || {};
+      const specStatusLine = specTrack.trackName
+        ? `**${specTrack.status}** — **${specTrack.trackName}** (${specTrack.completedCredits || 0}/${specTrack.totalCredits || 20} credits completed)`
+        : `**${specTrack.status || profile.specialisationStatus || 'Not yet eligible to select'}** (${specTrack.completedCredits || 0}/${specTrack.totalCredits || 20} credits; ${specTrack.note || 'Available from Semester 5 onward'})`;
+
+      const missingList = (plan && plan.missingPrerequisites) || [];
+      const missingPrereqSection = missingList.length > 0
+        ? missingList.map(p => `• **${p.course}** requires **${p.missingPrereq}** — *${p.status}*`).join('\n')
+        : `• **None:** You have no missing prerequisite blockers for your upcoming planned Semester ${profile.semester + 1} courses.`;
+
+      const sheetName = `Struct_${profile.batch === '2026' ? '2026_DS' : profile.batch}`;
+      const asksPrereqs = normalizedQuery.includes('prerequisite');
+      const asksCompleted = normalizedQuery.includes('completed') && !normalizedQuery.includes('remaining') && !normalizedQuery.includes('still need');
+      const asksRemaining = normalizedQuery.includes('remaining') || normalizedQuery.includes('remain') || normalizedQuery.includes('still need') || normalizedQuery.includes('still pending');
+
+      let body = `**Degree Pathway & Academic Progress for ${profile.display_name} (${profile.id}, Batch ${profile.batch}, Semester ${profile.semester})**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx (${sheetName}) & Minor_Courses_for_BTech_Students.xlsx\n\n`;
+
+      body += `### 1. Overall 180-Credit Degree Standing\n` +
+        `• **Degree Program:** ${profile.programName}\n` +
+        `• **Completed Credits:** **${profile.completedCredits} / ${totalDegree} credits** (Major/Core & Specialisation: **${majorCompleted} cr**; Minor: **${minorCompleted} cr**)\n` +
+        `• **Remaining Credits:** **${profile.remainingCredits} credits** (incl. currently enrolled Semester ${profile.semester} courses)\n` +
+        `• **Minor Track (${profile.declaredMinor} — ${profile.minorSchool}):** **${profile.minorStatus}** (**${minorCompleted}/${minorTotal} cr**, ${minorRemaining} cr remaining)\n` +
+        `• **Specialisation Track:** ${specStatusLine}\n\n`;
+
+      if (asksPrereqs) {
+        body += `### 2. Missing Prerequisites & Dependent Course Restrictions\n${missingPrereqSection}\n\n` +
+          `### 3. Currently Enrolled in Semester ${profile.semester}\n${enrolledRows}`;
+      } else if (asksCompleted) {
+        body += `### 2. Completed Courses (${completedCourses.length} courses, ${profile.completedCredits} credits)\n${completedSection}\n\n` +
+          `### 3. Currently Registered in Semester ${profile.semester}\n${enrolledRows}`;
+      } else if (asksRemaining) {
+        body += `### 2. Remaining Major, Core & Planned Future Courses\n${remMajorRows}\n\n` +
+          `### 3. Remaining Minor Courses (${profile.declaredMinor} — ${minorRemaining} cr remaining)\n${minorRemRows}\n\n` +
+          `### 4. Prerequisite Alerts for Remaining Courses\n${missingPrereqSection}`;
+      } else {
+        body += `### 2. Currently Registered in Semester ${profile.semester}\n${enrolledRows}\n\n` +
+          `### 3. Completed Courses (${completedCourses.length} courses, ${profile.completedCredits} cr)\n${completedSection}\n\n` +
+          `### 4. Remaining Curriculum Courses\n${remMajorRows}`;
+      }
 
       return {
         state: 'ANSWERABLE',
-        answer: `**Degree Pathway & Major/Minor Completion Progress for ${profile.display_name} (${profile.id}, Batch ${profile.batch}, Semester ${profile.semester})**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx & Minor_Courses_for_BTech_Students.xlsx\n\n### 1. Overall Degree Requirements\n• **Degree Program:** B.Tech (Hons.) Computer Science and Engineering\n• **Total Degree Credits Required:** Exactly **180 credits**\n• **Completed Credits:** **${profile.completedCredits} credits**\n• **Remaining Credits:** **${profile.remainingCredits} credits**\n\n### 2. Major Progress (Computer Science & Engineering)\n• **Major Core & Elective Requirement:** **${majorTotal} credits**\n• **Completed Major Credits:** **${majorCompleted} credits**\n• **Currently Registered in Semester ${profile.semester}:**\n${enrolledRows}\n\n### 3. Minor Progress (${profile.declaredMinor} — ${profile.minorSchool})\n• **Minor Credit Requirement:** **${minorTotal} credits** across Semesters 3 to 8\n• **Completed Minor Credits:** **${minorCompleted} credits**\n• **Remaining Minor Credits:** **${minorRemaining} credits**\n• **Minor Status:** ${profile.minorStatus}\n\n### 4. Specialisation Progress\n• **Specialisation Track:** **Not assigned / Not specified**\n• Note: Under Vidyashilp University B.Tech regulations, specialisation tracks are formal pathways allocated according to department offerings; your current profile does not have an assigned specialisation.`,
+        answer: body,
         sources: [
           {
             documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
             hierarchyLevel: 2,
-            pageOrSheet: `Struct_${profile.batch === '2026' ? '2026_DS' : profile.batch}`,
-            clauseNumber: 'Degree Credit Structure',
-            excerpt: 'B.Tech CSE degree requirements: 180 total credits (156 major core/electives + 24 minor credits).'
+            pageOrSheet: sheetName,
+            clauseNumber: 'Degree Credit & Semester Structure',
+            excerpt: 'B.Tech CSE degree requirements: 180 total credits (156 major/core/specialisation credits + 24 minor credits).'
           },
           {
             documentTitle: '118351_Minor Courses for BTech_Students.xlsx',
             hierarchyLevel: 2,
             pageOrSheet: profile.declaredMinor,
             clauseNumber: 'Minor Basket Allocation',
-            excerpt: `Minor structure in ${profile.declaredMinor} (${profile.minorSchool}) requiring 24 credits.`
+            excerpt: `Minor structure in ${profile.declaredMinor} (${profile.minorSchool}) requiring ${minorTotal} credits.`
           }
         ],
-        ruleResults: { studentId: profile.id, majorCompleted, minorCompleted, totalDegree },
-        followUp: "Ask 'What are my minor requirements?' or 'What should I take next semester?'"
+        ruleResults: {
+          studentId: profile.id,
+          majorCompleted,
+          minorCompleted,
+          totalDegree,
+          completedCount: completedCourses.length,
+          remainingCount: remMajor.length,
+          missingPrerequisitesCount: missingList.length
+        },
+        followUp: "Ask 'What courses should I take next semester?' or 'What specialisation am I pursuing?'"
       };
     }
 
@@ -3874,12 +4446,19 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
       const studentName = profile ? profile.display_name : null;
       let personalizedSection = '';
       if (profile) {
-        if (typeof profile.attendance === 'number') {
-          const statusText = profile.attendance >= 75.0
-            ? `✓ Your current recorded attendance is **${profile.attendance}%**, which satisfies the university's 75% attendance criterion.`
-            : profile.attendance >= 65.0
-              ? `⚠ Your current recorded attendance is **${profile.attendance}%**, which is between 65% and 75%. You require approved medical relaxation (submitted within 3 working days of rejoining) to write end-semester exams.`
-              : `❌ Your current recorded attendance is **${profile.attendance}%**, which is below 65%. Attendance below 65% results in strict exam debarment per Clause 7.2.`;
+        const numericPct = (profile.overallAttendance && typeof profile.overallAttendance.percentage === 'number')
+          ? profile.overallAttendance.percentage
+          : (typeof profile.attendance === 'number' ? profile.attendance : null);
+        if (typeof numericPct === 'number') {
+          const atRiskCourses = (profile.enrolledCourses || []).filter(c => c.attendancePercentage < 75.0);
+          const atRiskNote = atRiskCourses.length > 0
+            ? `\n⚠ Course(s) currently below 75%: ${atRiskCourses.map(c => `**${c.code} (${c.attendancePercentage}%) — needs ${c.classesNeededFor75} consecutive classes**`).join(', ')}.`
+            : '';
+          const statusText = numericPct >= 75.0
+            ? `✓ Your overall recorded attendance is **${numericPct}%**, which satisfies the university's 75% aggregate benchmark.${atRiskNote}`
+            : numericPct >= 65.0
+              ? `⚠ Your overall recorded attendance is **${numericPct}%**, which is between 65% and 75%. You require approved medical relaxation (submitted within 3 working days of rejoining) to write end-semester exams.${atRiskNote}`
+              : `❌ Your overall recorded attendance is **${numericPct}%**, which is below 65%. Attendance below 65% results in strict exam debarment per Clause 7.2.${atRiskNote}`;
           personalizedSection = `\n\n**Your Attendance Standing (${studentName} — ${profile.programName}):**\n${statusText}`;
         } else {
           personalizedSection = `\n\n**Your Attendance Standing (${studentName} — ${profile.programName}):**\nAttendance status: **${profile.attendance}**. Individual course-wise attendance percentages are tracked in real time in the university Digii ERP portal. Per Clause 7.1, a minimum of 75% attendance is required in each course to avoid examination debarment.`;
@@ -5137,11 +5716,46 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
         }
 
         if (activeProfile && targetCourse.code === 'DATA302') {
+          const completed302 = (activeProfile.completedCourses || []).find(c => extractCodeTokens(c.courseCode || c.code).includes('DATA302'));
+          const completed301 = (activeProfile.completedCourses || []).find(c => extractCodeTokens(c.courseCode || c.code).includes('DATA301'));
           const isEnrolledInPrereq = activeProfile.enrolledCourses && activeProfile.enrolledCourses.some(c => c.code === 'DATA301');
-          if (isEnrolledInPrereq) {
+
+          if (completed302) {
             return {
               state: 'ANSWERABLE',
-              answer: `**Course Eligibility for DATA302 — Deep Learning (4 credits)**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx\n\n• **Course Requirement:** DATA302 (Deep Learning, 4 credits) has a mandatory prerequisite of **DATA301 (Machine Learning, 4 credits)**.\n• **Student Status (${activeProfile.display_name} — Batch ${activeProfile.batch}, Semester ${activeProfile.semester}):** You are currently enrolled in **DATA301 — Machine Learning** this semester.\n• **Eligibility Decision:** **PENDING PREREQUISITE COMPLETION**. You will be fully eligible to register for DATA302 in Semester 6 once you successfully pass DATA301 at the end of this semester.\n• **Official Records:** Final passing grades and prerequisite verification are recorded in the university Digii ERP portal (recorded as 'Not available' in local cache).`,
+              answer: `**Course Eligibility for DATA302 — Deep Learning (4 credits)**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx\n\n• **Course Requirement:** DATA302 (Deep Learning, 4 credits) requires mandatory prerequisite **DATA301 (Machine Learning, 4 credits)**.\n• **Student Status (${activeProfile.display_name} — Batch ${activeProfile.batch}, Semester ${activeProfile.semester}):** You have **already completed DATA302 (${completed302.courseName || 'Deep Learning'})** in Semester ${completed302.semester || 'prior'} with Grade **${completed302.grade}**${completed301 ? ` (after clearing prerequisite **DATA301** in Semester ${completed301.semester || 'prior'} with Grade **${completed301.grade}**)` : ''}.\n• **Eligibility Decision:** **ALREADY COMPLETED** — No further registration needed unless repeating for grade improvement.`,
+              sources: [
+                {
+                  documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+                  hierarchyLevel: 2,
+                  pageOrSheet: `Struct_${activeProfile.batch === '2026' ? '2026_DS' : activeProfile.batch}`,
+                  clauseNumber: 'Course Code: DATA302',
+                  excerpt: 'DATA302 (Deep Learning): 4 credits. Mandatory prerequisite: DATA301 (Machine Learning).'
+                }
+              ],
+              ruleResults: { targetCourse: 'DATA302', prerequisite: 'DATA301', status: 'ALREADY_COMPLETED', grade: completed302.grade },
+              followUp: "Ask 'What courses should I take next semester?' or 'Which courses are remaining?'"
+            };
+          } else if (completed301) {
+            return {
+              state: 'ANSWERABLE',
+              answer: `**Course Eligibility for DATA302 — Deep Learning (4 credits)**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx\n\n• **Course Requirement:** DATA302 (Deep Learning, 4 credits) requires mandatory prerequisite **DATA301 (Machine Learning, 4 credits)**.\n• **Student Status (${activeProfile.display_name} — Batch ${activeProfile.batch}, Semester ${activeProfile.semester}):** You have **completed prerequisite DATA301** in Semester ${completed301.semester || 'prior'} with Grade **${completed301.grade}**.\n• **Eligibility Decision:** **ELIGIBLE** — You meet all prerequisite requirements to register for DATA302.`,
+              sources: [
+                {
+                  documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
+                  hierarchyLevel: 2,
+                  pageOrSheet: `Struct_${activeProfile.batch === '2026' ? '2026_DS' : activeProfile.batch}`,
+                  clauseNumber: 'Course Code: DATA302',
+                  excerpt: 'DATA302 (Deep Learning): 4 credits. Mandatory prerequisite: DATA301 (Machine Learning).'
+                }
+              ],
+              ruleResults: { targetCourse: 'DATA302', prerequisite: 'DATA301', status: 'ELIGIBLE' },
+              followUp: "Ask 'What courses should I take next semester?' or 'Which courses are remaining?'"
+            };
+          } else if (isEnrolledInPrereq) {
+            return {
+              state: 'ANSWERABLE',
+              answer: `**Course Eligibility for DATA302 — Deep Learning (4 credits)**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx\n\n• **Course Requirement:** DATA302 (Deep Learning, 4 credits) has a mandatory prerequisite of **DATA301 (Machine Learning, 4 credits)**.\n• **Student Status (${activeProfile.display_name} — Batch ${activeProfile.batch}, Semester ${activeProfile.semester}):** You are currently enrolled in **DATA301 — Machine Learning** this semester.\n• **Eligibility Decision:** **PENDING PREREQUISITE COMPLETION**. You will be fully eligible to register for DATA302 in Semester 6 once you successfully pass DATA301 at the end of this semester.\n• **Official Records:** Final passing grades and prerequisite verification are recorded in the university Digii ERP portal.`,
               sources: [
                 {
                   documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
@@ -5173,7 +5787,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
           } else if (activeProfile.semester >= 6) {
             return {
               state: 'ANSWERABLE',
-              answer: `**Course Eligibility for DATA302 — Deep Learning (4 credits)**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx\n\n• **Course Requirement:** DATA302 (Deep Learning, 4 credits) was scheduled in Semester 6 with mandatory prerequisite **DATA301 (Machine Learning)**.\n• **Student Status (${activeProfile.display_name} — Batch ${activeProfile.batch}, Semester ${activeProfile.semester}):** You are currently in **Semester ${activeProfile.semester}**. Official transcript passing grades are maintained in the Digii ERP portal (recorded as 'Not available' in local records). If you have satisfied DATA301 and DATA302, your enrollment is cleared in the university ERP.`,
+              answer: `**Course Eligibility for DATA302 — Deep Learning (4 credits)**\nOfficial Knowledge Source: Semester_Spread_Structures_Sept_2026.xlsx\n\n• **Course Requirement:** DATA302 (Deep Learning, 4 credits) was scheduled in Semester 6 with mandatory prerequisite **DATA301 (Machine Learning)**.\n• **Student Status (${activeProfile.display_name} — Batch ${activeProfile.batch}, Semester ${activeProfile.semester}):** You are currently in **Semester ${activeProfile.semester}**. Official transcript passing grades are verified in the Digii ERP portal before registration.`,
               sources: [
                 {
                   documentTitle: 'Semester_Spread_Structures_Sept_2026.xlsx',
@@ -5818,11 +6432,16 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
 
     // ── 12. PERSONALIZED TRANSCRIPT & ATTENDANCE ──
     if (profile && (normalizedQuery.includes('my attendance') || normalizedQuery.includes('attendance requirement'))) {
-      const statusText = profile.attendance >= 75.0
-        ? `✓ Your attendance is **${profile.attendance}%**, which satisfies the mandatory 75% requirement.`
-        : profile.attendance >= 65.0
-          ? `⚠ Your attendance is **${profile.attendance}%**, which is below 75%. You require approved medical relaxation (submitted within 3 working days) to write end-semester exams.`
-          : `❌ Your attendance is **${profile.attendance}%**, which is below 65%. Attendance below 65% results in exam debarment per Clause 7.2.`;
+      const numericPct = (profile.overallAttendance && typeof profile.overallAttendance.percentage === 'number')
+        ? profile.overallAttendance.percentage
+        : (typeof profile.attendance === 'number' ? profile.attendance : null);
+      const statusText = numericPct === null
+        ? `Your attendance status is recorded as **${profile.attendance}**. Check your course-wise attendance breakdown in Digii ERP.`
+        : numericPct >= 75.0
+          ? `✓ Your overall attendance is **${numericPct}%**, which satisfies the mandatory 75% aggregate benchmark.`
+          : numericPct >= 65.0
+            ? `⚠ Your overall attendance is **${numericPct}%**, which is below 75%. You require approved medical relaxation (submitted within 3 working days) to write end-semester exams.`
+            : `❌ Your overall attendance is **${numericPct}%**, which is below 65%. Attendance below 65% results in exam debarment per Clause 7.2.`;
 
       return {
         state: 'ANSWERABLE',
@@ -5836,7 +6455,7 @@ async function executeAdvisorQuery(query, profileId = null, history = []) {
             excerpt: 'Minimum 75% attendance required for end-semester examinations.'
           }
         ],
-        ruleResults: { attendance: profile.attendance },
+        ruleResults: { attendance: numericPct !== null ? numericPct : profile.attendance },
         followUp: null
       };
     }
@@ -6025,7 +6644,7 @@ async function processAdvisorQuery(query, profileId = null, history = []) {
   console.log('[ADVISORY DEBUG]');
   console.log(`Query: ${query}`);
   console.log(`Intent: ${detectedIntent}`);
-  console.log(`Profile: ${profileId || 'None'}`);
+  console.log(`Profile: ${profileId && typeof profileId === 'object' ? profileId.id : (profileId || 'None')}`);
   console.log(`Retrieved documents: ${docCount}`);
   console.log(`Relevant documents: ${docTitles}`);
   console.log(`Context characters: ${contextChars}`);

@@ -368,7 +368,15 @@ async function openProfileDrawer() {
   };
 
   const medLeave = (dash && dash.medicalLeave) ? dash.medicalLeave : (p.medicalLeave || { hasRecord: false });
-  const mStructure = p.minorCreditStructure;
+  const mStructure = (dash && dash.minorCreditStructure) ? dash.minorCreditStructure : p.minorCreditStructure;
+  const specStructure = (dash && dash.specialisationStructure) ? dash.specialisationStructure : (p.specialisationTracking || null);
+
+  const syntheticNoticeEl = document.getElementById('drawerSyntheticNotice');
+  if (syntheticNoticeEl) {
+    const noteText = sOverview.recordDataNote || 'Synthetic evaluation student record grounded strictly in official VU curriculum workbooks.';
+    syntheticNoticeEl.innerHTML = `<span class="erb-badge">Evaluation Record</span> <span>${escHtml(noteText)}</span>`;
+    syntheticNoticeEl.classList.remove('hidden');
+  }
 
   const initials = sOverview.name.split(' ').map(n => n[0]).join('').toUpperCase();
 
@@ -545,31 +553,63 @@ async function openProfileDrawer() {
     }
   }
 
-  // Populate Section 5: Declared Minor Structure
+  // Populate Section 5: Declared Minor & Specialisation Track Structures
   const dMinorBadge = document.getElementById('drawerMinorCreditsBadge');
   const dMinorHeading = document.getElementById('drawerMinorTitleHeading');
   const dMinorStatus = document.getElementById('drawerMinorStatusText');
   const dMinorList = document.getElementById('drawerMinorCoursesList');
 
   if (dMinorBadge) {
-    dMinorBadge.textContent = `${mStructure ? (mStructure.requiredCredits || mStructure.totalCredits || 24) : 24} Credits`;
+    const reqCr = mStructure ? (mStructure.requiredCredits || mStructure.totalCredits || 24) : 24;
+    const compCr = mStructure && typeof mStructure.completedCredits === 'number' ? mStructure.completedCredits : null;
+    dMinorBadge.textContent = compCr !== null ? `${compCr}/${reqCr} Credits` : `${reqCr} Credits`;
   }
   if (dMinorHeading) {
     dMinorHeading.textContent = `Declared Minor: ${sOverview.minor}`;
   }
   if (dMinorStatus) {
-    dMinorStatus.textContent = `${sOverview.minor} (${sOverview.minorSchool}) · Grounded in Minor_Courses_for_BTech_Students.xlsx`;
+    const mStat = sOverview.minorStatus ? `${sOverview.minorStatus} · ` : '';
+    dMinorStatus.textContent = `${mStat}${sOverview.minor} (${sOverview.minorSchool}) · Grounded in Minor_Courses_for_BTech_Students.xlsx`;
   }
   if (dMinorList) {
     const courses = (mStructure && (mStructure.curriculumCourses || mStructure.coursesOffered)) || [];
     if (courses.length > 0) {
       dMinorList.innerHTML = courses.map(c => `
         <span class="msb-course-chip" title="${escHtml(c.name)}">
-          <strong>${escHtml(c.code)}</strong>: ${escHtml(c.name)} (${c.credits} cr) ${c.status ? '— ' + c.status : ''}
+          <strong>${escHtml(c.code)}</strong>: ${escHtml(c.name)} (${c.credits} cr)${c.status ? ' — ' + escHtml(c.status) : ''}
         </span>
       `).join('');
     } else {
       dMinorList.innerHTML = '<span class="msb-course-chip">Standard minor basket courses</span>';
+    }
+  }
+
+  const dSpecHeading = document.getElementById('drawerSpecTitleHeading');
+  const dSpecBadge = document.getElementById('drawerSpecCreditsBadge');
+  const dSpecStatus = document.getElementById('drawerSpecStatusText');
+  const dSpecList = document.getElementById('drawerSpecCoursesList');
+  if (specStructure) {
+    const specLabel = specStructure.trackName && specStructure.trackName !== 'Not selected'
+      ? `Specialisation: ${specStructure.trackName}`
+      : 'Specialisation Track Status';
+    if (dSpecHeading) dSpecHeading.textContent = specLabel;
+    if (dSpecBadge) {
+      dSpecBadge.textContent = `${specStructure.completedCredits || 0}/${specStructure.totalCredits || 20} Credits`;
+    }
+    if (dSpecStatus) {
+      dSpecStatus.textContent = `${specStructure.status}${specStructure.note ? ' — ' + specStructure.note : ''}`;
+    }
+    if (dSpecList) {
+      const sCourses = specStructure.courses || [];
+      if (sCourses.length > 0) {
+        dSpecList.innerHTML = sCourses.map(c => `
+          <span class="msb-course-chip" title="${escHtml(c.name)}">
+            <strong>${escHtml(c.code)}</strong>: ${escHtml(c.name)} (${c.credits} cr, Sem ${c.semester})${c.status ? ' — ' + escHtml(c.status) : ''}
+          </span>
+        `).join('');
+      } else {
+        dSpecList.innerHTML = '<span class="msb-course-chip">Selected in Semester 5 per curriculum spread (20 credits)</span>';
+      }
     }
   }
 
@@ -581,10 +621,22 @@ function closeProfileDrawer() {
   if (drawer) drawer.classList.add('hidden');
 }
 
+function askAboutMyIdentity() {
+  closeProfileDrawer();
+  scrollToAdvisor();
+  sendQuery('What is my student ID, batch, and current semester?');
+}
+
 function askAboutMyCourses() {
   closeProfileDrawer();
   scrollToAdvisor();
   sendQuery('What courses do I have this semester?');
+}
+
+function askAboutMyRemaining() {
+  closeProfileDrawer();
+  scrollToAdvisor();
+  sendQuery('Which courses are remaining?');
 }
 
 function askAboutMyAttendance() {
@@ -609,6 +661,12 @@ function askAboutMyMinor() {
   closeProfileDrawer();
   scrollToAdvisor();
   sendQuery('What are my minor requirements?');
+}
+
+function askAboutMySpecialisation() {
+  closeProfileDrawer();
+  scrollToAdvisor();
+  sendQuery('What specialisation am I pursuing?');
 }
 
 function askAboutMyEligibility() {
