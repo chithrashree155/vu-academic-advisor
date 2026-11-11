@@ -284,14 +284,14 @@ function updateAuthUI() {
 
     if (avatarEl) avatarEl.textContent = initials;
     if (nameEl) nameEl.textContent = activeStudentProfile.display_name;
-    if (progEl) progEl.textContent = activeStudentProfile.program_type || 'B.Tech CSE';
+    if (progEl) progEl.textContent = `${activeStudentProfile.id} · ${activeStudentProfile.program_type || 'B.Tech CSE'}`;
 
     if (contextBanner) {
       contextBanner.classList.remove('hidden');
       const scbName = document.getElementById('scbName');
       const scbProg = document.getElementById('scbProg');
       if (scbName) scbName.textContent = activeStudentProfile.display_name;
-      if (scbProg) scbProg.textContent = `${activeStudentProfile.programName} · Batch ${activeStudentProfile.batch} · Sem ${activeStudentProfile.semester}`;
+      if (scbProg) scbProg.textContent = `${activeStudentProfile.id} · ${activeStudentProfile.programName} · Batch ${activeStudentProfile.batch} · Sem ${activeStudentProfile.semester}`;
     }
   } else {
     if (loggedOutWrap) loggedOutWrap.classList.remove('hidden');

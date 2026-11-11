@@ -1879,6 +1879,13 @@ body {
   font-size: 1.2rem;
   color: var(--text-subtle);
   cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 6px;
 }
 
 .drawer-body {

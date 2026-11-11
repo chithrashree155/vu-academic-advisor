@@ -1310,17 +1310,13 @@ function classifyQuery(queryStr) {
       q.includes('how much of my minor is complete') ||
       q.includes('what are my remaining degree requirements') ||
       q.includes('my remaining degree requirements') ||
-      q.includes('what courses have i completed') ||
-      q.includes('which courses have i completed') ||
+      /\b(?:what|which)\s+courses?\s+(?:have\s+i\s+completed|did\s+i\s+complete|are\s+completed)\b/i.test(q) ||
       q.includes('my completed courses') ||
-      q.includes('which courses are remaining') ||
-      q.includes('what courses are remaining') ||
+      /\b(?:what|which)\s+courses?\s+(?:are\s+remaining|remain|are\s+left|do\s+i\s+(?:still\s+)?(?:need|have)\s+to\s+(?:complete|take|finish|clear))\b/i.test(q) ||
       q.includes('my remaining courses') ||
-      q.includes('which courses remain') ||
-      q.includes('what courses remain') ||
-      q.includes('which courses do i still need to complete') ||
-      q.includes('which prerequisites am i missing') ||
+      q.includes('my pending courses') ||
       q.includes('what prerequisites am i missing') ||
+      q.includes('which prerequisites am i missing') ||
       q.includes('prerequisites am i missing')
     )
   ) {

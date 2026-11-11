@@ -133,11 +133,14 @@ async function runSuite() {
       assert(r.json.answer.includes('91') && r.json.answer.includes('UCOR103') && r.json.answer.includes('FINA333'));
     });
 
-    await test(9, 'Progression: "Which courses are remaining?" lists Divya remaining core & minor courses', async () => {
-      const r = await req('/api/advisory', 'POST', { query: 'Which courses are remaining?' }, tokens.divya);
-      assert.strictEqual(r.json.state, 'ANSWERABLE');
-      assert(r.json.answer.includes('110 credits') || r.json.answer.includes('110'));
-      assert(r.json.answer.includes('MKTG') || r.json.answer.includes('Remaining'));
+    await test(9, 'Progression: Remaining courses ("Which courses are remaining?" & "What courses do I still need to complete?")', async () => {
+      const r1 = await req('/api/advisory', 'POST', { query: 'Which courses are remaining?' }, tokens.divya);
+      assert.strictEqual(r1.json.state, 'ANSWERABLE');
+      assert(r1.json.answer.includes('110 credits') || r1.json.answer.includes('110'));
+      assert(r1.json.answer.includes('MKTG') || r1.json.answer.includes('Remaining'));
+      const r2 = await req('/api/advisory', 'POST', { query: 'What courses do I still need to complete?' }, tokens.divya);
+      assert.strictEqual(r2.json.state, 'ANSWERABLE');
+      assert(r2.json.answer.includes('110') && !r2.json.answer.includes('INSUFFICIENT'));
     });
 
     await test(10, 'Specialisation & Minor: Bhavya query shows Applied Deep Learning + MATH401 & DATA402 + Psychology', async () => {
